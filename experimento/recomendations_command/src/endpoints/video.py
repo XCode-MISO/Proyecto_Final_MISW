@@ -25,4 +25,4 @@ def upload_video():
     file.save(file_path)
 
     job_id, status = register_video(file_path, db, VideoProcess)
-    return jsonify({'job_id': job_id, 'status': status, 'file_path': file_path}), 201
+    return jsonify({'job_id': job_id, 'status': status}), 201

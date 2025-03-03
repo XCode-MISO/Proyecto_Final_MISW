@@ -3,3 +3,5 @@ Flask-SQLAlchemy==2.5.1
 SQLAlchemy==1.4.46
 psycopg2-binary==2.9.3
 Werkzeug==2.0.3
+google-cloud-storage==2.5.0
+google-cloud-pubsub==2.13.0

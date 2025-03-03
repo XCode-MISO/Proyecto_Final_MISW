@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recomendations-query-deployment
+  labels:
+    app: recomendations-query
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: recomendations-query
+  template:
+    metadata:
+      labels:
+        app: recomendations-query
+    spec:
+      containers:
+      - name: recomendations-query
+        image: gcr.io/xenon-broker-309217/recomendations-query:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_URI
+          value: "postgresql://user:password@35.222.158.4:5432/recomendaciones_query_db"
+        - name: GCP_PROJECT
+          value: "xenon-broker-309217"
+        - name: PUBSUB_TOPIC
+          value: "video-jobs-topic"
