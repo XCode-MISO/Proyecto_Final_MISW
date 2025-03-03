@@ -1,8 +1,24 @@
 from flask import Blueprint, request, jsonify
 from src.models import db, Recommendation
-from src.services.recommendation_service import update_or_create_recommendation
+from src.services.recommendation_service import create_pending_recommendation
 
 recommendation_bp = Blueprint('recommendation', __name__)
+
+@recommendation_bp.route('/pubsub_update', methods=['POST'])
+def pubsub_update():
+    """
+    Endpoint para recibir mensajes de Pub/Sub.
+    Se espera un payload JSON con al menos {"job_id": <valor>}.
+    """
+    data = request.get_json()
+    if not data or "job_id" not in data:
+        return jsonify({"error": "Falta job_id en el mensaje"}), 400
+    try:
+        job_id = data["job_id"]
+        rec = create_pending_recommendation(job_id, db, Recommendation)
+        return jsonify({"message": "Recomendación pendiente creada", "job_id": rec.job_id}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @recommendation_bp.route('/recommend', methods=['GET'])
 def get_recommendation():
@@ -18,12 +34,3 @@ def get_recommendation():
         'final_recommendation': rec.final_recommendation,
         'recommendation_data': rec.recommendation_data
     })
-
-@recommendation_bp.route('/update_recommendation', methods=['POST'])
-def update_recommendation():
-    data = request.get_json()
-    rec = update_or_create_recommendation(data, db, Recommendation)
-    return jsonify({
-        'message': 'Recomendación actualizada exitosamente',
-        'job_id': rec.job_id
-    }), 200

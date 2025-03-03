@@ -22,3 +22,16 @@ def update_or_create_recommendation(data, db, Recommendation):
         db.session.add(rec)
     db.session.commit()
     return rec
+
+def create_pending_recommendation(job_id, db, Recommendation):
+    rec = Recommendation.query.get(job_id)
+    if not rec:
+        rec = Recommendation(
+            job_id=job_id,
+            final_state="pending",
+            final_recommendation="",
+            recommendation_data={}
+        )
+        db.session.add(rec)
+        db.session.commit()
+    return rec

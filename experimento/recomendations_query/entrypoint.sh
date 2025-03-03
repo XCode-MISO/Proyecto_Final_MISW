@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 echo "===== Waiting 5s to ensure DB is ready ====="
 sleep 5
 echo "===== Running db.create_all() for Recomendations-Query ====="
