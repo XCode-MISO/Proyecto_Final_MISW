@@ -1,2 +1,2 @@
-google-cloud-videointelligence
-google-cloud-pubsub
+google-cloud-videointelligence==2.13.0
+google-cloud-pubsub==2.13.0

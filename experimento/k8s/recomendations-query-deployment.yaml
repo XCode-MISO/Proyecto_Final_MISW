@@ -25,4 +25,4 @@ spec:
         - name: GCP_PROJECT
           value: "xenon-broker-309217"
         - name: PUBSUB_TOPIC
-          value: "video-jobs-topic"
+          value: "video-procesado-topic"
