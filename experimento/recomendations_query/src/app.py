@@ -8,4 +8,9 @@ def create_app():
     app.config.from_object(Config)
     db.init_app(app)
     app.register_blueprint(recommendation_bp, url_prefix='/api')
+
+    @app.route('/health', methods=['GET'])
+    def health():
+        return "OK", 200
+    
     return app

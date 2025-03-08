@@ -8,28 +8,32 @@ kubectl apply -f recomendations-command-deployment.yaml
 kubectl apply -f recomendations-command-service.yaml
 kubectl apply -f recomendations-query-deployment.yaml
 kubectl apply -f recomendations-query-service.yaml
+kubectl apply -f recommendations-ingress.yaml
+
 
 
 
 gcloud container clusters create my-cluster \
-  --num-nodes=3 \
+  --zone us-central1 \
+  --num-nodes=1 \
   --machine-type=e2-standard-2 \
   --disk-size=10 \
-  --enable-autoscaling --min-nodes=3 --max-nodes=6 \
+  --enable-autoscaling --min-nodes=1 --max-nodes=3 \
   --enable-ip-alias \
-  --zone us-central1-a
-
-
-gcloud sql users create user --instance=write-instance --password=password
+  --scopes=https://www.googleapis.com/auth/cloud-platform
 
 
 
-gcloud functions deploy process_video \
+ gcloud functions deploy process_video \
   --runtime python39 \
   --trigger-resource videos_tiendas \
   --trigger-event google.storage.object.finalize \
-  --set-env-vars PUBSUB_TOPIC=video-procesado-topic,GCP_PROJECT=xenon-broker-309217 \
-  --region us-central1
+  --entry-point process_video \
+  --set-env-vars GCP_PROJECT=xenon-broker-309217,PUBSUB_TOPIC=video-procesado-topic \
+  --project=xenon-broker-309217
+
+gcloud functions list --project=xenon-broker-309217
+gcloud functions logs read process_video --project=xenon-broker-309217
 
 
 
@@ -38,25 +42,11 @@ gcloud functions deploy process_video \
   --member=serviceAccount:service-92636439949@gs-project-accounts.iam.gserviceaccount.com \
   --role=roles/pubsub.publisher
 
-us-central1
 
   gcloud container clusters describe my-cluster --zone us-central1-a \
   --format="value(nodeConfig.serviceAccount)"
 
 
-  gcloud projects add-iam-policy-binding xenon-broker-309217 \
-  --member="serviceAccount:92636439949-compute@developer.gserviceaccount.com" \
-  --role="roles/storage.objectCreator"
-
-
-  default-compute@developer.gserviceaccount.com
-
-
-
-  # Escalar a 0
-kubectl scale deployment recomendations-command-deployment --replicas=0
-# Esperar unos segundos y luego
-kubectl scale deployment recomendations-command-deployment --replicas=3
 
 
 
@@ -69,107 +59,3 @@ gcloud compute instances describe gke-my-cluster-default-pool-ba89f0a0-3t0f \
 
 
 
-
-
-cat > test_upload.py << 'EOF'
-from google.cloud import storage
-import os
-import sys
-
-def subir_archivo_a_gcs(bucket_name, source_file_name, destination_blob_name):
-    """Sube un archivo a un bucket de Cloud Storage y captura excepciones detalladas.
-
-    Args:
-        bucket_name: El nombre del bucket de Cloud Storage.
-        source_file_name: La ruta local al archivo que se va a subir.
-        destination_blob_name: El nombre del blob (archivo) en el bucket.
-    """
-
-    try:
-        storage_client = storage.Client()
-        bucket = storage_client.bucket(bucket_name)
-        blob = bucket.blob(destination_blob_name)
-
-        blob.upload_from_filename(source_file_name)
-
-        print(f"Archivo {source_file_name} subido a {bucket_name}/{destination_blob_name}.")
-
-    except FileNotFoundError:
-        print(f"Error: El archivo {source_file_name} no existe.")
-        sys.exit(1) # Finaliza el script con un código de error.
-
-    except Exception as e:
-        print(f"Error al subir el archivo: {e}")
-
-        # Obtener información adicional de la excepción
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        filename = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(f"Tipo de excepción: {exc_type}")
-        print(f"Archivo: {filename}")
-        print(f"Línea: {exc_tb.tb_lineno}")
-        sys.exit(1) # Finaliza el script con un código de error
-
-if __name__ == "__main__":
-    bucket_name = "videos_tiendas" # Reemplaza con el nombre de tu bucket
-    source_file_name = "test.txt" # El archivo que quieres subir (debe estar en el mismo dir.)
-    destination_blob_name = "archivo_en_gcs.txt" # Como se llamará en GCS.
-
-    # Crea un archivo local de ejemplo si no existe
-    if not os.path.exists(source_file_name):
-        with open(source_file_name, "w") as f:
-            f.write("Este es un archivo de prueba para subir a Cloud Storage desde GKE.")
-        print(f"Archivo de prueba '{source_file_name}' creado.")
-
-    subir_archivo_a_gcs(bucket_name, source_file_name, destination_blob_name)
-    EOF
-
-
-
-
-    92636439949
-
-
-
-
-
-    Si gsutil cp archivo_prueba.txt gs://videos_tiendas/archivo_prueba.txt funciona correctamente, esto es un hallazgo muy importante que nos acerca a la solución.
-
-Implicaciones:
-
-Conectividad: Esto confirma que tu red tiene conectividad hacia Cloud Storage y que las reglas de firewall no están bloqueando el tráfico.
-Permisos: Esto también verifica que tu cuenta de usuario (la que estás usando en tu máquina local o Cloud Shell) tiene los permisos necesarios para escribir en el bucket "videos_tiendas".
-Configuración del bucket: Indica que la configuración básica del bucket (bloqueo de acceso público, políticas de retención, etc.) no está impidiendo la subida de archivos.
-El problema se centra en tu aplicación dentro del Pod de GKE.
-
-Aquí tienes los siguientes pasos a seguir:
-
-1. Aislamiento del problema:
-
-Script de prueba simplificado en el Pod:
-Crea un script de Python muy simple que solo intente subir un archivo pequeño a Cloud Storage, similar a lo que estás haciendo con gsutil cp.
-Esto eliminará la complejidad de tu aplicación Flask y la base de datos, lo que facilitará la depuración.
-Ejemplo de script (guarda esto como test_upload_gcs.py):
-Python
-
-
-cat > test_upload.py << 'EOF'
-from google.cloud import storage
-import os
-
-def upload_blob(bucket_name, source_file_name, destination_blob_name):
-    """Uploads a file to the bucket."""
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(destination_blob_name)
-
-    blob.upload_from_filename(source_file_name)
-
-    print(f"File {source_file_name} uploaded to {bucket_name}/{destination_blob_name}.")
-
-if __name__ == "__main__":
-    bucket_name = "videos_tiendas"
-    source_file_name = "test.txt" #crea un archivo de texto llamado test_file.txt dentro del POD, con algun texto.
-    destination_blob_name = "test_upload_from_pod.txt"
-
-    upload_blob(bucket_name, source_file_name, destination_blob_name)
-EOF
