@@ -7,9 +7,6 @@ from google.cloud import pubsub_v1
 from google.protobuf.json_format import MessageToJson
 
 def process_video(event, context):
-    logging.info("========== INICIO DE LA FUNCIÓN process_video ==========")
-    logging.info(f"FULL EVENT PAYLOAD:\n{json.dumps(event, indent=2)}")
-    logging.info(f"CONTEXT: event_id={context.event_id}, timestamp={context.timestamp}, event_type={context.event_type}")
 
     metadata_dict = event.get('metadata', {})
     job_id = metadata_dict.get('job_id')
@@ -25,7 +22,6 @@ def process_video(event, context):
         return
 
     video_uri = f"gs://{bucket}/{file_name}"
-    logging.info(f"Procesando video_uri={video_uri} con job_id={job_id}")
 
     # Variable para almacenar el JSON del resultado (dummy o real)
     metadata_json_str = None
@@ -46,7 +42,6 @@ def process_video(event, context):
             dummy_result = {
                 "dummy": True,
                 "message": "No se pudo procesar el video debido a cuota excedida",
-                "error_detail": error_msg
             }
             metadata_json_str = json.dumps(dummy_result)
         else:
@@ -60,7 +55,6 @@ def process_video(event, context):
         "metadata": json.loads(metadata_json_str)
     }
     message_data = json.dumps(event_data)
-    logging.info(f"Publicando mensaje en Pub/Sub: {message_data}")
 
     try:
         publisher = pubsub_v1.PublisherClient()
@@ -71,9 +65,7 @@ def process_video(event, context):
         topic_path = publisher.topic_path(project_id, topic_name)
         future = publisher.publish(topic_path, data=message_data.encode("utf-8"))
         published_id = future.result()
-        logging.info(f"Mensaje publicado en Pub/Sub, ID={published_id}")
+    
     except Exception as e:
         logging.error(f"Error publicando mensaje en Pub/Sub: {e}")
         return
-
-    logging.info("========== FIN DE LA FUNCIÓN process_video ==========")
