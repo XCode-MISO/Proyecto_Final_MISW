@@ -5,13 +5,8 @@ import { randomIntBetween } from 'https://jslib.k6.io/k6-utils/1.4.0/index.js';
 import encoding from 'k6/encoding';
 import { videoData } from './video_data.js';
 
-// Métricas
-let processingTime = new Trend('processing_time');
-let requestCounter = new Counter('requests_total');
-let requestRate = new Rate('requests_rate');
-
 // Configuración de control de tasa
-const MAX_REQUESTS_PER_MINUTE = 60;  // Máximo permitido por la API
+const MAX_REQUESTS_PER_MINUTE = 120;  // Máximo permitido por la API
 const SAFETY_FACTOR = 0.9;  // Factor de seguridad (90% del límite)
 const ACTUAL_LIMIT = Math.floor(MAX_REQUESTS_PER_MINUTE * SAFETY_FACTOR);  // ~54 requests/minuto
 const MIN_SLEEP_BETWEEN_REQUESTS = 60 / ACTUAL_LIMIT;  // Aprox. 1.11 segundos entre peticiones
@@ -43,7 +38,7 @@ let rateLimiter = {
         // Si estamos cerca del límite, esperar proporcionalmente
         if (this.requestsThisMinute >= ACTUAL_LIMIT) {
             const timeToNextMinute = 60000 - (now - this.lastResetTime);
-            console.log(`Alcanzado límite de ${ACTUAL_LIMIT} peticiones por minuto. Esperando ${timeToNextMinute/1000} segundos.`);
+            //console.log(`Alcanzado límite de ${ACTUAL_LIMIT} peticiones por minuto. Esperando ${timeToNextMinute/1000} segundos.`);
             sleep(timeToNextMinute / 1000); // Convertir a segundos para sleep
             this.lastResetTime = Date.now();
             this.requestsThisMinute = 0;
@@ -56,17 +51,41 @@ let rateLimiter = {
 
 // Configuración de la prueba
 export let options = {
-    vus: 3,           // Reducido el número de usuarios virtuales concurrentes
-    iterations: 10,   // Reducido el número de iteraciones
-    // No usamos duración fija para tener más control sobre el número total de peticiones
+    scenarios: {
+        subirYRevisarVideos: {
+            executor: 'constant-arrival-rate',
+
+            // How long the test lasts
+            duration: '30m',
+
+            // How many iterations per timeUnit
+            rate: 100,
+
+            // Start `rate` iterations per second
+            timeUnit: '1m',
+
+            // Pre-allocate 2 VUs before starting the test
+            preAllocatedVUs: 100,
+
+            // Spin up a maximum of 50 VUs to sustain the defined
+            // constant arrival rate.
+            maxVUs: 120,
+        },
+    },
 };
 
 // Función principal
 export function setup() {
     rateLimiter.init();
-    console.log(`Configuración: Máximo ${ACTUAL_LIMIT} peticiones por minuto (${MIN_SLEEP_BETWEEN_REQUESTS.toFixed(2)}s entre peticiones)`);
+    //console.log(`Configuración: Máximo ${ACTUAL_LIMIT} peticiones por minuto (${MIN_SLEEP_BETWEEN_REQUESTS.toFixed(2)}s entre peticiones)`);
     return { startTime: Date.now() };
 }
+
+
+// Métricas
+let processingTime = new Trend('processing_time');
+let requestCounter = new Counter('requests_total');
+let requestRate = new Rate('requests_rate');
 
 export default function (data) {
     // Obtener las claves (nombres de videos) disponibles
@@ -87,7 +106,7 @@ export default function (data) {
         const base64Data = videoData[videoKey];
         const binaryData = encoding.b64decode(base64Data);
 
-        console.log(`Usando video real: ${fileName} (${(binaryData.length / 1024).toFixed(2)} KB)`);
+        //console.log(`Usando video real: ${fileName} (${(binaryData.length / 1024).toFixed(2)} KB)`);
 
         // Esperar si es necesario antes de hacer la petición
         rateLimiter.registerRequest();
@@ -107,14 +126,14 @@ export default function (data) {
         requestCounter.add(1);
         requestRate.add(1);
 
-        console.log(`Tiempo de subida: ${uploadTime.toFixed(2)} segundos`);
+        //console.log(`Tiempo de subida: ${uploadTime.toFixed(2)} segundos`);
 
         check(uploadRes, {
             'upload success': (r) => r.status === 201 && r.json('job_id') !== undefined,
         });
 
         if (uploadRes.status > 300) {
-            console.log(`Error en la subida: ${uploadRes.status}, Respuesta: ${uploadRes.body}`);
+            //console.log(`Error en la subida: ${uploadRes.status}, Respuesta: ${uploadRes.body}`);
             return;
         }
 
@@ -122,15 +141,15 @@ export default function (data) {
         try {
             jobId = uploadRes.json('job_id');
             if (!jobId) {
-                console.log(`No se obtuvo jobId, respuesta: ${uploadRes.body}`);
+                //console.log(`No se obtuvo jobId, respuesta: ${uploadRes.body}`);
                 return;
             }
         } catch (e) {
-            console.log(`Error al procesar respuesta JSON: ${e.message}, Cuerpo: ${uploadRes.body}`);
+            //console.log(`Error al procesar respuesta JSON: ${e.message}, Cuerpo: ${uploadRes.body}`);
             return;
         }
 
-        console.log(`Subida exitosa, jobId: ${jobId}`);
+        //console.log(`Subida exitosa, jobId: ${jobId}`);
 
         // Se inicia el tiempo crítico a partir de que se recibe el jobID
         let startTime = new Date().getTime();
@@ -139,53 +158,62 @@ export default function (data) {
         let processed = false;
         let maxAttempts = 30; // Reducido para limitar el número de peticiones
         let attempts = 0;
+        // Esperar si es necesario antes de hacer la petición
+        rateLimiter.registerRequest();
+        // Registrar métricas
+        requestCounter.add(1);
+        requestRate.add(1);
 
-        while (!processed && attempts < maxAttempts) {
+        let interval
+
+        const timeout = setTimeout(() => {
+            if (interval) {
+                console.log(`Limpiando interavlo por fuera del ciclo: no se obtuvo una respuesta a tiempo`)
+                processed = true
+                clearInterval(interval)
+                clearTimeout(timeout)
+            }
+        }, 20000)
 
 
-            // Esperar si es necesario antes de hacer la petición
-            rateLimiter.registerRequest();
+        interval = setInterval(() => {
+            if (processed) {
+                console.log("clear interval inside itself")
+                clearInterval(interval)
+            }
 
             attempts++;
             let statusUrl = `http://34.60.201.251/query/api/recommend?job_id=${jobId}`;
 
             let statusRes = http.get(statusUrl);
 
-            // Registrar métricas
-            requestCounter.add(1);
-            requestRate.add(1);
-
             if (statusRes.status === 200) {
                 try {
                     let jsonResponse = JSON.parse(statusRes.body);
+                    console.log(jsonResponse)
 
-                    if (jsonResponse.state === 'processed') {
+                    if (jsonResponse.final_state === 'processed') {
                         processed = true;
+                        let endTime = new Date().getTime();
+                        let totalProcessingTime = (endTime - startTime) / 1000; // en segundos
+                        processingTime.add(totalProcessingTime);
+                        clearInterval(interval)
+                        clearTimeout(timeout)
                         console.log(`Video procesado después de ${attempts} intentos`);
                     } else {
-                        console.log(`Estado actual: ${jsonResponse.state || 'desconocido'}`);
+                        //console.log(`Estado actual: ${jsonResponse.state || 'desconocido'}`);
                     }
                 } catch (e) {
-                    console.log(`Error al parsear JSON: ${e.message}, Respuesta: ${statusRes.body}`);
+                    //console.log(`Error al parsear JSON: ${e.message}, Respuesta: ${statusRes.body}`);
                 }
-            } else {
-                console.log(`Estado HTTP inesperado: ${statusRes.status}, Respuesta: ${statusRes.body}`);
             }
-
-            if (!processed) {
-                // No es necesario sleep adicional aquí, ya que rateLimiter.registerRequest ya incluye sleep
+            if (statusRes.status === 404) {
+                //console.log(`Estado HTTP 404: ${statusRes.status}, Respuesta: ${statusRes.body}`);
             }
-        }
+        }, 500)
 
-        if (!processed) {
-            console.log(`No se completó el procesamiento después de ${maxAttempts} intentos para el jobId: ${jobId}`);
-            return;
-        }
+        check(processed, Boolean)
 
-        let endTime = new Date().getTime();
-        let totalProcessingTime = (endTime - startTime) / 1000; // en segundos
-        processingTime.add(totalProcessingTime);
-        console.log(`Procesamiento completado en ${totalProcessingTime.toFixed(2)} segundos`);
     } catch (error) {
         console.error(`Error general en la iteración con video ${fileName}: ${error.message}`);
     }
@@ -193,6 +221,6 @@ export default function (data) {
 
 export function teardown(data) {
     const testDuration = (Date.now() - data.startTime) / 1000;
-    console.log(`Prueba completada en ${testDuration.toFixed(2)} segundos.`);
-    console.log(`Tasa de peticiones promedio: ${(requestCounter.count / (testDuration / 60)).toFixed(2)} req/min`);
+    //console.log(`Prueba completada en ${testDuration.toFixed(2)} segundos.`);
+    //console.log(`Tasa de peticiones promedio: ${(requestCounter.count / (testDuration / 60)).toFixed(2)} req/min`);
 }
