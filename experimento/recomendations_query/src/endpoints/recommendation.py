@@ -29,7 +29,7 @@ def get_recommendation():
         'job_id': rec.job_id,
         'final_state': rec.final_state,
         'final_recommendation': rec.final_recommendation,
-        'recommendation_data': rec.recommendation_data
+        'identified_objects': rec.identified_objects
     })
 
 @recommendation_bp.route('/health', methods=['GET'])

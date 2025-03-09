@@ -16,13 +16,13 @@ def upload_to_cloud_storage(file_path, job_id):
         raise Exception("GCP_PROJECT no está definido en las variables de entorno.")
     
     client = storage.Client(project=project)
+    
     bucket = client.bucket(bucket_name)
     blob_name = os.path.basename(file_path)
     blob = bucket.blob(blob_name)
-
+    blob.metadata = {"job_id": str(job_id)}
     blob.upload_from_filename(file_path, predefined_acl="publicRead")
     
-    blob.metadata = {"job_id": str(job_id)}
     blob.patch()  
     
     return blob.public_url

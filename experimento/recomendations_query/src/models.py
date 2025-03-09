@@ -9,4 +9,5 @@ class Recommendation(db.Model):
     final_state = db.Column(db.String(50), nullable=False)
     final_recommendation = db.Column(db.Text)
     recommendation_data = db.Column(db.JSON)
+    identified_objects = db.Column(db.JSON) 
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

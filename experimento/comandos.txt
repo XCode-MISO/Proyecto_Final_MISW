@@ -36,17 +36,9 @@ gcloud functions list --project=xenon-broker-309217
 gcloud functions logs read process_video --project=xenon-broker-309217
 
 
-
-
-  gcloud projects add-iam-policy-binding xenon-broker-309217 \
-  --member=serviceAccount:service-92636439949@gs-project-accounts.iam.gserviceaccount.com \
-  --role=roles/pubsub.publisher
-
-
-  gcloud container clusters describe my-cluster --zone us-central1-a \
-  --format="value(nodeConfig.serviceAccount)"
-
-
+gcloud pubsub subscriptions create recommendations-pull-sub \                            
+  --topic=video-procesado-topic \
+  --project=xenon-broker-309217
 
 
 
