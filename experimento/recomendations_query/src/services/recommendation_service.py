@@ -12,8 +12,8 @@ def update_or_create_recommendation(data):
     job_id = data.get('job_id')
     final_state = data.get('final_state')
     final_recommendation = data.get('final_recommendation')
-    recommendation_data = data.get('recommendation_data')
-    identified_objects = data.get('identified_objects')  # Nuevo campo
+    recommendation_data = {}
+    identified_objects = data.get('identified_objects')  
 
     if not job_id or final_state is None or final_recommendation is None:
         raise ValueError("Datos insuficientes para crear/actualizar la recomendación.")
@@ -22,14 +22,14 @@ def update_or_create_recommendation(data):
     if rec:
         rec.final_state = final_state
         rec.final_recommendation = final_recommendation
-        rec.recommendation_data = recommendation_data
+        rec.recommendation_data = {}
         rec.identified_objects = identified_objects
     else:
         rec = Recommendation(
             job_id=job_id,
             final_state=final_state,
             final_recommendation=final_recommendation,
-            recommendation_data=recommendation_data,
+            recommendation_data={},
             identified_objects=identified_objects
         )
         db.session.add(rec)
@@ -47,7 +47,7 @@ def create_pending_recommendation(job_id):
             final_state="pending",
             final_recommendation="",
             recommendation_data={},
-            identified_objects=[]  # Inicialmente vacío
+            identified_objects=[]  
         )
         db.session.add(rec)
         db.session.commit()
@@ -75,8 +75,7 @@ def process_message(app, received_message):
         # Fase 1: Creamos el registro 'pending' si no existe
         with app.app_context():
             create_pending_recommendation(job_id)
-            print(f"Procesado job_id: {job_id} en estado 'pending'", flush=True)
-
+            
         # Fase 2: Generar recomendación final
         video_metadata = data_json.get("metadata", {})  # El block devuelto por la Video Intelligence
         final_recommendation, identified_objects = generate_store_recommendation(video_metadata)
@@ -86,14 +85,12 @@ def process_message(app, received_message):
             "job_id": job_id,
             "final_state": "processed",
             "final_recommendation": final_recommendation,
-            "recommendation_data": video_metadata,
+            "recommendation_data": {},
             "identified_objects": identified_objects
         }
 
         with app.app_context():
             rec = update_or_create_recommendation(updated_data)
-            print(f"Recomendación final guardada para job_id={job_id}", flush=True)
-            print(f"Texto:\n{final_recommendation}", flush=True)
 
         received_message.ack()
 
@@ -115,7 +112,6 @@ def pull_messages(app):
 
     subscriber = pubsub_v1.SubscriberClient()
     subscription_path = subscriber.subscription_path(project_id, subscription_name)
-    print(f"Iniciando pull en la suscripción: {subscription_path}", flush=True)
 
     while True:
         try:
@@ -148,7 +144,6 @@ def generate_store_recommendation(analysis_metadata: dict) -> (str, list):
     for annotation in analysis_metadata.get("segmentLabelAnnotations", []):
         entity_desc = annotation["entity"]["description"].lower()
         labels.add(entity_desc)
-        # Podríamos ver categoryEntities, segments, etc. si es relevante
 
     # shotLabelAnnotations
     for annotation in analysis_metadata.get("shotLabelAnnotations", []):
@@ -156,8 +151,7 @@ def generate_store_recommendation(analysis_metadata: dict) -> (str, list):
         labels.add(entity_desc)
 
     identified_objects = list(labels)
-    # Ejemplo de heurísticas con más variedad
-    # Podrías adaptarlo a los dominios que necesites (alimentos, ropa, electrónica, etc.)
+
     suggestions = []
 
     # Sugerencias centradas en 'food', 'beverage', 'cleaning', etc.
@@ -168,7 +162,7 @@ def generate_store_recommendation(analysis_metadata: dict) -> (str, list):
     if any(lbl in labels for lbl in ["electronics", "software", "media", "computer", "tutorial", "editing"]):
         suggestions.append("Crear una zona de demostración de productos multimedia/electrónicos en el centro.")
 
-       # Heurísticas para productos de canasta familiar
+    # Heurísticas para productos de canasta familiar
     if any(x in labels for x in ["groceries", "food", "cereal", "bread", "milk", "fruit", "vegetable"]):
         suggestions.append("Resalta la sección de productos de canasta familiar en un área de fácil acceso, para facilitar compras impulsivas.")
 
@@ -219,15 +213,21 @@ def generate_store_recommendation(analysis_metadata: dict) -> (str, list):
     # Multimedia y software (heurística anterior)
     if any(lbl in labels for lbl in ["software", "media", "tutorial", "editing"]):
         suggestions.append("Crear una zona interactiva para demostraciones de multimedia y software.")
+
+    if any(lbl in labels for lbl in ["convenience store", "retail", "grocery store", "supermarket", "grocer", "convenience food"]):
+        suggestions.append("Optimizar el layout para una tienda de conveniencia: secciones de compra rápida cerca de la caja y áreas bien definidas para productos frescos y envasados.")
+    if "inventory" in labels:
+        suggestions.append("Revisar la organización del inventario, asegurando que la rotulación y la ubicación de los productos permitan un fácil acceso y reabastecimiento.")
+    if "aisle" in labels:
+        suggestions.append("Asegurar que los pasillos sean amplios y estén bien iluminados para mejorar la circulación y la visibilidad de los productos.")
+
     # Otras heurísticas
     if "document" in labels or "text" in labels:
         suggestions.append("Incluir un punto de exhibición de artículos de papelería cerca de la zona de cajas.")
 
-    # Si no se detectaron etiquetas relevantes, sugerir un layout estándar
     if not suggestions:
         suggestions.append("No se identificó una categoría clara.")
 
-    # Unir las sugerencias en un string final
     final_recommendation = "\n".join(f"- {sug}" for sug in suggestions)
 
     return final_recommendation, identified_objects
