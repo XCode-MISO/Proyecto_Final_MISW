@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recomendations-command-deployment
+  labels:
+    app: recomendations-command
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: recomendations-command
+  template:
+    metadata:
+      labels:
+        app: recomendations-command
+    spec:
+      containers:
+      - name: recomendations-command
+        image: gcr.io/xenon-broker-309217/recomendations-command:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_URI
+          value: "postgresql://user:password@34.28.33.69:5432/recomendaciones_command_db"
+        - name: VIDEO_BUCKET
+          value: "videos_tiendas"
+        - name: GCP_PROJECT
+          value: "xenon-broker-309217"
+        - name: PUBSUB_TOPIC
+          value: "video-procesado-topic"

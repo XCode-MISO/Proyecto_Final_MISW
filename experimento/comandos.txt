@@ -1,0 +1,53 @@
+docker build --platform linux/amd64 -t gcr.io/xenon-broker-309217/recomendations-command:latest .
+docker push gcr.io/xenon-broker-309217/recomendations-command:latest
+docker build --platform linux/amd64 -t gcr.io/xenon-broker-309217/recomendations-query:latest .
+docker push gcr.io/xenon-broker-309217/recomendations-query:latest
+
+
+kubectl apply -f recomendations-command-deployment.yaml
+kubectl apply -f recomendations-command-service.yaml
+kubectl apply -f recomendations-query-deployment.yaml
+kubectl apply -f recomendations-query-service.yaml
+kubectl apply -f recommendations-ingress.yaml
+
+
+
+
+gcloud container clusters create my-cluster \
+  --zone us-central1 \
+  --num-nodes=1 \
+  --machine-type=e2-standard-2 \
+  --disk-size=10 \
+  --enable-autoscaling --min-nodes=1 --max-nodes=3 \
+  --enable-ip-alias \
+  --scopes=https://www.googleapis.com/auth/cloud-platform
+
+
+
+ gcloud functions deploy process_video \
+  --runtime python39 \
+  --trigger-resource videos_tiendas \
+  --trigger-event google.storage.object.finalize \
+  --entry-point process_video \
+  --set-env-vars GCP_PROJECT=xenon-broker-309217,PUBSUB_TOPIC=video-procesado-topic \
+  --project=xenon-broker-309217
+
+gcloud functions list --project=xenon-broker-309217
+gcloud functions logs read process_video --project=xenon-broker-309217
+
+
+gcloud pubsub subscriptions create recommendations-pull-sub \                            
+  --topic=video-procesado-topic \
+  --project=xenon-broker-309217
+
+
+
+
+gcloud compute instances describe gke-my-cluster-default-pool-ba89f0a0-3t0f \
+  --zone us-central1-a \
+  --format="value(serviceAccounts.email)"
+  92636439949-compute@developer.gserviceaccount.com
+  92636439949
+
+
+

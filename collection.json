@@ -1,0 +1,98 @@
+{
+    "info": {
+      "name": "Experiment Microservices Endpoints",
+      "_postman_id": "b2c1f7d5-1234-4bcd-8e7f-abcdef123456",
+      "description": "Colección para probar los endpoints de Recomendations-Command y Recomendations-Query",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Upload Video (Recomendations-Command)",
+        "request": {
+          "method": "POST",
+          "header": [],
+          "body": {
+            "mode": "formdata",
+            "formdata": [
+              {
+                "key": "video",
+                "type": "file",
+                "src": ""
+              }
+            ]
+          },
+          "url": {
+            "raw": "http://localhost:8081/api/upload",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "8081",
+            "path": [
+              "api",
+              "upload"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Update Recommendation (Recomendations-Query)",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "name": "Content-Type",
+              "value": "application/json",
+              "type": "text"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n    \"job_id\": 1,\n    \"final_state\": \"processed\",\n    \"final_recommendation\": \"Reorganiza las estanterías para mejorar la visibilidad.\",\n    \"recommendation_data\": {\"heuristics\": \"Simple ratio analysis\"}\n}"
+          },
+          "url": {
+            "raw": "http://localhost:8082/api/update_recommendation",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "8082",
+            "path": [
+              "api",
+              "update_recommendation"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Get Recommendation (Recomendations-Query)",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:8082/api/recommend?job_id=1",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "8082",
+            "path": [
+              "api",
+              "recommend"
+            ],
+            "query": [
+              {
+                "key": "job_id",
+                "value": "1"
+              }
+            ]
+          }
+        },
+        "response": []
+      }
+    ]
+  }
+  
