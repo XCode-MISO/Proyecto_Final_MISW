@@ -27,7 +27,7 @@ val AppTypography = Typography(
     titleLarge = TextStyle(
         fontFamily = Poppins,
         fontWeight = FontWeight.Bold,
-        fontSize = 50.sp,
+        fontSize = 40.sp,
         color = MoradoApp
     ),
     titleSmall = TextStyle(

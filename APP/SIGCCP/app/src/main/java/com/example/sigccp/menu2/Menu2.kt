@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.sigccp.ui.theme.AmarilloApp
+import com.example.sigccp.ui.theme.AppTypography
 import com.example.sigccp.ui.theme.VerdeApp
 
 @Preview
@@ -42,7 +43,7 @@ fun Options() {
             Text(
                 modifier = Modifier.padding(top = 54.dp),
                 text = "SIGCCP",
-                style = MaterialTheme.typography.titleLarge
+                style = AppTypography.titleLarge
             )
         }
     }

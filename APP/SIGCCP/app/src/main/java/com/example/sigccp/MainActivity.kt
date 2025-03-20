@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.sigccp.ui.theme.AppTypography
 import com.example.sigccp.ui.theme.SIGCCPTheme
 
 class MainActivity : ComponentActivity() {
@@ -37,7 +38,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
         text = "Hello $name!",
         modifier = Modifier.padding(top = 54.dp),
-        style = MaterialTheme.typography.bodyLarge
+        style = AppTypography.bodyLarge
     )
 }
 
