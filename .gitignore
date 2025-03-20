@@ -172,3 +172,44 @@ cython_debug/
 
 video_data.js
 videos/
+
+# Directorios y archivos generados por Android Studio
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Archivos de compilación y Gradle
+/build/
+.gradle/
+local.properties
+**/out/
+**/build/
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración del entorno
+.env
+*.keystore
+*.jks
+*.pem
+
+# Archivos de caché y logs
+/captures/
+*.log
+
+# Archivos de configuración específicas de Gradle
+.gradle/
+gradle.properties
+gradlew
+gradlew.bat
+
+# Archivos generados por el sistema de Android
+.navigation/
+test-results/
+test-output/
+
+# Archivos de dependencias de NPM (si usas React Native o alguna integración)
+node_modules/
