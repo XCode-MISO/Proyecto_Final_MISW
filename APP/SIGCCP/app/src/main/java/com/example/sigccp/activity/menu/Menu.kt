@@ -1,4 +1,4 @@
-package com.example.sigccp.menu2
+package com.example.sigccp.activity.menu
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,22 +29,23 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.sigccp.R
+import com.example.sigccp.navigation.AppScreen
 import com.example.sigccp.ui.theme.AmarilloApp
 import com.example.sigccp.ui.theme.AppTypography
 import com.example.sigccp.ui.theme.VerdeApp
 
-@Preview
 @Composable
-fun Menu2 ()
+fun Menu(navController: NavController)
 {
-    Options()
+    Options(navController)
 }
 
 @Composable
-fun Options() {
+fun Options(navController: NavController)
+{
     Column (
         modifier = Modifier.fillMaxSize()
             .background(
@@ -111,7 +112,7 @@ fun Options() {
                 }
             }
             //newButton(onClick = { "navController.navigate(AppScreen.CrearAlarma.route) }", nombre = "CREAR ALARMA", imagen = R.drawable.editar)
-            newButton(onClick = {/*TODO*/}, nombre = "PEDIDOS", imagen = R.drawable.editar, enabled = true)
+            newButton(onClick = {navController.navigate(AppScreen.ListarPedidos.route)}, nombre = "PEDIDOS", imagen = R.drawable.editar, enabled = true)
             newButton(onClick = {/*TODO*/}, nombre = "CLIENTES", imagen = R.drawable.ver, enabled = false)
             newButton(onClick = {/*TODO*/}, nombre = "INVENTARIO", imagen = R.drawable.ver, enabled = false)
             newButton(onClick = {/*TODO*/}, nombre = "RUTAS", imagen = R.drawable.ia,enabled = false)

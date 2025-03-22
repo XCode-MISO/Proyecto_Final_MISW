@@ -33,19 +33,19 @@ val AppTypography = Typography(
     titleSmall = TextStyle(
         fontFamily = Poppins,
         fontWeight = FontWeight.Bold,
-        fontSize = 23.sp,
+        fontSize = 30.sp,
         color = MoradoApp
     ),
     bodyLarge = TextStyle(
         fontFamily = Poppins,
         fontWeight = FontWeight.Bold,
-        fontSize = 10.sp,
+        fontSize = 22.sp,
         color = MoradoApp
     ),
     labelLarge = TextStyle(
         fontFamily = Poppins,
         fontWeight = FontWeight.Bold,
-        fontSize = 16.sp,
+        fontSize = 20.sp,
         color = MoradoApp
     )
 )
