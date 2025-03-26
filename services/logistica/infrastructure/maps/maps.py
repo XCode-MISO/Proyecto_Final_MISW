@@ -8,14 +8,30 @@ import pybreaker
 # Used in database integration points
 maps_breaker = pybreaker.CircuitBreaker(fail_max=5, reset_timeout=60)
 
-api_key = os.environ.get('GMAPS_API_KEY')
+api_key = os.environ.get('GMAPS_API_KEY', "")
 gmaps = googlemaps.Client(key=api_key)
 
 @maps_breaker
-def getRouteFromListOfRoutes(routes, mode="transit", departure_time=datetime.now()):
+def getRouteFromListOfRoutes(routes, mode="driving", departure_time=datetime.now()):
+  return gmaps.directions(
+        routes[0], 
+        routes[0],
+        waypoints=routes[1:], 
+        optimize_waypoints=True, 
+        mode=mode, 
+        departure_time=departure_time
+    )
+  origins = [routes[0]]
+  destinations = routes[1:]
+  
   # Distance matrix
   data = {}
-  data["distanceMatrix"] = gmaps.distance_matrix([routes[0]], routes[1:], mode, departure_time)
+  data["distance_matrix"] = gmaps.distance_matrix(
+        origins,
+        destinations,
+        mode,
+        departure_time
+     )
   data["depot"] = 0
   data["num_vehicles"] = 1
   
@@ -30,7 +46,7 @@ def getRouteFromListOfRoutes(routes, mode="transit", departure_time=datetime.now
       # Convert from routing variable Index to distance matrix NodeIndex.
       from_node = manager.IndexToNode(from_index)
       to_node = manager.IndexToNode(to_index)
-      return data["distance_matrix"][from_node][to_node]
+      return data["distance_matrix"]["rows"][from_node]["elements"][to_node-1]
 
   transit_callback_index = routing.RegisterTransitCallback(distance_callback)
 
@@ -44,5 +60,5 @@ def getRouteFromListOfRoutes(routes, mode="transit", departure_time=datetime.now
   )
 
   # Solve the problem.
-  solution = routing.SolveWithParameters(search_parameters)
+  solution = routing.SolveWithParameters(search_parameters) 
   return solution

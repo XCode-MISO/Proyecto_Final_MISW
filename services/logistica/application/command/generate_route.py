@@ -2,14 +2,19 @@ from functools import reduce
 from flask import Blueprint, request, jsonify
 import more_itertools
 
-from services.logistica.infrastructure.db.model import Route
-from services.logistica.infrastructure.maps.maps import getRouteFromListOfRoutes
+from logistica.infrastructure.db.model import Route
+from logistica.infrastructure.maps.maps import getRouteFromListOfRoutes
 
 comandos_bp = Blueprint('comandos', __name__)
 
 @comandos_bp.route('/generate-route', methods=['POST'])
 def generate_route():
-  default_route = Route("default_route", "default", 0, 0)
+  default_route = Route(
+      route_id="default_route",
+      nombreRuta="default",
+      distancia=0,
+      tiempoEstimado=0
+    )
   try:
     body = request.json
     if 'pedidos' not in body:
@@ -21,10 +26,10 @@ def generate_route():
     def route(pedidosPair):
       return pedidosPair.get("cliente").get("direccion")
       
-    listOfPoints = reduce(pedidos, route)
+    listOfPoints = list(map(route, pedidos))
     calculatedRoute = getRouteFromListOfRoutes(listOfPoints)
     return jsonify(calculatedRoute)
     
   except Exception as e: 
     print(e)
-    return default_route, 400
+    return e, 400

@@ -1,7 +1,7 @@
 from flask import Flask
-from services.logistica.infrastructure.config import Config
-from services.logistica.application.command.generate_route import comandos_bp
-from services.logistica.infrastructure import db
+from logistica.infrastructure.config import Config
+from logistica.application.command.generate_route import comandos_bp
+from logistica.infrastructure.db.model import db
 
 
 def create_app():
@@ -17,6 +17,5 @@ def create_app():
     @app.route("/health")
     def health_check():
         return "Ok"
-    
     return app
 

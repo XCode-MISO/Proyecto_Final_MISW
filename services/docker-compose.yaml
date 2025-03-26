@@ -1,0 +1,15 @@
+services:
+  db_routes:
+    image: postgres:13
+    container_name: experiment-db-routes
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db-routes
+    volumes:
+      - db_routes_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+volumes:
+  db_routes_data:

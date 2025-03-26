@@ -177,3 +177,5 @@ node_modules
 
 .env
 .python-version
+
+launch.json
