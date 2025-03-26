@@ -1,0 +1,7 @@
+Flask
+SQLAlchemy
+googlemaps
+more_itertools
+pybreaker
+Flask-SQLAlchemy
+ortools
