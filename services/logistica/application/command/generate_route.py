@@ -1,9 +1,7 @@
-from functools import reduce
+import traceback
 from flask import Blueprint, request, jsonify
-import more_itertools
 
-from logistica.infrastructure.db.model import Route
-from logistica.infrastructure.maps.maps import getRouteFromListOfRoutes
+from logistica.application.services.generate_route import generate_route as generate_route_service
 
 comandos_bp = Blueprint('comandos', __name__)
 
@@ -13,7 +11,8 @@ def generate_route():
       route_id="default_route",
       nombreRuta="default",
       distancia=0,
-      tiempoEstimado=0
+      tiempoEstimado=0,
+      pedidos = []
     )
   try:
     body = request.json
@@ -23,13 +22,15 @@ def generate_route():
     if len(pedidos) < 2:
       return jsonify({'error': f'No se puede generar una ruta para una lista de pedidos menor a dos', 'len': len(pedidos)})
     
-    def route(pedidosPair):
-      return pedidosPair.get("cliente").get("direccion")
+    def route(pedido):
+      return pedido.get("cliente").get("direccion")
       
     listOfPoints = list(map(route, pedidos))
-    calculatedRoute = getRouteFromListOfRoutes(listOfPoints)
-    return jsonify(calculatedRoute)
+
+    route = generate_route_service(listOfPoints, pedidos)
+
+    return route.toJSON()
     
   except Exception as e: 
-    print(e)
-    return e, 400
+    print(traceback.format_exc())
+    return default_route.toJSON(), 400

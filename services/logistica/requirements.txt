@@ -1,8 +1,7 @@
 Flask
 SQLAlchemy
 googlemaps
-more_itertools
 pybreaker
 Flask-SQLAlchemy
-ortools
 psycopg2
+uuid
