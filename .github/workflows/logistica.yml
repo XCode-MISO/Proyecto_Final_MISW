@@ -30,16 +30,16 @@ jobs:
         docker run --name postgres -e POSTGRES_USER=user -e POSTGRES_PASSWORD=secret -e POSTGRES_DB=db-routes  -p 5432:5432 -d postgres
     - name: Test with pytest
       env:
-        FLASK_DEBUG: ${{ secrets.FLASK_DEBUG }}
-        GMAPS_API_KEY: ${{ secrets.GMAPS_API_KEY }}
-        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-        DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        DATABASE_USER: ${{ secrets.DATABASE_USER }}
-        GOOGLE_CLOUD_PROJECT: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
-        PEDIDO_DESPACHADO_TOPIC: ${{ secrets.PEDIDO_DESPACHADO_TOPIC }}
-        PEDIDO_CREADO_TOPIC: ${{ secrets.PEDIDO_CREADO_TOPIC }}
-        PEDIDO_CREADO_SUB: ${{ secrets.PEDIDO_CREADO_SUB }}
+        FLASK_DEBUG: ${{ vars.FLASK_DEBUG }}
+        GMAPS_API_KEY: ${{ vars.GMAPS_API_KEY }}
+        DATABASE_PASSWORD: ${{ vars.DATABASE_PASSWORD }}
+        DATABASE_PORT: ${{ vars.DATABASE_PORT }}
+        DATABASE_URL: ${{ vars.DATABASE_URL }}
+        DATABASE_USER: ${{ vars.DATABASE_USER }}
+        GOOGLE_CLOUD_PROJECT: ${{ vars.GOOGLE_CLOUD_PROJECT }}
+        PEDIDO_DESPACHADO_TOPIC: ${{ vars.PEDIDO_DESPACHADO_TOPIC }}
+        PEDIDO_CREADO_TOPIC: ${{ vars.PEDIDO_CREADO_TOPIC }}
+        PEDIDO_CREADO_SUB: ${{ vars.PEDIDO_CREADO_SUB }}
       run: |
-        env && 
+        docker run --name postgres -e POSTGRES_USER=${{vars.DATABASE_USER}} -e POSTGRES_PASSWORD=${{vars.DATABASE_PASSWORD}} -e POSTGRES_DB=db-routes  -p 5432:5432 -d postgres && 
         pytest services/logistica
