@@ -5,7 +5,6 @@ import googlemaps
 import os
 import pybreaker
 
-from logistica.infrastructure.db.model import Pedido, Route
 from logistica.infrastructure.maps.types import Bounds, Distance, Duration, Leg, Location, TypedObject
 
 # Used in database integration points

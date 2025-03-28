@@ -13,7 +13,8 @@ def generate_route():
       nombreRuta="default",
       distancia=0,
       tiempoEstimado=0,
-      pedidos = []
+      pedidos = [],
+      mapsResponse= ""
     )
   try:
     body = request.json
@@ -28,7 +29,7 @@ def generate_route():
       
     listOfPoints = list(map(route, pedidos))
 
-    route = generate_route_service(listOfPoints, pedidos)
+    route: Route = generate_route_service(listOfPoints, pedidos)
 
     return route.toJSON()
     

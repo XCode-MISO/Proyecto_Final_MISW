@@ -15,7 +15,7 @@ def create_app():
     with app.app_context() as context:
         db.create_all()
         thread = threading.Thread(target=lambda: consume_pedido_creado(context))
-        thread.setDaemon(True)
+        thread.daemon = True
         thread.start()
 
     @app.route("/")

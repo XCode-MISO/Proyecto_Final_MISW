@@ -26,3 +26,4 @@ class Route(db.Model):
     distancia = db.Column(Float)
     tiempoEstimado = db.Column(Integer)
     pedidos: Mapped[List[Pedido]] = relationship(secondary=association_table)
+    mapsResponse = db.Column(String)
