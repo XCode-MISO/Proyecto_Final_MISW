@@ -41,4 +41,5 @@ jobs:
         PEDIDO_CREADO_TOPIC: ${{ secrets.PEDIDO_CREADO_TOPIC }}
         PEDIDO_CREADO_SUB: ${{ secrets.PEDIDO_CREADO_SUB }}
       run: |
+        env && 
         pytest services/logistica
