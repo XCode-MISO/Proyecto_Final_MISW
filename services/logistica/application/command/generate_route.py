@@ -2,6 +2,7 @@ import traceback
 from flask import Blueprint, request, jsonify
 
 from logistica.application.services.generate_route import generate_route as generate_route_service
+from logistica.domain.model import Route
 
 comandos_bp = Blueprint('comandos', __name__)
 

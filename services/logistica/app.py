@@ -1,3 +1,4 @@
+import threading
 from flask import Flask
 from logistica.infrastructure.config import Config
 from logistica.infrastructure.pub_sub import consume_pedido_creado
@@ -11,9 +12,11 @@ def create_app():
     db.init_app(app)
     app.register_blueprint(comandos_bp)
 
-    with app.app_context():
+    with app.app_context() as context:
         db.create_all()
-        consume_pedido_creado()
+        thread = threading.Thread(target=lambda: consume_pedido_creado(context))
+        thread.setDaemon(True)
+        thread.start()
 
     @app.route("/")
     def hello_world():

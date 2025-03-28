@@ -1,8 +1,8 @@
 from typing import List
 
 from logistica.infrastructure.maps.maps import getRouteFromListOfRoutes
-from services.logistica.domain.model import Route, parseMapsResponseToRoute
-from services.logistica.infrastructure import db
+from logistica.domain.model import Route, parseMapsResponseToRoute
+from logistica.infrastructure.db.model import db
 
 
 def generate_route(listOfPoints: List[str], pedidos: List):

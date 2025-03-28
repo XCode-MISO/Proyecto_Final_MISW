@@ -179,3 +179,6 @@ node_modules
 .python-version
 
 launch.json
+
+.terraform*
+terraform.tfstate*

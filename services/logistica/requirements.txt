@@ -5,3 +5,4 @@ pybreaker
 Flask-SQLAlchemy
 psycopg2
 uuid
+google-cloud-pubsub
