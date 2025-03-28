@@ -7,9 +7,6 @@ on:
   push:
     paths:
       - 'services/logistica/**'
-  pull_request:
-    paths:
-      - 'services/logistica/**'
 
 permissions:
   contents: read
