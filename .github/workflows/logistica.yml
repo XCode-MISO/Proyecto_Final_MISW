@@ -17,6 +17,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: LOGISTICA_CI
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.13
@@ -34,7 +35,10 @@ jobs:
       env:
         FLASK_DEBUG: ${{ secrets.FLASK_DEBUG }}
         GMAPS_API_KEY: ${{ secrets.GMAPS_API_KEY }}
+        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        DATABASE_USER: ${{ secrets.DATABASE_USER }}
         GOOGLE_CLOUD_PROJECT: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
         PEDIDO_DESPACHADO_TOPIC: ${{ secrets.PEDIDO_DESPACHADO_TOPIC }}
         PEDIDO_CREADO_TOPIC: ${{ secrets.PEDIDO_CREADO_TOPIC }}
