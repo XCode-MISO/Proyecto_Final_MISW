@@ -27,7 +27,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt; fi
+        pip install -r requirements.txt
     - name: Start PostgreSQL
       run: |
         docker run --name postgres -e POSTGRES_USER=user -e POSTGRES_PASSWORD=secret -e POSTGRES_DB=db-routes  -p 5432:5432 -d postgres
