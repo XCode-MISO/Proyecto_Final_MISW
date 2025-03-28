@@ -27,7 +27,7 @@ jobs:
         pip install -r services/logistica/requirements.txt
     - name: Start PostgreSQL
       run: |
-        docker run --name postgres -e POSTGRES_USER=user -e POSTGRES_PASSWORD=secret -e POSTGRES_DB=db-routes  -p 5432:5432 -d postgres
+        docker run --name postgres -e POSTGRES_USER=${{vars.DATABASE_USER}} -e POSTGRES_PASSWORD=${{vars.DATABASE_PASSWORD}} -e POSTGRES_DB=db-routes  -p 5432:5432 -d postgres 
     - name: Test with pytest
       env:
         FLASK_DEBUG: ${{ vars.FLASK_DEBUG }}
@@ -41,5 +41,4 @@ jobs:
         PEDIDO_CREADO_TOPIC: ${{ vars.PEDIDO_CREADO_TOPIC }}
         PEDIDO_CREADO_SUB: ${{ vars.PEDIDO_CREADO_SUB }}
       run: |
-        docker run --name postgres -e POSTGRES_USER=${{vars.DATABASE_USER}} -e POSTGRES_PASSWORD=${{vars.DATABASE_PASSWORD}} -e POSTGRES_DB=db-routes  -p 5432:5432 -d postgres && 
         pytest services/logistica
