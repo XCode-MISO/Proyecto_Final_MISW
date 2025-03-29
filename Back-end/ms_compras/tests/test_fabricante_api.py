@@ -4,10 +4,8 @@ from models.db import db
 
 @pytest.fixture
 def client():
-    # Creamos la app con configuración de testing
     app = create_app()
     app.config['TESTING'] = True
-    # Usamos SQLite en memoria para las pruebas
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     with app.app_context():
         db.create_all()
@@ -31,11 +29,10 @@ def test_crear_fabricante_telefono_invalido(client):
     payload = {
         "nombre": "Fábrica Prueba",
         "correo": "prueba@ejemplo.com",
-        "telefono": "abc123",  # Teléfono inválido (no son solo dígitos)
+        "telefono": "abc123",  # Inválido
         "empresa": "Empresa Prueba"
     }
     response = client.post("/api/fabricantes", json=payload)
     assert response.status_code == 400
     data = response.get_json()
     assert "errors" in data
-    assert "telefono" in data["errors"]

@@ -7,7 +7,6 @@ class ProductoService:
         fab = Fabricante.query.get(fabricante_id)
         if not fab:
             raise ValueError("Fabricante no encontrado")
-
         nuevo_prod = Producto(
             nombre=nombre,
             descripcion=descripcion,
