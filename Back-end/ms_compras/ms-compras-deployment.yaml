@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-compras-deployment
+  labels:
+    app: ms-compras
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ms-compras
+  template:
+    metadata:
+      labels:
+        app: ms-compras
+    spec:
+      containers:
+      - name: ms-compras
+        image: gcr.io/misw-4301-native-cloud-433702/ms_compras:latest
+        ports:
+        - containerPort: 5001
+        env:
+        - name: DB_HOST
+          value: "34.171.48.199"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          value: "admin_write"
+        - name: DB_PASS
+          value: "PASSWORD_123"
+        - name: DB_NAME
+          value: "compras_db"
+        - name: GCP_PROJECT_ID
+          value: "misw-4301-native-cloud-433702"
+        - name: PUBSUB_TOPIC_ID
+          value: "compras-topic"

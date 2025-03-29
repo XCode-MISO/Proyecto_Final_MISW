@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-inventarios-deployment
+  labels:
+    app: ms-inventarios
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ms-inventarios
+  template:
+    metadata:
+      labels:
+        app: ms-inventarios
+    spec:
+      containers:
+      - name: ms-inventarios
+        image: gcr.io/misw-4301-native-cloud-433702/ms_inventarios:latest
+        ports:
+        - containerPort: 5002
+        env:
+        - name: DB_HOST
+          value: "34.171.48.199"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          value: "admin_write"
+        - name: DB_PASS
+          value: "PASSWORD_123"
+        - name: DB_NAME
+          value: "inventarios_db"
+        - name: GCP_PROJECT_ID
+          value: "misw-4301-native-cloud-433702"
+        - name: PUBSUB_SUBSCRIPTION_ID
+          value: "inventarios-sub"

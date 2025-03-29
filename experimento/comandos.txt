@@ -87,3 +87,24 @@ gcloud pubsub topics create compras-topic --project misw-4301-native-cloud-43370
 gcloud pubsub subscriptions create inventarios-sub \
     --topic compras-topic \
     --project misw-4301-native-cloud-433702
+
+
+
+
+
+docker build --platform linux/amd64 -t gcr.io/misw-4301-native-cloud-433702/ms_compras:latest .
+docker push gcr.io/misw-4301-native-cloud-433702/ms_compras:latest
+
+docker build --platform linux/amd64 -t gcr.io/misw-4301-native-cloud-433702/ms_inventarios:latest .
+docker push gcr.io/misw-4301-native-cloud-433702/ms_inventarios:latest
+
+
+kubectl apply -f ms-compras-deployment.yaml
+kubectl apply -f ms-compras-service.yaml
+kubectl apply -f ms-inventarios-deployment.yaml
+kubectl apply -f ms-inventarios-service.yaml
+
+
+
+
+kubectl logs ms-compras-deployment-9ffb5cdd-flkj9 --previous
