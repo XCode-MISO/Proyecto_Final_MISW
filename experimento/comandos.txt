@@ -1,3 +1,8 @@
+gcloud projects list
+
+gcloud config set project misw-4301-native-cloud-433702 
+
+
 docker build --platform linux/amd64 -t gcr.io/xenon-broker-309217/recomendations-command:latest .
 docker push gcr.io/xenon-broker-309217/recomendations-command:latest
 docker build --platform linux/amd64 -t gcr.io/xenon-broker-309217/recomendations-query:latest .
@@ -22,6 +27,23 @@ gcloud container clusters create my-cluster \
   --enable-ip-alias \
   --scopes=https://www.googleapis.com/auth/cloud-platform
 
+gcloud sql instances create write-instance \ 
+--database-version=POSTGRES_13 \
+  --tier=db-f1-micro \
+  --region=us-central1
+
+gcloud sql instances create read-instance \
+  --database-version=POSTGRES_13 \
+  --tier=db-f1-micro \
+  --region=us-central1
+
+
+  gcloud sql users create query_user \
+    --instance=queries-db \
+    --password="SECURE_PASSWORD_QUERY"
+
+
+  gcloud sql databases create inventarios_db --instance=write-instance 
 
 
  gcloud functions deploy process_video \
@@ -51,3 +73,17 @@ gcloud compute instances describe gke-my-cluster-default-pool-ba89f0a0-3t0f \
 
 
 
+docker build gcr.io/xenon-broker-309217/recomendations-command:latest .
+docker push gcr.io/xenon-broker-309217/recomendations-command:latest
+
+
+
+misw-4301-native-cloud-433702 
+
+
+gcloud pubsub topics create compras-topic --project misw-4301-native-cloud-433702
+
+
+gcloud pubsub subscriptions create inventarios-sub \
+    --topic compras-topic \
+    --project misw-4301-native-cloud-433702

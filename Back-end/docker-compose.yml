@@ -1,0 +1,66 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15.2
+    container_name: postgres_ms
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ms_compras:
+    build: 
+      context: ./ms_compras
+      dockerfile: Dockerfile
+    container_name: ms_compras_container
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: compras_db
+      GCP_PROJECT_ID: "misw-4301-native-cloud-433702"
+      PUBSUB_TOPIC_ID: "compras-topic"
+      GOOGLE_APPLICATION_CREDENTIALS: "/app/credentials.json"
+
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./credentials.json:/app/credentials.json
+    command: ["/bin/sh", "-c", "until pg_isready -h db -p 5432; do echo waiting for db; sleep 2; done; python app.py"]
+
+  ms_inventarios:
+    build:
+      context: ./ms_inventarios
+      dockerfile: Dockerfile
+    container_name: ms_inventarios_container
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: inventarios_db
+      GCP_PROJECT_ID: "misw-4301-native-cloud-433702"
+      PUBSUB_SUBSCRIPTION_ID: "inventarios-sub"
+      GOOGLE_APPLICATION_CREDENTIALS: "/app/credentials.json"
+
+    ports:
+      - "5002:5002"
+    volumes:
+      - ./credentials.json:/app/credentials.json
+    command: ["/bin/sh", "-c", "until pg_isready -h db -p 5432; do echo waiting for db; sleep 2; done; python app.py"]
+volumes:
+  postgres_data:
