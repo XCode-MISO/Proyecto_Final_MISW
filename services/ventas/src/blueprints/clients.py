@@ -19,3 +19,11 @@ def getClient(id):
 def getAllClients():
     clients = GetAllClients().execute()
     return jsonify(clients)
+
+@client_blueprint.route("/")
+def root_path():
+    return "<p>Servicio de Ventas</p>"
+
+@client_blueprint.route("/health")
+def health_check():
+    return "Ok"
