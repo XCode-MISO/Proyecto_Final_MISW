@@ -19,7 +19,9 @@ import androidx.compose.ui.unit.dp
 import com.example.sigccp.navigation.NavigationScreen
 import com.example.sigccp.ui.theme.AppTypography
 import com.example.sigccp.ui.theme.SIGCCPTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

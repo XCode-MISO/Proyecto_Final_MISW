@@ -1,4 +1,4 @@
-package com.example.sigccp.activity.menu
+package com.example.sigccp.activity.menu.UI.View
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -113,6 +113,7 @@ fun Options(navController: NavController)
             }
             //newButton(onClick = { "navController.navigate(AppScreen.CrearAlarma.route) }", nombre = "CREAR ALARMA", imagen = R.drawable.editar)
             newButton(onClick = {navController.navigate(AppScreen.ListarPedidos.route)}, nombre = "PEDIDOS", imagen = R.drawable.editar, enabled = true)
+            newButton(onClick =  {/*TODO*/}, nombre = "CREAR CLIENTE", imagen = R.drawable.editar, enabled = true)
             newButton(onClick = {/*TODO*/}, nombre = "CLIENTES", imagen = R.drawable.ver, enabled = false)
             newButton(onClick = {/*TODO*/}, nombre = "INVENTARIO", imagen = R.drawable.ver, enabled = false)
             newButton(onClick = {/*TODO*/}, nombre = "RUTAS", imagen = R.drawable.ia,enabled = false)
