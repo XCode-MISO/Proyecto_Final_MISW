@@ -1,7 +1,4 @@
 steps:
-  options:
-    logging: CLOUD_LOGGING_ONLY
-  - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'build'
     - '-t'
@@ -37,3 +34,5 @@ steps:
     - --location=us-central1
     - --cluster=my-cluster
     - --image=gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/logistica:latest
+options:
+  logging: CLOUD_LOGGING_ONLY
