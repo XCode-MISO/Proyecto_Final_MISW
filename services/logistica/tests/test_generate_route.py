@@ -23,7 +23,7 @@ def client():
         db.drop_all()
 
 
-def test_generate_route(client):
+def generate_route(client):
     data = {
         "pedidos": [
             {
@@ -48,6 +48,10 @@ def test_generate_route(client):
     }
     response = client.post('/generate-route', data=json.dumps(data),
                            content_type='application/json')
+    return response
+
+def test_generate_route(client):
+    response = generate_route(client)
     assert response.status_code == 200
     resp_json = json.loads(response.data)
     assert resp_json['distancia'] == 41896

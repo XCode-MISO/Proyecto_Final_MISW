@@ -41,4 +41,8 @@ jobs:
         PEDIDO_CREADO_TOPIC: ${{ vars.PEDIDO_CREADO_TOPIC }}
         PEDIDO_CREADO_SUB: ${{ vars.PEDIDO_CREADO_SUB }}
       run: |
-        pytest services/logistica
+        coverage run -m pytest services/logistica
+    - name: Start PostgreSQL
+      run: |
+        coverage report
+      
