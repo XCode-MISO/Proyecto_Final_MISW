@@ -14,7 +14,7 @@ steps:
     entrypoint: bash
     args:
     - '-c'
-    - sed -i 's/%GOOGLE_CLOUD_PROJECT%/'${_GOOGLE_CLOUD_PROJECT}'/g' services/logistica/gcp/kubernetes/deployment.yaml
+    - sed -i 's/%GOOGLE_CLOUD_PROJECT%/'${_GOOGLE_CLOUD_PROJECT}'/g' services/ventas/gcp/kubernetes/deployment.yaml
   # REPLACE DATABASE_URL
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
@@ -57,7 +57,7 @@ steps:
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
     - run
-    - --filename=services/logistica/gcp/ventas/service.yaml
+    - --filename=services/ventas/gcp/ventas/service.yaml
     - --location=us-central1
     - --cluster=my-cluster
     - --output=output/service
