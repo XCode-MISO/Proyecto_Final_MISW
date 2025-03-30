@@ -57,7 +57,7 @@ steps:
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
     - run
-    - --filename=services/ventas/gcp/ventas/service.yaml
+    - --filename=services/ventas/gcp/kubernetes/service.yaml
     - --location=us-central1
     - --cluster=my-cluster
     - --output=output/service
