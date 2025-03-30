@@ -18,6 +18,11 @@ class Pedido(db.Model):
     __tablename__ = 'pedido'
     pedido_id = db.Column(String, primary_key=True)
     direccion = db.Column(String)
+    def toJSON(self):
+        return {
+            "id": self.pedido_id,
+            "direccion": self.direccion
+        }
     
 class Route(db.Model):
     __tablename__ = 'route'
@@ -27,3 +32,13 @@ class Route(db.Model):
     tiempoEstimado = db.Column(Integer)
     pedidos: Mapped[List[Pedido]] = relationship(secondary=association_table)
     mapsResponse = db.Column(String)
+    
+    def toJSON(self):
+        return {
+            "id": self.route_id,
+            "nombreRuta": self.nombreRuta,
+            "distancia": self.distancia,
+            "tiempoEstimado": self.tiempoEstimado,
+            "pedidos": list(map(lambda pedido: pedido.toJSON(), self.pedidos)),
+            "mapsResponse": json.loads(self.mapsResponse)
+        }
