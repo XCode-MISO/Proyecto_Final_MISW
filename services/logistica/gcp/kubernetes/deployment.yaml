@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logistica-deployment
+  labels:
+    app: logistica
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logistica
+  template:
+    metadata:
+      labels:
+        app: logistica
+    spec:
+      containers:
+      - name: logistica
+        image: gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/logistica
+        ports:
+        - containerPort: 8080
+        env:
+        - name: FLASK_DEBUG
+          value: "1" #
+        - name: GMAPS_API_KEY
+          value: "%GMAPS_API_KEY%"
+        - name: DATABASE_USER
+          value: "%DATABASE_USER%"
+        - name: DATABASE_PASSWORD
+          value: "%DATABASE_PASSWORD%"
+        - name: DATABASE_PORT
+          value: "%DATABASE_PORT%"
+        - name: DATABASE_URL
+          value: "%DATABASE_URL%"
+        - name: GOOGLE_CLOUD_PROJECT
+          value: "%GOOGLE_CLOUD_PROJECT%"
+        - name: PEDIDO_DESPACHADO_TOPIC
+          value: "PedidoDespachado"
+        - name: PEDIDO_CREADO_TOPIC
+          value: "PedidoCreado"
+        - name: PEDIDO_CREADO_SUB
+          value: "logistica"

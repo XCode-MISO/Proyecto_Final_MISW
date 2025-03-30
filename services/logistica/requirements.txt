@@ -1,0 +1,10 @@
+Flask
+SQLAlchemy
+googlemaps
+pybreaker
+Flask-SQLAlchemy
+psycopg2-binary
+uuid
+google-cloud-pubsub
+pytest
+coverage

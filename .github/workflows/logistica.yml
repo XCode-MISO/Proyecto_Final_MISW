@@ -1,0 +1,48 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Python application
+
+on:
+  pull_request:
+    paths:
+      - 'services/logistica/**'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: LOGISTICA_CI
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.13"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r services/logistica/requirements.txt
+    - name: Start PostgreSQL
+      run: |
+        docker run --name postgres -e POSTGRES_USER=${{vars.DATABASE_USER}} -e POSTGRES_PASSWORD=${{vars.DATABASE_PASSWORD}} -e POSTGRES_DB=rutas_db  -p ${{vars.DATABASE_PORT}}:5432 -d postgres 
+    - name: Test with pytest
+      env:
+        FLASK_DEBUG: ${{ vars.FLASK_DEBUG }}
+        GMAPS_API_KEY: ${{ vars.GMAPS_API_KEY }}
+        DATABASE_PASSWORD: ${{ vars.DATABASE_PASSWORD }}
+        DATABASE_PORT: ${{ vars.DATABASE_PORT }}
+        DATABASE_URL: ${{ vars.DATABASE_URL }}
+        DATABASE_USER: ${{ vars.DATABASE_USER }}
+        GOOGLE_CLOUD_PROJECT: ${{ vars.GOOGLE_CLOUD_PROJECT }}
+        PEDIDO_DESPACHADO_TOPIC: ${{ vars.PEDIDO_DESPACHADO_TOPIC }}
+        PEDIDO_CREADO_TOPIC: ${{ vars.PEDIDO_CREADO_TOPIC }}
+        PEDIDO_CREADO_SUB: ${{ vars.PEDIDO_CREADO_SUB }}
+      run: |
+        coverage run -m pytest services/logistica
+    - name: Coverage Report
+      run: |
+        coverage report
+      
