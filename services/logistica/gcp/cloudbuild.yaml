@@ -60,5 +60,6 @@ steps:
     - --filename=services/logistica/gcp/kubernetes/service.yaml
     - --location=us-central1
     - --cluster=my-cluster
+    - --output=output/service
 options:
   logging: CLOUD_LOGGING_ONLY
