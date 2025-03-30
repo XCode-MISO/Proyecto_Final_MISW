@@ -23,17 +23,17 @@ spec:
         - name: FLASK_DEBUG
           value: "1" #
         - name: GMAPS_API_KEY
-          value: %GMAPS_API_KEY%
+          value: "%GMAPS_API_KEY%"
         - name: DATABASE_USER
-          value: "user"
+          value: "%DATABASE_USER%"
         - name: DATABASE_PASSWORD
-          value: "password"
+          value: "%DATABASE_PASSWORD%"
         - name: DATABASE_PORT
-          value: "5433"
+          value: "%DATABASE_PORT%"
         - name: DATABASE_URL
-          value: %DATABASE_URL%
+          value: "%DATABASE_URL%"
         - name: GOOGLE_CLOUD_PROJECT
-          value: %GOOGLE_CLOUD_PROJECT% 
+          value: "%GOOGLE_CLOUD_PROJECT%"
         - name: PEDIDO_DESPACHADO_TOPIC
           value: "PedidoDespachado"
         - name: PEDIDO_CREADO_TOPIC

@@ -27,6 +27,24 @@ steps:
     args:
     - '-c'
     - sed -i 's/%DATABASE_URL%/'${_DATABASE_URL}'/g' services/logistica/gcp/kubernetes/deployment.yaml
+  # REPLACE DATABASE_USER
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+    - '-c'
+    - sed -i 's/%DATABASE_USER%/'${_DATABASE_USER}'/g' services/logistica/gcp/kubernetes/deployment.yaml
+  # REPLACE DATABASE_PASSWORD
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+    - '-c'
+    - sed -i 's/%DATABASE_PASSWORD%/'${_DATABASE_PASSWORD}'/g' services/logistica/gcp/kubernetes/deployment.yaml
+  # REPLACE DATABASE_PORT
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+    - '-c'
+    - sed -i 's/%DATABASE_PORT%/'${_DATABASE_PORT}'/g' services/logistica/gcp/kubernetes/deployment.yaml
   # Kubernetes Deploy
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
