@@ -5,7 +5,7 @@ metadata:
   labels:
     app: ms-inventarios
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: ms-inventarios

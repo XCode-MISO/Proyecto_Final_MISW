@@ -3,6 +3,12 @@ gcloud projects list
 gcloud config set project misw-4301-native-cloud-433702 
 
 
+
+gcloud container clusters create-auto my-cluster \ 
+  --region us-central1 \
+  --scopes=https://www.googleapis.com/auth/cloud-platform
+
+
 docker build --platform linux/amd64 -t gcr.io/xenon-broker-309217/recomendations-command:latest .
 docker push gcr.io/xenon-broker-309217/recomendations-command:latest
 docker build --platform linux/amd64 -t gcr.io/xenon-broker-309217/recomendations-query:latest .
@@ -17,15 +23,6 @@ kubectl apply -f recommendations-ingress.yaml
 
 
 
-
-gcloud container clusters create my-cluster \
-  --zone us-central1 \
-  --num-nodes=1 \
-  --machine-type=e2-standard-2 \
-  --disk-size=10 \
-  --enable-autoscaling --min-nodes=1 --max-nodes=3 \
-  --enable-ip-alias \
-  --scopes=https://www.googleapis.com/auth/cloud-platform
 
 gcloud sql instances create write-instance \ 
 --database-version=POSTGRES_13 \
@@ -112,3 +109,89 @@ kubectl logs ms-compras-deployment-9ffb5cdd-flkj9 --previous
 gcloud pubsub subscriptions pull inventarios-sub --limit=10 --auto-ack --project misw-4301-native-cloud-433702
 
 gcloud pubsub subscriptions describe inventarios-sub --project misw-4301-native-cloud-433702
+
+
+
+gcloud api-gateway api-configs create my-config \
+  --api=my-api \
+  --openapi-spec=openapi.yaml \
+  --project=misw-4301-native-cloud-433702
+
+
+
+  gcloud api-gateway gateways create my-gateway \
+  --api=my-api \
+  --api-config=my-config \
+  --location=us-central1 \
+  --project=misw-4301-native-cloud-433702
+
+
+
+  gcloud api-gateway gateways describe my-gateway --location=us-central1 --project=misw-4301-native-cloud-433702
+
+
+
+
+  gcloud api-gateway gateways describe my-gateway --location=us-central1 --format="value(defaultHostname)"
+
+
+
+gcloud projects add-iam-policy-binding misw-4301-native-cloud-433702 \
+  --member="serviceAccount:misw-4301-native-cloud-433702@appspot.gserviceaccount.com" \
+  --role="roles/pubsub.subscriber" \
+  --condition="expression=true,title=AllowPubsubSubscriber,description=Granting Pub/Sub subscriber role unconditionally"
+
+
+  kubectl annotate serviceaccount default iam.gke.io/gcp-service-account=misw-4301-native-cloud-433702@appspot.gserviceaccount.com --overwrite
+
+
+gcloud iam service-accounts add-iam-policy-binding misw-4301-native-cloud-433702@appspot.gserviceaccount.com \
+  --member="serviceAccount:misw-4301-native-cloud-433702.svc.id.goog[default/default]" \
+  --role="roles/iam.workloadIdentityUser" \
+  --project=misw-4301-native-cloud-433702
+
+my-gateway-1qkjvfz9.uc.gateway.dev
+
+
+
+  curl 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBt-n8T_SOTiqzO9eHDwcMCQwR46t5Byzs' \
+-H 'Content-Type: application/json' \
+--data-binary '{
+  "email": "esneiderrestrepo.7@gmail.com",
+  "password": "holamundo",
+  "returnSecureToken": true
+}'
+
+
+gcloud api-gateway apis create microservicios-api \
+  --project=misw-4301-native-cloud-433702
+
+
+  gcloud api-gateway api-configs create microservicios-config-v2 \
+  --api=microservicios-api \
+  --openapi-spec=api-spec.yaml \
+  --project=misw-4301-native-cloud-433702 \
+  --backend-auth-service-account=misw-4301-native-cloud-433702@appspot.gserviceaccount.com
+
+
+  gcloud api-gateway gateways create microservicios-gateway \
+  --api=microservicios-api \
+  --api-config=microservicios-config-v1 \
+  --location=us-central1 \
+  --project=misw-4301-native-cloud-433702
+
+
+ gcloud api-gateway gateways update microservicios-gateway \
+  --api=microservicios-api \
+  --api-config=ms-config-fixed \
+  --location=us-central1 \
+  --project=misw-4301-native-cloud-433702
+
+
+  gcloud api-gateway gateways describe microservicios-gateway \
+  --location=us-central1 \
+  --project=misw-4301-native-cloud-433702 \
+  --format="value(defaultHostname)"git add .
+  
+
+  microservicios-gateway-1qkjvfz9.uc.gateway.dev

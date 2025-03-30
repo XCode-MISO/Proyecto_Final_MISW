@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from services.producto_service import ProductoService
+from models.producto import Producto
 
 producto_bp = Blueprint('producto_bp', __name__)
 producto_service = ProductoService()
@@ -8,20 +9,20 @@ producto_service = ProductoService()
 def crear_producto(fabricante_id):
     data = request.get_json() or {}
     nombre = data.get('nombre')
-    descripcion = data.get('descripcion')
+    cantidad = data.get('cantidad')
     precio_compra = data.get('precioCompra')
     moneda = data.get('moneda')
     prod = producto_service.crear_producto(
         fabricante_id=fabricante_id,
         nombre=nombre,
-        descripcion=descripcion,
+        cantidad=cantidad,
         precio_compra=precio_compra,
         moneda=moneda
     )
     return jsonify({
         "id": prod.id,
         "nombre": prod.nombre,
-        "descripcion": prod.descripcion,
+        "cantidad": prod.cantidad,
         "precioCompra": prod.precio_compra,
         "moneda": prod.moneda,
         "fabricanteId": prod.fabricante_id
@@ -46,7 +47,7 @@ def buscar_producto():
     except ValueError:
         return jsonify({"error": "El parámetro 'fabricanteId' debe ser un entero"}), 400
 
-    from models.producto import Producto
+   
     # Buscar productos cuyo nombre contenga el texto (fuzzy search) y que pertenezcan al fabricante
     productos = Producto.query.filter(
         Producto.nombre.ilike(f"%{nombre}%"),

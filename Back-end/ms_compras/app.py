@@ -6,6 +6,10 @@ from apis.producto_api import producto_bp
 from apis.detalle_compra_api import detalle_compra_bp
 from werkzeug.exceptions import HTTPException
 import os
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 def create_app():
     app = Flask(__name__)
