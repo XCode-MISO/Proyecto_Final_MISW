@@ -25,7 +25,7 @@ spec:
         - name: FLASK_DEBUG
           value: "1" #
         - name: GMAPS_API_KEY
-          value: %GMAPS_API_KEY% #"AIzaSyAUeA0tVvrF8O0JNJohoKBtIaMCV3uNZdI"
+          value: %GMAPS_API_KEY%
         - name: DATABASE_USER
           value: "user"
         - name: DATABASE_PASSWORD

@@ -20,7 +20,7 @@ steps:
     entrypoint: bash
     args:
     - '-c'
-    - sed -i 's/%%GOOGLE_CLOUD_PROJECT%%/'${_GOOGLE_CLOUD_PROJECT}'/g' services/logistica/gcp/kubernetes/deployment.yaml
+    - sed -i 's/%GOOGLE_CLOUD_PROJECT%/'${_GOOGLE_CLOUD_PROJECT}'/g' services/logistica/gcp/kubernetes/deployment.yaml
   # REPLACE DATABASE_URL
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
