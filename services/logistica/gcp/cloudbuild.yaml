@@ -1,0 +1,37 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+    - 'build'
+    - '-t'
+    - 'gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/logistica:latest'
+    - '-f'
+    - 'services/logistica/Dockerfile'
+    - 'services/logistica'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/logistica:latest']
+  # REPLACE GOOGLE MAPS API KEY
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+    - '-c'
+    - sed -i 's/%GMAPS_API_KEY%/'${_GMAPS_API_KEY}'/g' gcp/kubernetes/deployment.yaml
+  # REPLACE GOOGLE PROJECT
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+    - '-c'
+    - sed -i 's/%%GOOGLE_CLOUD_PROJECT%%/'${_GOOGLE_CLOUD_PROJECT}'/g' gcp/kubernetes/deployment.yaml
+  # REPLACE DATABASE_URL
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+    - '-c'
+    - sed -i 's/%DATABASE_URL%/'${_DATABASE_URL}'/g' gcp/kubernetes/deployment.yaml
+  # Kubernetes Deploy
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+    - run
+    - --filename=gcp/kubernetes/deployment.yaml
+    - --location=us-central1
+    - --cluster=my-cluster
+    - --image=gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/logistica:latest
