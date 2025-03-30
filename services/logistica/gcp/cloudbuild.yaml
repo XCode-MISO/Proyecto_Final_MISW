@@ -53,5 +53,12 @@ steps:
     - --location=us-central1
     - --cluster=my-cluster
     - --image=gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/logistica:latest
+  # Kubernetes Service Updated
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+    - run
+    - --filename=services/logistica/gcp/kubernetes/service.yaml
+    - --location=us-central1
+    - --cluster=my-cluster
 options:
   logging: CLOUD_LOGGING_ONLY
