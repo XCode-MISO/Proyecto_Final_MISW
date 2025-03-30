@@ -31,7 +31,7 @@ steps:
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
     - run
-    - --filename=services/gcp/kubernetes/deployment.yaml
+    - --filename=services/logistica/gcp/kubernetes/deployment.yaml
     - --location=us-central1
     - --cluster=my-cluster
     - --image=gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/logistica:latest
