@@ -1,0 +1,11 @@
+import os
+
+
+
+class Config:
+    DATABASE_USER = os.environ.get('DATABASE_USER')
+    DATABASE_PASSWORD = os.environ.get('DATABASE_PASSWORD')
+    DATABASE_PORT = os.environ.get('DATABASE_PORT')
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+    SQLALCHEMY_DATABASE_URI = f"postgresql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_URL}:{DATABASE_PORT}/db-routes"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False

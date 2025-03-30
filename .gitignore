@@ -172,3 +172,13 @@ cython_debug/
 
 video_data.js
 videos/
+
+node_modules
+
+.env
+.python-version
+
+launch.json
+
+.terraform*
+terraform.tfstate*
