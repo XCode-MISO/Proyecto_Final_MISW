@@ -14,19 +14,19 @@ steps:
     entrypoint: bash
     args:
     - '-c'
-    - sed -i 's/%GMAPS_API_KEY%/'${_GMAPS_API_KEY}'/g' services/gcp/kubernetes/deployment.yaml
+    - sed -i 's/%GMAPS_API_KEY%/'${_GMAPS_API_KEY}'/g' services/logistica/gcp/kubernetes/deployment.yaml
   # REPLACE GOOGLE PROJECT
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:
     - '-c'
-    - sed -i 's/%%GOOGLE_CLOUD_PROJECT%%/'${_GOOGLE_CLOUD_PROJECT}'/g' services/gcp/kubernetes/deployment.yaml
+    - sed -i 's/%%GOOGLE_CLOUD_PROJECT%%/'${_GOOGLE_CLOUD_PROJECT}'/g' services/logistica/gcp/kubernetes/deployment.yaml
   # REPLACE DATABASE_URL
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:
     - '-c'
-    - sed -i 's/%DATABASE_URL%/'${_DATABASE_URL}'/g' services/gcp/kubernetes/deployment.yaml
+    - sed -i 's/%DATABASE_URL%/'${_DATABASE_URL}'/g' services/logistica/gcp/kubernetes/deployment.yaml
   # Kubernetes Deploy
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
