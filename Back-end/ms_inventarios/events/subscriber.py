@@ -1,18 +1,17 @@
-# ms_inventarios/events/subscriber.py
 import os
+import sys
 import json
 from google.cloud import pubsub_v1
-
-# Importa el servicio que usas
 from services.inventario_service import InventarioService
+from models.db import db
+from models.producto import Producto
 
-# Crea una instancia global del servicio (esto no necesita contexto)
 inventario_service = InventarioService()
 
 def callback(message):
-    # Importamos create_app para poder crear un contexto de aplicación
+    # Para usar el ORM de Flask, creamos un contexto de aplicación
     from app import create_app
-    app = create_app()  # Se crea la aplicación
+    app = create_app()
     with app.app_context():
         data_str = message.data.decode('utf-8')
         event_data = json.loads(data_str)
@@ -20,12 +19,25 @@ def callback(message):
         if event_data.get("eventType") == "DetalleCompraCreado":
             producto_id = event_data.get("productoId")
             cantidad = event_data.get("cantidad", 0)
-            # Aquí ya estamos en un contexto de aplicación, por lo que podemos usar db queries
+            nombre = event_data.get("nombre")
+            precio = event_data.get("precio")
+            fabricante_id = event_data.get("fabricanteId")
+            # Actualizar el stock en la tabla de inventario
             inventario_service.incrementar_stock(producto_id, cantidad)
+            # Actualizar (o insertar) en la tabla desnormalizada de productos
+            prod = Producto.query.filter_by(producto_id=producto_id).first()
+            if prod:
+                prod.nombre = nombre
+                prod.precio = precio
+                prod.fabricante_id = fabricante_id
+            else:
+                prod = Producto(producto_id=producto_id, nombre=nombre, precio=precio, fabricante_id=fabricante_id)
+                db.session.add(prod)
+            db.session.commit()
     message.ack()
 
 def start_subscriber():
-    project_id = os.getenv('GCP_PROJECT_ID', 'my-project')
+    project_id = os.getenv('GCP_PROJECT_ID', 'misw-4301-native-cloud-433702')
     subscription_id = os.getenv('PUBSUB_SUBSCRIPTION_ID', 'inventarios-sub')
     subscriber = pubsub_v1.SubscriberClient()
     subscription_path = subscriber.subscription_path(project_id, subscription_id)

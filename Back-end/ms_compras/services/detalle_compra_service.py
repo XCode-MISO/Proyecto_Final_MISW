@@ -1,3 +1,4 @@
+# ms_compras/services/detalle_compra_service.py
 from models.db import db
 from models.compra import Compra
 from models.producto import Producto
@@ -13,7 +14,7 @@ class DetalleCompraService:
         # 2. Buscar si existe un producto con ese nombre y fabricante
         producto = Producto.query.filter_by(nombre=nombre, fabricante_id=fabricante_id).first()
         if producto:
-            # Actualizar el precio (opcionalmente se podría comparar)
+            # Actualizar el precio
             producto.precio_compra = precio
             db.session.commit()
         else:
@@ -22,7 +23,7 @@ class DetalleCompraService:
                 nombre=nombre,
                 fabricante_id=fabricante_id,
                 precio_compra=precio,
-                moneda="COP"  # Valor fijo o configurable
+                moneda="COP"  # Se puede parametrizar
             )
             db.session.add(producto)
             db.session.commit()
@@ -36,15 +37,17 @@ class DetalleCompraService:
         db.session.add(detalle)
         db.session.commit()
 
-        # 4. Publicar evento para ms_inventarios 
-        from events.publisher import publish_compra_realizada
+        # 4. Publicar el evento (incluyendo nombre, precio y fabricanteId)
         event_data = {
             "eventType": "DetalleCompraCreado",
             "compraId": compra.id,
             "productoId": producto.id,
             "cantidad": cantidad,
-            "precio": precio
+            "precio": precio,
+            "nombre": producto.nombre,
+            "fabricanteId": producto.fabricante_id
         }
+        from events.publisher import publish_compra_realizada
         publish_compra_realizada(event_data)
 
         return compra, producto, detalle

@@ -1,4 +1,3 @@
-# ms_compras/tests/test_fabricante_api.py
 import pytest
 from app import create_app
 from models.db import db
@@ -10,7 +9,7 @@ def client():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     with app.app_context():
         db.create_all()
-        # Insertar algunos fabricantes para probar el listado
+        # Insertar algunos fabricantes para probar
         from models.fabricante import Fabricante
         fab1 = Fabricante(nombre="Fábrica Uno", correo="uno@fab.com", telefono="1234567", empresa="Empresa Uno")
         fab2 = Fabricante(nombre="Fábrica Dos", correo="dos@fab.com", telefono="7654321", empresa="Empresa Dos")

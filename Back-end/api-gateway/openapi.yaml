@@ -1,0 +1,45 @@
+swagger: "2.0"
+info:
+  title: "API Gateway - Proyecto CPP"
+  description: "API Gateway unificado para los microservicios"
+  version: "1.0.0"
+schemes:
+  - http
+paths:
+  /compras/fabricantes:
+    post:
+      summary: "Crear fabricante"
+      operationId: "crearFabricante"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      x-google-backend:
+        address: "http://<ms_compras_loadbalancer_endpoint>/api/fabricantes"
+      responses:
+        "201":
+          description: "Fabricante creado"
+  /compras/detalle:
+    post:
+      summary: "Registrar detalle de compra"
+      operationId: "registrarDetalleCompra"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      x-google-backend:
+        address: "http://<ms_compras_loadbalancer_endpoint>/api/compras/detalle"
+      responses:
+        "201":
+          description: "Detalle de compra registrado exitosamente"
+  /inventarios/productos:
+    get:
+      summary: "Listar productos con su inventario"
+      operationId: "listarProductosInventario"
+      produces:
+        - application/json
+      x-google-backend:
+        address: "http://<ms_inventarios_loadbalancer_endpoint>/api/inventarios/productos"
+      responses:
+        "200":
+          description: "Listado de productos"

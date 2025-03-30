@@ -37,7 +37,7 @@ services:
     ports:
       - "5001:5001"
     volumes:
-      - ./credentials.json:/app/credentials.json
+      - /Users/credentials.json:/app/credentials.json
     command: ["/bin/sh", "-c", "until pg_isready -h db -p 5432; do echo waiting for db; sleep 2; done; python app.py"]
 
   ms_inventarios:
@@ -60,7 +60,7 @@ services:
     ports:
       - "5002:5002"
     volumes:
-      - ./credentials.json:/app/credentials.json
+      - /Users/credentials.json:/app/credentials.json
     command: ["/bin/sh", "-c", "until pg_isready -h db -p 5432; do echo waiting for db; sleep 2; done; python app.py"]
 volumes:
   postgres_data:

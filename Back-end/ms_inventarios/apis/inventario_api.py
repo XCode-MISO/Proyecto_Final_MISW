@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from models.producto_inventario import ProductoInventario
+from models.producto import Producto
 
 inventario_bp = Blueprint('inventario_bp', __name__)
 
@@ -8,16 +8,23 @@ def ping():
     return jsonify({"msg": "ms_inventarios alive"}), 200
 
 @inventario_bp.route('/productos', methods=['GET'])
-def listar_productos_inventario():
+def listar_productos():
     """
-    Endpoint para listar todos los registros de la tabla productos_inventario.
+    Lista todos los productos desnormalizados con nombre, precio y stock.
+    Se realiza un JOIN entre la tabla productos y productos_inventario.
     """
-    productos = ProductoInventario.query.all()
+    from models.producto_inventario import ProductoInventario
+    productos = Producto.query.all()
     result = []
     for prod in productos:
+        # Consultar el stock en la tabla de inventario
+        inv = ProductoInventario.query.filter_by(producto_id=prod.producto_id).first()
+        stock = inv.stock if inv else 0
         result.append({
-            "id": prod.id,
             "producto_id": prod.producto_id,
-            "stock": prod.stock
+            "nombre": prod.nombre,
+            "precio": prod.precio,
+            "fabricanteId": prod.fabricante_id,
+            "stock": stock
         })
     return jsonify(result), 200

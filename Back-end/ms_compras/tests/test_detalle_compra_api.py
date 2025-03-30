@@ -1,4 +1,3 @@
-# ms_compras/tests/test_detalle_compra_api.py
 import pytest
 from app import create_app
 from models.db import db
@@ -7,10 +6,11 @@ from models.db import db
 def client():
     app = create_app()
     app.config['TESTING'] = True
+    # Usamos SQLite en memoria para pruebas
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     with app.app_context():
         db.create_all()
-        # Insertar un fabricante para validar el endpoint
+        # Insertar un fabricante para poder validar el endpoint
         from models.fabricante import Fabricante
         fab = Fabricante(nombre="Test Fabricante", correo="test@fab.com", telefono="1234567", empresa="Test Inc")
         db.session.add(fab)
