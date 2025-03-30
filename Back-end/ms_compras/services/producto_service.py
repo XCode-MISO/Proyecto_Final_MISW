@@ -7,13 +7,13 @@ class ProductoService:
         fab = Fabricante.query.get(fabricante_id)
         if not fab:
             raise ValueError("Fabricante no encontrado")
-        nuevo_prod = Producto(
+        nuevo = Producto(
             nombre=nombre,
             descripcion=descripcion,
             precio_compra=precio_compra or 0.0,
             moneda=moneda or "COP",
             fabricante_id=fabricante_id
         )
-        db.session.add(nuevo_prod)
+        db.session.add(nuevo)
         db.session.commit()
-        return nuevo_prod
+        return nuevo

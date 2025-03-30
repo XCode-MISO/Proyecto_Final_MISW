@@ -7,4 +7,4 @@ class Producto(db.Model):
     descripcion = db.Column(db.String(300))
     precio_compra = db.Column(db.Float)
     moneda = db.Column(db.String(10))
-    fabricante_id = db.Column(db.Integer, db.ForeignKey('fabricantes.id'), nullable=False)
+    fabricante_id = db.Column(db.Integer, nullable=False)

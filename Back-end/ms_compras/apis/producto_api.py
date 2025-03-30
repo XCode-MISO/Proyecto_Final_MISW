@@ -11,7 +11,6 @@ def crear_producto(fabricante_id):
     descripcion = data.get('descripcion')
     precio_compra = data.get('precioCompra')
     moneda = data.get('moneda')
-
     prod = producto_service.crear_producto(
         fabricante_id=fabricante_id,
         nombre=nombre,
@@ -27,3 +26,41 @@ def crear_producto(fabricante_id):
         "moneda": prod.moneda,
         "fabricanteId": prod.fabricante_id
     }), 201
+
+@producto_bp.route('/search', methods=['GET'])
+def buscar_producto():
+    """
+    Endpoint para buscar productos por nombre y fabricante.
+    Parámetros de consulta:
+      - nombre: texto para la búsqueda (usamos ilike para autocompletar)
+      - fabricanteId: ID del fabricante (entero)
+    """
+    nombre = request.args.get('nombre')
+    fabricante_id = request.args.get('fabricanteId')
+    
+    if not nombre or not fabricante_id:
+        return jsonify({"error": "Se requieren los parámetros 'nombre' y 'fabricanteId'"}), 400
+
+    try:
+        fabricante_id = int(fabricante_id)
+    except ValueError:
+        return jsonify({"error": "El parámetro 'fabricanteId' debe ser un entero"}), 400
+
+    from models.producto import Producto
+    # Buscar productos cuyo nombre contenga el texto (fuzzy search) y que pertenezcan al fabricante
+    productos = Producto.query.filter(
+        Producto.nombre.ilike(f"%{nombre}%"),
+        Producto.fabricante_id == fabricante_id
+    ).all()
+    
+    result = []
+    for p in productos:
+        result.append({
+            "id": p.id,
+            "nombre": p.nombre,
+            "descripcion": p.descripcion,
+            "precioCompra": p.precio_compra,
+            "moneda": p.moneda,
+            "fabricanteId": p.fabricante_id
+        })
+    return jsonify(result), 200

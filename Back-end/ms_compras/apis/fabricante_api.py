@@ -22,18 +22,31 @@ def crear_fabricante():
         validated = schema.load(data)
     except ValidationError as err:
         return jsonify({"errors": err.messages}), 400
-
-    nuevo_fab = fabricante_service.crear_fabricante(
-        nombre   = validated['nombre'],
-        correo   = validated['correo'],
-        telefono = validated['telefono'],
-        empresa  = validated['empresa']
+    nuevo = fabricante_service.crear_fabricante(
+        nombre=validated['nombre'],
+        correo=validated['correo'],
+        telefono=validated['telefono'],
+        empresa=validated['empresa']
     )
-
     return jsonify({
-        "id":       nuevo_fab.id,
-        "nombre":   nuevo_fab.nombre,
-        "correo":   nuevo_fab.correo,
-        "telefono": nuevo_fab.telefono,
-        "empresa":  nuevo_fab.empresa
+        "id": nuevo.id,
+        "nombre": nuevo.nombre,
+        "correo": nuevo.correo,
+        "telefono": nuevo.telefono,
+        "empresa": nuevo.empresa
     }), 201
+
+@fabricante_bp.route('', methods=['GET'])
+def listar_fabricantes():
+    from models.fabricante import Fabricante
+    fabricantes = Fabricante.query.all()
+    result = []
+    for fab in fabricantes:
+        result.append({
+            "id": fab.id,
+            "nombre": fab.nombre,
+            "correo": fab.correo,
+            "telefono": fab.telefono,
+            "empresa": fab.empresa
+        })
+    return jsonify(result), 200

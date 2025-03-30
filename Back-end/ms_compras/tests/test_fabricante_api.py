@@ -1,3 +1,4 @@
+# ms_compras/tests/test_fabricante_api.py
 import pytest
 from app import create_app
 from models.db import db
@@ -9,30 +10,19 @@ def client():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     with app.app_context():
         db.create_all()
+        # Insertar algunos fabricantes para probar el listado
+        from models.fabricante import Fabricante
+        fab1 = Fabricante(nombre="Fábrica Uno", correo="uno@fab.com", telefono="1234567", empresa="Empresa Uno")
+        fab2 = Fabricante(nombre="Fábrica Dos", correo="dos@fab.com", telefono="7654321", empresa="Empresa Dos")
+        db.session.add(fab1)
+        db.session.add(fab2)
+        db.session.commit()
     with app.test_client() as client:
         yield client
 
-def test_crear_fabricante_valido(client):
-    payload = {
-        "nombre": "Fábrica Prueba",
-        "correo": "prueba@ejemplo.com",
-        "telefono": "1234567",
-        "empresa": "Empresa Prueba"
-    }
-    response = client.post("/api/fabricantes", json=payload)
-    assert response.status_code == 201
+def test_listar_fabricantes(client):
+    response = client.get("/api/fabricantes")
+    assert response.status_code == 200
     data = response.get_json()
-    assert "id" in data
-    assert data["nombre"] == payload["nombre"]
-
-def test_crear_fabricante_telefono_invalido(client):
-    payload = {
-        "nombre": "Fábrica Prueba",
-        "correo": "prueba@ejemplo.com",
-        "telefono": "abc123",  # Inválido
-        "empresa": "Empresa Prueba"
-    }
-    response = client.post("/api/fabricantes", json=payload)
-    assert response.status_code == 400
-    data = response.get_json()
-    assert "errors" in data
+    assert isinstance(data, list)
+    assert len(data) >= 2

@@ -1,4 +1,3 @@
-# ms_inventarios/Dockerfile
 FROM python:3.10-slim
 
 RUN apt-get update && apt-get install -y \
@@ -12,5 +11,5 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app
 ENV FLASK_APP=app.py
-EXPOSE 5002
+EXPOSE 5001
 CMD ["python", "app.py"]

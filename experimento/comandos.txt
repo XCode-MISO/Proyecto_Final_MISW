@@ -108,3 +108,7 @@ kubectl apply -f ms-inventarios-service.yaml
 
 
 kubectl logs ms-compras-deployment-9ffb5cdd-flkj9 --previous
+
+gcloud pubsub subscriptions pull inventarios-sub --limit=10 --auto-ack --project misw-4301-native-cloud-433702
+
+gcloud pubsub subscriptions describe inventarios-sub --project misw-4301-native-cloud-433702
