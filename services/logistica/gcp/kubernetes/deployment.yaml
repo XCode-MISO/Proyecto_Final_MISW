@@ -5,7 +5,7 @@ metadata:
   labels:
     app: logistica
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: logistica
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: logistica
-        image: gcr.io/misw-4301-native-cloud-433702/logistica
+        image: gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/logistica
         ports:
         - containerPort: 8080
         env:
