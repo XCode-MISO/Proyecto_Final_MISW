@@ -11,7 +11,7 @@ class GetPedidos(BaseCommannd):
             pedidos = session.query(Pedido).all()
             print(f"DEBUG: Se encontraron {len(pedidos)} pedidos")
 
-            # Serializar los pedidos encontrados
+            # Serializar los pedidos incluyendo los productos
             pedidos_json = PedidoJsonSchema(many=True).dump(pedidos)
         except Exception as e:
             print(f"ERROR: {str(e)}")
