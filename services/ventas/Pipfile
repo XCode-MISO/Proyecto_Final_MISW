@@ -1,0 +1,26 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "posts"
+
+[packages]
+wheel = "*"
+flask = "*"
+marshmallow = "*"
+python-abc = "*"
+pytest = "~=7.2.0"
+pytest-cov = "~=4.0.0"
+pytest-mock = "~=3.10.0"
+pytest-env = "~=0.8.1"
+python-dotenv = "1.0.1"
+Flask-SQLAlchemy= "*"
+psycopg2 = "*"
+Werkzeug= "*"
+requests = "*"
+sqlalchemy = "*"
+httpmock = "*"
+httmock = "*"
+python-dateutil= "*"
+
+[dev-packages]
+pytest = "*"
