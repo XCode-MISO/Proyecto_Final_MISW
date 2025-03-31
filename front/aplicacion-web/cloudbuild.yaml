@@ -4,7 +4,9 @@ steps:
       'build', 
       '-t', 
       'gcr.io/misw-4301-native-cloud-433702/aplicacion-web', 
-      '.']
+      'front/aplicacion-web/Dockerfile'
+      'front/aplicacion-web'
+      ]
   - name: 'gcr.io/cloud-builders/gcloud'
     args: [
         'run', 
