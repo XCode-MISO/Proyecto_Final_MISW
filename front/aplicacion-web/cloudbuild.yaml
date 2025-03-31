@@ -3,11 +3,12 @@ steps:
     args: [
         'run', 
         'deploy',
+        'aplicacion-web',
         '--allow-unauthenticated',
         '--region',
         'us-central1',
         '--source',
-        'front/aplicacion-web'
+        'front/aplicacion-web',
       ]
 options:
   logging: CLOUD_LOGGING_ONLY
