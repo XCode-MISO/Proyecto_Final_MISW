@@ -3,9 +3,7 @@ steps:
     args: [
         'run', 
         'deploy', 
-        'aplicacion-web', 
-        '--image', 
-        'gcr.io/misw-4301-native-cloud-433702/aplicacion-web', 
+        'aplicacion-web',
         '--platform', 
         'managed', 
         '--allow-unauthenticated',
