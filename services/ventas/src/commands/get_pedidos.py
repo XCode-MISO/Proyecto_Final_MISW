@@ -3,25 +3,20 @@ from ..models.pedido import Pedido, PedidoJsonSchema
 from src.database import db
 
 class GetPedidos(BaseCommannd):
-    def __init__(self, pedido_id=None):
-        self.pedido_id = pedido_id
-
     def execute(self):
-        print("DEBUG: Entrando en execute() de GetPedidos")
+        print("DEBUG: Entrando en GetPedidos.execute()")
+
         session = db.session()
-        
-        if self.pedido_id:
-            print(f"DEBUG: Buscando pedido con ID {self.pedido_id}")
-            pedido = session.query(Pedido).filter_by(id=self.pedido_id).first()
-            if not pedido:
-                print("DEBUG: Pedido no encontrado")
-                return {"error": "Pedido no encontrado"}, 404
-            pedido_json = PedidoJsonSchema().dump(pedido)
+        try:
+            pedidos = session.query(Pedido).all()
+            print(f"DEBUG: Se encontraron {len(pedidos)} pedidos")
+
+            # Serializar los pedidos encontrados
+            pedidos_json = PedidoJsonSchema(many=True).dump(pedidos)
+        except Exception as e:
+            print(f"ERROR: {str(e)}")
+            return {"error": "Error al obtener los pedidos"}, 500
+        finally:
             session.close()
-            return pedido_json
-        
-        print("DEBUG: Obteniendo todos los pedidos")
-        pedidos = session.query(Pedido).all()
-        pedidos_json = PedidoJsonSchema(many=True).dump(pedidos)
-        session.close()
+
         return pedidos_json
