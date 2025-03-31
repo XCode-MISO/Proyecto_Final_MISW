@@ -12,10 +12,21 @@ class CreatePedido(BaseCommannd):
         print("DEBUG: Entrando en execute()",self.data)
         # Validar los datos del pedido con el esquema
         try:
-            productos_objetos = db.session.query(Producto).filter(Producto.id.in_(self.data["products"])).all()
-            print("DEBUG: productos_objetos =", productos_objetos)
+            print("DEBUG: Antes de productos_objetos",self.data)
+            product_ids = self.data.get("products", [])
+            print("DEBUG: Antes de product_ids",product_ids)
+            # Validar que product_ids no esté vacío
+            if not product_ids:
+                raise ValueError("No se han proporcionado IDs de productos.")
+            print ("DEBUG: db.session", db.session)
+            print("DEBUG: Database URL =", db.engine.url)
+            productos_objetos = db.session.query(Producto).filter(Producto.id.in_(product_ids)).all()            
+            print("DEBUG: Despues de productos_objetos =", productos_objetos)
+            # Validar que todos los productos existan en la base de datos
+            productos_encontrados = {producto.id for producto in productos_objetos}
+            print("DEBUG: Despues de productos_encontrados =",productos_encontrados)
         except ValidationError as err:
-                    return {"error": err.messages}, 400 
+            return {"error crear pedido": str(err)}, 500 
         schema = PedidoSchema()
         try:
             validated_data = schema.load(self.data)
@@ -25,7 +36,7 @@ class CreatePedido(BaseCommannd):
         # Crear instancia del pedido
         nuevo_pedido = Pedido(
             name=validated_data["name"],
-            client_id=validated_data["clientId"], 
+            clientId=validated_data["clientId"], 
             products=productos_objetos, 
             price=validated_data["price"],
             delivery_date=validated_data["deliveryDate"]  

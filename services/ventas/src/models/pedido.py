@@ -26,7 +26,7 @@ class Pedido(Base):
 
     id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     name = Column(String(50), nullable=False)
-    client_id = Column(String(36), ForeignKey('clientes.id'), nullable=False)  # Almacena el ID del cliente
+    clientId = Column(String(36), ForeignKey('clientes.id'), nullable=False)  # Almacena el ID del cliente
     price = Column(Float, nullable=False)
     delivery_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
@@ -34,9 +34,9 @@ class Pedido(Base):
     client = relationship("Cliente", back_populates="pedidos", uselist=False)  # Relación opcional
     products = relationship("Producto", secondary=pedido_producto, back_populates="pedidos")
 
-    def __init__(self, name, client_id, products, price, delivery_date):
+    def __init__(self, name, clientId, products, price, delivery_date):
         self.name = name
-        self.client_id = client_id
+        self.clientId = clientId
         self.products = products
         self.price = price
         self.delivery_date = delivery_date

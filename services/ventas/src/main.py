@@ -13,14 +13,14 @@ from src.models.producto import Producto
 from src.models.cliente import Cliente
 from src.database import db, database
 
-# Encuentra la raíz del proyecto
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+# Cargar variables de entorno
+dotenv_path = find_dotenv(filename=".env.development")
+if dotenv_path:
+    loaded=load_dotenv(dotenv_path)
+    print("Variables de entorno cargadas correctamente")
+else:
+    print("Error: No se encontró el archivo .env.development")
 
-# Busca el archivo .env.development desde la raíz
-dotenv_path = os.path.join(BASE_DIR, "..", ".env.development")
-
-# Carga las variables de entorno
-loaded = load_dotenv(dotenv_path)
 print(os.getenv("DB_NAME"))
 if loaded:
     print("Variables de entorno cargadas correctamente")
@@ -34,15 +34,15 @@ app.config['DEBUG'] = True
 app.config["SQLALCHEMY_DATABASE_URI"] = database.get_db_url()
 db.init_app(app)
 
-print(f"Conectando a la base de datos: {database.get_db_url()}")
 
 
 app.register_blueprint(operations_blueprint)
+try:
+  with app.app_context():  
+    Base.metadata.create_all(engine)  # Crea las tablas
+except Exception as e:
+  print(f"Error al crear tablas: {e}")
 
-with app.app_context():
-  Base.metadata.create_all(engine)  # Crea las tablas
-  
-print(f"Tablas en Base.metadata: {Base.metadata.tables.keys()}")
 
 if not loaded:
     print("Error: No se pudieron cargar las variables de entorno")

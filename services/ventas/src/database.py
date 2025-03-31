@@ -4,8 +4,6 @@ from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 
-# Cargar variables de entorno desde el archivo .env
-load_dotenv()
 
 db = SQLAlchemy()
 
@@ -24,11 +22,11 @@ class DataBase:
         db_host = os.getenv("DB_HOST", "")
         db_port = os.getenv("DB_PORT", "")
         db_name = os.getenv("DB_NAME", "database")
+        print(f"DEBUG: db_type = {db_type}")
 
         if db_type == "sqlite":
             return f"sqlite:///./{db_name}.db"  # Base de datos local
-        else:        
-            return f"{db_type}://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}"
+        return f"{db_type}://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}"
 
     def create_engine(self):
         """ Crea el motor de SQLAlchemy basado en la URL de la base de datos. """
