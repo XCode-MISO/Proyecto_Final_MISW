@@ -35,8 +35,7 @@ def pedidos():
     return jsonify({ 
         "clientId": newPedido['clientId'],
         "products": newPedido['products'],
-        "price": newPedido['rice'],
-        "deliveryDate": newPedido['deliveryDate'],
+        "price": newPedido['price'],
     }), 201
 
 ## Obtener Pedidos
