@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 
 from ..commands.fields_pedido import ValidatePedidoFields
 from ..commands.create_pedido import CreatePedido
+from ..commands.get_pedidos import GetPedidos
 from ..models.pedido import Pedido
 
 import os
@@ -45,6 +46,6 @@ def get_pedidos():
     ##user_id = ValidateToken(auth_header).execute()
     ##data=request.args.to_dict()
     result = request.args.to_dict()
-    ##result = GetPedidos(data).execute()
+    result = GetPedidos(data).execute()
     return jsonify(result), 200
 
