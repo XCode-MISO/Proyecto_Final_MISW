@@ -8,7 +8,9 @@ steps:
         'gcr.io/misw-4301-native-cloud-433702/aplicacion-web', 
         '--platform', 
         'managed', 
-        '--allow-unauthenticated'
+        '--allow-unauthenticated',
+        '--region',
+        'us-central1'
       ]
 options:
   logging: CLOUD_LOGGING_ONLY
