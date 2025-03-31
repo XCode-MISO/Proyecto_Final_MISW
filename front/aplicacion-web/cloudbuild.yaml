@@ -2,10 +2,7 @@ steps:
   - name: 'gcr.io/cloud-builders/gcloud'
     args: [
         'run', 
-        'deploy', 
-        'aplicacion-web',
-        '--platform', 
-        'managed', 
+        'deploy',
         '--allow-unauthenticated',
         '--region',
         'us-central1'
