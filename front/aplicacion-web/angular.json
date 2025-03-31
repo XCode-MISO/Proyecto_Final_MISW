@@ -4,6 +4,9 @@
   "newProjectRoot": "projects",
   "projects": {
     "aplicacion-web": {
+      "i18n": { 
+        "sourceLocale": "es"
+      },
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -17,7 +20,8 @@
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
@@ -81,7 +85,8 @@
           "options": {
             "polyfills": [
               "zone.js",
-              "zone.js/testing"
+              "zone.js/testing",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [

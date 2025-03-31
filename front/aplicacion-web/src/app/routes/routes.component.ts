@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './routes.component.css'
 })
 export class RoutesComponent {
-
+  title = 'routes';
 }

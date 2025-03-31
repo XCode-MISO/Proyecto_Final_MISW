@@ -1,0 +1,12 @@
+.nav-button {
+  height: 40px;
+  min-width: 10rem;
+  border: 2px;
+}
+.nav-button-row {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  padding: 10px;
+  background: #351330;
+}
