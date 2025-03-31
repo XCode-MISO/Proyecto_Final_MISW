@@ -1,0 +1,23 @@
+.header {
+  height: auto;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+  text-align: center;
+  font: var(--mat-sys-headline-large);
+}
+
+.salir-button {
+  background-color: #424254 !important;
+  color: #FFFFFF !important;
+  font-weight: 400;
+  border-radius: 0;
+  padding-left: 5;
+  padding-right: 5;
+}
+
+.exit-buttons-header {
+  display: flex;
+  flex-direction: column;
+}
