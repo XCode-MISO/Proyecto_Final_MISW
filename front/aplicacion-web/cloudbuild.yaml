@@ -9,6 +9,6 @@ steps:
         '--image', 
         'gcr.io/$PROJECT_ID/aplicacion-web', 
         '--platform', 
-        'managed',
+        'managed', 
         '--allow-unauthenticated'
       ]
