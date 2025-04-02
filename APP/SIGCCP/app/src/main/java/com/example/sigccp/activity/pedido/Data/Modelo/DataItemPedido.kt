@@ -14,3 +14,16 @@ data class DataItemPedido(
     val price:Float=0.0f,
     val deliveryDate:String="",
 )
+
+data class PedidoClass(
+    val id: String,
+    val name: String,
+    val price: Double,
+    val state: String,
+    val client: ClienteClass
+)
+
+data class ClienteClass(
+    val id: String,
+    val name: String
+)

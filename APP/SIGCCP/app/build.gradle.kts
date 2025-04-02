@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.gson.converter)
     //
+    implementation(libs.androidx.compose.material.icons)
     // Dagger Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
