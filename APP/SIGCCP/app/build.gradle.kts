@@ -6,6 +6,10 @@ plugins {
     kotlin("kapt")
 }
 
+hilt {
+    enableAggregatingTask = false
+}
+
 android {
     namespace = "com.example.sigccp"
     compileSdk = 35
