@@ -15,3 +15,12 @@ val AmarilloApp= Color(0xFFE8CAA4)
 val VerdeApp= Color(0xFF64908A)
 val RojoApp=Color(0xFFCC2A41)
 val GrisApp=Color(0xFF424254)
+
+object CcpColors {
+    val GradientStart = Color(0xFFE3C6A0)
+    val GradientEnd = Color(0xFF5D7A75)
+    val ColorAppBar = Color(0xFFE3C6A0)
+    val ColorButton = Color(0xFFE3C6A0)
+    val ColorText = Color(0xFF5D7A75)
+    val GrisApp= com.example.sigccp.ui.theme.GrisApp
+}

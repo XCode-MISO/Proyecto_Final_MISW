@@ -118,7 +118,7 @@ fun Options(navController: NavController)
             newButton(onClick = {/*TODO*/}, nombre = "INVENTARIO", imagen = R.drawable.ver, enabled = false)
             newButton(onClick = {/*TODO*/}, nombre = "RUTAS", imagen = R.drawable.ia,enabled = false)
             newButton(onClick = {/*TODO*/}, nombre = "RECOMENDACION", imagen = R.drawable.config, enabled = false)
-            newButton(onClick = {/*TODO*/}, nombre = "REGISTRAR VISITA", imagen = R.drawable.editar,enabled = false)
+            newButton(onClick = {navController.navigate(AppScreen.RegistrarVisita.route)}, nombre = "REGISTRAR VISITA", imagen = R.drawable.editar,enabled = true)
 
         }
     }
