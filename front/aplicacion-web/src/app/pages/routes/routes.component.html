@@ -6,32 +6,43 @@
     </span>
     <div class="agregar-ruta-row">
       <button mat-flat-button class="agregar-ruta-button" i18n>
-        Agregar Ruta
+        Agregar Parada
       </button>
     </div>
     <div class="route-list">
-      @for (route of routes; track $index; let idx = $index) {
+      @for (pedido of routes; track $index; let idx = $index) {
         <div class="route-row">
           <span class="route-row-text">
-            {{route.client.nombre}}
+            {{pedido.client.nombre}}
           </span>
           <span class="route-row-text" i18n>
-            Desplazamiento: {{Math.ceil(route.tiempoEstimado / 60)}} min
+            Desplazamiento: {{Math.ceil(pedido.leg.duration.value / 60)}} min
           </span>
           <span class="route-row-text">
-            {{route.fecha}}
+            {{pedido.leg.fecha}}
           </span>
         </div>
       }
     </div>
     <div class="map-container">
-      <google-map [center]="center" [zoom]="zoom" [options]="{}">
-        <map-polyline [path]="route" [options]="{
-          strokeColor: '#000000',
-          strokeOpacity: 1.0,
-          strokeWeight: 4
-          }"/>
-      </google-map>
+      @if (mapLoaded){
+        <google-map [center]="center" [zoom]="zoom" [options]="{}"  (mapInitialized)="onMapLoad($event)">
+          @if (route && encoding){
+            <map-polyline [path]="route" [options]="{
+              strokeColor: 'blue',
+              strokeOpacity: 0.5,
+              strokeWeight: 4
+              }"/>
+              @if (mapMarkers && mapMarkers.length > 0) {
+                @for (marker of mapMarkers; track marker) {
+                  <map-marker
+                    [position]="marker"
+                  />
+                }
+              }
+          }
+        </google-map>
+    }
     </div>
   </div>
 </div>
