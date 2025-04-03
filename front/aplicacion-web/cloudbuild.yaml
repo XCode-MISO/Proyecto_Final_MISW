@@ -1,4 +1,10 @@
 steps:
+ - name: 'node'
+   entrypoint: 'npm'
+   args: ['ci', '--prefix', 'front/aplicacion-web']
+ - name: 'node'
+   entrypoint: 'npm'
+   args: ['run', 'build', '--prefix', 'front/aplicacion-web']
   - name: 'gcr.io/cloud-builders/gcloud'
     args: [
         'run', 
