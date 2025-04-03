@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -52,6 +53,8 @@ import com.example.sigccp.ui.theme.AmarilloApp
 import com.example.sigccp.ui.theme.AppTypography
 import com.example.sigccp.ui.theme.MoradoApp
 import com.example.sigccp.ui.theme.VerdeApp
+import com.example.sigccp.utils.getSavedLanguage
+import com.example.sigccp.utils.setAppLocale
 
 @Composable
 fun newButton(
@@ -247,8 +250,9 @@ fun SubTitleBar( texto:String, imagen:Int? = null, enabled: Boolean = true)  {
 // DropDown de Lenguaje
 @Composable
 fun LanguageDropdown() {
+    val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
-    var selectedLanguage by remember { mutableStateOf("ES") }
+    var selectedLanguage by remember { mutableStateOf(getSavedLanguage(context)) }
 
     Box(
         modifier = Modifier.wrapContentSize(Alignment.TopEnd)
@@ -263,12 +267,12 @@ fun LanguageDropdown() {
                 Icon(
                     imageVector = Icons.Outlined.Public,
                     contentDescription = "Idioma",
-                    tint = MoradoApp, // Color del ícono
+                    tint = MoradoApp,
                     modifier = Modifier.size(40.dp)
                 )
             }
             Text(
-                text = selectedLanguage,
+                text = selectedLanguage.uppercase(),
                 color = MoradoApp,
                 style = AppTypography.titleSmall
             )
@@ -279,14 +283,16 @@ fun LanguageDropdown() {
                 DropdownMenuItem(
                     text = { Text("ES", style =AppTypography.titleSmall) },
                     onClick = {
-                        selectedLanguage = "Español"
+                        selectedLanguage = "es"
+                        setAppLocale(context, "es")
                         expanded = false
                     }
                 )
                 DropdownMenuItem(
                     text = { Text("EN", style =AppTypography.titleSmall) },
                     onClick = {
-                        selectedLanguage = "English"
+                        selectedLanguage = "en"
+                        setAppLocale(context, "en")
                         expanded = false
                     }
                 )
