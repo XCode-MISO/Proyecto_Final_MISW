@@ -31,11 +31,11 @@ def parse_json(json_data) -> TypedObject:
     return parsed_objects
 
 @maps_breaker
-def getRouteFromListOfRoutes(routes, mode="driving", departure_time=datetime.now()):
+def getRouteFromMaps(start,end, routes, mode="driving", departure_time=datetime.now()):
   return gmaps.directions(
-        routes[0], 
-        routes[0],
-        waypoints=routes[1:], 
+        start, 
+        end,
+        waypoints=routes, 
         optimize_waypoints=True, 
         mode=mode, 
         departure_time=departure_time
