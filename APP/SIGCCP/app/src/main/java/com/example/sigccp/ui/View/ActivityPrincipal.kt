@@ -17,11 +17,11 @@ import androidx.compose.ui.unit.dp
 import com.example.sigccp.R
 import com.example.sigccp.activity.pedido.Data.Modelo.ClienteClass
 import com.example.sigccp.activity.pedido.Data.Modelo.PedidoClass
-import com.example.sigccp.ui.View.Components.BaseScreen
 import com.example.sigccp.ui.View.Components.ClientDropdown
 import com.example.sigccp.ui.View.Components.PedidoBox
 import com.example.sigccp.ui.View.Components.ScreenContainer
-import com.example.sigccp.ui.View.Components.SubTitleBar
+import com.example.sigccp.ui.View.Components.locationDropdown
+import com.example.sigccp.ui.View.Components.newButton
 import com.example.sigccp.ui.View.Components.newMenuButton
 
 val clientes = listOf(
@@ -94,6 +94,11 @@ fun MainScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     )
                     {
+                        newButton(onClick = {/*todo*/}, nombre= "Crear Pedido")
+                        locationDropdown(
+                            locations = clientes,
+                            onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
+                        )
                         ClientDropdown(
                             clients = clientes,
                             onClientSelected = { id -> println("Cliente seleccionado: $id") }

@@ -2,4 +2,6 @@
     <string name="app_name">SIGCCP</string>
     <string name="hello">Hola</string>
     <string name="welcome_message">Bienvenido a nuestra app</string>
+    <string name="menuVendedor">!Hola, Vendedor¡ </string>
+    <string name="ListPedidos">!Tus Pedidos¡ </string>
 </resources>
