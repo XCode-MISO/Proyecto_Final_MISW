@@ -3,6 +3,7 @@ package com.example.sigccp.activity.clients.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sigccp.activity.clients.data.model.Client
+import com.example.sigccp.activity.clients.data.model.ClientPost
 import com.example.sigccp.activity.clients.data.model.VisitRequest
 import com.example.sigccp.activity.clients.repository.ClienteRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,7 +37,7 @@ class ClienteViewModel: ViewModel() {
             }
         }
     }
-/**************************************************************************************************/
+
     fun sendVisit(idCliente: String, informe: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -57,5 +58,22 @@ class ClienteViewModel: ViewModel() {
         }
     }
 /**************************************************************************************************/
-
+    fun createClient(nombre: String, correo: String, direccion: String, telefono: String, latitud: Double, longitud: Double, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = repository.postCliente(ClientPost(nombre, correo, direccion, telefono, latitud, longitud))
+                if (response.isSuccessful) {
+                    onSuccess()
+                } else {
+                    onError("Error en el envío: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                onError(e.localizedMessage ?: "Error desconocido")
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+/**************************************************************************************************/
 }
