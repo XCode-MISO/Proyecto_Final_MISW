@@ -1,5 +1,6 @@
 package com.example.sigccp.ui.View.Components
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,12 +11,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -27,7 +28,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,17 +39,99 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.sigccp.R
 import com.example.sigccp.activity.pedido.Data.Modelo.PedidoClass
 import com.example.sigccp.ui.theme.AmarilloApp
 import com.example.sigccp.ui.theme.AppTypography
 import com.example.sigccp.ui.theme.MoradoApp
 import com.example.sigccp.ui.theme.VerdeApp
+import com.example.sigccp.utils.getSavedLanguage
+import com.example.sigccp.utils.restartActivity
+import com.example.sigccp.utils.saveLanguage
+import com.example.sigccp.utils.setAppLocale
+
+@Composable
+fun newButton(
+    onClick: () -> Unit,
+    nombre: String,
+    buttonWidth: Dp = 200.dp // 🔹 Ancho definido por defecto en 200.dp
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHovered by interactionSource.collectIsHoveredAsState()
+    val buttonColor = AmarilloApp
+    val hoverColor = buttonColor.copy(alpha = 1f).compositeOver(Color.Black.copy(alpha = 0.3f))
+    val currentColor = if (isHovered) hoverColor else buttonColor
+
+    Box(
+        modifier = Modifier
+            .width(buttonWidth) // 🔹 Ancho fijo en lugar de fillMaxWidth()
+            .border(2.dp, MoradoApp, RoundedCornerShape(12.dp))
+    ) {
+        // Sombra debajo del botón
+        Box(
+            modifier = Modifier
+                .width(buttonWidth) // 🔹 Ancho fijo
+                .height(4.dp)
+                .background(Color.Black.copy(alpha = 0.3f))
+                .align(Alignment.BottomCenter)
+                .clip(RoundedCornerShape(12.dp))
+                .offset(y = 2.dp)
+        )
+
+        // Fondo del botón
+        Box(
+            modifier = Modifier
+                .width(buttonWidth) // 🔹 Ancho fijo
+                .padding(bottom = 4.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(currentColor)
+        ) {
+            Button(
+                onClick = onClick,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent // Botón transparente
+                ),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier
+                    .width(buttonWidth) // 🔹 Ancho fijo
+                    .semantics { contentDescription = nombre },
+                interactionSource = interactionSource
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = nombre,
+                            style = AppTypography.labelLarge
+                        )
+                    }
+                }
+            }
+        }
+
+        if (isHovered) {
+            Box(
+                modifier = Modifier
+                    .width(buttonWidth) // 🔹 Ancho fijo
+                    .matchParentSize()
+                    .background(Color.Black.copy(alpha = 0.3f))
+                    .clip(RoundedCornerShape(12.dp))
+            )
+        }
+    }
+}
 
 
 @Composable
@@ -64,7 +146,7 @@ fun newMenuButton(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .border(2.dp, Color(0xFF3E6963), RoundedCornerShape(12.dp)) // Borde con el color especificado
+            .border(2.dp, MoradoApp, RoundedCornerShape(12.dp)) // Borde con el color especificado
     ) {
         // Sombra debajo del botón
         Box(
@@ -167,9 +249,11 @@ fun SubTitleBar( texto:String, imagen:Int? = null, enabled: Boolean = true)  {
 
 // DropDown de Lenguaje
 @Composable
-fun LanguageDropdown() {
+fun LanguageDropdown(activity: Activity?) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedLanguage by remember { mutableStateOf("ES") }
+    val context = LocalContext.current
+    var selectedLanguage by remember { mutableStateOf(getSavedLanguage(context).uppercase()) }
+    val recomposer = remember { mutableStateOf(0) }
 
     Box(
         modifier = Modifier.wrapContentSize(Alignment.TopEnd)
@@ -184,7 +268,7 @@ fun LanguageDropdown() {
                 Icon(
                     imageVector = Icons.Outlined.Public,
                     contentDescription = "Idioma",
-                    tint = MoradoApp, // Color del ícono
+                    tint = MoradoApp,
                     modifier = Modifier.size(40.dp)
                 )
             }
@@ -200,15 +284,23 @@ fun LanguageDropdown() {
                 DropdownMenuItem(
                     text = { Text("ES", style =AppTypography.titleSmall) },
                     onClick = {
-                        selectedLanguage = "Español"
+                        selectedLanguage = "ES"
+                        setAppLocale(activity, "es")
+                        saveLanguage(context, "ES")
                         expanded = false
+                        restartActivity(activity)
+                        recomposer.value++
                     }
                 )
                 DropdownMenuItem(
                     text = { Text("EN", style =AppTypography.titleSmall) },
                     onClick = {
-                        selectedLanguage = "English"
+                        selectedLanguage = "EN"
+                        setAppLocale(activity, "en")
+                        saveLanguage(context, "EN")
                         expanded = false
+                        restartActivity(activity)
+                        recomposer.value++
                     }
                 )
             }
@@ -229,7 +321,7 @@ fun ClientDropdown(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
+            .border(2.dp, MoradoApp, shape = RoundedCornerShape(8.dp))
             .clickable { expanded = true }
             .padding(12.dp),
         contentAlignment = Alignment.CenterStart
@@ -255,6 +347,52 @@ fun ClientDropdown(
                     onClick = {
                         selectedClient = client
                         onClientSelected(client.first)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+// DropDown de Cliente
+@Composable
+fun locationDropdown(
+    locations: List<Pair<Int, String>>, // Lista de monedas (id, name)
+    onLocationtSelected: (Int) -> Unit // Callback con el ID de la moneda seleccionada
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedLocation by remember { mutableStateOf<Pair<Int, String>?>(null) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(2.dp, MoradoApp, shape = RoundedCornerShape(8.dp))
+            .clickable { expanded = true }
+            .padding(12.dp),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Text(
+            text = selectedLocation?.second ?: "Seleccione la moneda",
+            style = AppTypography.labelLarge
+        )
+
+        Icon(
+            imageVector = Icons.Default.ArrowDropDown,
+            contentDescription = "Desplegar",
+            modifier = Modifier.align(Alignment.CenterEnd)
+        )
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            locations.forEach { location ->
+                DropdownMenuItem(
+                    text = { Text(location.second) },
+                    onClick = {
+                        selectedLocation = location
+                        onLocationtSelected(location.first)
                         expanded = false
                     }
                 )
