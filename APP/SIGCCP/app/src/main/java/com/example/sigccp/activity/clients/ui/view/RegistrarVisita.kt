@@ -26,7 +26,7 @@ fun RegistrarVisita(viewModel: ClienteViewModel = viewModel(), navController: Na
     var expanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) { viewModel.fetchClientes() }
-    ScreenContainer(title = "Registrar Visita") {
+    ScreenContainer(title = "Registrar Visita",false,null) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
             if (isLoading) {
                 CircularProgressIndicator()
