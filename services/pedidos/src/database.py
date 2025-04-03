@@ -22,7 +22,7 @@ class DataBase:
         db_host = os.getenv("DB_HOST", "")
         db_port = os.getenv("DB_PORT", "")
         db_name = os.getenv("DB_NAME", "database")
-        print(f"DEBUG: db_type = {db_type}")
+        print(f"DEBUG: db_type 1 = {db_type}")
 
         if db_type == "sqlite":
             return f"sqlite:///./{db_name}.db"  # Base de datos local

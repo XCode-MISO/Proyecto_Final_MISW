@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Permitir tráfico en texto claro (HTTP sin HTTPS) Quitar despues(android:usesCleartextTraffic="true") -->
     <application
         android:name=".SIGCCPApp"
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

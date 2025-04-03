@@ -9,8 +9,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.sigccp.activity.clients.CustomButton
-import com.example.sigccp.activity.clients.ScreenContainer
+import com.example.sigccp.ui.View.Components.CustomButton
+import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.activity.clients.data.model.Client
 import com.example.sigccp.activity.clients.ui.viewmodel.ClienteViewModel
 import com.example.sigccp.ui.theme.CcpColors

@@ -19,7 +19,7 @@ class NetworkModule {
     @Provides
     fun provideApiService(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://35.238.195.112:3000/")
+            .baseUrl("http://0.0.0.0:3001/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
