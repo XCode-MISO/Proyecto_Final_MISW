@@ -201,7 +201,6 @@ Thumbs.db
 
 # Archivos de configuración específicos de Gradle
 .gradle/
-gradle.properties
 gradlew
 gradlew.bat
 

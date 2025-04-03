@@ -16,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
+import com.example.sigccp.activity.clients.ui.viewmodel.ClienteViewModel
 import com.example.sigccp.navigation.NavigationScreen
 import com.example.sigccp.ui.theme.AppTypography
 import com.example.sigccp.ui.theme.SIGCCPTheme
@@ -23,7 +25,10 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private lateinit var clientViewModel: ClienteViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
+        clientViewModel = ViewModelProvider(this).get(ClienteViewModel::class.java)
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -33,7 +38,7 @@ class MainActivity : ComponentActivity() {
                     color = Color.Transparent
                 )
                 {
-                    NavigationScreen()
+                    NavigationScreen(clientViewModel)
                 }
             }
         }
