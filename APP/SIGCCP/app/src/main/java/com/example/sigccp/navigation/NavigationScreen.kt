@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.sigccp.activity.clients.ui.view.CrearCliente
 import com.example.sigccp.activity.pedido.UI.View.ListarPedidos
 import com.example.sigccp.activity.menu.UI.View.Menu
 import com.example.sigccp.activity.clients.ui.view.RegistrarVisita
@@ -26,6 +27,10 @@ fun NavigationScreen(clientViewModel: ClienteViewModel)
         composable(route = AppScreen.RegistrarVisita.route)
         {
             RegistrarVisita(clientViewModel, navController)
+        }
+        composable(route = AppScreen.CrearCliente.route)
+        {
+            CrearCliente(clientViewModel, navController)
         }
 
     }
