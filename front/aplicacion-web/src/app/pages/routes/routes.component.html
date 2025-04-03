@@ -1,8 +1,7 @@
 <div class="route-page">
   <div class="route-column">
-
     <span class="route-title" i18n>
-      Rutas
+      Paradas
     </span>
     <div class="agregar-ruta-row">
       <button mat-flat-button class="agregar-ruta-button" i18n>
@@ -10,39 +9,37 @@
       </button>
     </div>
     <div class="route-list">
-      @for (pedido of routes; track $index; let idx = $index) {
-        <div class="route-row">
-          <span class="route-row-text">
-            {{pedido.client.nombre}}
-          </span>
-          <span class="route-row-text" i18n>
-            Desplazamiento: {{Math.ceil(pedido.leg.duration.value / 60)}} min
-          </span>
-          <span class="route-row-text">
-            {{pedido.leg.fecha}}
-          </span>
-        </div>
+      @for (pedido of route?.pedidos; track $index; let idx = $index) {
+      <div class="route-row">
+        <span class="route-row-text">
+          {{pedido.nombre}}
+        </span>
+         <span class="route-row-text" i18n>
+          Desplazamiento: {{Math.ceil(getPedidoDuration(getPedidoAndLeg((route?.pedidos && route!!.pedidos.length > 0) ? route!!.pedidos : [], route?.mapsResponse, $index)))}} min
+         </span >
+        <span class="route-row-text">
+          {{pedido.fecha}}
+        </span>
+      </div>
       }
     </div>
     <div class="map-container">
       @if (mapLoaded){
-        <google-map [center]="center" [zoom]="zoom" [options]="{}"  (mapInitialized)="onMapLoad($event)">
-          @if (route && encoding){
-            <map-polyline [path]="route" [options]="{
-              strokeColor: 'blue',
-              strokeOpacity: 0.5,
-              strokeWeight: 4
-              }"/>
-              @if (mapMarkers && mapMarkers.length > 0) {
-                @for (marker of mapMarkers; track marker) {
-                  <map-marker
-                    [position]="marker"
-                  />
-                }
-              }
+      <google-map [center]="center" [zoom]="zoom" [options]="{}" (mapInitialized)="onMapLoad($event)">
+        @if (route && encoding){
+          <map-polyline [path]="route_path" [options]="{
+                strokeColor: 'blue',
+                strokeOpacity: 0.5,
+                strokeWeight: 4
+              }" />
+        }
+        @if (mapMarkers && mapMarkers.length > 0) {
+          @for (marker of mapMarkers; track marker) {
+            <map-marker [position]="marker" />
           }
-        </google-map>
-    }
+        }
+      </google-map>
+      }
     </div>
   </div>
 </div>

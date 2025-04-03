@@ -984,7 +984,10 @@ const mockRoute = {
         }
       },
       "pedido_id": "528281a1-a440-44bb-985b-a8f22bfed185",
-      "client": { id: "Cliente 1", nombre: "Cliente 1" }
+      "client": {
+        id: "Cliente 1", nombre: "Cliente 1",
+        "direccion": "Cra. 11, 82-71, Bogotá, Colombia",
+      }
     },
     {
       "direccion": "Calle 149, 16-56, Bogotá, Colombia",
@@ -1009,7 +1012,10 @@ const mockRoute = {
         }
       },
       "pedido_id": "438fa87d-3382-4136-acaa-a56b6059921d",
-      "client": { id: "Cliente 2", nombre: "Cliente 1" },
+      "client": {
+        id: "Cliente 2", nombre: "Cliente 1",
+        "direccion": "Cra. 11, 82-71, Bogotá, Colombia",
+      },
     },
     {
       "direccion": "Cl. 114a #45-78, Bogota, Colombia",
@@ -1034,10 +1040,13 @@ const mockRoute = {
         }
       },
       "pedido_id": "c1a68b27-51c5-4098-af32-7a1f4cc3398e",
-      "client": { id: "Cliente 3", nombre: "Cliente 1" },
+      "client": {
+        id: "Cliente 3", nombre: "Cliente 1",
+        "direccion": "Cra. 11, 82-71, Bogotá, Colombia",
+      },
     }
   ],
-  "route_id": "e111a6fa-3413-4fc0-b0e2-9dc6ad750d82",
+  "id": "e111a6fa-3413-4fc0-b0e2-9dc6ad750d82",
   "tiempoEstimado": 2601,
   "fecha": new Date().toLocaleDateString()
 }
