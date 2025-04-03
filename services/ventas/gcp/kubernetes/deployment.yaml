@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ventas-deployment
+  labels:
+    app: ventas
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ventas
+  template:
+    metadata:
+      labels:
+        app: ventas
+    spec:
+      containers:
+      - name: ventas
+        image: gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/ventas
+        ports:
+        - containerPort: 8080
+        env:
+        - name: FLASK_DEBUG
+          value: "1" #
+        - name: DATABASE_USER
+          value: "%DATABASE_USER%"
+        - name: DATABASE_PASSWORD
+          value: "%DATABASE_PASSWORD%"
+        - name: DATABASE_PORT
+          value: "%DATABASE_PORT%"
+        - name: DATABASE_URL
+          value: "%DATABASE_URL%"
+        - name: DATABASE_NAME
+          value: "%DATABASE_NAME%"
+        - name: GOOGLE_CLOUD_PROJECT
+          value: "%GOOGLE_CLOUD_PROJECT%"

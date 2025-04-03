@@ -1,22 +1,22 @@
-FROM python:latest
+FROM python:3.11-slim
 
+# Establecer el directorio de trabajo
 WORKDIR /app
 
-RUN pip install pipenv && \
-  apt-get update && \
-  apt-get install -y libpq-dev gcc && \
-  apt-get install -y --no-install-recommends gcc python3-dev libssl-dev
+# Copiar archivos de dependencia
+COPY requirements.txt ./
 
-RUN pip install pipenv psycopg2
+# Instalar dependencias
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY Pipfile ./
+# Copiar el código fuente de la aplicación
+COPY src/ ./src
 
-RUN pipenv install
+# Configurar la variable de entorno para Flask
+ENV PYTHONPATH=/app/src
 
-COPY . .
+# Exponer el puerto de la aplicación
+EXPOSE 8080
 
-EXPOSE 3001
-
-ENV FLASK_APP="./src/main.py"
-
-ENTRYPOINT ["pipenv", "run", "flask", "run", "-h", "0.0.0.0", "--port=3001"]
+# Comando para ejecutar la aplicación con gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "src.main:app"]

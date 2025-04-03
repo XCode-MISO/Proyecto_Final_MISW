@@ -1,7 +1,6 @@
-#./commands/base_command.py
 from abc import ABC, abstractmethod
 
 class BaseCommannd(ABC):
     @abstractmethod
-    def execute(self): # pragma: no cover
+    def execute(self):
         raise NotImplementedError("Please implement in subclass")
