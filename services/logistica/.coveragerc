@@ -1,2 +1,5 @@
-[fail_under]
-70
+[run]
+branch = True
+
+[report]
+fail_under = 70

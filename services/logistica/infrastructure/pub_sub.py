@@ -32,10 +32,9 @@ def consume_pedido_creado(appContext):
       print(message)
       def route(pedido):
         return pedido.get("cliente").get("direccion")
-      pedidos = json.loads(message.data).get("pedidos")
+      pedidos = json.loads(message.data)
         
-      listOfPoints = list(map(route, pedidos))
-      route = generate_route(listOfPoints, pedidos)
+      route = generate_route(pedidos)
       publish_pedido_despachado(route)
       message.ack()
 

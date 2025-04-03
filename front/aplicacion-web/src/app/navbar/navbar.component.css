@@ -1,7 +1,7 @@
 .nav-button {
   height: 40px;
   min-width: 10rem;
-  border: 2px;
+  border: 2px solid #B38D5C;
 }
 .nav-button-row {
   display: flex;
