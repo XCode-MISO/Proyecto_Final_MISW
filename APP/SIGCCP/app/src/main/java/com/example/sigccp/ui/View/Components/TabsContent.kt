@@ -1,5 +1,6 @@
 package com.example.sigccp.ui.View.Components
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -28,7 +28,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,13 +46,14 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.sigccp.R
 import com.example.sigccp.activity.pedido.Data.Modelo.PedidoClass
 import com.example.sigccp.ui.theme.AmarilloApp
 import com.example.sigccp.ui.theme.AppTypography
 import com.example.sigccp.ui.theme.MoradoApp
 import com.example.sigccp.ui.theme.VerdeApp
 import com.example.sigccp.utils.getSavedLanguage
+import com.example.sigccp.utils.restartActivity
+import com.example.sigccp.utils.saveLanguage
 import com.example.sigccp.utils.setAppLocale
 
 @Composable
@@ -249,10 +249,11 @@ fun SubTitleBar( texto:String, imagen:Int? = null, enabled: Boolean = true)  {
 
 // DropDown de Lenguaje
 @Composable
-fun LanguageDropdown() {
-    val context = LocalContext.current
+fun LanguageDropdown(activity: Activity?) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedLanguage by remember { mutableStateOf(getSavedLanguage(context)) }
+    val context = LocalContext.current
+    var selectedLanguage by remember { mutableStateOf(getSavedLanguage(context).uppercase()) }
+    val recomposer = remember { mutableStateOf(0) }
 
     Box(
         modifier = Modifier.wrapContentSize(Alignment.TopEnd)
@@ -272,7 +273,7 @@ fun LanguageDropdown() {
                 )
             }
             Text(
-                text = selectedLanguage.uppercase(),
+                text = selectedLanguage,
                 color = MoradoApp,
                 style = AppTypography.titleSmall
             )
@@ -283,17 +284,23 @@ fun LanguageDropdown() {
                 DropdownMenuItem(
                     text = { Text("ES", style =AppTypography.titleSmall) },
                     onClick = {
-                        selectedLanguage = "es"
-                        setAppLocale(context, "es")
+                        selectedLanguage = "ES"
+                        setAppLocale(activity, "es")
+                        saveLanguage(context, "ES")
                         expanded = false
+                        restartActivity(activity)
+                        recomposer.value++
                     }
                 )
                 DropdownMenuItem(
                     text = { Text("EN", style =AppTypography.titleSmall) },
                     onClick = {
-                        selectedLanguage = "en"
-                        setAppLocale(context, "en")
+                        selectedLanguage = "EN"
+                        setAppLocale(activity, "en")
+                        saveLanguage(context, "EN")
                         expanded = false
+                        restartActivity(activity)
+                        recomposer.value++
                     }
                 )
             }

@@ -43,7 +43,7 @@ fun ListarPedidos()
 @Composable
 fun Pedidos ()
 {
-    ScreenContainer(title = stringResource(id = R.string.menuVendedor),false,null) {
+    ScreenContainer(title = stringResource(id = R.string.ListPedidos),false,null) {
         Box(
             modifier = Modifier
                 .fillMaxSize(), // Ocupa toda la pantalla para centrar el contenido

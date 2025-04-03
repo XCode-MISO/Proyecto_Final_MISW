@@ -1,6 +1,8 @@
 package com.example.sigccp.ui.View.Components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.ContextWrapper
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -10,15 +12,15 @@ import androidx.compose.material3.*
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.example.sigccp.R
 import com.example.sigccp.ui.theme.AmarilloApp
 import com.example.sigccp.ui.theme.AppTypography
 import com.example.sigccp.ui.theme.CcpColors
@@ -56,6 +58,7 @@ fun AppTopBar(title: String) {
     )
 }
 
+@SuppressLint("ContextCastToActivity")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreenContainer(
@@ -64,6 +67,9 @@ fun ScreenContainer(
     imagen:Int? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
+    val context = LocalContext.current
+    val activity = remember { context as? Activity ?: (context as? ContextWrapper)?.baseContext as? Activity }
+
     BaseScreen {
         TopAppBar(
             colors = topAppBarColors(
@@ -94,7 +100,7 @@ fun ScreenContainer(
 
             },
             actions = {
-                LanguageDropdown()
+                LanguageDropdown(activity)
             }
         )
         Column(
