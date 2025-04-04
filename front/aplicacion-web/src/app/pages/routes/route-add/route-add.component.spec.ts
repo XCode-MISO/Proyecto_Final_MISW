@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StopsComponent } from './stops.component';
+import { RouteAddComponent } from './route-add.component';
 
-describe('StopsComponent', () => {
-  let component: StopsComponent;
-  let fixture: ComponentFixture<StopsComponent>;
+describe('RouteAddComponent', () => {
+  let component: RouteAddComponent;
+  let fixture: ComponentFixture<RouteAddComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StopsComponent]
+      imports: [RouteAddComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(StopsComponent);
+    fixture = TestBed.createComponent(RouteAddComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

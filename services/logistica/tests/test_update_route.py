@@ -6,10 +6,11 @@ import pytest
 from logistica.app import create_app, db
 from unittest.mock import MagicMock
 
+from logistica.tests.test_generate_route import generate_route
+
 sys.modules["google.cloud.pubsub_v1"] = MagicMock()
 sys.modules["googlemaps"] = MagicMock()
 sys.modules["googlemaps.client"] = MagicMock()
-
 
 @pytest.fixture
 def client():
@@ -23,7 +24,7 @@ def client():
         db.drop_all()
 
 
-def generate_route(client):
+def update_route(client):
     data = {
         "paradas": [
             {
@@ -49,6 +50,18 @@ def generate_route(client):
                 },
                 "nombre":"Parada 2",
                 "fecha": "01/02/2025"
+            },
+            {
+                "cliente": {
+                    "direccion": "Calle 149, 16-56, Bogotá, Colombia",
+                    "nombre": "Cliente 2"
+                },
+                "vendedor": {
+                    "direccion": " Cl 63 #60-80, Bogotá",
+                    "nombre": "Vendedor 2"
+                },
+                "nombre":"Parada 2",
+                "fecha": "01/02/2025"
             }
         ],
         "inicio": "Cl. 114a #45-78, Bogota, Colombia",
@@ -59,10 +72,21 @@ def generate_route(client):
                            content_type='application/json')
     return response
 
-def test_generate_route(client):
-    response = generate_route(client)
+def test_update_route(client):
+    route_resp = generate_route(client)
+    route_resp_update = update_route(client)
+
+    route_resp_json = json.loads(route_resp.data)
+    route_resp_update_json = json.loads(route_resp_update.data)
+
+    id = route_resp_json["route_id"]
+    response = client.get(
+            f'/route/{id}',
+            content_type='application/json'
+        )
+    
     assert response.status_code == 200
     resp_json = json.loads(response.data)
-    assert resp_json['distancia'] == 19800
-    assert 'mapsResponse' in resp_json
-    assert resp_json['tiempoEstimado'] == 2848
+    assert 'id' in resp_json
+    assert route_resp_update_json["distancia"] > resp_json["distancia"]
+

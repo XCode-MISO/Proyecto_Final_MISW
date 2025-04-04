@@ -1,19 +1,23 @@
-import { Component, inject, Input, Output } from '@angular/core';
+import { Component, Inject, inject, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { GoogleMapsModule } from '@angular/google-maps';
-import { Parada, Pedido, RouteListService } from '../route-list/route-list.service';
-import { ActivatedRoute } from '@angular/router';
+import { Parada, Ruta, RouteListService } from './route-list/route-list.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 export type Cliente = {id: string, nombre: string, direccion: string}
+export type Vendedor = Cliente
 
 export type Route = {
   distancia: number
   id: string
   mapsResponse: any[]
   nombreRuta: string
-  pedidos: Parada[]
+  paradas: Parada[]
   tiempoEstimado: number
   fecha: string
+  inicio: string
+  fin: string
 }
 
 @Component({
@@ -24,6 +28,7 @@ export type Route = {
 })
 export class RoutesComponent {
 
+  private router: Router = inject(Router)
   private routesListService = inject(RouteListService)
   
   center: google.maps.LatLngLiteral = {lat: 4.7110, lng: -74.0721};
@@ -40,6 +45,11 @@ export class RoutesComponent {
   route_id: string = ''
 
   constructor(private activatedRoute: ActivatedRoute) {
+  }
+
+  navigateTo(path:string){
+    this.router.url
+    this.router.navigate([`${this.router.url}/${path}`])
   }
   
   ngOnInit(){
@@ -72,7 +82,6 @@ export class RoutesComponent {
   }
 
   onMapLoad(map: google.maps.Map) {
-    this.fitBounds(map)
     this.drawRoutes(map)
   }
   
@@ -85,8 +94,13 @@ export class RoutesComponent {
   }
 
   drawRoutes(map: google.maps.Map) {
-    this.getMarkers(this.route!!.mapsResponse[0].legs)
-    this.getPath(this.route!!.mapsResponse)
+    if (!this.route) {
+      console.error("No route")
+      return 
+    }
+    this.getMarkers(this.route.mapsResponse[0].legs)
+    this.getPath(this.route.mapsResponse)
+    this.fitBounds(map)
   }
 
   getPedidoDuration([_, leg]: [Parada, any]){

@@ -5,42 +5,73 @@ from typing import List
 import uuid
 from logistica.infrastructure.maps.types import Leg, TypedObject
 from logistica.infrastructure.maps.maps import parse_json
-from logistica.infrastructure.db.model import Route as DBRoute, Pedido as DBPedido, Cliente as DBCliente
+from logistica.infrastructure.db.model import Route as DBRoute, Parada as DBParada, Cliente as DBCliente, Vendedor as DBVendedor
 import datetime
 
 class Cliente():
     cliente_id = str
     direccion = str
+    nombre = str
     
-    def __init__(self, cliente_id, direccion) -> None:
+    def __init__(self, cliente_id, direccion, nombre) -> None:
         self.cliente_id = cliente_id
         self.direccion = direccion
+        self.nombre = nombre
     
     def toJSON(self):
         return json.dumps(
-            self,
-            default=lambda o: o.__dict__,
-            sort_keys=True,
-            indent=4)
+                self,
+                default=lambda o: o.__dict__,
+                sort_keys=True,
+                indent=4
+            )
 
     def toDBO(self):
         return DBCliente(
             cliente_id=self.cliente_id,
-            direccion=self.direccion
+            direccion=self.direccion,
+            nombre=self.nombre
+        )
+    
+class Vendedor():
+    vendedor_id = str
+    direccion = str
+    nombre = str
+    
+    def __init__(self, vendedor_id, direccion, nombre) -> None:
+        self.vendedor_id = vendedor_id
+        self.direccion = direccion
+        self.nombre = nombre
+    
+    def toJSON(self):
+        return json.dumps(
+                self,
+                default=lambda o: o.__dict__,
+                sort_keys=True,
+                indent=4
+            )
+
+    def toDBO(self):
+        return DBVendedor(
+            vendedor_id=self.vendedor_id,
+            direccion=self.direccion,
+            nombre=self.nombre
         )
 
 
-class Pedido():
-    pedido_id = str
+class Parada():
+    parada_id = str
     nombre = str
     fecha = str
-    clientes = List[Cliente]
+    cliente = Cliente
+    vendedor = Vendedor
 
-    def __init__(self, pedido_id, nombre, fecha, clientes) -> None:
-        self.pedido_id = pedido_id
+    def __init__(self, parada_id, nombre, fecha, cliente, vendedor) -> None:
+        self.parada_id = parada_id
         self.nombre = nombre
         self.fecha = fecha
-        self.clientes = clientes
+        self.cliente = cliente
+        self.vendedor = vendedor
 
     def toJSON(self):
         return json.dumps(
@@ -50,29 +81,34 @@ class Pedido():
             indent=4)
 
     def toDBO(self):
-        return DBPedido(
-            pedido_id=self.pedido_id,
+        return DBParada(
+            parada_id=self.parada_id,
             nombre=self.nombre,
             fecha=self.fecha,
-            clientes=list(map(lambda cliente: cliente.toDBO(), self.clientes)),
+            cliente=self.cliente.toDBO(),
+            vendedor=self.vendedor.toDBO()
         )
 
 
 class Route():
     route_id = str
     nombreRuta = str
+    inicio = str
+    fin = str
     distancia = float
     tiempoEstimado = int
-    pedidos= List[Pedido]
+    paradas= List[Parada]
     fecha = str
     mapsResponse= any
 
-    def __init__(self, route_id, nombreRuta, distancia, tiempoEstimado, pedidos, mapsResponse, fecha) -> None:
+    def __init__(self, route_id, nombreRuta, distancia, tiempoEstimado, paradas, mapsResponse, fecha, inicio, fin) -> None:
         self.route_id = route_id
         self.nombreRuta = nombreRuta
+        self.inicio = inicio
+        self.fin = fin
         self.distancia = distancia
         self.tiempoEstimado = tiempoEstimado
-        self.pedidos = pedidos
+        self.paradas = paradas
         self.mapsResponse = mapsResponse
         self.fecha = fecha
 
@@ -87,16 +123,18 @@ class Route():
         return DBRoute(
             route_id=self.route_id,
             nombreRuta=self.nombreRuta,
+            inicio=self.inicio,
+            fin=self.fin,
             distancia=self.distancia,
             tiempoEstimado=self.tiempoEstimado,
-            pedidos=list(map(lambda pedido: pedido.toDBO(), self.pedidos)),
+            paradas=list(map(lambda parada: parada.toDBO(), self.paradas)),
             mapsResponse=json.dumps(self.mapsResponse),
             fecha=self.fecha
         )
 
 
 def parseMapsResponseToRoute(requestJson, mapsResponse):
-    parsedResponse: TypedObject = parse_json(mapsResponse)[0]
+    parsedResponse = parse_json(mapsResponse)[0]
 
     def getDistance(legs):
         return sum(leg.distance.value for leg in legs)
@@ -106,14 +144,20 @@ def parseMapsResponseToRoute(requestJson, mapsResponse):
     
     paradas = requestJson.get("paradas")
 
-    parsedParadas = list(map(lambda parada: Pedido(
-        clientes=[Cliente(
+    parsedParadas = list(map(lambda parada: Parada(
+        cliente=Cliente(
             cliente_id=parada.get("cliente").get("id", str(uuid.uuid4())),
-            direccion=parada.get("cliente").get("direccion")
-        )],
+            direccion=parada.get("cliente").get("direccion"),
+            nombre=parada.get("cliente").get("nombre")
+        ),
+        vendedor=Vendedor(
+            vendedor_id=parada.get("vendedor").get("id", str(uuid.uuid4())),
+            direccion=parada.get("vendedor").get("direccion"),
+            nombre=parada.get("vendedor").get("nombre")
+        ),
         fecha=parada.get("fecha"),
         nombre=parada.get("nombre"),
-        pedido_id=parada.get("id", str(uuid.uuid4()))
+        parada_id=parada.get("id", str(uuid.uuid4()))
     ),paradas))
 
     return Route(
@@ -121,9 +165,11 @@ def parseMapsResponseToRoute(requestJson, mapsResponse):
         nombreRuta=requestJson.get("nombre"),
         distancia=getDistance(parsedResponse.legs),
         tiempoEstimado=getDuration(parsedResponse.legs),
-        pedidos=parsedParadas,
+        paradas=parsedParadas,
         mapsResponse=mapsResponse,
         fecha=parse_datetime_to_dd_mm_yyyy(datetime.datetime.now()),
+        inicio=requestJson.get("inicio"),
+        fin=requestJson.get("fin"),
     )
 
 def parse_datetime_to_dd_mm_yyyy(dt):
