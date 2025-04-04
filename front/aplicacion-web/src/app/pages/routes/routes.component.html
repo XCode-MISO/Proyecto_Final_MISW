@@ -9,16 +9,16 @@
       </button>
     </div>
     <div class="route-list">
-      @for (pedido of route?.pedidos; track $index; let idx = $index) {
+      @for (parada of route?.paradas; track $index; let idx = $index) {
       <div class="route-row">
         <span class="route-row-text">
-          {{pedido.nombre}}
+          {{parada.nombre}}
         </span>
          <span class="route-row-text" i18n>
-          Desplazamiento: {{Math.ceil(getPedidoDuration(getPedidoAndLeg((route?.pedidos && route!!.pedidos.length > 0) ? route!!.pedidos : [], route?.mapsResponse, $index)))}} min
+          Desplazamiento: {{Math.ceil(getPedidoDuration(getPedidoAndLeg((route?.paradas && route!!.paradas.length > 0) ? route!!.paradas : [], route?.mapsResponse, $index)))}} min
          </span >
         <span class="route-row-text">
-          {{pedido.fecha}}
+          {{parada.fecha}}
         </span>
       </div>
       }
