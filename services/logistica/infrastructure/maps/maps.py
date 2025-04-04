@@ -13,7 +13,9 @@ maps_breaker = pybreaker.CircuitBreaker(fail_max=5, reset_timeout=60)
 api_key = os.environ.get('GMAPS_API_KEY', "")
 gmaps = googlemaps.Client(key=api_key)
 
-def parse_json(json_data) -> TypedObject:
+def parse_json(json_data) -> List[TypedObject]:
+    if json_data == None:
+        return [TypedObject(bounds=[], legs=[])]
     parsed_objects = []
     for item in json_data:
         bounds = Bounds(
@@ -32,6 +34,8 @@ def parse_json(json_data) -> TypedObject:
 
 @maps_breaker
 def getRouteFromMaps(start,end, routes, mode="driving", departure_time=datetime.now()):
+  if len(routes) < 2:
+      return None
   return gmaps.directions(
         start, 
         end,

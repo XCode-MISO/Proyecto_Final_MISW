@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouteListService } from './route-list.service';
-import { Route } from '../routes/routes.component';
+import { Route } from '../routes.component';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 

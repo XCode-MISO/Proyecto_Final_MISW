@@ -22,7 +22,7 @@
   color: #351330;
 }
 
-.agregar-stop-row {
+.agregar-buttons-row {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -71,4 +71,12 @@
   justify-content: space-between;
   width: 100%;
   gap: 1rem;
+}
+
+.crear-ruta-button {
+  background-color: #45847B;
+}
+
+.cancelar-crear-ruta-button {
+  background-color: #AF0F26;
 }

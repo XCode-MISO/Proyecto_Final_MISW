@@ -3,7 +3,7 @@ body {
   display: grid;
   height: 100vh;
   font-family: Roboto, "Helvetica Neue", sans-serif; 
-  background: linear-gradient(180deg, #E8CAA4 0%, #64908A 100%) fixed; 
+  background: url("./background.svg") no-repeat fixed center bottom, linear-gradient(180deg, #E8CAA4 0%, #64908A 100%) fixed; 
 }
 
 app-root {
@@ -46,5 +46,4 @@ html, body {
 } */
 
 .left-sidebar, .right-sidebar, main, header, footer {
-  padding: 2rem;
 }
