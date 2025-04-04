@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -14,6 +15,13 @@ import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.activity.clients.data.model.Client
 import com.example.sigccp.activity.clients.ui.viewmodel.ClienteViewModel
 import com.example.sigccp.ui.theme.CcpColors
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,6 +32,12 @@ fun RegistrarVisita(viewModel: ClienteViewModel = viewModel(), navController: Na
     var selectedCliente by remember { mutableStateOf<Client?>(null) }
     var informe by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
+
+    var mostrarMapa by remember { mutableStateOf(false) } // Controla la visibilidad del mapa
+    var selectedPosition by remember { mutableStateOf<LatLng?>(null) }
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(LatLng(4.6097, -74.0817), 10f) // Bogotá
+    }
 
     LaunchedEffect(Unit) { viewModel.fetchClientes() }
     ScreenContainer(title = "Registrar Visita",false,null) {
@@ -77,13 +91,50 @@ fun RegistrarVisita(viewModel: ClienteViewModel = viewModel(), navController: Na
                 onValueChange = { informe = it },
                 modifier = Modifier.fillMaxWidth()
             )
+
+            // Switch para mostrar u ocultar el mapa
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("Agregar ubicación de la visita")
+                Spacer(modifier = Modifier.width(8.dp))
+                Switch(
+                    checked = mostrarMapa,
+                    onCheckedChange = { mostrarMapa = it }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(4.dp))
+            if (mostrarMapa) {
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.4f))
+                {
+                    GoogleMap(
+                        modifier = Modifier.fillMaxSize(),
+                        cameraPositionState = cameraPositionState,
+                        onMapClick = { latLng ->
+                            selectedPosition = latLng
+                        }
+                    ) {
+                        selectedPosition?.let {
+                            Marker(
+                                state = MarkerState(position = it),
+                                title = "Ubicación seleccionada"
+                            )
+                        }
+                    }
+                }
+            }
             Spacer(modifier = Modifier.height(4.dp))
             Row {
                 CustomButton(text ="Cancelar") { navController.popBackStack() }
                 CustomButton(text = "Aceptar") {
+                    val latitud = selectedPosition?.latitude ?: 0.0
+                    val longitud = selectedPosition?.longitude ?: 0.0
                     viewModel.sendVisit(
                         selectedCliente?.id ?: "",
                         informe,
+                        latitud,
+                        longitud,
                         onSuccess = { navController.popBackStack() },
                         onError = { msg -> println(msg) }
                     )

@@ -37,14 +37,14 @@ class ClienteViewModel: ViewModel() {
             }
         }
     }
-
-    fun sendVisit(idCliente: String, informe: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+    /**************************************************************************************************/
+    fun sendVisit(idCliente: String, informe: String, latitud: Double, longitud: Double, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             _isLoading.value = true
             val fechaHora = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
 
             try {
-                val response = repository.sendVisit(VisitRequest(idCliente, fechaHora, informe, 0.0, 0.0))
+                val response = repository.sendVisit(VisitRequest(idCliente, fechaHora, informe, latitud, longitud))
                 if (response.isSuccessful) {
                     onSuccess()
                 } else {
@@ -57,7 +57,7 @@ class ClienteViewModel: ViewModel() {
             }
         }
     }
-/**************************************************************************************************/
+    /**************************************************************************************************/
     fun createClient(nombre: String, correo: String, direccion: String, telefono: String, latitud: Double, longitud: Double, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -75,5 +75,4 @@ class ClienteViewModel: ViewModel() {
             }
         }
     }
-/**************************************************************************************************/
 }
