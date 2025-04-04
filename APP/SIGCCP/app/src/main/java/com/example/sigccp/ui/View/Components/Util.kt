@@ -107,7 +107,7 @@ fun ScreenContainer(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(50.dp)) // 50.dp Espaciado entre TopAppBar y subtítulo
+            Spacer(modifier = Modifier.height(80.dp)) // 50.dp Espaciado entre TopAppBar y subtítulo
             SubTitleBar(
                 texto = title,
                 imagen = imagen,

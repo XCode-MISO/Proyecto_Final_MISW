@@ -1,5 +1,6 @@
 package com.example.sigccp.activity.clients.ui.view
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -7,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -26,6 +28,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrarVisita(viewModel: ClienteViewModel = viewModel(), navController: NavController) {
+    val context = LocalContext.current
     val clientes = viewModel.clientes.collectAsState().value
     val isLoading = viewModel.isLoading.collectAsState().value
 
@@ -38,106 +41,138 @@ fun RegistrarVisita(viewModel: ClienteViewModel = viewModel(), navController: Na
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(LatLng(4.6097, -74.0817), 10f) // Bogotá
     }
-
     LaunchedEffect(Unit) { viewModel.fetchClientes() }
     ScreenContainer(title = "Registrar Visita",false,null) {
-        Column(Modifier.fillMaxSize().padding(16.dp)) {
-            if (isLoading) {
-                CircularProgressIndicator()
-            } else {
-                ExposedDropdownMenuBox(
-                    expanded = expanded,
-                    onExpandedChange = { expanded = it }
-                ) {
-                    OutlinedTextField(
-                        value = selectedCliente?.nombre ?: "Selecciona un cliente",
-                        onValueChange = {},
-                        readOnly = true,
-                        modifier = Modifier.menuAnchor(),
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = CcpColors.GrisApp,
-                            unfocusedBorderColor = Color.Gray
-                        )
-                    )
-                    ExposedDropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false },
-                        modifier = Modifier.exposedDropdownSize(),
-                    ) {
-                        clientes.forEach { cliente ->
-                            DropdownMenuItem(
-                                text = { Text(cliente.nombre) },
-                                onClick = {
-                                    selectedCliente = cliente
-                                    expanded = false
-                                },
-                                modifier = Modifier.background(CcpColors.GradientStart)
-                            )
-                        }
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            selectedCliente?.let {
-                Text("Nombre: ${it.nombre}")
-                Text("Dirección: ${it.direccion}")
-                Text("Teléfono: ${it.telefono}")
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Text("Informe:", style = MaterialTheme.typography.bodyLarge)
-            OutlinedTextField(
-                value = informe,
-                onValueChange = { informe = it },
-                modifier = Modifier.fillMaxWidth()
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ){
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center
             )
+            {
 
-            // Switch para mostrar u ocultar el mapa
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Agregar ubicación de la visita")
-                Spacer(modifier = Modifier.width(8.dp))
-                Switch(
-                    checked = mostrarMapa,
-                    onCheckedChange = { mostrarMapa = it }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(4.dp))
-            if (mostrarMapa) {
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.4f))
-                {
-                    GoogleMap(
-                        modifier = Modifier.fillMaxSize(),
-                        cameraPositionState = cameraPositionState,
-                        onMapClick = { latLng ->
-                            selectedPosition = latLng
-                        }
+                if (isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    ExposedDropdownMenuBox(
+                        expanded = expanded,
+                        onExpandedChange = { expanded = it }
                     ) {
-                        selectedPosition?.let {
-                            Marker(
-                                state = MarkerState(position = it),
-                                title = "Ubicación seleccionada"
+                        OutlinedTextField(
+                            value = selectedCliente?.nombre ?: "Selecciona un cliente",
+                            onValueChange = {},
+                            readOnly = true,
+                            modifier = Modifier.menuAnchor(),
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = CcpColors.GrisApp,
+                                unfocusedBorderColor = Color.Gray
                             )
+                        )
+                        ExposedDropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            modifier = Modifier.exposedDropdownSize(),
+                        ) {
+                            clientes.forEach { cliente ->
+                                DropdownMenuItem(
+                                    text = { Text(cliente.nombre) },
+                                    onClick = {
+                                        selectedCliente = cliente
+                                        expanded = false
+                                    },
+                                    modifier = Modifier.background(CcpColors.GradientStart)
+                                )
+                            }
                         }
                     }
                 }
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Row {
-                CustomButton(text ="Cancelar") { navController.popBackStack() }
-                CustomButton(text = "Aceptar") {
-                    val latitud = selectedPosition?.latitude ?: 0.0
-                    val longitud = selectedPosition?.longitude ?: 0.0
-                    viewModel.sendVisit(
-                        selectedCliente?.id ?: "",
-                        informe,
-                        latitud,
-                        longitud,
-                        onSuccess = { navController.popBackStack() },
-                        onError = { msg -> println(msg) }
+                Spacer(modifier = Modifier.height(4.dp))
+                selectedCliente?.let {
+                    Text("Nombre: ${it.nombre}")
+                    Text("Dirección: ${it.direccion}")
+                    Text("Teléfono: ${it.telefono}")
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Text("Informe:", style = MaterialTheme.typography.bodyLarge)
+                OutlinedTextField(
+                    value = informe,
+                    onValueChange = { informe = it },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                // Switch para mostrar u ocultar el mapa
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("Agregar ubicación de la visita")
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Switch(
+                        checked = mostrarMapa,
+                        onCheckedChange = { mostrarMapa = it }
                     )
+                }
+
+                Spacer(modifier = Modifier.height(4.dp))
+                if (mostrarMapa) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.4f)
+                    )
+                    {
+                        GoogleMap(
+                            modifier = Modifier.fillMaxSize(),
+                            cameraPositionState = cameraPositionState,
+                            onMapClick = { latLng ->
+                                selectedPosition = latLng
+                            }
+                        ) {
+                            selectedPosition?.let {
+                                Marker(
+                                    state = MarkerState(position = it),
+                                    title = "Ubicación seleccionada"
+                                )
+                            }
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Row {
+                    CustomButton(text = "Cancelar") { navController.popBackStack() }
+                    CustomButton(text = "Aceptar") {
+                        if (selectedCliente == null || informe.isBlank()) {
+                            Toast.makeText(
+                                context,
+                                "Por favor, complete todos los campos.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            val latitud = selectedPosition?.latitude ?: 0.0
+                            val longitud = selectedPosition?.longitude ?: 0.0
+                            viewModel.sendVisit(
+                                selectedCliente?.id ?: "",
+                                informe,
+                                latitud,
+                                longitud,
+                                onSuccess = {
+                                    Toast.makeText(
+                                        context,
+                                        "Visita Registrada", Toast.LENGTH_SHORT
+                                    ).show()
+                                    navController.popBackStack()
+                                },
+                                onError = { msg ->
+                                    Toast.makeText(
+                                        context,
+                                        msg, Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
