@@ -10,7 +10,7 @@ type Tab = {
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatButtonModule,MatTabsModule, MatButtonModule],
+  imports: [MatButtonModule,MatTabsModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -32,7 +32,7 @@ export class NavbarComponent {
   isPath(tab: Tab) {
     const path = this.router.url
 
-    return tab.route.includes(path)
+    return path.includes(tab.route)
   }
   navigate(tab:Tab) {
     this.router.navigate([tab.route])

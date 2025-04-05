@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { Parada, Ruta, RouteListService } from './route-list/route-list.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatTabsModule } from '@angular/material/tabs';
 
 export type Cliente = {id: string, nombre: string, direccion: string}
 export type Vendedor = Cliente
@@ -21,7 +22,7 @@ export type Route = {
 
 @Component({
   selector: 'app-routes',
-  imports: [MatButtonModule, GoogleMapsModule],
+  imports: [MatButtonModule, GoogleMapsModule, MatTabsModule],
   templateUrl: './routes.component.html',
   styleUrl: './routes.component.css'
 })

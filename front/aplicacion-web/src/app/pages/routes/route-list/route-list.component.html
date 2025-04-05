@@ -4,13 +4,30 @@
     <span class="route-title" i18n>
       Rutas
     </span>
+    <div class="form-row">
+      <span class="form-row-text">
+        Fecha:
+      </span>
+      <form >
+        <mat-form-field class="form-field" appearance="outline" [subscriptSizing]="'dynamic'">
+          <input matInput [matDatepicker]="datepicker" [formControl]="dateFilter" (dateInput)="filterRoutes()"/>
+          <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+          <mat-datepicker #datepicker>
+            <mat-datepicker-actions>
+              <button mat-button matDatepickerCancel>Cancel</button>
+              <button mat-raised-button matDatepickerApply>Apply</button>
+            </mat-datepicker-actions>
+          </mat-datepicker>
+        </mat-form-field>
+      </form>
+    </div>
     <div class="agregar-ruta-row">
       <button mat-flat-button class="agregar-ruta-button" i18n (click)="navigateToRouteAdd()">
         Agregar Ruta
       </button>
     </div>
     <div class="route-list">
-      @for (route of routes; track $index; let idx = $index) {
+      @for (route of filteredRoutes; track $index; let idx = $index) {
           <div class="route-row" (click)="navigateToRoute(route.id)" >
             <span class="route-row-text">
               {{route.nombreRuta}}
