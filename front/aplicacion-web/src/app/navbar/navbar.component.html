@@ -1,7 +1,12 @@
 <section class="navigation-button-list">
   <div class="nav-button-row">
     @for (tab of tabs; track tab) {
-      <a mat-flat-button href={{tab.route}} class="nav-button">{{ tab.name }}</a>
+      @if (isPath(tab)) {
+        <a mat-flat-button class="nav-button-disabled" >{{ tab.name }}</a>
+      }
+      @else {
+        <a mat-flat-button class="nav-button" href={{tab.route}} (click)="navigate(tab)">{{ tab.name }}</a>
+      }
     }
   </div>
 </section>

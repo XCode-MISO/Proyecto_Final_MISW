@@ -78,7 +78,7 @@ def add_stop_route(id, parada):
     clienteFinal = clienteDB if clienteDB != None else Cliente(
         cliente_id=cliente.get("id", str(uuid.uuid4())),
         direccion=cliente.get("direccion"),
-        nombre=cliente.get("Nombre")
+        nombre=cliente.get("nombre")
     ).toDBO()
 
     vendedorDB = DBVendedor.query.get(vendedor.get("id"))

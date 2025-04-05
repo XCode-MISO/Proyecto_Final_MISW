@@ -8,12 +8,16 @@ from sqlalchemy.orm import relationship
 
 db = SQLAlchemy()
 
+
 class Vendedor(db.Model):
     __tablename__ = 'vendedor'
     vendedor_id = db.Column(String, primary_key=True)
-    nombre= db.Column(String)
+    nombre = db.Column(String)
     direccion = db.Column(String)
-    parada_id: Mapped[str] = mapped_column(ForeignKey("parada.parada_id"))
+    
+    # Correcting relationship definition
+    paradas: Mapped[List["Parada"]] = relationship("Parada", back_populates="vendedor")
+    
     def toJSON(self):
         return {
             "id": self.vendedor_id,
@@ -24,14 +28,40 @@ class Vendedor(db.Model):
 class Cliente(db.Model):
     __tablename__ = 'cliente'
     cliente_id = db.Column(String, primary_key=True)
-    nombre= db.Column(String)
+    nombre = db.Column(String)
     direccion = db.Column(String)
-    parada_id: Mapped[str] = mapped_column(ForeignKey("parada.parada_id"))
+    
+    # Correcting relationship definition
+    paradas: Mapped[List["Parada"]] = relationship("Parada", back_populates="cliente")
+    
     def toJSON(self):
         return {
             "id": self.cliente_id,
             "direccion": self.direccion,
             "nombre": self.nombre
+        }
+    
+class Parada(db.Model):
+    __tablename__ = 'parada'
+    parada_id = db.Column(String, primary_key=True)
+    route_id = Column(String, ForeignKey("route.route_id"))
+
+    nombre = db.Column(String)
+    fecha = db.Column(Date)
+    
+    cliente_id = db.Column(String, ForeignKey("cliente.cliente_id"))
+    cliente = relationship("Cliente", back_populates="paradas")
+    
+    vendedor_id = db.Column(String, ForeignKey("vendedor.vendedor_id"))
+    vendedor = relationship("Vendedor", back_populates="paradas")
+
+    def toJSON(self):
+        return {
+            "id": self.parada_id,
+            "nombre": self.nombre,
+            "fecha": self.fecha,
+            "cliente": self.cliente.toJSON(),
+            "vendedor": self.vendedor.toJSON(),
         }
     
 
@@ -61,24 +91,3 @@ class Route(db.Model):
             "mapsResponse": json.loads(self.mapsResponse),
             "fecha": self.fecha
         }
-
-class Parada(db.Model):
-    __tablename__ = 'parada'
-    parada_id = db.Column(String, primary_key=True)
-    route_id = Column(String, ForeignKey("route.route_id"))
-
-    nombre = db.Column(String)
-    fecha = db.Column(Date)
-
-    cliente: Mapped[Cliente] = relationship(Cliente)
-    vendedor: Mapped[Vendedor] = relationship(Vendedor)
-
-    def toJSON(self):
-        return {
-            "id": self.parada_id,
-            "nombre": self.nombre,
-            "fecha": self.fecha,
-            "cliente": self.cliente.toJSON(),
-            "vendedor": self.vendedor.toJSON(),
-        }
-    

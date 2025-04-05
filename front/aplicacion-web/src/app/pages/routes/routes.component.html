@@ -25,7 +25,7 @@
     </div>
     <div class="map-container">
       @if (mapLoaded){
-      <google-map [center]="center" [zoom]="zoom" [options]="{}" (mapInitialized)="onMapLoad($event)">
+      <google-map class="map" [width]="'100%'" [center]="center" [zoom]="zoom" [options]="{}" (mapInitialized)="onMapLoad($event)">
         @if (route && encoding){
           <map-polyline [path]="route_path" [options]="{
                 strokeColor: 'blue',
@@ -34,8 +34,8 @@
               }" />
         }
         @if (mapMarkers && mapMarkers.length > 0) {
-          @for (marker of mapMarkers; track marker) {
-            <map-marker [position]="marker" />
+          @for (marker of mapMarkers; track marker; let idx = $index) {
+            <map-marker [position]="marker.start_location" [title]="marker.start_address" [label]="`${idx}`"/>
           }
         }
       </google-map>
