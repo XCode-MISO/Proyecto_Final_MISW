@@ -12,6 +12,10 @@ import { Router } from '@angular/router';
 })
 export class RouteListComponent {
 
+  navigateToRouteAdd() {
+    this.router.navigate(['route-add'])
+  }
+
   router: Router = inject(Router)
 
   routes: Route[] = []
