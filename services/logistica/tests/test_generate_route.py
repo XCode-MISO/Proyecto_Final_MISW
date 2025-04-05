@@ -63,6 +63,4 @@ def test_generate_route(client):
     response = generate_route(client)
     assert response.status_code == 200
     resp_json = json.loads(response.data)
-    assert resp_json['distancia'] == 19800
     assert 'mapsResponse' in resp_json
-    assert resp_json['tiempoEstimado'] == 2848

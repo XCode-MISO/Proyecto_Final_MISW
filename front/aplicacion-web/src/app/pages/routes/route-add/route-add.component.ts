@@ -79,4 +79,8 @@ export class RouteAddComponent {
         }
       })
   }
+
+  cancelar() {
+    this.router.navigate(['/route/'])
+  }
 }

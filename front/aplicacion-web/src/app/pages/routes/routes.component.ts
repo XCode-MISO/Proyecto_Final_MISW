@@ -1,9 +1,9 @@
-import { Component, Inject, inject, Input, Output } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { Parada, Ruta, RouteListService } from './route-list/route-list.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { environment } from '../../../environments/environment';
+import { MatTabsModule } from '@angular/material/tabs';
 
 export type Cliente = {id: string, nombre: string, direccion: string}
 export type Vendedor = Cliente
@@ -22,7 +22,7 @@ export type Route = {
 
 @Component({
   selector: 'app-routes',
-  imports: [MatButtonModule, GoogleMapsModule],
+  imports: [MatButtonModule, GoogleMapsModule, MatTabsModule],
   templateUrl: './routes.component.html',
   styleUrl: './routes.component.css'
 })
@@ -78,7 +78,7 @@ export class RoutesComponent {
   }
 
   getMarkers(legs:any[]) {
-    this.mapMarkers = legs.map(pedido => pedido.start_location)
+    this.mapMarkers = legs
   }
 
   onMapLoad(map: google.maps.Map) {
@@ -94,7 +94,7 @@ export class RoutesComponent {
   }
 
   drawRoutes(map: google.maps.Map) {
-    if (!this.route) {
+    if (!this.route || !this.route.mapsResponse) {
       console.error("No route")
       return 
     }
@@ -104,7 +104,7 @@ export class RoutesComponent {
   }
 
   getPedidoDuration([_, leg]: [Parada, any]){
-    return leg.duration.value
+    return this.Math.round(leg.duration.value / 60)
   }
   
   getPedidoAndLeg(pedidos: Parada[], mapsResponse:any, pedidoPosition: number): [Parada, any]{
