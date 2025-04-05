@@ -68,60 +68,63 @@ fun ScreenContainer(
     content: @Composable ColumnScope.() -> Unit
 ) {
     val context = LocalContext.current
-    val activity = remember { context as? Activity ?: (context as? ContextWrapper)?.baseContext as? Activity }
+    val activity =
+        remember { context as? Activity ?: (context as? ContextWrapper)?.baseContext as? Activity }
 
     BaseScreen {
-        TopAppBar(
-            colors = topAppBarColors(
-                containerColor = Color.Transparent,
-                titleContentColor = MaterialTheme.colorScheme.primary,
-            ),
-            title = {
-                Text(
-                    modifier = Modifier.fillMaxSize()
-                        .wrapContentHeight(Alignment.CenterVertically),
-                    textAlign = TextAlign.Center,
-                    text = "SIGCCP",
-                    style = AppTypography.titleLarge
-                )
-            },
-            navigationIcon = {
-                IconButton(
-                    onClick = {/*todo*/},
-                    modifier = Modifier.padding(start = 20.dp, end = 25.dp)
-                )
-                {
-                    Icon(
-                        imageVector = Icons.Filled.PowerSettingsNew, contentDescription = "Salir",
-                        tint = MoradoApp,
-                        modifier = Modifier.size(40.dp)
-                    )
-                }
-
-            },
-            actions = {
-                LanguageDropdown(activity)
-            }
-        )
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxSize()
         ) {
-            Spacer(modifier = Modifier.height(50.dp)) // 50.dp Espaciado entre TopAppBar y subtítulo
-            SubTitleBar(
-                texto = title,
-                imagen = imagen,
-                enabled = enabled,
+            // TopAppBar como PRIMER elemento del Column
+            TopAppBar(
+                colors = topAppBarColors(
+                    containerColor = Color.Transparent,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+                title = {
+                    Text(
+                        modifier = Modifier.fillMaxWidth()
+                            .wrapContentHeight(Alignment.CenterVertically),
+                        textAlign = TextAlign.Center,
+                        text = "SIGCCP",
+                        style = AppTypography.titleLarge
+                    )
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {/* TODO */ },
+                        modifier = Modifier.padding(start = 20.dp, end = 25.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.PowerSettingsNew,
+                            contentDescription = "Salir",
+                            tint = MoradoApp,
+                            modifier = Modifier.size(40.dp)
+                        )
+                    }
+                },
+                actions = {
+                    LanguageDropdown(activity)
+                }
             )
-        }
-        Column(
+            // Contenido debajo del AppBar de forma natural
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            content()
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                Spacer(modifier = Modifier.height(16.dp)) // Espaciado relativo
+                SubTitleBar(
+                    texto = title,
+                    imagen = imagen,
+                    enabled = enabled,
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                content()
+            }
         }
     }
 }

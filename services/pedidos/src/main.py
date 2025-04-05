@@ -12,7 +12,9 @@ from src.models.pedido import Pedido
 from src.models.producto import Producto
 from src.models.cliente import Cliente
 from src.database import db, database
+from src.models.seed_data import seed_database_if_empty  # Solo con importarlo se ejecutará el código del archivo
 
+seed_database_if_empty()
 # Cargar variables de entorno
 dotenv_path = find_dotenv(filename=".env.development")
 if dotenv_path:

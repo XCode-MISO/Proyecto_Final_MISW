@@ -23,6 +23,10 @@ data class PedidoClass(
     val client: ClienteClass
 )
 
+data class Pedidos(
+    val pedidos: List<PedidoClass>
+)
+
 data class ClienteClass(
     val id: String,
     val name: String

@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.example.sigccp.R
 import com.example.sigccp.activity.pedido.Data.Modelo.ClienteClass
 import com.example.sigccp.activity.pedido.Data.Modelo.PedidoClass
+import com.example.sigccp.activity.pedido.Data.Modelo.Pedidos
 import com.example.sigccp.ui.View.Components.ClientDropdown
 import com.example.sigccp.ui.View.Components.PedidoBox
 import com.example.sigccp.ui.View.Components.ScreenContainer
@@ -41,7 +42,21 @@ val pedidoEjemplo = PedidoClass(
     )
 )
 
-//@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+val listaPedidos = Pedidos(
+    pedidos = listOf(
+        PedidoClass("1", "Pedido 1", 1200050.0, "pendiente", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("1", "Pedido 1", 50.0, "pendiente", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez"))
+    )
+)
+
 @Preview
 @Composable
 fun MainScreen(
@@ -51,8 +66,8 @@ fun MainScreen(
     ScreenContainer(title = "Hola Usuario",true,R.drawable.avatar) {
         Box(
             modifier = Modifier
-                .fillMaxSize(), // Ocupa toda la pantalla para centrar el contenido
-            contentAlignment = Alignment.Center // Centra el contenido en la pantalla
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
         )
         {
             Column(

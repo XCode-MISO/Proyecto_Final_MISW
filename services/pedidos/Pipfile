@@ -24,3 +24,4 @@ python-dateutil= "*"
 
 [dev-packages]
 pytest = "*"
+faker = "*"

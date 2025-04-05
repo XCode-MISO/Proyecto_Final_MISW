@@ -11,4 +11,13 @@ interface ApiServicePedido {
 
     @GET("pedido/{pedidoId}")
     suspend fun getPedidoId(@Path("pedidoId") pedidoId:String):DataItemPedido
+
+    /*
+    @POST("pedido/{pedidoId}")
+    suspend fun getPedidoId(@Path("pedidoId") pedidoId:String):DataItemPedido
+
+    @DELETE("pedido/{pedidoId}")
+    suspend fun getPedidoId(@Path("pedidoId") pedidoId:String):DataItemPedido
+
+     */
 }

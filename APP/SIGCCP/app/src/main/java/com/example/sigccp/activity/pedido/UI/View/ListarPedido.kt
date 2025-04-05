@@ -20,14 +20,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sigccp.R
 import com.example.sigccp.ui.View.Components.ClientDropdown
+import com.example.sigccp.ui.View.Components.ListaDePedidos
 import com.example.sigccp.ui.View.Components.PedidoBox
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.locationDropdown
 import com.example.sigccp.ui.View.Components.newButton
 import com.example.sigccp.ui.View.Components.newMenuButton
 import com.example.sigccp.ui.View.clientes
+import com.example.sigccp.ui.View.listaPedidos
 import com.example.sigccp.ui.View.pedidoEjemplo
 import com.example.sigccp.ui.theme.AmarilloApp
 import com.example.sigccp.ui.theme.AppTypography
@@ -94,26 +97,11 @@ fun Pedidos ()
                             locations = clientes,
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
                         )
-                        ClientDropdown(
-                            clients = clientes,
-                            onClientSelected = { id -> println("Cliente seleccionado: $id") }
-                        )
-                        PedidoBox(pedido = pedidoEjemplo)
-                        newMenuButton(
-                            onClick = {/*TODO*/ },
-                            nombre = "CREAR CLIENTE",
-                            imagen = R.drawable.editar,
-                            enabled = true
-                        )
+                        ListaDePedidos(listaPedidos)
+
                     }
                 }
             }
         }
     }
 }
-/*
-@Composable
-fun Pedido()
-{
-
-}*/
