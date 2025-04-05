@@ -64,6 +64,166 @@ paths:
           description: "Lista de productos en inventario"
       x-google-backend:
         address: "http://inventarios.cppxcode.shop/api/inventarios/productos"
+  
+  /api/rutas:
+    get:
+      operationId: "listRutas"
+      summary: "Listas rutas que han sido generadas"
+      description: "Devuleve la lista de rutas que se han generado"
+      produces:
+        - "application/json"
+      response:
+        200:
+          description: "Lista de rutas generadas"
+      x-google-backend:
+        address: "http://logistica.cppxcode.shop/route"
+
+  /api/rutas/{route_id}:
+    get:
+      operationId: "getRuta"
+      summary: "Obtener una rutas que ha sido generada"
+      description: "Devuleve la ruta que se han generado"
+      produces:
+        - "application/json"
+      parameter:        
+      - in: path
+          name: route_id
+          type: string
+          required: true
+          description: String ID de la ruta
+      response:
+        200:
+          description: "Lista de rutas generadas"
+        404:
+          description: "No se encontró esa ruta"
+      x-google-backend:
+        address: "http://logistica.cppxcode.shop/route"
+        
+  /add-stop-route:
+    post:
+      operationId: "addStop"
+      summary: Add a stop to a route
+      description: Adds a new stop to an existing route by ID
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Stop data and route ID
+          required: true
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: 17008418-3720-4530-9a59-760e9c8a7750
+              parada:
+                type: object
+                properties:
+                  nombre:
+                    type: string
+                    example: Parada 3
+                  fecha:
+                    type: string
+                    example: 01/02/2026
+                  cliente:
+                    type: object
+                    properties:
+                      nombre:
+                        type: string
+                        example: Cliente 1
+                      direccion:
+                        type: string
+                        example: Cra. 11, 82-71, Bogotá, Colombia
+                  vendedor:
+                    type: object
+                    properties:
+                      nombre:
+                        type: string
+                        example: Vendedor 1
+                      direccion:
+                        type: string
+                        example: Calle 149, 16-56, Bogotá, Colombia
+      responses:
+        200:
+          description: Stop successfully added to the route
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: Stop added to route successfully
+        400:
+          description: Invalid input
+        500:
+          description: Server error
+  /api/generate-route:
+    post:
+      operationId: "getRuta"
+      summary: "Obtener una rutas que ha sido generada"
+      description: "Devuleve la ruta que se han generado"
+      produces:
+        - "application/json"
+      parameters:
+      - in: body
+        name: body
+        description: Ruta con paradas
+        required: true
+        schema:
+          type: object
+          properties:
+            nombre:
+              type: string
+              example: Ruta 1
+            inicio:
+              type: string
+              example: Cl. 114a #45-78, Bogota, Colombia
+            fin:
+              type: string
+              example: Cl. 114a #45-78, Bogota, Colombia
+            paradas:
+              type: array
+              items:
+                type: object
+                properties:
+                  nombre:
+                    type: string
+                    example: Parada 1
+                  fecha:
+                    type: string
+                    example: 01/02/2026
+                  cliente:
+                    type: object
+                    properties:
+                      nombre:
+                        type: string
+                        example: Cliente 1
+                      direccion:
+                        type: string
+                        example: Cra. 11, 82-71, Bogotá, Colombia
+                  vendedor:
+                    type: object
+                    properties:
+                      nombre:
+                        type: string
+                        example: Vendedor 1
+                      direccion:
+                        type: string
+                        example: Calle 149, 16-56, Bogotá, Colombia
+      response:
+        200:
+          description: "Lista de rutas generadas"
+        404:
+          description: "No se encontró esa ruta"
+      x-google-backend:
+        address: "http://logistica.cppxcode.shop/route"
+
 
 securityDefinitions:
   firebase:
