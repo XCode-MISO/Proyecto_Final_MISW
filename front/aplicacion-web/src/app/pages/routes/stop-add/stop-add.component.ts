@@ -1,16 +1,21 @@
-import {ChangeDetectionStrategy, Component, inject, Input, signal} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatSelectModule} from '@angular/material/select';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { Cliente, Route, Vendedor } from '../routes.component';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { catchError, Observable } from 'rxjs';
-import { RouteListService } from '../route-list/route-list.service';
+import { Parada, RouteListService } from '../route-list/route-list.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 export type UpdateRoute = Route
+
+export type AddStopToRoute = {
+  id: string,
+  parada: Parada
+}
 
 @Component({
   selector: 'app-stop-add',
@@ -36,32 +41,32 @@ export class StopAddComponent {
 
   clientes: Cliente[] = [
     {
-      id: "1", 
-      nombre: "Cliente1", 
-      direccion: "Cra. 11, 82-71, Bogotá, Colombia" 
+      id: "1",
+      nombre: "Cliente1",
+      direccion: "Cra. 11, 82-71, Bogotá, Colombia"
     },
     {
-      id: "2", 
-      nombre: "Cliente 2", 
-      direccion: "Calle 149, 16-56, Bogotá, Colombia" 
+      id: "2",
+      nombre: "Cliente 2",
+      direccion: "Calle 149, 16-56, Bogotá, Colombia"
     },
     {
-      id: "3", 
-      nombre: "Cliente 3", 
-      direccion: "Cra. 11, 82-71, Bogotá, Colombia" 
+      id: "3",
+      nombre: "Cliente 3",
+      direccion: "Cra. 11, 82-71, Bogotá, Colombia"
     },
   ]
 
-  vendedores: Vendedor[] =[
+  vendedores: Vendedor[] = [
     {
-      id: "1", 
-      nombre: "Vendedor 1", 
-      direccion: "Cl. 81 # 13 05, Bogotá" 
+      id: "1",
+      nombre: "Vendedor 1",
+      direccion: "Cl. 81 # 13 05, Bogotá"
     },
     {
-      id: "2", 
-      nombre: "Vendedor 2", 
-      direccion: "Cra. 15 #78-33, Bogotá" 
+      id: "2",
+      nombre: "Vendedor 2",
+      direccion: "Cra. 15 #78-33, Bogotá"
     },
   ]
 
@@ -75,11 +80,11 @@ export class StopAddComponent {
   router: Router = inject(Router)
 
   routeService: RouteListService = inject(RouteListService)
-  
+
   constructor(private activatedRoute: ActivatedRoute) {
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.route_id = this.activatedRoute.snapshot.paramMap.get("id") || ""
     this.routeService.getRoute(this.route_id).subscribe(this.getRoute.bind(this))
   }
@@ -101,18 +106,14 @@ export class StopAddComponent {
     if (!this.baseRoute) {
       console.error("NO BASE ROUTE")
     }
-    const route: Route = {...this.baseRoute!!}
-    route.paradas.push({
-      cliente,
-      vendedor,
-      fecha,
-      nombre
+    this.addStopToRoute({
+      id: this.baseRoute!!.id,
+      parada: { cliente, vendedor, nombre, fecha }
     })
-    this.updateRoute(route)
   }
 
-  updateRoute(route: UpdateRoute) {
-    this.routeService.updateRoute(route)
+  addStopToRoute(route: AddStopToRoute) {
+    this.routeService.addStopToRoute(route)
       .pipe(
         catchError((e, source) => {
           console.error(e)
@@ -121,8 +122,8 @@ export class StopAddComponent {
         })
       )
       .subscribe(result => {
-        if (!!(result as {route_id:string}).route_id) {
-          this.router.navigate([`/route/${(result as {route_id:string}).route_id}`])
+        if (!!(result as { id: string }).id) {
+          this.router.navigate([`/route/${(result as { id: string }).id}`])
         }
       })
   }

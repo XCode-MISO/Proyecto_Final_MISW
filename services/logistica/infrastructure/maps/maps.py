@@ -34,7 +34,7 @@ def parse_json(json_data) -> List[TypedObject]:
 
 @maps_breaker
 def getRouteFromMaps(start,end, routes, mode="driving", departure_time=datetime.now()):
-  if len(routes) < 2:
+  if len(routes) < 1:
       return None
   return gmaps.directions(
         start, 

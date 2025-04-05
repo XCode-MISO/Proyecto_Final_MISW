@@ -4,7 +4,7 @@ import { Cliente, Route, Vendedor } from '../routes.component';
 import { environment } from '../../../../environments/environment';
 import { catchError, finalize, Observable } from 'rxjs';
 import { CreateRoute } from '../route-add/route-add.component';
-import { UpdateRoute } from '../stop-add/stop-add.component';
+import { AddStopToRoute, UpdateRoute } from '../stop-add/stop-add.component';
 
 export type Parada = {
   cliente: Cliente
@@ -73,6 +73,19 @@ export class RouteListService {
   updateRoute(body: UpdateRoute) {
     return this.http
     .put(`${environment.apiUrl}/update-route`, body)
+    .pipe(
+      catchError((e, source) => {
+        console.error(e)
+        console.error(source)
+        return new Observable()
+      }),
+      finalize(() => console.error("finalized call"))
+    )as unknown as Observable<Route>
+  }
+
+  addStopToRoute(body: AddStopToRoute) {
+    return this.http
+    .post(`${environment.apiUrl}/add-stop-route`, body)
     .pipe(
       catchError((e, source) => {
         console.error(e)
