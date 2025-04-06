@@ -7,6 +7,7 @@ import { RouteAddComponent } from './pages/routes/route-add/route-add.component'
 import { FabricantesListarComponent } from './pages/fabricantes/fabricantes-listar/fabricantes-listar.component'
 import { FabricantesCrearComponent } from './pages/fabricantes/fabricantes-crear/fabricantes-crear.component'
 import { ProductosCargarComponent } from './pages/productos/productos-cargar/productos-cargar.component';
+import { GestionFabricantesComponent } from './pages/fabricantes/gestion-fabricantes/gestion-fabricantes.component';
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   {
@@ -29,6 +30,7 @@ export const routes: Routes = [
   { path: 'route-add', component: RouteAddComponent },
   { path: 'fabricantes/listar',component: FabricantesListarComponent },
   { path: 'fabricantes/crear',component: FabricantesCrearComponent },
+  { path: 'fabricantes/menu',component: GestionFabricantesComponent },
   { path: 'productos/crear',component: ProductosCargarComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
