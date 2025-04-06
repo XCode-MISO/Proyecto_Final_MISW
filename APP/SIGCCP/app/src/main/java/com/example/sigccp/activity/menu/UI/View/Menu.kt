@@ -105,7 +105,7 @@ fun Options(navController: NavController)
                             enabled = true
                         )
                         newMenuButton(
-                            onClick = {/*TODO*/ },
+                            onClick = {navController.navigate(AppScreen.CrearCliente.route) },
                             nombre = "CREAR CLIENTE",
                             imagen = R.drawable.editar,
                             enabled = true

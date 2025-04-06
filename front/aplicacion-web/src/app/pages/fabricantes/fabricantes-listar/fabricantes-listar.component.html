@@ -1,0 +1,20 @@
+<div class="contenedor">
+  <h2 class="titulo">Listado de Fabricantes</h2>
+
+  @if (fabricantes.length > 0) {
+    @for (fabricante of fabricantes; track fabricante.id) {
+      <div class="tarjeta">
+        <div class="avatar">
+          @if (fabricante.imagen) {
+            <img [src]="fabricante.imagen" alt="{{ fabricante.nombre }}" />
+          } @else {
+            <div class="inicial">{{ fabricante.nombre.charAt(0).toUpperCase() }}</div>
+          }
+        </div>
+        <span class="nombre">{{ fabricante.nombre }}</span>
+      </div>
+    }
+  } @else {
+    <p class="mensaje-vacio">No hay fabricantes registrados.</p>
+  }
+</div>

@@ -1,12 +1,23 @@
 .nav-button {
   height: 40px;
   min-width: 10rem;
-  border: 2px;
+  border: 2px solid #B38D5C;
 }
+
+.nav-button-disabled {
+  height: 40px;
+  min-width: 10rem;
+  border: 2px solid #B38D5C;
+  background-color: #B38D5C;
+}
+
 .nav-button-row {
   display: flex;
   justify-content: center;
   gap: 5px;
   padding: 10px;
   background: #351330;
+  .mat-mdc-tab-links {
+    gap: 5px !important;
+  }
 }

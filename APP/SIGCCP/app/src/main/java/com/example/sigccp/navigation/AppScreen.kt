@@ -3,6 +3,7 @@ package com.example.sigccp.navigation
 sealed class AppScreen(val route:String)
 { //Crear Rutas
     object Menu:AppScreen("Menu")
+    object CrearCliente:AppScreen("CrearCliente")
     object ListarPedidos:AppScreen("ListarPedidos")
     object CrearPedido:AppScreen("CrearPedidos")
     object ListarClientes:AppScreen("ListarClientes")

@@ -1,0 +1,235 @@
+swagger: "2.0"
+info:
+  title: "API de Microservicios"
+  version: "1.0.0"
+host: "microservicios-gateway-1qkjvfz9.uc.gateway.dev"
+schemes:
+  - "https"
+security:
+  - firebase: []
+paths:
+  /api/compras/detalle:
+    post:
+      operationId: "createDetalleCompra"
+      summary: "Crear detalle de compra"
+      description: "Crea un detalle de compra en el sistema de compras."
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Datos del detalle de compra"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              nombre:
+                type: "string"
+              fabricante_id:
+                type: "integer"
+              cantidad:
+                type: "integer"
+              precio:
+                type: "number"
+      responses:
+        201:
+          description: "Detalle de compra creado"
+      x-google-backend:
+        address: "http://compras.cppxcode.shop/api/compras/detalle"
+
+  /api/fabricantes:
+    get:
+      operationId: "listFabricantes"
+      summary: "Listar fabricantes"
+      description: "Devuelve una lista de fabricantes en el sistema de compras."
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Lista de fabricantes"
+      x-google-backend:
+        address: "http://compras.cppxcode.shop/api/fabricantes"
+
+  /api/inventarios/productos:
+    get:
+      operationId: "listInventarioProductos"
+      summary: "Listar productos en inventario"
+      description: "Devuelve la lista de productos registrados en inventario."
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Lista de productos en inventario"
+      x-google-backend:
+        address: "http://inventarios.cppxcode.shop/api/inventarios/productos"
+  
+  /api/rutas:
+    get:
+      operationId: "listRutas"
+      summary: "Listas rutas que han sido generadas"
+      description: "Devuleve la lista de rutas que se han generado"
+      produces:
+        - "application/json"
+      response:
+        200:
+          description: "Lista de rutas generadas"
+      x-google-backend:
+        address: "http://logistica.cppxcode.shop/route"
+
+  /api/rutas/{route_id}:
+    get:
+      operationId: "getRuta"
+      summary: "Obtener una rutas que ha sido generada"
+      description: "Devuleve la ruta que se han generado"
+      produces:
+        - "application/json"
+      parameter:        
+      - in: path
+          name: route_id
+          type: string
+          required: true
+          description: String ID de la ruta
+      response:
+        200:
+          description: "Lista de rutas generadas"
+        404:
+          description: "No se encontró esa ruta"
+      x-google-backend:
+        address: "http://logistica.cppxcode.shop/route"
+        
+  /add-stop-route:
+    post:
+      operationId: "addStop"
+      summary: Add a stop to a route
+      description: Adds a new stop to an existing route by ID
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Stop data and route ID
+          required: true
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: 17008418-3720-4530-9a59-760e9c8a7750
+              parada:
+                type: object
+                properties:
+                  nombre:
+                    type: string
+                    example: Parada 3
+                  fecha:
+                    type: string
+                    example: 01/02/2026
+                  cliente:
+                    type: object
+                    properties:
+                      nombre:
+                        type: string
+                        example: Cliente 1
+                      direccion:
+                        type: string
+                        example: Cra. 11, 82-71, Bogotá, Colombia
+                  vendedor:
+                    type: object
+                    properties:
+                      nombre:
+                        type: string
+                        example: Vendedor 1
+                      direccion:
+                        type: string
+                        example: Calle 149, 16-56, Bogotá, Colombia
+      responses:
+        200:
+          description: Stop successfully added to the route
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: Stop added to route successfully
+        400:
+          description: Invalid input
+        500:
+          description: Server error
+  /api/generate-route:
+    post:
+      operationId: "getRuta"
+      summary: "Obtener una rutas que ha sido generada"
+      description: "Devuleve la ruta que se han generado"
+      produces:
+        - "application/json"
+      parameters:
+      - in: body
+        name: body
+        description: Ruta con paradas
+        required: true
+        schema:
+          type: object
+          properties:
+            nombre:
+              type: string
+              example: Ruta 1
+            inicio:
+              type: string
+              example: Cl. 114a #45-78, Bogota, Colombia
+            fin:
+              type: string
+              example: Cl. 114a #45-78, Bogota, Colombia
+            paradas:
+              type: array
+              items:
+                type: object
+                properties:
+                  nombre:
+                    type: string
+                    example: Parada 1
+                  fecha:
+                    type: string
+                    example: 01/02/2026
+                  cliente:
+                    type: object
+                    properties:
+                      nombre:
+                        type: string
+                        example: Cliente 1
+                      direccion:
+                        type: string
+                        example: Cra. 11, 82-71, Bogotá, Colombia
+                  vendedor:
+                    type: object
+                    properties:
+                      nombre:
+                        type: string
+                        example: Vendedor 1
+                      direccion:
+                        type: string
+                        example: Calle 149, 16-56, Bogotá, Colombia
+      response:
+        200:
+          description: "Lista de rutas generadas"
+        404:
+          description: "No se encontró esa ruta"
+      x-google-backend:
+        address: "http://logistica.cppxcode.shop/route"
+
+
+securityDefinitions:
+  firebase:
+    type: "oauth2"
+    flow: "implicit"
+    authorizationUrl: ""
+    x-google-issuer: "https://securetoken.google.com/misw-4301-native-cloud-433702"
+    x-google-jwks_uri: "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+    x-google-audiences: "misw-4301-native-cloud-433702"

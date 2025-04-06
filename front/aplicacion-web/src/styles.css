@@ -1,8 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
-
-html, body { height: 100%; }
-body { 
-  margin: 0; 
+body {
+  display: grid;
+  height: 100vh;
   font-family: Roboto, "Helvetica Neue", sans-serif; 
-  background: linear-gradient(180deg, #E8CAA4 0%, #64908A 100%); 
+  background: url("./background.svg") no-repeat fixed center bottom, linear-gradient(180deg, #E8CAA4 0%, #64908A 100%) fixed; 
+}
+
+app-root {
+  display: grid;
+  height: 100vh;
+  grid-template: auto 1fr auto / auto 1fr auto;
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+}
+
+app-header {
+  grid-column: 1 / 4;
+}
+
+.left-sidebar {
+  grid-column: 1 / 2;
+}
+
+main {
+  grid-column: 2 / 3;
+  overflow: auto;
+}
+
+.right-sidebar {
+  grid-column: 3 / 4;
+}
+
+footer {
+  text-align: center;
+  grid-column: 1 / 4;
+}
+ 
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #aed9e0;
+}
+
+/* body > * {        
+  outline: 1px dashed #247ba0;
+} */
+
+.left-sidebar, .right-sidebar, main, header, footer {
 }

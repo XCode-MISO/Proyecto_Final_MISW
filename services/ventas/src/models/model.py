@@ -6,8 +6,12 @@ from sqlalchemy.dialects.postgresql import UUID
 
 Base = declarative_base()
 
-class Model:
+
+class Model():
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
-    
+    createdAt = Column(DateTime)
+    updatedAt = Column(DateTime)
+
+    def __init__(self):
+        self.createdAt = datetime.now()
+        self.updatedAt = datetime.now()
