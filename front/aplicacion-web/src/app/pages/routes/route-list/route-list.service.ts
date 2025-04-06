@@ -34,7 +34,7 @@ export class RouteListService {
 
   getRoutes(){
     return this.http
-    .get(`${this.apiUrl}/routes`)
+    .get(`${this.apiUrl}/route`)
     .pipe(
       catchError((e, source) => {
         console.error(e)
@@ -48,7 +48,7 @@ export class RouteListService {
   
   getRoute(route_id: string){
     return this.http
-    .get(`${this.apiUrl}/routes/${route_id}`)
+    .get(`${this.apiUrl}/route/${route_id}`)
     .pipe(
       catchError((e, source) => {
         console.error(e)
