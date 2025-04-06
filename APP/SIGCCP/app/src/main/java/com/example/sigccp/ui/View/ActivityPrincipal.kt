@@ -54,11 +54,6 @@ val pedidosDePrueba = listOf(
     ProductoClass(id = "2" ,name = "Pizza Familiar", amount = 1, price = 30.00),
     ProductoClass(id = "3" ,name = "Refresco", amount = 3, price = 9.00)
 )
-val productos = listOf(
-    ProductoClass(id = "1", name = "Manzanas", amount = 50, price = 1.99),
-    ProductoClass(id = "2", name = "Naranjas", amount = 30, price = 2.49),
-    ProductoClass(id = "3", name = "Bananas", amount = 20, price = 1.29)
-)
 
 val listaPedidos = Pedidos(
     pedidos = listOf(
@@ -81,7 +76,6 @@ fun MainScreen(
        //navController: NavController,
         //menu: Menu
 ) {
-    var cantidades by remember { mutableStateOf(productos.associate { it.id to 0 }) }
 
     ScreenContainer(title = "Hola Usuario",true,R.drawable.avatar) {
         Box(
@@ -139,7 +133,7 @@ fun MainScreen(
                             onClientSelected = { id -> println("Cliente seleccionado: $id") }
                         )
                         PedidoBox(pedido = pedidoEjemplo)
-
+                        /*
                         ListaDeProductosEditable(
                             productos = productos,
                             cantidades = cantidades,
@@ -148,14 +142,14 @@ fun MainScreen(
                                     this[id] = nuevaCantidad
                                 }
                             }
-                        )
+                        )*/
                         newMenuButton(
                             onClick = {/*TODO*/ },
                             nombre = "CREAR CLIENTE",
                             imagen = R.drawable.editar,
                             enabled = true
                         )
-                        ListaDeProductosPedido(pedidosDePrueba)
+                        //ListaDeProductosPedido(pedidosDePrueba)
                     }
                 }
             }

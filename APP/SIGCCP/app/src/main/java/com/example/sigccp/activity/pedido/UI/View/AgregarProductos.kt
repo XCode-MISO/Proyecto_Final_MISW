@@ -10,41 +10,40 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.sigccp.R
-import com.example.sigccp.ui.View.Components.ClientDropdown
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.sigccp.activity.pedido.UI.ViewModel.PedidoViewModel
+import com.example.sigccp.activity.producto.Data.Modelo.ProductosPedidoClass
+import com.example.sigccp.navigation.AppScreen
 import com.example.sigccp.ui.View.Components.ListaDeProductosEditable
-import com.example.sigccp.ui.View.Components.ListaDeProductosPedido
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.locationDropdown
-import com.example.sigccp.ui.View.Components.newAgregarButton
 import com.example.sigccp.ui.View.Components.newDualButton
 import com.example.sigccp.ui.View.clientes
-import com.example.sigccp.ui.View.pedidosDePrueba
-import com.example.sigccp.ui.View.productos
 import kotlin.collections.set
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 
-@Preview
+//@Preview
 @Composable
-fun AgregarProducto()
+fun AgregarProductos( navController: NavController, viewModel: PedidoViewModel)
 {
-    Producto()
+    Producto(navController,viewModel)
 }
 
 @Composable
-fun Producto()
+fun Producto( navController: NavController,
+              viewModel: PedidoViewModel = viewModel()
+)
 {
-    var cantidades by remember { mutableStateOf(productos.associate { it.id to 0 }) }
-
+    val productos = viewModel.productosDisponibles
+    var cantidades by remember { mutableStateOf<Map<String, Int>>(emptyMap()) }
     ScreenContainer(title = "!Productos¡",false,null) {
         Box(
             modifier = Modifier
@@ -96,14 +95,37 @@ fun Producto()
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
                         )
                         newDualButton(
-                            nombreIzquierdo = "Agregar",
-                            onClickIzquierdo = { /* Acción Agregar */ },
-                            nombreDerecho = "Cancelar",
-                            onClickDerecho = { /* Acción Cancelar */ },
+                                nombreIzquierdo = "Agregar",
+                        onClickIzquierdo = {
+                            val productosValidados = productos.value.mapNotNull { producto ->
+                                val cantidad = cantidades[producto.id]
+
+                                if (cantidad == null || cantidad <= 0) return@mapNotNull null
+
+                                val esValida = cantidad <= producto.amount
+                                val total = cantidad * producto.price
+
+                                ProductosPedidoClass(
+                                    id = producto.id,
+                                    nombre = producto.name,
+                                    cantidadRequerida = cantidad,
+                                    cantidadDisponible = producto.amount,
+                                    precioUnitario = producto.price,
+                                    precioTotal = total,
+                                    cantidadEsValida = esValida
+                                )
+                            }
+
+                            viewModel.actualizarProductosSeleccionados(productosValidados)
+                            navController.navigate(AppScreen.CrearPedido.route)
+                        },
+                        nombreDerecho = "Cancelar",
+                        onClickDerecho = { navController.popBackStack() },
                             buttonWidth = 300.dp,
                         )
+
                         ListaDeProductosEditable(
-                            productos = productos,
+                            productos = productos.value,
                             cantidades = cantidades,
                             onCantidadChange = { id, nuevaCantidad ->
                                 cantidades = cantidades.toMutableMap().apply {

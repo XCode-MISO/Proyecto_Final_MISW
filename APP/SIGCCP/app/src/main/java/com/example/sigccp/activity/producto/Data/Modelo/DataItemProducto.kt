@@ -17,7 +17,16 @@ data class ProductoClass(
     val amount: Int,
 )
 
-
 data class ProductosPedido(
     val productosPedidos: List<ProductoClass>
+)
+
+data class ProductosPedidoClass(
+    val id: String,
+    val nombre: String,
+    val precioUnitario: Double,
+    val cantidadDisponible: Int,
+    val cantidadRequerida: Int = 0,
+    val precioTotal: Double = 0.0,
+    val cantidadEsValida: Boolean = true
 )

@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import com.example.sigccp.activity.pedido.Data.Modelo.PedidoClass
 import com.example.sigccp.activity.pedido.Data.Modelo.Pedidos
 import com.example.sigccp.activity.producto.Data.Modelo.ProductoClass
+import com.example.sigccp.activity.producto.Data.Modelo.ProductosPedidoClass
 import com.example.sigccp.ui.theme.AmarilloApp
 import com.example.sigccp.ui.theme.AppTypography
 import com.example.sigccp.ui.theme.MoradoApp
@@ -482,63 +483,6 @@ fun PedidoBox(
 }
 
 
-@Composable
-fun ListaDePedidos(pedidos: List<PedidoClass>) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp) // Espaciado entre elementos
-    ) {
-        items(pedidos) { pedido:PedidoClass  ->
-            PedidoBox(pedido = pedido)
-        }
-    }
-}
-
-
-
-@Composable
-fun ProductoPedidoBox(producto: ProductoClass) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 8.dp)
-            .background(AmarilloApp, shape = RoundedCornerShape(8.dp))
-            .border(2.dp, MoradoApp, shape = RoundedCornerShape(8.dp))
-            .padding(8.dp), // Espaciado interno
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = producto.name,
-            style = AppTypography.labelMedium,
-            modifier = Modifier.weight(1f)
-        )
-        Text(
-            text = "${producto.amount}",
-            style = AppTypography.labelMedium,
-            modifier = Modifier.weight(1f),
-            textAlign = TextAlign.Center
-        )
-        Text(
-            text = "$${producto.price}",
-            style = AppTypography.labelMedium,
-            modifier = Modifier.weight(1f),
-            textAlign = TextAlign.End
-        )
-    }
-}
-
-@Composable
-fun ListaDeProductosPedido(productos: List<ProductoClass>) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(productos) { producto ->
-            ProductoPedidoBox(producto = producto)
-        }
-    }
-}
 
 
 @Composable
@@ -698,6 +642,63 @@ fun newDualButton(
 }
 
 
+@Composable
+fun ListaDePedidos(pedidos: List<PedidoClass>) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp) // Espaciado entre elementos
+    ) {
+        items(pedidos) { pedido:PedidoClass  ->
+            PedidoBox(pedido = pedido)
+        }
+    }
+}
+
+
+@Composable
+fun ProductoPedidoBox(producto: ProductosPedidoClass) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .background(AmarilloApp, shape = RoundedCornerShape(8.dp))
+            .border(2.dp, MoradoApp, shape = RoundedCornerShape(8.dp))
+            .padding(8.dp), // Espaciado interno
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = producto.nombre,
+            style = AppTypography.labelMedium,
+            modifier = Modifier.weight(1f)
+        )
+        Text(
+            text = "${producto.cantidadRequerida}",
+            style = AppTypography.labelMedium,
+            modifier = Modifier.weight(1f),
+            textAlign = TextAlign.Center
+        )
+        Text(
+            text = "$${producto.precioTotal}",
+            style = AppTypography.labelMedium,
+            modifier = Modifier.weight(1f),
+            textAlign = TextAlign.End
+        )
+    }
+}
+
+@Composable
+fun ListaDeProductosPedido(productos: List<ProductosPedidoClass>) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(productos) { producto ->
+            ProductoPedidoBox(producto = producto)
+        }
+    }
+}
+
 
 @Composable
 fun ProductoEditableBox(
@@ -759,15 +760,25 @@ fun ProductoEditableBox(
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     singleLine = true
                 )
-
-                // Precio unitario
+                val cantidadActual = cantidadTexto.toIntOrNull() ?: 0
+                val cantidadInvalida = cantidadActual > producto.amount
                 Text(
-                    text = "Precio: $${producto.price}",
+                    text = "$${producto.price}",
                     style = AppTypography.labelMedium,
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.End
                 )
+                // Precio unitario
+                if (cantidadInvalida) {
+                    Text(
+                        text = "Cantidad excede disponible",
+                        color = Color.Red,
+                        style = AppTypography.labelSmall,
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    )
             }
+        }
+
         }
     }
 }

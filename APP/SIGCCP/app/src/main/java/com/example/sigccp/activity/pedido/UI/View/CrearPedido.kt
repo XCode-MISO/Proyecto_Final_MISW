@@ -13,34 +13,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.sigccp.R
+import com.example.sigccp.activity.pedido.UI.ViewModel.PedidoViewModel
 import com.example.sigccp.navigation.AppScreen
 import com.example.sigccp.ui.View.Components.ClientDropdown
-import com.example.sigccp.ui.View.Components.ListaDePedidos
 import com.example.sigccp.ui.View.Components.ListaDeProductosPedido
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.locationDropdown
 import com.example.sigccp.ui.View.Components.newAgregarButton
-import com.example.sigccp.ui.View.Components.newButton
 import com.example.sigccp.ui.View.Components.newDualButton
 import com.example.sigccp.ui.View.clientes
-import com.example.sigccp.ui.View.listaPedidos
-import com.example.sigccp.ui.View.pedidosDePrueba
 
-
-@Preview
+//@Preview
 @Composable
-fun CrearPedido()
+fun CrearPedido(navController: NavController, viewModel: PedidoViewModel)
 {
-    Pedido()
+    Pedido(navController, viewModel)
 }
 
 @Composable
-fun Pedido()
+fun Pedido( navController: NavController,
+            viewModel: PedidoViewModel = viewModel()
+)
 {
-
+    val productos = viewModel.productosSeleccionados.value
     ScreenContainer(title = stringResource(id = R.string.CrearPedido),false,null) {
         Box(
             modifier = Modifier
@@ -87,7 +86,7 @@ fun Pedido()
                         horizontalAlignment = Alignment.CenterHorizontally
                     )
                     {
-                        newAgregarButton(onClick = {/*Todo*/}, nombre= "Agregar")
+                        newAgregarButton(onClick = {navController.navigate(AppScreen.AgregarProductos.route)}, nombre= "Agregar")
                         ClientDropdown(
                             clients = clientes,
                             onClientSelected = { id -> println("Cliente seleccionado: $id") })
@@ -97,12 +96,13 @@ fun Pedido()
                         )
                         newDualButton(
                             nombreIzquierdo = "Aceptar",
-                            onClickIzquierdo = { /* Acción Agregar */ },
+                            onClickIzquierdo = { navController.navigate(AppScreen.ListarPedidos.route) },
                             nombreDerecho = "Cancelar",
-                            onClickDerecho = { /* Acción Cancelar */ },
+                            onClickDerecho = { navController.navigate(AppScreen.ListarPedidos.route) },
                             buttonWidth = 300.dp,
                         )
-                        ListaDeProductosPedido(pedidosDePrueba)
+                        ListaDeProductosPedido(productos)
+
                     }
                 }
             }

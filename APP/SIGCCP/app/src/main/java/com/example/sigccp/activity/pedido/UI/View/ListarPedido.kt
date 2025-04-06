@@ -83,7 +83,6 @@ fun Pedidos (navController: NavController, viewModel: PedidoViewModel = viewMode
                         horizontalAlignment = Alignment.CenterHorizontally
                     )
                     {
-                        newButton(onClick = {navController.navigate(AppScreen.Menu.route)}, nombre= "Menu")
                         newButton(onClick = {navController.navigate(AppScreen.CrearPedido.route)}, nombre= "Crear Pedido")
                         locationDropdown(
                             locations = clientes,
