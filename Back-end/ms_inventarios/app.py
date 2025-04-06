@@ -6,14 +6,17 @@ from apis.inventario_api import inventario_bp
 from werkzeug.exceptions import HTTPException
 import threading
 from events.subscriber import start_subscriber  
+from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
 
-    db_host = os.getenv('DB_HOST', 'db')
+    CORS(app)
+
+    db_host = os.getenv('DB_HOST', '34.171.48.199')
     db_port = os.getenv('DB_PORT', '5432')
-    db_user = os.getenv('DB_USER', 'postgres')
-    db_pass = os.getenv('DB_PASS', 'postgres')
+    db_user = os.getenv('DB_USER', 'admin_write')
+    db_pass = os.getenv('DB_PASS', 'PASSWORD_123')
     db_name = os.getenv('DB_NAME', 'inventarios_db')
 
     app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
