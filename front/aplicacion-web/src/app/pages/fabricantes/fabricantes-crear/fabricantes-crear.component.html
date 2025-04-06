@@ -1,0 +1,36 @@
+<div class="form-wrapper">
+  <h2 class="titulo">Registrar Fabricante</h2>
+
+  <form [formGroup]="fabricanteForm" (ngSubmit)="onSubmit()" class="campos">
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" />
+      <mat-error *ngIf="enviado && f['nombre'].errors">Requerido / máx 150</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Correo</mat-label>
+      <input matInput type="email" formControlName="correo" />
+      <mat-error *ngIf="enviado && f['correo'].errors">Correo inválido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Teléfono</mat-label>
+      <input matInput type="tel" formControlName="telefono" />
+      <mat-error *ngIf="enviado && f['telefono'].errors">7‑15 dígitos</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Empresa</mat-label>
+      <input matInput formControlName="empresa" />
+      <mat-error *ngIf="enviado && f['empresa'].errors">Requerida / máx 150</mat-error>
+    </mat-form-field>
+
+    <div class="acciones">
+      <button mat-flat-button class="save-btn" type="submit" >Guardar</button>
+      <button mat-flat-button class="cancel-btn" type="button" (click)="onCancel()">Cancelar</button>
+    </div>
+
+    <p class="mensaje" *ngIf="mensajeServidor">{{ mensajeServidor }}</p>
+  </form>
+</div>
