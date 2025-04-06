@@ -1,6 +1,6 @@
 {
     "/api": {
-      "target": "http://compras.cppxcode.shop",
+      "target": "https://microservicios-gateway-1qkjvfz9.uc.gateway.dev",
       "secure": false,
       "changeOrigin": true,
       "logLevel": "debug"
