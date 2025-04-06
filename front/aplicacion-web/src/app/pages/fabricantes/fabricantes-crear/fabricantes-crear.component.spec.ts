@@ -4,6 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { FabricantesCrearComponent } from './fabricantes-crear.component';
 import { FabricantesCrearService } from './fabricantes-crear.service';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('FabricantesCrearComponent', () => {
   let serviceSpy: jasmine.SpyObj<FabricantesCrearService>;
@@ -51,3 +52,35 @@ describe('FabricantesCrearComponent', () => {
     expect(serviceSpy.crearFabricante).toHaveBeenCalledWith(jasmine.objectContaining({ nombre: 'Prueba' }));
   });
 });
+
+
+describe('FabricantesCrearComponent – validación de formulario', () => {
+    let comp: FabricantesCrearComponent;
+  
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        imports: [FabricantesCrearComponent, ReactiveFormsModule, HttpClientModule],
+        providers: [FabricantesCrearService]
+      }).compileComponents();
+  
+      comp = TestBed.createComponent(FabricantesCrearComponent).componentInstance;
+      comp.ngOnInit();
+    });
+  
+    it('debe ser inválido con campos vacíos', () => {
+      expect(comp.fabricanteForm.valid).toBeFalse();
+    });
+  
+    it('correo inválido no pasa la validación', () => {
+      comp.fabricanteForm.patchValue({
+        nombre: 'A', correo: 'invalido', telefono: '1234567', empresa: 'E' });
+      expect(comp.f['correo'].valid).toBeFalse();
+      expect(comp.fabricanteForm.valid).toBeFalse();
+    });
+  
+    it('teléfono fuera de rango no es válido', () => {
+      comp.fabricanteForm.patchValue({
+        nombre: 'A', correo: 'a@a.com', telefono: '12', empresa: 'E' });
+      expect(comp.f['telefono'].valid).toBeFalse();
+    });
+  });

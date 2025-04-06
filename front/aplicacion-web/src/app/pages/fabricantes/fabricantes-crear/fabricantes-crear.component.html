@@ -1,47 +1,36 @@
 <div class="form-wrapper">
   <h2 class="titulo">Registrar Fabricante</h2>
 
-  <div class="grid-form">
+  <form [formGroup]="fabricanteForm" (ngSubmit)="onSubmit()" class="campos">
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" />
+      <mat-error *ngIf="enviado && f['nombre'].errors">Requerido / máx 150</mat-error>
+    </mat-form-field>
 
-    <form class="campos" [formGroup]="fabricanteForm" (ngSubmit)="onSubmit()" novalidate>
-      <div class="campo">
-        <label for="nombre">Nombre:</label>
-        <input id="nombre" type="text" formControlName="nombre" />
-        <small *ngIf="enviado && f['nombre'].errors" class="error">
-          Nombre es requerido y máximo 150 caracteres.
-        </small>
-      </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Correo</mat-label>
+      <input matInput type="email" formControlName="correo" />
+      <mat-error *ngIf="enviado && f['correo'].errors">Correo inválido</mat-error>
+    </mat-form-field>
 
-      <div class="campo">
-        <label for="correo">Correo:</label>
-        <input id="correo" type="email" formControlName="correo" />
-        <small *ngIf="enviado && f['correo'].errors" class="error">
-          Debe ingresar un correo válido.
-        </small>
-      </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Teléfono</mat-label>
+      <input matInput type="tel" formControlName="telefono" />
+      <mat-error *ngIf="enviado && f['telefono'].errors">7‑15 dígitos</mat-error>
+    </mat-form-field>
 
-      <div class="campo">
-        <label for="telefono">Teléfono:</label>
-        <input id="telefono" type="tel" formControlName="telefono" />
-        <small *ngIf="enviado && f['telefono'].errors" class="error">
-          El teléfono debe tener entre 7 y 15 dígitos numéricos.
-        </small>
-      </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Empresa</mat-label>
+      <input matInput formControlName="empresa" />
+      <mat-error *ngIf="enviado && f['empresa'].errors">Requerida / máx 150</mat-error>
+    </mat-form-field>
 
-      <div class="campo">
-        <label for="empresa">Empresa:</label>
-        <input id="empresa" type="text" formControlName="empresa" />
-        <small *ngIf="enviado && f['empresa'].errors" class="error">
-          Empresa es requerida y máximo 150 caracteres.
-        </small>
-      </div>
+    <div class="acciones">
+      <button mat-flat-button class="save-btn" type="submit" >Guardar</button>
+      <button mat-flat-button class="cancel-btn" type="button" (click)="onCancel()">Cancelar</button>
+    </div>
 
-      <div class="acciones">
-        <button type="submit" class="btn btn-primary">
-          Registrar Fabricante
-        </button>
-        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
-      </div>
-    </form>
-  </div>
+    <p class="mensaje" *ngIf="mensajeServidor">{{ mensajeServidor }}</p>
+  </form>
 </div>

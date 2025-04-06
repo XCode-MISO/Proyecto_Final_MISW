@@ -1,26 +1,23 @@
-/* Contenedor principal dentro del layout existente */
 .form-wrapper {
-  width: 100%;
-  max-width: 800px; /* ⬅️ más estrecho para que no se expanda a todo el ancho */
+  max-width: 500px;
   margin: 0 auto;
-  padding: 2rem 1rem 4rem;
+  padding: 2rem 1rem;
   font-family: 'Poppins', sans-serif;
 }
 
 .titulo {
   text-align: center;
-  font-size: 2.2rem;
   color: #2b0a3d;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
   font-weight: 700;
 }
 
-/* Grid: avatar a la izquierda, formulario a la derecha */
 .grid-form {
   display: grid;
-  grid-template-columns: 220px auto; /* segunda columna se ajusta al contenido */
+  grid-template-columns: 220px auto;
   gap: 3rem;
-  justify-content: center; /* centra todo el grid */
+  justify-content: center;
 }
 
 .foto {
@@ -36,30 +33,29 @@
   border: 5px solid #2b0a3d;
 }
 
-/* Campos */
 .campos {
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
-  max-width: 380px; /* ⬅️ limita el ancho del bloque de campos */
+  gap: 1.2rem;
+  max-width: 300px;
 }
 
 .campo {
   display: flex;
   align-items: center;
-  gap: 1.2rem;
+  gap: 1rem;
 }
 
 .campo label {
-  width: 100px; /* alinea los dos puntos */
+  width: 90px;
   text-align: right;
   font-weight: 600;
   color: #2b0a3d;
 }
 
 .campo input {
-  width: 260px; /* ⬅️ ancho fijo para que no crezca indefinidamente */
-  padding: 0.55rem 0.9rem;
+  flex: 1;
+  padding: 0.5rem 0.9rem;
   border: 2px solid #2b0a3d;
   border-radius: 0.4rem;
   font-size: 1rem;
@@ -69,43 +65,30 @@
 
 .error {
   display: block;
-  margin-left: 110px; /* desplaza debajo del input */
+  margin-left: 100px;
   color: #d32f2f;
   font-size: 0.8rem;
-  margin-top: 0.2rem;
 }
 
-/* Botones */
 .acciones {
   display: flex;
-  gap: 1.5rem;
-  margin-top: 2rem;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
-.btn {
-  padding: 0.5rem 1.6rem;
-  border: none;
-  border-radius: 1.5rem;
+.mensaje {
+  text-align: center;
   font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease;
+  margin-top: 1rem;
+  color: #2b0a3d;
+}
+.save-btn {
+  background: #5c857f !important;
+  color: #000 !important;
 }
 
-.btn-primary {
-  background: #6ca39b;
-  color: #000;
-}
-
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn-secondary {
-  background: #d32f2f;
-  color: #000;
-}
-
-.btn-secondary:hover {
-  background: #b71c1c;
+.cancel-btn {
+  background: #c12b46 !important;
+  color: #000 !important;
 }
