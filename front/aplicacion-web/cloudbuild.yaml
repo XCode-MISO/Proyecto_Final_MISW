@@ -1,4 +1,10 @@
 steps:
+- name: 'node'
+  args: [
+    'npm',
+    'run',
+    'build:env',
+  ]
   - name: 'gcr.io/cloud-builders/gcloud'
     args: [
         'run', 
