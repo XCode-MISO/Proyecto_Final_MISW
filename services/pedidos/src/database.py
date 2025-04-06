@@ -10,7 +10,7 @@ db = SQLAlchemy()
 class DataBase:
     def __init__(self):
         self.db_url = self.get_db_url()
-        self.engine = create_engine(self.db_url, echo=True, connect_args={"check_same_thread": False} if "sqlite" in self.db_url else {})
+        self.engine = create_engine(self.db_url, echo=True, connect_args={"check_same_thread": False} if "sqlite" in self.db_url else {}) ##echo=True para ver las consultas SQL // false para no verlas
         self.Session = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
 
 

@@ -28,18 +28,20 @@ class Pedido(Base, Model):
     name = Column(String(50), nullable=False)
     clientId = Column(String(36), ForeignKey('clientes.id'), nullable=False)  # Almacena el ID del cliente
     price = Column(Float, nullable=False)
+    state = Column(String(50), default="Pendiente", nullable=False)
     delivery_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     # Relaciones
     client = relationship("Cliente", back_populates="pedidos", uselist=False)  # Relación opcional
     products = relationship("Producto", secondary=pedido_producto, back_populates="pedidos")
 
-    def __init__(self, name, clientId, products, price, delivery_date):
+    def __init__(self, name, clientId, products, price, state, delivery_date):
         super().__init__() # Llama al constructor de Model
         self.name = name
         self.clientId = clientId
         self.products = products
         self.price = price
+        self.state = state
         self.delivery_date = delivery_date
 
 
@@ -64,6 +66,7 @@ class PedidoJsonSchema(Schema):
     client = fields.Nested(ClientSchema) # Relación opcional
     products = fields.Nested(ProductoSchema, many=True)
     price = fields.Float(required=True)
+    state = fields.Str(required=True)
     deliveryDate = fields.DateTime(required=True, format="iso", validate=validate_delivery_date)
     createdAt = fields.DateTime(dump_only=True)  # Solo se devuelve al serializar
 
@@ -73,6 +76,7 @@ class PedidoSchema(Schema):
     name = fields.Str(required=True)
     clientId = fields.Str(required=True)
     products = fields.List(fields.UUID(), required=True)
+    state = fields.Str(missing="Pendiente")
     price = fields.Float(required=True)
     deliveryDate = fields.DateTime(required=True, format="iso", validate=validate_delivery_date)
 

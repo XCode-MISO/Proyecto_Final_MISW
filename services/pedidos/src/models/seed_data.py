@@ -5,11 +5,11 @@ from faker import Faker
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exists
 
-from database import Session, engine  # <- Usa tu engine y Session definidos
-from models.model import Base
-from models.cliente import Cliente
-from models.producto import Producto
-from models.pedido import Pedido
+from src.database import Session, engine  # <- Usa tu engine y Session definidos
+from src.models.model import Base
+from src.models.cliente import Cliente
+from src.models.producto import Producto
+from src.models.pedido import Pedido
 
 # Crea las tablas (si no existen)
 Base.metadata.create_all(engine)
@@ -18,6 +18,7 @@ fake = Faker()
 session = Session()
 
 def seed_database_if_empty():
+    states = ["Pendiente", "En camino", "Entregado"]
     # Validar si ya hay datos
     has_clients = session.query(exists().where(Cliente.id != None)).scalar()
     has_products = session.query(exists().where(Producto.id != None)).scalar()
@@ -46,10 +47,11 @@ def seed_database_if_empty():
             delivery_date = datetime.utcnow() + timedelta(days=random.randint(2, 10))
 
             pedido = Pedido(
-                name=f"Pedido de {client.name}",
+                name=f"Pedido #{random.randint(1, 1000)}",
                 clientId=client.id,
                 products=selected_products,
                 price=total_price,
+                state=random.choice(states),
                 delivery_date=delivery_date
             )
             session.add(pedido)

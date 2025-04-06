@@ -22,8 +22,6 @@ if dotenv_path:
     print("Variables de entorno cargadas correctamente")
 else:
     print("Error: No se encontró el archivo .env.development")
-
-print(os.getenv("DB_NAME"))
 if loaded:
     print("Variables de entorno cargadas correctamente")
 else: 

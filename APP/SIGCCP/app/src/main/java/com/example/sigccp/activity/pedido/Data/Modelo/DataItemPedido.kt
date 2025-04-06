@@ -12,7 +12,7 @@ data class DataItemPedido(
     val client: DataItemClient = DataItemClient(),
     val products: List<DataItemProducto> = emptyList(),
     val price:Float=0.0f,
-    val deliveryDate:String="",
+    //val deliveryDate:String="",
 )
 
 data class PedidoClass(
