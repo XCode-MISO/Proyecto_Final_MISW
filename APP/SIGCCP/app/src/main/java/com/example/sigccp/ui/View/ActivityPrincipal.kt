@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,12 +20,18 @@ import com.example.sigccp.R
 import com.example.sigccp.activity.pedido.Data.Modelo.ClienteClass
 import com.example.sigccp.activity.pedido.Data.Modelo.PedidoClass
 import com.example.sigccp.activity.pedido.Data.Modelo.Pedidos
+import com.example.sigccp.activity.producto.Data.Modelo.ProductoClass
 import com.example.sigccp.ui.View.Components.ClientDropdown
+import com.example.sigccp.ui.View.Components.ListaDeProductosPedido
 import com.example.sigccp.ui.View.Components.PedidoBox
+import com.example.sigccp.ui.View.Components.ProductoPedidoBox
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.locationDropdown
 import com.example.sigccp.ui.View.Components.newButton
 import com.example.sigccp.ui.View.Components.newMenuButton
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import com.example.sigccp.ui.View.Components.ListaDeProductosEditable
 
 val clientes = listOf(
     1 to "Juan Pérez",
@@ -40,6 +48,16 @@ val pedidoEjemplo = PedidoClass(
         id = "123e4567-e89b-12d3-a456-426614174000",
         name = "pedrito perez"
     )
+)
+val pedidosDePrueba = listOf(
+    ProductoClass(id = "1" , name = "Hamburguesa Doble", price = 18.50, amount = 200),
+    ProductoClass(id = "2" ,name = "Pizza Familiar", amount = 1, price = 30.00),
+    ProductoClass(id = "3" ,name = "Refresco", amount = 3, price = 9.00)
+)
+val productos = listOf(
+    ProductoClass(id = "1", name = "Manzanas", amount = 50, price = 1.99),
+    ProductoClass(id = "2", name = "Naranjas", amount = 30, price = 2.49),
+    ProductoClass(id = "3", name = "Bananas", amount = 20, price = 1.29)
 )
 
 val listaPedidos = Pedidos(
@@ -63,6 +81,8 @@ fun MainScreen(
        //navController: NavController,
         //menu: Menu
 ) {
+    var cantidades by remember { mutableStateOf(productos.associate { it.id to 0 }) }
+
     ScreenContainer(title = "Hola Usuario",true,R.drawable.avatar) {
         Box(
             modifier = Modifier
@@ -119,12 +139,23 @@ fun MainScreen(
                             onClientSelected = { id -> println("Cliente seleccionado: $id") }
                         )
                         PedidoBox(pedido = pedidoEjemplo)
+
+                        ListaDeProductosEditable(
+                            productos = productos,
+                            cantidades = cantidades,
+                            onCantidadChange = { id, nuevaCantidad ->
+                                cantidades = cantidades.toMutableMap().apply {
+                                    this[id] = nuevaCantidad
+                                }
+                            }
+                        )
                         newMenuButton(
                             onClick = {/*TODO*/ },
                             nombre = "CREAR CLIENTE",
                             imagen = R.drawable.editar,
                             enabled = true
                         )
+                        ListaDeProductosPedido(pedidosDePrueba)
                     }
                 }
             }

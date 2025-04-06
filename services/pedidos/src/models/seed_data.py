@@ -35,7 +35,14 @@ def seed_database_if_empty():
         session.commit()
 
         # Crear 20 productos
-        productos = [Producto(name=fake.word().capitalize(), price=round(random.uniform(5.0, 100.0), 2)) for _ in range(20)]
+        productos = [
+            Producto(
+                name=fake.word().capitalize(),
+                price=round(random.uniform(5.0, 100.0), 2),
+                amount=random.randint(1, 100)
+            )
+            for _ in range(20)
+        ]
         session.add_all(productos)
         session.commit()
 
