@@ -10,19 +10,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.sigccp.R
+import com.example.sigccp.activity.pedido.UI.ViewModel.PedidoViewModel
 import com.example.sigccp.navigation.AppScreen
 import com.example.sigccp.ui.View.Components.ListaDePedidos
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.locationDropdown
 import com.example.sigccp.ui.View.Components.newButton
 import com.example.sigccp.ui.View.clientes
-import com.example.sigccp.ui.View.listaPedidos
 
 //@Preview
 @Composable
@@ -32,8 +34,9 @@ fun ListarPedidos(navController: NavController)
 }
 
 @Composable
-fun Pedidos (navController: NavController)
+fun Pedidos (navController: NavController, viewModel: PedidoViewModel = viewModel())
 {
+    val pedidos = viewModel.pedidos.collectAsState().value
     ScreenContainer(title = stringResource(id = R.string.ListPedidos),false,null) {
         Box(
             modifier = Modifier
@@ -86,7 +89,7 @@ fun Pedidos (navController: NavController)
                             locations = clientes,
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
                         )
-                        ListaDePedidos(listaPedidos)
+                        ListaDePedidos(pedidos)
 
                     }
                 }

@@ -87,7 +87,7 @@ fun Pedido()
                             locations = clientes,
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
                         )
-                        ListaDePedidos(listaPedidos)
+                        //ListaDePedidos(listaPedidos)
 
                     }
                 }

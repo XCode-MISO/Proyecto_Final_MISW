@@ -478,12 +478,12 @@ fun PedidoBox(
 
 
 @Composable
-fun ListaDePedidos(pedidos: Pedidos) {
+fun ListaDePedidos(pedidos: List<PedidoClass>) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp) // Espaciado entre elementos
     ) {
-        items(pedidos.pedidos) { pedido:PedidoClass  ->
+        items(pedidos) { pedido:PedidoClass  ->
             PedidoBox(pedido = pedido)
         }
     }
