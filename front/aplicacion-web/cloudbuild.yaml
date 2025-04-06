@@ -6,7 +6,6 @@ steps:
       'run',
       'build:env'
     ]
-
   - name: 'gcr.io/cloud-builders/gcloud'
     args: [
         'run', 

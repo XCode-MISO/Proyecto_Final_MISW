@@ -26,7 +26,7 @@ export type Ruta = {
 })
 export class RouteListService {
 
-  apiUrl = 'http://logistica.cppxcode.shop'
+  apiUrl = 'http://104.197.210.216:80'
 
   private http = inject(HttpClient)
 
