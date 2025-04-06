@@ -2,12 +2,7 @@
   <h2 class="titulo">Registrar Fabricante</h2>
 
   <div class="grid-form">
-    <!-- Columna avatar -->
-    <div class="foto">
-      <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e" alt="avatar" />
-    </div>
 
-    <!-- Columna formulario -->
     <form class="campos" [formGroup]="fabricanteForm" (ngSubmit)="onSubmit()" novalidate>
       <div class="campo">
         <label for="nombre">Nombre:</label>
@@ -42,7 +37,7 @@
       </div>
 
       <div class="acciones">
-        <button type="submit" class="btn btn-primary" [disabled]="fabricanteForm.invalid">
+        <button type="submit" class="btn btn-primary">
           Registrar Fabricante
         </button>
         <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>

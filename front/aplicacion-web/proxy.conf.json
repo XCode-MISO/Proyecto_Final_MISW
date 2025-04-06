@@ -1,0 +1,8 @@
+{
+    "/api": {
+      "target": "http://compras.cppxcode.shop",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    }
+  }

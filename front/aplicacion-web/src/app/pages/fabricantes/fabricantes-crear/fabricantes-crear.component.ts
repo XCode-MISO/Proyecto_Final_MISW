@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -23,11 +24,12 @@ export interface Fabricante {
   templateUrl: './fabricantes-crear.component.html',
   styleUrls: ['./fabricantes-crear.component.css'],
   imports: [
-    CommonModule,          // habilita *ngIf, *ngFor, etc.
-    ReactiveFormsModule,   // habilita [formGroup], formControlName…
+    CommonModule,          
+    ReactiveFormsModule,   
     MatInputModule,
     MatFormFieldModule,
-    MatButtonModule
+    MatButtonModule,
+    HttpClientModule
   ]
 })
 export class FabricantesCrearComponent implements OnInit {
