@@ -5,7 +5,7 @@ import { RouteListComponent } from './pages/routes/route-list/route-list.compone
 import { StopAddComponent } from './pages/routes/stop-add/stop-add.component';
 import { RouteAddComponent } from './pages/routes/route-add/route-add.component';
 import { FabricantesListarComponent } from './pages/fabricantes/fabricantes-listar/fabricantes-listar.component'
-
+import { FabricantesCrearComponent } from './pages/fabricantes/fabricantes-crear/fabricantes-crear.component'
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   {
@@ -27,5 +27,6 @@ export const routes: Routes = [
   },
   { path: 'route-add', component: RouteAddComponent },
   { path: 'fabricantes/listar',component: FabricantesListarComponent },
+  { path: 'fabricantes/crear',component: FabricantesCrearComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];

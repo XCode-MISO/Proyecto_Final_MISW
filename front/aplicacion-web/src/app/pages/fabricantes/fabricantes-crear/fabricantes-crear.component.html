@@ -1,0 +1,52 @@
+<div class="form-wrapper">
+  <h2 class="titulo">Registrar Fabricante</h2>
+
+  <div class="grid-form">
+    <!-- Columna avatar -->
+    <div class="foto">
+      <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e" alt="avatar" />
+    </div>
+
+    <!-- Columna formulario -->
+    <form class="campos" [formGroup]="fabricanteForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="campo">
+        <label for="nombre">Nombre:</label>
+        <input id="nombre" type="text" formControlName="nombre" />
+        <small *ngIf="enviado && f['nombre'].errors" class="error">
+          Nombre es requerido y máximo 150 caracteres.
+        </small>
+      </div>
+
+      <div class="campo">
+        <label for="correo">Correo:</label>
+        <input id="correo" type="email" formControlName="correo" />
+        <small *ngIf="enviado && f['correo'].errors" class="error">
+          Debe ingresar un correo válido.
+        </small>
+      </div>
+
+      <div class="campo">
+        <label for="telefono">Teléfono:</label>
+        <input id="telefono" type="tel" formControlName="telefono" />
+        <small *ngIf="enviado && f['telefono'].errors" class="error">
+          El teléfono debe tener entre 7 y 15 dígitos numéricos.
+        </small>
+      </div>
+
+      <div class="campo">
+        <label for="empresa">Empresa:</label>
+        <input id="empresa" type="text" formControlName="empresa" />
+        <small *ngIf="enviado && f['empresa'].errors" class="error">
+          Empresa es requerida y máximo 150 caracteres.
+        </small>
+      </div>
+
+      <div class="acciones">
+        <button type="submit" class="btn btn-primary" [disabled]="fabricanteForm.invalid">
+          Registrar Fabricante
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
