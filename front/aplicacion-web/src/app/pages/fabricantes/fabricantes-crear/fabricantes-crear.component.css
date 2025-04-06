@@ -1,88 +1,37 @@
+
 .form-wrapper {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-  font-family: 'Poppins', sans-serif;
-}
-
-.titulo {
-  text-align: center;
-  color: #2b0a3d;
-  margin-bottom: 1.5rem;
-  font-size: 2rem;
-  font-weight: 700;
-}
-
-.grid-form {
-  display: grid;
-  grid-template-columns: 220px auto;
-  gap: 3rem;
-  justify-content: center;
-}
-
-.foto {
   display: flex;
-  justify-content: center;
-}
-
-.foto img {
-  width: 220px;
-  height: 220px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 5px solid #2b0a3d;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  min-height: 100vh;
 }
 
 .campos {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  max-width: 300px;
+  width: 100%;
+  max-width: 500px; /* ⬅️ Aumenta el ancho de los campos */
 }
 
-.campo {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+mat-form-field {
+  width: 100%;
+  font-size: 1.1rem;
 }
 
-.campo label {
-  width: 90px;
-  text-align: right;
-  font-weight: 600;
-  color: #2b0a3d;
-}
-
-.campo input {
-  flex: 1;
-  padding: 0.5rem 0.9rem;
-  border: 2px solid #2b0a3d;
-  border-radius: 0.4rem;
+input {
+  height: 48px;
   font-size: 1rem;
-  background: transparent;
-  color: #2b0a3d;
-}
-
-.error {
-  display: block;
-  margin-left: 100px;
-  color: #d32f2f;
-  font-size: 0.8rem;
 }
 
 .acciones {
   display: flex;
-  gap: 1rem;
   justify-content: center;
+  gap: 1.5rem;
   margin-top: 1rem;
 }
 
-.mensaje {
-  text-align: center;
-  font-weight: 600;
-  margin-top: 1rem;
-  color: #2b0a3d;
-}
 .save-btn {
   background: #5c857f !important;
   color: #000 !important;
