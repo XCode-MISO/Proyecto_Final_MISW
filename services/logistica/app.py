@@ -14,9 +14,9 @@ def create_app():
     db.init_app(app)
     app.register_blueprint(comandos_bp)
     app.register_blueprint(query_bp)
-    CORS(app)
-    CORS(query_bp)
-    CORS(comandos_bp)
+    CORS(app, resources={r"/*": {"origins": "*"}})
+    CORS(query_bp, resources={r"/*": {"origins": "*"}})
+    CORS(comandos_bp, resources={r"/*": {"origins": "*"}})
 
     with app.app_context() as context:
         db.create_all()
