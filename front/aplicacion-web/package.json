@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:env": "./replace-env.sh",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:aplicacion-web": "node dist/aplicacion-web/server/server.mjs",

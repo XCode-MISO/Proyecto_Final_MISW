@@ -72,7 +72,7 @@ paths:
       description: "Devuleve la lista de rutas que se han generado"
       produces:
         - "application/json"
-      response:
+      responses:
         200:
           description: "Lista de rutas generadas"
       x-google-backend:
@@ -85,13 +85,13 @@ paths:
       description: "Devuleve la ruta que se han generado"
       produces:
         - "application/json"
-      parameter:        
+      parameters:        
       - in: path
-          name: route_id
-          type: string
-          required: true
-          description: String ID de la ruta
-      response:
+        name: route_id
+        type: string
+        required: true
+        description: String ID de la ruta
+      responses:
         200:
           description: "Lista de rutas generadas"
         404:
@@ -99,7 +99,7 @@ paths:
       x-google-backend:
         address: "http://logistica.cppxcode.shop/route"
         
-  /add-stop-route:
+  /api/add-stop-route:
     post:
       operationId: "addStop"
       summary: Add a stop to a route
@@ -163,9 +163,12 @@ paths:
           description: Invalid input
         500:
           description: Server error
+      x-google-backend:
+        address: "http://logistica.cppxcode.shop/add-stop-route"
+  
   /api/generate-route:
     post:
-      operationId: "getRuta"
+      operationId: "generarRuta"
       summary: "Obtener una rutas que ha sido generada"
       description: "Devuleve la ruta que se han generado"
       produces:
@@ -216,20 +219,10 @@ paths:
                       direccion:
                         type: string
                         example: Calle 149, 16-56, Bogotá, Colombia
-      response:
+      responses:
         200:
           description: "Lista de rutas generadas"
         404:
           description: "No se encontró esa ruta"
       x-google-backend:
-        address: "http://logistica.cppxcode.shop/route"
-
-
-securityDefinitions:
-  firebase:
-    type: "oauth2"
-    flow: "implicit"
-    authorizationUrl: ""
-    x-google-issuer: "https://securetoken.google.com/misw-4301-native-cloud-433702"
-    x-google-jwks_uri: "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
-    x-google-audiences: "misw-4301-native-cloud-433702"
+        address: "http://logistica.cppxcode.shop/generate-route"
