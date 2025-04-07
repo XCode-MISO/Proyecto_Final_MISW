@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Cliente, Route, Vendedor } from '../routes.component';
-import { environment } from '../../../../environments/environment';
 import { catchError, finalize, Observable } from 'rxjs';
 import { CreateRoute } from '../route-add/route-add.component';
 import { AddStopToRoute, UpdateRoute } from '../stop-add/stop-add.component';
+import { environment } from '../../../../environments/environment';
 
 export type Parada = {
   cliente: Cliente
@@ -26,13 +26,15 @@ export type Ruta = {
 })
 export class RouteListService {
 
+  apiUrl = `${environment.apiUrl}`
+
   private http = inject(HttpClient)
 
   constructor() { }
 
   getRoutes(){
     return this.http
-    .get(`${environment.apiUrl}/route`)
+    .get(`${this.apiUrl}/rutas`)
     .pipe(
       catchError((e, source) => {
         console.error(e)
@@ -46,7 +48,7 @@ export class RouteListService {
   
   getRoute(route_id: string){
     return this.http
-    .get(`${environment.apiUrl}/route/${route_id}`)
+    .get(`${this.apiUrl}/rutas/${route_id}`)
     .pipe(
       catchError((e, source) => {
         console.error(e)
@@ -59,7 +61,7 @@ export class RouteListService {
 
   generateRoute(body: CreateRoute) {
     return this.http
-    .post(`${environment.apiUrl}/generate-route`, body)
+    .post(`${this.apiUrl}/generate-route`, body)
     .pipe(
       catchError((e, source) => {
         console.error(e)
@@ -72,7 +74,7 @@ export class RouteListService {
 
   updateRoute(body: UpdateRoute) {
     return this.http
-    .put(`${environment.apiUrl}/update-route`, body)
+    .put(`${this.apiUrl}/update-route`, body)
     .pipe(
       catchError((e, source) => {
         console.error(e)
@@ -85,7 +87,7 @@ export class RouteListService {
 
   addStopToRoute(body: AddStopToRoute) {
     return this.http
-    .post(`${environment.apiUrl}/add-stop-route`, body)
+    .post(`${this.apiUrl}/add-stop-route`, body)
     .pipe(
       catchError((e, source) => {
         console.error(e)

@@ -5,6 +5,7 @@ from logistica.infrastructure.pub_sub import consume_pedido_creado
 from logistica.application.command.generate_route import comandos_bp
 from logistica.application.query.get_routes import query_bp
 from logistica.infrastructure.db.model import db
+from flask_cors import CORS
 
 
 def create_app():
@@ -13,6 +14,7 @@ def create_app():
     db.init_app(app)
     app.register_blueprint(comandos_bp)
     app.register_blueprint(query_bp)
+    CORS(app)
 
     with app.app_context() as context:
         db.create_all()
