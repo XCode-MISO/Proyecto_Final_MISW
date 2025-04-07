@@ -15,7 +15,9 @@ jobs:
       - uses: actions/checkout@v4
       - run: npm ci
         working-directory: "./front/aplicacion-web"
-      - run: sed -i 's/%GMAPS_API_KEY%/'${{ secrets.GMAPS_API_KEY }}'/g' ./front/aplicacion-web/src/index.html
+      - run: npm run build
+        working-directory: "./front/aplicacion-web"
+      - run: sed -i 's/%GMAPS_API_KEY%/'${{ secrets.GMAPS_API_KEY }}'/g' ./src/index.html
         working-directory: "./front/aplicacion-web"
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
