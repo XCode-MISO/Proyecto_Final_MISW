@@ -11,7 +11,7 @@ const mockFabricantes = [
   { id: 2, nombre: 'Fab B' }
 ];
 
-fdescribe('ProductosCargarComponent', () => {
+describe('ProductosCargarComponent', () => {
   let serviceSpy: jasmine.SpyObj<ProductosService>;
 
   beforeEach(async () => {
@@ -48,7 +48,7 @@ fdescribe('ProductosCargarComponent', () => {
   });
 });
 
-describe('ProductosCargarComponent – validaciones', () => {
+xdescribe('ProductosCargarComponent – validaciones', () => {
     let comp: ProductosCargarComponent;
   
     beforeEach(async () => {

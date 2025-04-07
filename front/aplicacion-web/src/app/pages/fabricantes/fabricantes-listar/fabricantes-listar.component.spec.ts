@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FabricantesListarComponent } from './fabricantes-listar.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 describe('FabricantesListarComponent', () => {
   let component: FabricantesListarComponent;
@@ -8,7 +10,10 @@ describe('FabricantesListarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FabricantesListarComponent]
+      imports: [FabricantesListarComponent, HttpClientTestingModule],
+      providers: [
+        provideNativeDateAdapter()
+      ]
     })
     .compileComponents();
 
