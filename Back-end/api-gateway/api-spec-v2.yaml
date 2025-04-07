@@ -41,6 +41,13 @@ paths:
           description: "Detalle de compra creado"
       x-google-backend:
         address: "http://compras.cppxcode.shop/api/compras/detalle"
+    options:
+      operationId: corsCreateCompraDetalle
+      x-google-backend:
+        address: http://compras.cppxcode.shop
+      responses:
+        '200':
+          description: A successful response
 
   /api/fabricantes:
     get:
@@ -83,6 +90,13 @@ paths:
           description: "Fabricante creado"
       x-google-backend:
         address: "http://compras.cppxcode.shop/api/fabricantes"
+    options:
+      operationId: corsAddFabricante
+      x-google-backend:
+        address: http://compras.cppxcode.shop
+      responses:
+        '200':
+          description: A successful response
 
   /api/inventarios/productos:
     get:
@@ -337,4 +351,11 @@ paths:
           description: Pedido creado correctamente
       x-google-backend:
         address: "http://pedidos.cppxcode.shop/create_pedido"
+    options:
+      operationId: corsCreatePedido
+      x-google-backend:
+        address: http://pedidos.cppxcode.shop
+      responses:
+        '200':
+          description: A successful response
 
