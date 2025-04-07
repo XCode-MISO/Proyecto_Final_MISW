@@ -359,3 +359,81 @@ paths:
         '200':
           description: A successful response
 
+  /api/clients:
+    post:
+      operationId: "crearCliente"
+      summary: Crear Visita nueva
+      responses:
+        200:
+          description: Visita nueva creada correctamente
+      x-google-backend:
+        address: "http://ventas.cppxcode.shop/clients"
+    options:
+      operationId: corsCrearCliente
+      x-google-backend:
+        address: http://ventas.cppxcode.shop
+      responses:
+        '200':
+          description: A successful response
+    get:
+      operationId: "listclientes"
+      summary: "Listas clientes que han sido generadas"
+      description: "Devuleve la lista de clientes que se han generado"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Lista de clientes generadas"
+      x-google-backend:
+        address: "http://ventas.cppxcode.shop/clients"
+
+  /api/clients/{client_id}:
+    get:
+      operationId: "getCliente"
+      summary: "Obtener una Clientes que ha sido generada"
+      description: "Devuleve la Cliente que se han generado"
+      produces: 
+        - "application/json"
+      parameters:        
+      - in: path
+        name: client_id
+        type: string
+        required: true
+        description: String ID de la Cliente
+      responses:
+        200:
+          description: "Lista de Clientes generadas"
+        404:
+          description: "No se encontró esa Cliente"
+      x-google-backend:
+        address: "http://ventas.cppxcode.shop"
+        path_translation: APPEND_PATH_TO_ADDRESS
+
+  /api/visits:
+    post:
+      operationId: "crearVisita"
+      summary: Crear Visita nueva
+      responses:
+        200:
+          description: Visita nueva creada correctamente
+      x-google-backend:
+        address: "http://ventas.cppxcode.shop/visits"
+    options:
+      operationId: corsCrearVisita
+      x-google-backend:
+        address: http://ventas.cppxcode.shop/visits
+      responses:
+        '200':
+          description: A successful response
+    get:
+      operationId: "listvisitas"
+      summary: "Listas visitas que han sido generadas"
+      description: "Devuleve la lista de visitas que se han generado"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Lista de visitas generadas"
+      x-google-backend:
+        address: "http://ventas.cppxcode.shop/visits"
+    
