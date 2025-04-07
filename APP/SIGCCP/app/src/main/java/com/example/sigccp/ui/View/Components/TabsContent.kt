@@ -52,6 +52,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.sigccp.activity.pedido.Data.Modelo.ClienteClass
 import com.example.sigccp.activity.pedido.Data.Modelo.PedidoClass
 import com.example.sigccp.activity.pedido.Data.Modelo.Pedidos
 import com.example.sigccp.activity.producto.Data.Modelo.ProductoClass
@@ -322,11 +323,11 @@ fun LanguageDropdown(activity: Activity?) {
 // DropDown de Cliente
 @Composable
 fun ClientDropdown(
-    clients: List<Pair<Int, String>>, // Lista de clientes (id, name)
-    onClientSelected: (Int) -> Unit // Callback con el ID del cliente seleccionado
+    clients: List<ClienteClass>, // Lista de clientes (id: String, nombre: String)
+    onClientSelected: (String) -> Unit // Callback con el ID del cliente seleccionado
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedClient by remember { mutableStateOf<Pair<Int, String>?>(null) }
+    var selectedClient by remember { mutableStateOf<ClienteClass?>(null) }
 
     Box(
         modifier = Modifier
@@ -337,7 +338,7 @@ fun ClientDropdown(
         contentAlignment = Alignment.CenterStart
     ) {
         Text(
-            text = selectedClient?.second ?: "Seleccione un cliente",
+            text = selectedClient?.name ?: "Seleccione un cliente",
             style = AppTypography.labelLarge
         )
 
@@ -353,10 +354,10 @@ fun ClientDropdown(
         ) {
             clients.forEach { client ->
                 DropdownMenuItem(
-                    text = { Text(client.second) },
+                    text = { Text(client.name) },
                     onClick = {
                         selectedClient = client
-                        onClientSelected(client.first)
+                        onClientSelected(client.id) // Ahora es String
                         expanded = false
                     }
                 )
@@ -364,6 +365,8 @@ fun ClientDropdown(
         }
     }
 }
+
+
 
 // DropDown de Cliente
 @Composable

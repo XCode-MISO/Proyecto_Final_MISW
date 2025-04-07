@@ -24,7 +24,7 @@ import com.example.sigccp.ui.View.Components.ListaDePedidos
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.locationDropdown
 import com.example.sigccp.ui.View.Components.newButton
-import com.example.sigccp.ui.View.clientes
+import com.example.sigccp.ui.View.moneda
 
 //@Preview
 @Composable
@@ -85,7 +85,7 @@ fun Pedidos (navController: NavController, viewModel: PedidoViewModel = viewMode
                     {
                         newButton(onClick = {navController.navigate(AppScreen.CrearPedido.route)}, nombre= "Crear Pedido")
                         locationDropdown(
-                            locations = clientes,
+                            locations = moneda,
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
                         )
                         ListaDePedidos(pedidos)

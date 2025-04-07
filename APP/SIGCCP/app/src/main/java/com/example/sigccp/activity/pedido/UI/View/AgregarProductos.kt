@@ -23,11 +23,11 @@ import com.example.sigccp.ui.View.Components.ListaDeProductosEditable
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.locationDropdown
 import com.example.sigccp.ui.View.Components.newDualButton
-import com.example.sigccp.ui.View.clientes
 import kotlin.collections.set
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.example.sigccp.ui.View.moneda
 
 
 //@Preview
@@ -91,7 +91,7 @@ fun Producto( navController: NavController,
                     )
                     {
                         locationDropdown(
-                            locations = clientes,
+                            locations = moneda,
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
                         )
                         newDualButton(

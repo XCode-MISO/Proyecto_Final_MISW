@@ -25,7 +25,7 @@ import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.locationDropdown
 import com.example.sigccp.ui.View.Components.newAgregarButton
 import com.example.sigccp.ui.View.Components.newDualButton
-import com.example.sigccp.ui.View.clientes
+import com.example.sigccp.ui.View.moneda
 
 //@Preview
 @Composable
@@ -88,17 +88,30 @@ fun Pedido( navController: NavController,
                     {
                         newAgregarButton(onClick = {navController.navigate(AppScreen.AgregarProductos.route)}, nombre= "Agregar")
                         ClientDropdown(
-                            clients = clientes,
-                            onClientSelected = { id -> println("Cliente seleccionado: $id") })
+                            clients = viewModel.clientes.value,
+                            onClientSelected = { id -> viewModel.clienteId.value = id.toString() }
+                        )
                         locationDropdown(
-                            locations = clientes,
+                            locations = moneda,
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
                         )
                         newDualButton(
                             nombreIzquierdo = "Aceptar",
-                            onClickIzquierdo = { navController.navigate(AppScreen.ListarPedidos.route) },
+                            onClickIzquierdo = {
+                                viewModel.crearPedido(
+                                    onSuccess = {
+                                        viewModel.limpiarPedido()
+                                        navController.navigate(AppScreen.ListarPedidos.route)
+                                    },
+                                    onError = {
+                                        println("Error al crear pedido: ${it.localizedMessage}")
+                                    }
+                                )
+                            },
                             nombreDerecho = "Cancelar",
-                            onClickDerecho = { navController.navigate(AppScreen.ListarPedidos.route) },
+                            onClickDerecho = {
+                                navController.navigate(AppScreen.ListarPedidos.route)
+                            },
                             buttonWidth = 300.dp,
                         )
                         ListaDeProductosPedido(productos)

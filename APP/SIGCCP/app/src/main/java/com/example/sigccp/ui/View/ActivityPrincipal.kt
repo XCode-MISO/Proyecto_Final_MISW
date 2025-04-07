@@ -33,10 +33,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import com.example.sigccp.ui.View.Components.ListaDeProductosEditable
 
-val clientes = listOf(
-    1 to "Juan Pérez",
-    2 to "María González",
-    3 to "Carlos López"
+val moneda = listOf(
+    1 to "Peso Colombiano",
+    2 to "Dolar Americano",
 )
 
 val pedidoEjemplo = PedidoClass(
@@ -125,13 +124,13 @@ fun MainScreen(
                     {
                         newButton(onClick = {/*todo*/}, nombre= "Crear Pedido")
                         locationDropdown(
-                            locations = clientes,
+                            locations = moneda,
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
                         )
-                        ClientDropdown(
-                            clients = clientes,
+                        /*ClientDropdown(
+                            clients = moneda,
                             onClientSelected = { id -> println("Cliente seleccionado: $id") }
-                        )
+                        )*/
                         PedidoBox(pedido = pedidoEjemplo)
                         /*
                         ListaDeProductosEditable(

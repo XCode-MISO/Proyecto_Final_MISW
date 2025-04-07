@@ -30,7 +30,7 @@ def seed_database_if_empty():
         print("Insertando datos de prueba...")
 
         # Crear 10 clientes
-        clientes = [Cliente(name=fake.name()) for _ in range(10)]
+        clientes = [Cliente(name=fake.name()) for _ in range(5)]
         session.add_all(clientes)
         session.commit()
 
@@ -41,13 +41,13 @@ def seed_database_if_empty():
                 price=round(random.uniform(5.0, 100.0), 2),
                 amount=random.randint(1, 100)
             )
-            for _ in range(20)
+            for _ in range(5)
         ]
         session.add_all(productos)
         session.commit()
 
         # Crear 50 pedidos con productos
-        for _ in range(50):
+        for _ in range(5):
             client = random.choice(clientes)
             selected_products = random.sample(productos, k=random.randint(1, 5))
             total_price = sum(p.price for p in selected_products)
