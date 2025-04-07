@@ -12,12 +12,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci
-      - run: N
+        working-directory: "./front/aplicacion-web"
+      - run: sed -i 's/%GMAPS_API_KEY%/'${{ secrets.GMAPS_API_KEY }}'/g' ./front/aplicacion-web/src/index.html
+        working-directory: "./front/aplicacion-web"
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
+          entryPoint: "./front/aplicacion-web"
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MISW_4301_NATIVE_CLOUD_433702 }}
-          channelId: live
           projectId: misw-4301-native-cloud-433702
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
+
