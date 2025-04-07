@@ -1,0 +1,14 @@
+{
+    "/api": {
+      "target": "http://compras.cppxcode.shop",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/rutas": {
+      "target": "http://logistica.cppxcode.shop",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    }
+  }

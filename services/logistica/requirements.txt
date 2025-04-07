@@ -8,3 +8,4 @@ uuid
 google-cloud-pubsub
 pytest
 coverage
+flask-cors

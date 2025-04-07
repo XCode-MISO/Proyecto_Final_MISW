@@ -1,0 +1,44 @@
+.form-wrapper {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.titulo {
+  text-align: center;
+  color: #2b0a3d;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.campos {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.acciones {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.save-btn {
+  background: #5c857f !important;
+  color: #000 !important;
+}
+
+.cancel-btn {
+  background: #c12b46 !important;
+  color: #000 !important;
+}
+
+.mensaje {
+  text-align: center;
+  font-weight: 600;
+  margin-top: 1rem;
+  color: #2b0a3d;
+}

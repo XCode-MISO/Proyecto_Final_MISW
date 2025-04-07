@@ -1,0 +1,38 @@
+<div class="form-wrapper">
+  <h2 class="titulo">Cargar Productos</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="campos">
+    <mat-form-field appearance="outline">
+      <mat-label>Producto</mat-label>
+      <input matInput formControlName="nombre" />
+      <mat-error *ngIf="enviado && f['nombre'].errors">Requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fabricante</mat-label>
+      <mat-select formControlName="fabricanteId">
+        <mat-option *ngFor="let fab of fabricantes" [value]="fab.id">{{ fab.nombre }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="enviado && f['fabricanteId'].errors">Seleccione un fabricante</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Cantidad</mat-label>
+      <input matInput type="number" min="1" step="1" formControlName="cantidad" />
+      <mat-error *ngIf="enviado && f['cantidad'].errors">Ingrese un entero positivo</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Precio</mat-label>
+      <input matInput type="number" min="0.01" step="0.01" formControlName="precio" />
+      <mat-error *ngIf="enviado && f['precio'].errors">Ingrese un número positivo</mat-error>
+    </mat-form-field>
+
+    <div class="acciones">
+      <button mat-flat-button class="save-btn" type="submit" >Cargar Producto</button>
+      <button mat-flat-button class="cancel-btn" type="button" (click)="onCancel()">Cancelar</button>
+    </div>
+
+    <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
+  </form>
+</div>
