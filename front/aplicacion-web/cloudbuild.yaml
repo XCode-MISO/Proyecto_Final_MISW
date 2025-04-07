@@ -1,7 +1,7 @@
 steps:
   - name: 'bash'
     script: |
-      echo #GMAPS_API_KEY
+      echo $GMAPS_API_KEY
       sed -i "s|__GMAPS_API_KEY__|$GMAPS_API_KEY|g" ./front/aplicacion-web/src/index.html
       cat ./front/aplicacion-web/src/index.html
   - name: 'gcr.io/cloud-builders/gcloud'
