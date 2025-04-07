@@ -40,6 +40,14 @@ def create_app():
     # Nuevo endpoint para registrar la compra y su detalle
     app.register_blueprint(detalle_compra_bp, url_prefix='/api/compras/detalle')
     
+    @app.route("/")
+    def root_path():
+        return "<p>Servicio de Compras</p>"
+
+    @app.route("/health")
+    def health_check():
+        return "Ok"
+    
     CORS(app)
     return app
 
