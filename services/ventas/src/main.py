@@ -1,6 +1,7 @@
 from dotenv import load_dotenv, find_dotenv
 import os
 from pathlib import Path
+from flask_cors import CORS
 
 # Verificar si el archivo .env.development existe antes de cargarlo
 env_path = Path('.env.development')
@@ -18,6 +19,7 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 app.register_blueprint(client_blueprint)
 app.register_blueprint(visit_blueprint)
+CORS(app)
 
 Base.metadata.create_all(engine)
 

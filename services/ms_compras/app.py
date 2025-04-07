@@ -15,7 +15,6 @@ logger = logging.getLogger(__name__)
 def create_app():
     app = Flask(__name__)
 
-    CORS(app)
     
     # Configurar conexión a la base de datos compras_db
     db_host = os.getenv('DB_HOST', '34.171.48.199')
@@ -41,6 +40,7 @@ def create_app():
     # Nuevo endpoint para registrar la compra y su detalle
     app.register_blueprint(detalle_compra_bp, url_prefix='/api/compras/detalle')
     
+    CORS(app)
     return app
 
 if __name__ == '__main__':

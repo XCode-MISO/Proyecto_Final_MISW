@@ -20,3 +20,4 @@ tomli==2.0.1
 typing_extensions==4.12.2
 Werkzeug==3.0.4
 gunicorn==21.2.0
+flask-cors

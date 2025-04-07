@@ -1,4 +1,5 @@
 # src/main.py
+from flask_cors import CORS
 from dotenv import load_dotenv, find_dotenv
 
 from flask import Flask, jsonify
@@ -37,6 +38,7 @@ db.init_app(app)
 
 
 app.register_blueprint(operations_blueprint)
+CORS(app)
 try:
   with app.app_context():  
     Base.metadata.create_all(engine)  # Crea las tablas
