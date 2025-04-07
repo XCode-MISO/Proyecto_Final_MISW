@@ -24,6 +24,7 @@
         </div>
         }
         <div class="map-container">
+          @if(route.mapsResponse){
           <google-map class="map" [width]="'100%'" [center]="getCenter(route.mapsResponse[0].bounds)" (mapInitialized)="fitBounds(route, $event)" >
             @for (marker of getMarkers(route.mapsResponse[0].legs); track marker.position){
               <map-marker 
@@ -33,7 +34,7 @@
               />
             }
             <map-polyline [options]="getPath(route.mapsResponse)"/>
-          </google-map>
+          </google-map>}
         </div>
       }
     </div>

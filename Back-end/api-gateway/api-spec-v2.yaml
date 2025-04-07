@@ -97,7 +97,7 @@ paths:
       x-google-backend:
         address: "http://inventarios.cppxcode.shop/api/inventarios/productos"
   
-  /api/rutas:
+  /api/route:
     get:
       operationId: "listRutas"
       summary: "Listas rutas que han sido generadas"
@@ -108,9 +108,9 @@ paths:
         200:
           description: "Lista de rutas generadas"
       x-google-backend:
-        address: "http://logistica.cppxcode.shop/route"
+        address: "http://logistica.cppxcode.shop/api/route"
 
-  /api/rutas/{route_id}:
+  /api/route/{route_id}:
     get:
       operationId: "getRuta"
       summary: "Obtener una rutas que ha sido generada"
@@ -129,7 +129,8 @@ paths:
         404:
           description: "No se encontró esa ruta"
       x-google-backend:
-        address: "http://logistica.cppxcode.shop/route"
+        address: "http://logistica.cppxcode.shop"
+        path_translation: APPEND_PATH_TO_ADDRESS
         
   /api/add-stop-route:
     post:
@@ -196,7 +197,14 @@ paths:
         500:
           description: Server error
       x-google-backend:
-        address: "http://logistica.cppxcode.shop/add-stop-route"
+        address: "http://logistica.cppxcode.shop/api/add-stop-route"
+    options:
+      operationId: corsAddStop
+      x-google-backend:
+        address: http://logistica.cppxcode.shop
+      responses:
+        '200':
+          description: A successful response
   
   /api/generate-route:
     post:
@@ -257,8 +265,14 @@ paths:
         404:
           description: "No se encontró esa ruta"
       x-google-backend:
-        address: "http://logistica.cppxcode.shop/generate-route"
-
+        address: "http://logistica.cppxcode.shop/api/add-stop-route"
+    options:
+      operationId: corsGenerateRoute
+      x-google-backend:
+        address: http://logistica.cppxcode.shop
+      responses:
+        '200':
+          description: A successful response
   /api/productos:
     get:
       operationId: "getProductos"

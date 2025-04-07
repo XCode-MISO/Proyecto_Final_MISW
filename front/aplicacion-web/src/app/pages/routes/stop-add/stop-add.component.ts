@@ -36,7 +36,6 @@ export type AddStopToRoute = {
 export class StopAddComponent {
 
   baseRoute?: Route
-  @Input()
   route_id?: string
 
   clientes: Cliente[] = [
@@ -107,7 +106,7 @@ export class StopAddComponent {
       console.error("NO BASE ROUTE")
     }
     this.addStopToRoute({
-      id: this.baseRoute!!.id,
+      id: this.route_id!!,
       parada: { cliente, vendedor, nombre, fecha }
     })
   }
