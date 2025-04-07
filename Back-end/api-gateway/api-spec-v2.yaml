@@ -97,7 +97,7 @@ paths:
         404:
           description: "No se encontró esa ruta"
       x-google-backend:
-        address: "http://logistica.cppxcode.shop/api/route"
+        address: "http://logistica.cppxcode.shop/route"
         
   /api/add-stop-route:
     post:
