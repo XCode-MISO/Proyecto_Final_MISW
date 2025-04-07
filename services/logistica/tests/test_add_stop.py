@@ -42,7 +42,7 @@ def add_stop(client, route_id):
         "id": route_id
 
     }
-    response = client.post('/add-stop-route', data=json.dumps(data),
+    response = client.post('/api/add-stop-route', data=json.dumps(data),
                            content_type='application/json')
     return response
 

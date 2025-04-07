@@ -55,7 +55,7 @@ def generate_route(client):
         "fin": "Cl. 114a #45-78, Bogota, Colombia",
         "nombre": "Ruta 1"
     }
-    response = client.post('/generate-route', data=json.dumps(data),
+    response = client.post('/api/generate-route', data=json.dumps(data),
                            content_type='application/json')
     return response
 
