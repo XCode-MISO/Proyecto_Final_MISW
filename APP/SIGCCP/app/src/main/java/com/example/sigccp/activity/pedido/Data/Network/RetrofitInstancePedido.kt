@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitInstancePedido {
     val api: PedidoService by lazy {
         Retrofit.Builder()
-            .baseUrl("http://192.168.10.89:3001")
+            .baseUrl("https://microservicios-gateway-1qkjvfz9.uc.gateway.dev")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(PedidoService::class.java)

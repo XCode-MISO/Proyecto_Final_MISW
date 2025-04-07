@@ -112,7 +112,7 @@ fun Pedido( navController: NavController,
                             onClickDerecho = {
                                 navController.navigate(AppScreen.ListarPedidos.route)
                             },
-                            buttonWidth = 300.dp,
+                            buttonWidth = 320.dp,
                         )
                         ListaDeProductosPedido(productos)
 
