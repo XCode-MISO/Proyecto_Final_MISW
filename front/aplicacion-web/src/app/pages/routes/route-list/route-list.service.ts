@@ -26,7 +26,7 @@ export type Ruta = {
 })
 export class RouteListService {
 
-  apiUrl = 'http://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api'
+  apiUrl = 'https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api'
 
   private http = inject(HttpClient)
 
