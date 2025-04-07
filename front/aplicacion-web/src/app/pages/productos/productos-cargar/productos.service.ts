@@ -17,7 +17,7 @@ export interface ProductoDto {
 
 @Injectable({ providedIn: 'root' })
 export class ProductosService {
-  private readonly apiUrl = `https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api/compras`;
+  private readonly apiUrl = `https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api`;
 
   constructor(private http: HttpClient) {}
 
