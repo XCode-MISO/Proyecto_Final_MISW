@@ -2,6 +2,8 @@ import uuid
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from .model import Base,Model
+from marshmallow import Schema, fields, ValidationError
+
 
 class Cliente(Base,Model):
     __tablename__ = 'clientes'
@@ -15,3 +17,7 @@ class Cliente(Base,Model):
     def __init__(self, name):
         super().__init__() # Llama al constructor de Model
         self.name = name
+
+class ClienteJsonSchema(Schema):
+    id = fields.UUID()
+    name = fields.Str()

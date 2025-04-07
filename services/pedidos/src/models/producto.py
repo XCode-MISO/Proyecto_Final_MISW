@@ -3,7 +3,7 @@ from sqlalchemy import Column, String, Float, Integer
 from sqlalchemy.orm import relationship
 from .model import Base,Model
 from marshmallow import Schema, fields, ValidationError
-from .pedido import pedido_producto  # Importamos la tabla intermedia
+from .pedido_producto import PedidoProducto
 
 class Producto(Base,Model):
     __tablename__ = 'productos'
@@ -14,7 +14,8 @@ class Producto(Base,Model):
     amount = Column(Integer, nullable=False) # Cantidad del producto
 
     # Relación con pedidos
-    pedidos = relationship("Pedido", secondary=pedido_producto, back_populates="products")
+    pedido_productos = relationship("PedidoProducto", back_populates="producto")
+
 
     def __init__(self, name, price, amount):  ##
         super().__init__() # Llama al constructor de Model

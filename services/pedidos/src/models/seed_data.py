@@ -51,7 +51,7 @@ def seed_database_if_empty():
             client = random.choice(clientes)
             selected_products = random.sample(productos, k=random.randint(1, 5))
             total_price = sum(p.price for p in selected_products)
-            delivery_date = datetime.utcnow() + timedelta(days=random.randint(2, 10))
+            deliveryDate = datetime.utcnow() + timedelta(days=random.randint(2, 10))
 
             pedido = Pedido(
                 name=f"Pedido #{random.randint(1, 1000)}",
@@ -59,7 +59,7 @@ def seed_database_if_empty():
                 products=selected_products,
                 price=total_price,
                 state=random.choice(states),
-                delivery_date=delivery_date
+                deliveryDate=deliveryDate
             )
             session.add(pedido)
 

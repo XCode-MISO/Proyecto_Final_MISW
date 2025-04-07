@@ -1,25 +1,25 @@
+from sqlite3 import Date
 import uuid
-from datetime import datetime, timedelta
-from sqlalchemy import Column, String, Float, DateTime, ForeignKey, Table
+from datetime import date, datetime, timedelta
+from sqlalchemy import Column, String, Float, Date, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from .model import Base,Model 
 from marshmallow import Schema, fields, ValidationError
+from .pedido_producto import PedidoProducto
 
 
-# Función de validación para deliveryDate (+2 días mínimo)
-def validate_delivery_date(value):
-    min_date = datetime.utcnow() + timedelta(days=2)
-    if value < min_date:
-        raise ValidationError(f"🚨 La fecha de entrega debe ser al menos {min_date.strftime('%Y-%m-%d %H:%M:%S')} UTC")
+# Función de validación para deliveryDate (+2 días Maximo)
+def validate_deliveryDate(value):
+    if isinstance(value, datetime):
+        value = value.date()  # 💡 convertir si viene como datetime
 
+    today = datetime.utcnow().date()
+    max_date = today + timedelta(days=2)
 
-# Tabla intermedia para la relación muchos a muchos entre Pedido y Producto
-pedido_producto = Table(
-    'pedido_producto', Base.metadata,
-    Column('pedido_id', String(36), ForeignKey('pedidos.id'), primary_key=True),
-    Column('producto_id', String(36), ForeignKey('productos.id'), primary_key=True)
-)
-
+    if not (today <= value <= max_date):
+        raise ValidationError(
+            f"La fecha de entrega debe ser entre hoy ({today}) y {max_date} inclusive (UTC)."
+        )
 
 class Pedido(Base, Model):
     __tablename__ = 'pedidos'
@@ -29,20 +29,22 @@ class Pedido(Base, Model):
     clientId = Column(String(36), ForeignKey('clientes.id'), nullable=False)  # Almacena el ID del cliente
     price = Column(Float, nullable=False)
     state = Column(String(50), default="Pendiente", nullable=False)
-    delivery_date = Column(DateTime, nullable=False, default=datetime.utcnow)
+    deliveryDate = Column(Date, nullable=False, default=lambda: (datetime.utcnow() + timedelta(days=2)).date()) # Sumar 2 días
+ # Sumar 2 días
+
 
     # Relaciones
     client = relationship("Cliente", back_populates="pedidos", uselist=False)  # Relación opcional
-    products = relationship("Producto", secondary=pedido_producto, back_populates="pedidos")
+    pedido_productos = relationship("PedidoProducto", back_populates="pedido")
 
-    def __init__(self, name, clientId, products, price, state, delivery_date):
+
+    def __init__(self, name, clientId, products, price, state, deliveryDate):
         super().__init__() # Llama al constructor de Model
         self.name = name
         self.clientId = clientId
-        self.products = products
         self.price = price
         self.state = state
-        self.delivery_date = delivery_date
+        self.deliveryDate  = deliveryDate
 
 
 # Esquema para la  visualizacion de productos en un pedido
@@ -67,7 +69,7 @@ class PedidoJsonSchema(Schema):
     products = fields.Nested(ProductoSchema, many=True)
     price = fields.Float(required=True)
     state = fields.Str(required=True)
-    deliveryDate = fields.DateTime(required=True, format="iso", validate=validate_delivery_date)
+    deliveryDate = fields.Date(required=True, format="iso", validate=validate_deliveryDate)
     createdAt = fields.DateTime(dump_only=True)  # Solo se devuelve al serializar
 
 
@@ -75,8 +77,8 @@ class PedidoJsonSchema(Schema):
 class PedidoSchema(Schema):
     name = fields.Str(required=True)
     clientId = fields.Str(required=True)
-    products = fields.List(fields.UUID(), required=True)
+    products = fields.List(fields.Dict(keys=fields.Str(), values=fields.Raw()), required=True)
     state = fields.Str(missing="Pendiente")
     price = fields.Float(required=True)
-    deliveryDate = fields.DateTime(required=True, format="iso", validate=validate_delivery_date)
+    deliveryDate = fields.Date(required=True, format="iso", validate=validate_deliveryDate)
 

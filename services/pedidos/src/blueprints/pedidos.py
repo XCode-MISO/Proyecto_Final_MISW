@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 import uuid
 from datetime import datetime, timezone
 
+from src.commands.get_clientes import GetClientes
 from src.commands.get_productos import GetProductos
 
 from ..commands.fields_pedido import ValidatePedidoFields
@@ -35,11 +36,9 @@ def pedidos():
     if isinstance(newPedido, tuple) and len(newPedido) == 2 and isinstance(newPedido[0], dict):
         return jsonify(newPedido[0]), newPedido[1]
 
-    return jsonify({ 
-        "clientId": newPedido['clientId'],
-        "products": newPedido['products'],
-        "price": newPedido['price'],
-    }), 201
+    return jsonify(newPedido), 201
+
+
 
 ## Obtener Pedidos
 @operations_blueprint.route('/pedidos', methods=['GET'])
@@ -59,4 +58,13 @@ def get_productos():
     ##data=request.args.to_dict()
     result = request.args.to_dict()
     result = GetProductos().execute()
+    return jsonify(result), 200
+
+@operations_blueprint.route('/clientes', methods=['GET'])
+def get_clientes():
+    ##auth_header = request.headers.get('Authorization')
+    ##user_id = ValidateToken(auth_header).execute()
+    ##data=request.args.to_dict()
+    result = request.args.to_dict()
+    result = GetClientes().execute()
     return jsonify(result), 200

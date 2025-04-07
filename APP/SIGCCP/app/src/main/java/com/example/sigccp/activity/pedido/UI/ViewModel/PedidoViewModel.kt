@@ -12,9 +12,18 @@ import kotlinx.coroutines.launch
 import androidx.compose.runtime.State
 import com.example.sigccp.activity.producto.Data.Modelo.ProductoClass
 import com.example.sigccp.activity.producto.Data.Modelo.ProductosPedidoClass
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 class PedidoViewModel : ViewModel() {
+
+    val nombrePedido = mutableStateOf("Pedido #${(1..9999).random()}")
+    val clienteId = mutableStateOf("")
+    val precioTotal = mutableStateOf(0.0)
+    val estado = mutableStateOf("Pendiente")
+
+    val deliveryDate: String = LocalDate.now().plusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE)
 
     private val _pedidos = MutableStateFlow<List<PedidoClass>>(emptyList())
     val pedidos: StateFlow<List<PedidoClass>> = _pedidos

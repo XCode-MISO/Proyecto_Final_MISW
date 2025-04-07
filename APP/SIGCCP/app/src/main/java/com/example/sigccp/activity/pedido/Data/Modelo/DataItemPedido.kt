@@ -32,3 +32,17 @@ data class ClienteClass(
     val id: String,
     val name: String
 )
+
+data class PedidoRequest(
+    val name: String,
+    val clientId: String,
+    val products: List<ProductoCantidad>,
+    val price: Double,
+    val state: String = "Pendiente",
+    val deliveryDate: String  // formato: "2025-04-08"
+)
+
+data class ProductoCantidad(
+    val id: String,
+    val amount: Int
+)
