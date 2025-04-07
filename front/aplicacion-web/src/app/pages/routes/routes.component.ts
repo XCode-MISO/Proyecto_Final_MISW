@@ -1,11 +1,13 @@
 import { Component, inject, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { GoogleMapsModule } from '@angular/google-maps';
-import { Parada, Ruta, RouteListService } from './route-list/route-list.service';
+import { Parada, RouteListService } from './route-list/route-list.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
+import { Observable } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
-export type Cliente = {id: string, nombre: string, direccion: string}
+export type Cliente = { id: string, nombre: string, direccion: string }
 export type Vendedor = Cliente
 
 export type Route = {
@@ -22,7 +24,7 @@ export type Route = {
 
 @Component({
   selector: 'app-routes',
-  imports: [MatButtonModule, GoogleMapsModule, MatTabsModule],
+  imports: [MatButtonModule, GoogleMapsModule, MatTabsModule, AsyncPipe],
   templateUrl: './routes.component.html',
   styleUrl: './routes.component.css'
 })
@@ -30,14 +32,12 @@ export class RoutesComponent {
 
   private router: Router = inject(Router)
   private routesListService = inject(RouteListService)
-  
-  center: google.maps.LatLngLiteral = {lat: 4.7110, lng: -74.0721};
+
+  center: google.maps.LatLngLiteral = { lat: 4.7110, lng: -74.0721 };
   zoom = 12;
 
   Math = Math
-  route?: Route
-  route_path?: any
-  mapMarkers?: any[]
+  route!: Observable<Route>
   mapLoaded: Boolean = false
   encoding?: any
   LatLngBounds?: any
@@ -47,67 +47,75 @@ export class RoutesComponent {
   constructor(private activatedRoute: ActivatedRoute) {
   }
 
-  navigateTo(path:string){
+  navigateTo(path: string) {
     this.router.url
     this.router.navigate([`${this.router.url}/${path}`])
   }
-  
-  ngOnInit(){
+
+  ngOnInit() {
     this.route_id = this.activatedRoute.snapshot.paramMap.get("id") || ""
+    this.route = this.getRoute()
     this.initMap()
-    this.getRoute()
   }
 
   getRoute() {
-    this.routesListService.getRoute(this.route_id).subscribe(this.parseRoute.bind(this))
-  }
-
-  parseRoute(route: Route) {
-    this.route = route
+    return this.routesListService.getRoute(this.route_id)
   }
 
   async initMap(): Promise<void> {
-    const {encoding} = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrary;
+    const { encoding } = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrary;
     this.encoding = encoding
     this.mapLoaded = true
   }
-  
-  async getPath(mapsResponse: any) {
+
+  getPath(mapsResponse: any) {
     const encodedPolyline = mapsResponse[0]?.overview_polyline?.points
-    this.route_path = decodePathFromPolyline(encodedPolyline, this.encoding)
+    const path = decodePathFromPolyline(encodedPolyline, this.encoding)
+    return{ path, strokeColor: 'blue', strokeOpacity: 0.5, strokeWeight: 4 }
   }
 
-  getMarkers(legs:any[]) {
-    this.mapMarkers = legs
+  getMarkers(legs: any[]) {
+    console.log(legs)
+    return legs.map((leg, i) => {
+      return {
+        position: leg.start_location,
+        title: leg.start_address,
+        label: "" + i
+      }
+    })
   }
 
-  onMapLoad(map: google.maps.Map) {
-    this.drawRoutes(map)
+  getCenter(bounds: {northeast: {lat: number, lng: number}, southwest: {lat: number, lng: number}}){
+    return new google.maps.LatLngBounds(
+      bounds.southwest,
+      bounds.northeast
+    ).getCenter()
   }
   
-   fitBounds(map: google.maps.Map) {
+  getZoom(bounds: {northeast: {lat: number, lng: number}, southwest: {lat: number, lng: number}}){
+    return new google.maps.LatLngBounds(
+      bounds.southwest,
+      bounds.northeast
+    ).toSpan()
+  }
+
+  fitBounds(route: Route, map: google.maps.Map) {
     const latlngBounds = new google.maps.LatLngBounds(
-      this.route!!.mapsResponse[0].bounds.southwest,
-      this.route!!.mapsResponse[0].bounds.northeast
+      route.mapsResponse[0].bounds.southwest,
+      route.mapsResponse[0].bounds.northeast
     )
     map.fitBounds(latlngBounds)
   }
 
-  drawRoutes(map: google.maps.Map) {
-    if (!this.route || !this.route.mapsResponse) {
-      console.error("No route")
-      return 
-    }
-    this.getMarkers(this.route.mapsResponse[0].legs)
-    this.getPath(this.route.mapsResponse)
-    this.fitBounds(map)
+  drawRoutes(route: Route, map: google.maps.Map) {
+    this.fitBounds(route, map)
   }
 
-  getPedidoDuration([_, leg]: [Parada, any]){
+  getPedidoDuration([_, leg]: [Parada, any]) {
     return this.Math.round(leg.duration.value / 60)
   }
-  
-  getPedidoAndLeg(pedidos: Parada[], mapsResponse:any, pedidoPosition: number): [Parada, any]{
+
+  getPedidoAndLeg(pedidos: Parada[], mapsResponse: any, pedidoPosition: number): [Parada, any] {
     const route = mapsResponse[0]
     const legs = route.legs
     const waypointPosition = route["waypoint_order"][pedidoPosition]
