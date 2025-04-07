@@ -15,7 +15,7 @@ export type Fabricante = {
 })
 export class FabricantesListarService {
   //private apiUrl = 'https://67f142f7c733555e24aca5a3.mockapi.io/misw-pruebas/fabricantes';
-  private readonly apiUrl = `/compras/fabricantes`;
+  private readonly apiUrl = `https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api/fabricantes`;
   constructor(private http: HttpClient) {}
 
   obtenerFabricantes(): Observable<Fabricante[]> {
