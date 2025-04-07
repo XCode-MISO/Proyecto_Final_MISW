@@ -121,7 +121,7 @@ fun Producto( navController: NavController,
                         },
                         nombreDerecho = "Cancelar",
                         onClickDerecho = { navController.popBackStack() },
-                            buttonWidth = 300.dp,
+                            buttonWidth = 320.dp,
                         )
 
                         ListaDeProductosEditable(

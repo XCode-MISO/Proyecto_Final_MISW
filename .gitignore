@@ -184,6 +184,7 @@ terraform.tfstate*
 local.properties
 **/out/
 **/build/
+APP/SIGCCP/app/build/outputs/*
 
 # Archivos del sistema operativo
 .DS_Store

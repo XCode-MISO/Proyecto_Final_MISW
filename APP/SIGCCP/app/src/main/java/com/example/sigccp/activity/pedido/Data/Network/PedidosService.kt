@@ -10,16 +10,16 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface PedidoService {
-    @GET("/pedidos") // reemplaza por la ruta real
+    @GET("/api/pedidos") // reemplaza por la ruta real
     suspend fun obtenerPedidos(): List<PedidoClass>
 
-    @GET("/productos")
+    @GET("/api/productos")
     suspend fun obtenerProductos(): List<ProductoClass>
 
-    @POST("/create_pedido")
+    @POST("/api/create_pedido")
     suspend fun createPedido(@Body pedido: PedidoRequest): Response<Unit>
 
-    @GET("/clientes")
+    @GET("/api/clientes")
     suspend fun obtenerClientes(): List<ClienteClass>
 
 }
