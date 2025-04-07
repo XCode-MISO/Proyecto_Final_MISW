@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Cliente, Route, Vendedor } from '../routes.component';
-import { environment } from '../../../../environments/environment';
 import { catchError, finalize, Observable } from 'rxjs';
 import { CreateRoute } from '../route-add/route-add.component';
 import { AddStopToRoute, UpdateRoute } from '../stop-add/stop-add.component';
+import { environment } from '../../../../environments/environment';
 
 export type Parada = {
   cliente: Cliente
@@ -26,7 +26,7 @@ export type Ruta = {
 })
 export class RouteListService {
 
-  apiUrl = 'https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api'
+  apiUrl = `${environment.apiUrl}`
 
   private http = inject(HttpClient)
 

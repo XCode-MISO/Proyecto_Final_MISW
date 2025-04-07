@@ -226,13 +226,3 @@ paths:
           description: "No se encontró esa ruta"
       x-google-backend:
         address: "http://logistica.cppxcode.shop/generate-route"
-
-
-securityDefinitions:
-  firebase:
-    type: "oauth2"
-    flow: "implicit"
-    authorizationUrl: ""
-    x-google-issuer: "https://securetoken.google.com/misw-4301-native-cloud-433702"
-    x-google-jwks_uri: "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
-    x-google-audiences: "misw-4301-native-cloud-433702"
