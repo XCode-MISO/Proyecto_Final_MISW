@@ -1,11 +1,8 @@
 steps:
-  - name: 'node'
-    entrypoint: 'npm'
-    dir: 'front/aplicacion-web'
-    args: [
-      'run',
-      'build:env'
-    ]
+  - name: 'bash'
+    script: |
+      sled -i "s/__GMAPS_API_KEY__/$GMAPS_API_KEY/g" ./src/index.htm
+      cat ./src/index.html
   - name: 'gcr.io/cloud-builders/gcloud'
     args: [
         'run', 
