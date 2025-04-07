@@ -34,7 +34,7 @@ export class RouteListService {
 
   getRoutes(){
     return this.http
-    .get(`${this.apiUrl}/rutas`)
+    .get(`${this.apiUrl}/api/rutas`)
     .pipe(
       catchError((e, source) => {
         console.error(e)
@@ -48,7 +48,7 @@ export class RouteListService {
   
   getRoute(route_id: string){
     return this.http
-    .get(`${this.apiUrl}/rutas/${route_id}`)
+    .get(`${this.apiUrl}/api/rutas/${route_id}`)
     .pipe(
       catchError((e, source) => {
         console.error(e)
@@ -61,7 +61,7 @@ export class RouteListService {
 
   generateRoute(body: CreateRoute) {
     return this.http
-    .post(`${this.apiUrl}/generate-route`, body)
+    .post(`${this.apiUrl}/api/generate-route`, body)
     .pipe(
       catchError((e, source) => {
         console.error(e)
@@ -74,7 +74,7 @@ export class RouteListService {
 
   updateRoute(body: UpdateRoute) {
     return this.http
-    .put(`${this.apiUrl}/update-route`, body)
+    .put(`${this.apiUrl}/api/update-route`, body)
     .pipe(
       catchError((e, source) => {
         console.error(e)
@@ -87,7 +87,7 @@ export class RouteListService {
 
   addStopToRoute(body: AddStopToRoute) {
     return this.http
-    .post(`${this.apiUrl}/add-stop-route`, body)
+    .post(`${this.apiUrl}/api/add-stop-route`, body)
     .pipe(
       catchError((e, source) => {
         console.error(e)
