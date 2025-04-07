@@ -7,6 +7,9 @@ schemes:
   - "https"
 security:
   - firebase: []
+x-google-endpoints:
+  - name: "microservicios-gateway-1qkjvfz9.uc.gateway.dev"
+    allowCors: True
 paths:
   /api/compras/detalle:
     post:
@@ -49,6 +52,35 @@ paths:
       responses:
         200:
           description: "Lista de fabricantes"
+      x-google-backend:
+        address: "http://compras.cppxcode.shop/api/fabricantes"
+    post:
+      operationId: "createFabricante"
+      summary: "Crear fabricante"
+      description: "Crea un detalle de compra en el sistema de compras."
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Datos del fabricante"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              nombre:
+                type: "string"
+              correo:
+                type: "string"
+              telefono:
+                type: "string"
+              empresa:
+                type: "string"
+      responses:
+        201:
+          description: "Fabricante creado"
       x-google-backend:
         address: "http://compras.cppxcode.shop/api/fabricantes"
 
@@ -229,6 +261,7 @@ paths:
 
   /api/productos:
     get:
+      operationId: "getProductos"
       summary: Obtener lista de productos
       responses:
         200:
@@ -253,6 +286,7 @@ paths:
 
   /api/clientes:
     get:
+      operationId: "getClientes"
       summary: Obtener lista de clientes
       responses:
         200:
@@ -272,117 +306,21 @@ paths:
 
   /api/pedidos:
     get:
+      operationId: "getPedidos"
       summary: Obtener lista de pedidos
       responses:
         200:
           description: Lista de pedidos
-          schema:
-            type: array
-            items:
-              type: object
-              properties:
-                id:
-                  type: string
-                  format: uuid
-                name:
-                  type: string
-                price:
-                  type: number
-                  format: float
-                state:
-                  type: string
-                deliveryDate:
-                  type: string
-                  format: date
-                createdAt:
-                  type: string
-                  format: date-time
-                  nullable: true
-                client:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      format: uuid
-                    name:
-                      type: string
       x-google-backend:
         address: "http://pedidos.cppxcode.shop/pedidos"
 
   /api/create_pedido:
     post:
+      operationId: "crearPedido"
       summary: Crear un nuevo pedido
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            type: object
-            required:
-              - name
-              - clientId
-              - products
-              - price
-              - state
-              - deliveryDate
-            properties:
-              name:
-                type: string
-              clientId:
-                type: string
-                format: uuid
-              products:
-                type: array
-                items:
-                  type: object
-                  required:
-                    - id
-                    - amount
-                  properties:
-                    id:
-                      type: string
-                      format: uuid
-                    amount:
-                      type: integer
-              price:
-                type: number
-                format: float
-              state:
-                type: string
-              deliveryDate:
-                type: string
-                format: date
       responses:
         200:
           description: Pedido creado correctamente
-          schema:
-            type: object
-            properties:
-              id:
-                type: string
-                format: uuid
-              name:
-                type: string
-              price:
-                type: number
-                format: float
-              state:
-                type: string
-              deliveryDate:
-                type: string
-                format: date
-              createdAt:
-                type: string
-                format: date-time
-                nullable: true
-              client:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                  name:
-                    type: string
       x-google-backend:
         address: "http://pedidos.cppxcode.shop/create_pedido"
 

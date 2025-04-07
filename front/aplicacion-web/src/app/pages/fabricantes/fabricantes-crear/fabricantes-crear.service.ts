@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class FabricantesCrearService {
-  private readonly apiUrl = `${environment.apiUrl}/api/fabricantes`;
+  private readonly apiUrl = `http://34.41.92.117/api/fabricantes`;
   constructor(private http: HttpClient) {}
 
   crearFabricante(fabricante: Fabricante): Observable<Fabricante> {
