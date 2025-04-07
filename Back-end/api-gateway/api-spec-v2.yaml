@@ -279,7 +279,7 @@ paths:
         404:
           description: "No se encontró esa ruta"
       x-google-backend:
-        address: "http://logistica.cppxcode.shop/api/add-stop-route"
+        address: "http://logistica.cppxcode.shop/api/generate-route"
     options:
       operationId: corsGenerateRoute
       x-google-backend:
