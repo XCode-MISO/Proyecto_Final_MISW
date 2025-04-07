@@ -226,3 +226,163 @@ paths:
           description: "No se encontró esa ruta"
       x-google-backend:
         address: "http://logistica.cppxcode.shop/generate-route"
+
+  /api/productos:
+    get:
+      summary: Obtener lista de productos
+      responses:
+        200:
+          description: Lista de productos
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                name:
+                  type: string
+                amount:
+                  type: integer
+                price:
+                  type: number
+                  format: float
+      x-google-backend:
+        address: "http://pedidos.cppxcode.shop/productos"
+
+  /api/clientes:
+    get:
+      summary: Obtener lista de clientes
+      responses:
+        200:
+          description: Lista de clientes
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                name:
+                  type: string
+      x-google-backend:
+        address: "http://pedidos.cppxcode.shop/clientes"
+
+  /api/pedidos:
+    get:
+      summary: Obtener lista de pedidos
+      responses:
+        200:
+          description: Lista de pedidos
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                name:
+                  type: string
+                price:
+                  type: number
+                  format: float
+                state:
+                  type: string
+                deliveryDate:
+                  type: string
+                  format: date
+                createdAt:
+                  type: string
+                  format: date-time
+                  nullable: true
+                client:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                    name:
+                      type: string
+      x-google-backend:
+        address: "http://pedidos.cppxcode.shop/pedidos"
+
+  /api/create_pedido:
+    post:
+      summary: Crear un nuevo pedido
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - name
+              - clientId
+              - products
+              - price
+              - state
+              - deliveryDate
+            properties:
+              name:
+                type: string
+              clientId:
+                type: string
+                format: uuid
+              products:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - id
+                    - amount
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                    amount:
+                      type: integer
+              price:
+                type: number
+                format: float
+              state:
+                type: string
+              deliveryDate:
+                type: string
+                format: date
+      responses:
+        200:
+          description: Pedido creado correctamente
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              name:
+                type: string
+              price:
+                type: number
+                format: float
+              state:
+                type: string
+              deliveryDate:
+                type: string
+                format: date
+              createdAt:
+                type: string
+                format: date-time
+                nullable: true
+              client:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+      x-google-backend:
+        address: "http://pedidos.cppxcode.shop/create_pedido"
+
