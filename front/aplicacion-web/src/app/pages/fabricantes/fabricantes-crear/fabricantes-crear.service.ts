@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class FabricantesCrearService {
-  private readonly apiUrl = `https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api/compras/fabricantes`;
+  private readonly apiUrl = `https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api/fabricantes`;
   constructor(private http: HttpClient) {}
 
   crearFabricante(fabricante: Fabricante): Observable<Fabricante> {
