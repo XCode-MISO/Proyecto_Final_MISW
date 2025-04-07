@@ -66,7 +66,7 @@ gcloud run deploy api-pedidos \
     --platform managed \
     --region us-central1 \
     --allow-unauthenticated \
-    --set-env-vars DB_USER=user_pedidos_user,DB_PASSWORD=user_pedidos_pass,DB_PORT=5432,DB_NAME=pedidos_db,DB_HOST=0.0.0.0    
+    --set-env-vars DATABASE_USER=user_pedidos_user,DATABASE_PASSWORD=user_pedidos_pass,DATABASE_PORT=5432,DATABASE_NAME=pedidos_db,DATABASE_URL=0.0.0.0    
 ```
 
 9. Otros Comandos

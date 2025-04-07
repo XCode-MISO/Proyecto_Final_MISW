@@ -58,11 +58,11 @@ def handle_exception(err):
 
 # print("Variables de Entorno:")
 # print(f"VERSION: {os.getenv('VERSION')}")
-# print(f"DB_USER: {os.getenv('DB_USER')}")
-# print(f"DB_PASSWORD: {os.getenv('DB_PASSWORD')}")
-# print(f"DB_HOST: {os.getenv('DB_HOST')}")
-# print(f"DB_PORT: {os.getenv('DB_PORT')}")
-# print(f"DB_NAME: {os.getenv('DB_NAME')}")
+# print(f"DATABASE_USER: {os.getenv('DATABASE_USER')}")
+# print(f"DATABASE_PASSWORD: {os.getenv('DATABASE_PASSWORD')}")
+# print(f"DATABASE_URL: {os.getenv('DATABASE_URL')}")
+# print(f"DATABASE_PORT: {os.getenv('DATABASE_PORT')}")
+# print(f"DATABASE_NAME: {os.getenv('DATABASE_NAME')}")
 # print(f"USER_PATH: {os.getenv('USER_PATH')}")
 # Verifica si las variables se cargaron correctamente
 print(f"VERSION: {os.getenv('VERSION')}")
