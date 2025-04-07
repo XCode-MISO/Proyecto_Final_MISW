@@ -18,7 +18,7 @@ spec:
       - name: pedidos
         image: gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/pedidos
         ports:
-        - containerPort: 3001
+        - containerPort: 8080
         env:
         - name: FLASK_DEBUG
           value: "1" #
