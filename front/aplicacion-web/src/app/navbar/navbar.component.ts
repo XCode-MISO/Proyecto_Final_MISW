@@ -21,7 +21,7 @@ export class NavbarComponent {
 
   tabs: Tab[] = [
     { name: "Inicio", 'route': '/home' }, 
-    {name: "Gestion de Fabricantes", route: '/fabricantes'}, 
+    {name: "Gestion de Fabricantes", route: '/fabricantes/menu'}, 
     {name: "Gestion de Ventas", route: '/ventas'}, 
     {name: "Gestion de Inventario", route: '/route'}
   ]

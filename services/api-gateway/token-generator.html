@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Token Generator</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+  <h1>Firebase Token Generator</h1>
+  <div>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Get Token</button>
+  </div>
+  <div id="token" style="margin-top: 20px; word-break: break-all;"></div>
+  
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDG_lr2X6s8caxk8jMLUa6C2YHbOywijj8", 
+      authDomain: "misw-4301-native-cloud-433702.firebaseapp.com",
+      projectId: "misw-4301-native-cloud-433702"
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    
+    async function login() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      try {
+        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+        const token = await userCredential.user.getIdToken();
+        document.getElementById('token').textContent = token;
+      } catch (error) {
+        document.getElementById('token').textContent = 'Error: ' + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
