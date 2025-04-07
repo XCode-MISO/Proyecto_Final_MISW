@@ -21,6 +21,7 @@ sqlalchemy = "*"
 httpmock = "*"
 httmock = "*"
 python-dateutil= "*"
+faker = "*"
 
 [dev-packages]
 pytest = "*"

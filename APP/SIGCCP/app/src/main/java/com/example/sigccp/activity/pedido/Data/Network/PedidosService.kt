@@ -1,33 +1,25 @@
 package com.example.sigccp.activity.pedido.Data.Network
 
-import com.example.sigccp.activity.pedido.Data.Modelo.DataItemPedido
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
+import com.example.sigccp.activity.pedido.Data.Modelo.ClienteClass
+import com.example.sigccp.activity.pedido.Data.Modelo.PedidoClass
+import com.example.sigccp.activity.pedido.Data.Modelo.PedidoRequest
+import com.example.sigccp.activity.producto.Data.Modelo.ProductoClass
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
 
-class PedidosService @Inject constructor(
-    private val pedidoListClient: ApiServicePedido,
-)
-{
-    fun getPedidosFlow():Flow<List<DataItemPedido>> = flow {
-        try {
-            val response = pedidoListClient.getPedidos()
-            emit(response)
-        }
-        catch (e: Exception)
-        {
-            //Manejar exepciones aqui
-        }
-    }
+interface PedidoService {
+    @GET("/pedidos") // reemplaza por la ruta real
+    suspend fun obtenerPedidos(): List<PedidoClass>
 
-    fun getPedidoFlow(pedidoId:String):Flow<DataItemPedido> = flow{
-        try {
-            val response = pedidoListClient.getPedidoId(pedidoId)
-            emit(response)
-        }
-        catch (e: Exception)
-        {
-            //Manejar exepciones aqui
-        }
-    }
+    @GET("/productos")
+    suspend fun obtenerProductos(): List<ProductoClass>
+
+    @POST("/create_pedido")
+    suspend fun createPedido(@Body pedido: PedidoRequest): Response<Unit>
+
+    @GET("/clientes")
+    suspend fun obtenerClientes(): List<ClienteClass>
+
 }

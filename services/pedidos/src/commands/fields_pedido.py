@@ -21,16 +21,16 @@ class ValidatePedidoFields:
             price = self.data['price']
             if not price:
                 raise MissingField()
-            delivery_date_str = self.data['deliveryDate']
-            if not delivery_date_str:
+            deliveryDate_str = self.data['deliveryDate']
+            if not deliveryDate_str:
                 raise MissingField()            
-            if not name or not clientId or not products or not price or not delivery_date_str:
+            if not name or not clientId or not products or not price or not deliveryDate_str:
                 raise MissingField()
         except KeyError:
             raise MissingField()
         
         try:
-            if not self.valid_delivery_date():
+            if not self.valid_deliveryDate():
                 raise DatePast()
         except ValueError:
             raise DateInvalid()
@@ -40,13 +40,14 @@ class ValidatePedidoFields:
             "clientId": clientId,
             "products": products,
             "price": price,
-            "deliveryDate": delivery_date_str
+            "deliveryDate": deliveryDate_str
         }
     
-    def valid_delivery_date(self):
+    def valid_deliveryDate(self):
         try:
-            delivery_date = parser.parse(self.data['deliveryDate']).date()
-            min_date = datetime.utcnow().date() + timedelta(days=2)
-            return delivery_date >= min_date
+            deliveryDate = parser.parse(self.data['deliveryDate']).date()
+            today = datetime.utcnow().date()
+            max_date = today + timedelta(days=2)
+            return today <= deliveryDate <= max_date
         except:
             return False

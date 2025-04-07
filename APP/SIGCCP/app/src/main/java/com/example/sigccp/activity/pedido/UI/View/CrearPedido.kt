@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,24 +19,28 @@ import androidx.navigation.NavController
 import com.example.sigccp.R
 import com.example.sigccp.activity.pedido.UI.ViewModel.PedidoViewModel
 import com.example.sigccp.navigation.AppScreen
-import com.example.sigccp.ui.View.Components.ListaDePedidos
+import com.example.sigccp.ui.View.Components.ClientDropdown
+import com.example.sigccp.ui.View.Components.ListaDeProductosPedido
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.locationDropdown
-import com.example.sigccp.ui.View.Components.newButton
+import com.example.sigccp.ui.View.Components.newAgregarButton
+import com.example.sigccp.ui.View.Components.newDualButton
 import com.example.sigccp.ui.View.moneda
 
 //@Preview
 @Composable
-fun ListarPedidos(navController: NavController)
+fun CrearPedido(navController: NavController, viewModel: PedidoViewModel)
 {
-    Pedidos(navController)
+    Pedido(navController, viewModel)
 }
 
 @Composable
-fun Pedidos (navController: NavController, viewModel: PedidoViewModel = viewModel())
+fun Pedido( navController: NavController,
+            viewModel: PedidoViewModel = viewModel()
+)
 {
-    val pedidos = viewModel.pedidos.collectAsState().value
-    ScreenContainer(title = stringResource(id = R.string.ListPedidos),false,null) {
+    val productos = viewModel.productosSeleccionados.value
+    ScreenContainer(title = stringResource(id = R.string.CrearPedido),false,null) {
         Box(
             modifier = Modifier
                 .fillMaxSize(), // Ocupa toda la pantalla para centrar el contenido
@@ -83,12 +86,35 @@ fun Pedidos (navController: NavController, viewModel: PedidoViewModel = viewMode
                         horizontalAlignment = Alignment.CenterHorizontally
                     )
                     {
-                        newButton(onClick = {navController.navigate(AppScreen.CrearPedido.route)}, nombre= "Crear Pedido")
+                        newAgregarButton(onClick = {navController.navigate(AppScreen.AgregarProductos.route)}, nombre= "Agregar")
+                        ClientDropdown(
+                            clients = viewModel.clientes.value,
+                            onClientSelected = { id -> viewModel.clienteId.value = id.toString() }
+                        )
                         locationDropdown(
                             locations = moneda,
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
                         )
-                        ListaDePedidos(pedidos)
+                        newDualButton(
+                            nombreIzquierdo = "Aceptar",
+                            onClickIzquierdo = {
+                                viewModel.crearPedido(
+                                    onSuccess = {
+                                        viewModel.limpiarPedido()
+                                        navController.navigate(AppScreen.ListarPedidos.route)
+                                    },
+                                    onError = {
+                                        println("Error al crear pedido: ${it.localizedMessage}")
+                                    }
+                                )
+                            },
+                            nombreDerecho = "Cancelar",
+                            onClickDerecho = {
+                                navController.navigate(AppScreen.ListarPedidos.route)
+                            },
+                            buttonWidth = 300.dp,
+                        )
+                        ListaDeProductosPedido(productos)
 
                     }
                 }

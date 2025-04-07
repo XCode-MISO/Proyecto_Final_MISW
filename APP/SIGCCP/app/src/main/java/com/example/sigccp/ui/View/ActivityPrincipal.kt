@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,17 +19,23 @@ import androidx.compose.ui.unit.dp
 import com.example.sigccp.R
 import com.example.sigccp.activity.pedido.Data.Modelo.ClienteClass
 import com.example.sigccp.activity.pedido.Data.Modelo.PedidoClass
+import com.example.sigccp.activity.pedido.Data.Modelo.Pedidos
+import com.example.sigccp.activity.producto.Data.Modelo.ProductoClass
 import com.example.sigccp.ui.View.Components.ClientDropdown
+import com.example.sigccp.ui.View.Components.ListaDeProductosPedido
 import com.example.sigccp.ui.View.Components.PedidoBox
+import com.example.sigccp.ui.View.Components.ProductoPedidoBox
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.locationDropdown
 import com.example.sigccp.ui.View.Components.newButton
 import com.example.sigccp.ui.View.Components.newMenuButton
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import com.example.sigccp.ui.View.Components.ListaDeProductosEditable
 
-val clientes = listOf(
-    1 to "Juan Pérez",
-    2 to "María González",
-    3 to "Carlos López"
+val moneda = listOf(
+    1 to "Peso Colombiano",
+    2 to "Dolar Americano",
 )
 
 val pedidoEjemplo = PedidoClass(
@@ -40,19 +48,39 @@ val pedidoEjemplo = PedidoClass(
         name = "pedrito perez"
     )
 )
+val pedidosDePrueba = listOf(
+    ProductoClass(id = "1" , name = "Hamburguesa Doble", price = 18.50, amount = 200),
+    ProductoClass(id = "2" ,name = "Pizza Familiar", amount = 1, price = 30.00),
+    ProductoClass(id = "3" ,name = "Refresco", amount = 3, price = 9.00)
+)
 
-//@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+val listaPedidos = Pedidos(
+    pedidos = listOf(
+        PedidoClass("1", "Pedido 1", 1200050.0, "pendiente", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("2", "Pedido 2", 75.0, "enviado", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez")),
+        PedidoClass("1", "Pedido 1", 50.0, "pendiente", ClienteClass("123e4567-e89b-12d3-a456-426614174000","pedrito perez"))
+    )
+)
+
 @Preview
 @Composable
 fun MainScreen(
        //navController: NavController,
         //menu: Menu
 ) {
+
     ScreenContainer(title = "Hola Usuario",true,R.drawable.avatar) {
         Box(
             modifier = Modifier
-                .fillMaxSize(), // Ocupa toda la pantalla para centrar el contenido
-            contentAlignment = Alignment.Center // Centra el contenido en la pantalla
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
         )
         {
             Column(
@@ -96,20 +124,31 @@ fun MainScreen(
                     {
                         newButton(onClick = {/*todo*/}, nombre= "Crear Pedido")
                         locationDropdown(
-                            locations = clientes,
+                            locations = moneda,
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
                         )
-                        ClientDropdown(
-                            clients = clientes,
+                        /*ClientDropdown(
+                            clients = moneda,
                             onClientSelected = { id -> println("Cliente seleccionado: $id") }
-                        )
+                        )*/
                         PedidoBox(pedido = pedidoEjemplo)
+                        /*
+                        ListaDeProductosEditable(
+                            productos = productos,
+                            cantidades = cantidades,
+                            onCantidadChange = { id, nuevaCantidad ->
+                                cantidades = cantidades.toMutableMap().apply {
+                                    this[id] = nuevaCantidad
+                                }
+                            }
+                        )*/
                         newMenuButton(
                             onClick = {/*TODO*/ },
                             nombre = "CREAR CLIENTE",
                             imagen = R.drawable.editar,
                             enabled = true
                         )
+                        //ListaDeProductosPedido(pedidosDePrueba)
                     }
                 }
             }

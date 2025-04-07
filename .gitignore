@@ -35,7 +35,6 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 
-
 # pipenv
 Pipfile.lock
 
@@ -124,6 +123,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+*.db
 
 # Spyder project settings
 .spyderproject

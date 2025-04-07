@@ -4,4 +4,5 @@
     <string name="welcome_message">Bienvenido a nuestra app</string>
     <string name="menuVendedor">!Hola, Vendedor¡ </string>
     <string name="ListPedidos">!Tus Pedidos¡ </string>
+    <string name="CrearPedido">!Tu Pedido¡</string>
 </resources>
