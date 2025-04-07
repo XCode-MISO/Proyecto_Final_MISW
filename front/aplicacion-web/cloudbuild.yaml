@@ -3,7 +3,7 @@ steps:
     entrypoint: bash
     args:
       - '-c' 
-      - sed -i \'s/__GMAPS_API_KEY__\/$_GMAPS_API_KEY/g\' ./front/aplicacion-web/src/index.html
+      - sed -i 's/%GMAPS_API_KEY%/'${_GMAPS_API_KEY}'/g' ./front/aplicacion-web/src/index.html
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:
