@@ -25,6 +25,11 @@ export type Ruta = {
   providedIn: 'root'
 })
 export class RouteListService {
+  headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
 
   apiUrl = `${environment.apiUrl}`
 
@@ -32,23 +37,24 @@ export class RouteListService {
 
   constructor() { }
 
-  getRoutes(){
+  getRoutes() {
+
     return this.http
-    .get(`${this.apiUrl}/api/rutas`)
-    .pipe(
-      catchError((e, source) => {
-        console.error(e)
-        console.error(source)
-        return new Observable()
-      }),
-      finalize(() => console.error("finalized call")) 
-    ) as unknown as Observable<Route[]>
+      .get(`${this.apiUrl}/api/rutas`, { headers:this.headers })
+      .pipe(
+        catchError((e, source) => {
+          console.error(e);
+          console.error(source);
+          return new Observable();
+        }),
+        finalize(() => console.error("finalized call"))
+      ) as unknown as Observable<Route[]>;
   }
 
   
   getRoute(route_id: string){
     return this.http
-    .get(`${this.apiUrl}/api/rutas/${route_id}`)
+    .get(`${this.apiUrl}/api/rutas/${route_id}`, { headers:this.headers })
     .pipe(
       catchError((e, source) => {
         console.error(e)
@@ -61,7 +67,7 @@ export class RouteListService {
 
   generateRoute(body: CreateRoute) {
     return this.http
-    .post(`${this.apiUrl}/api/generate-route`, body)
+    .post(`${this.apiUrl}/api/generate-route`, body, { headers:this.headers })
     .pipe(
       catchError((e, source) => {
         console.error(e)
@@ -74,7 +80,7 @@ export class RouteListService {
 
   updateRoute(body: UpdateRoute) {
     return this.http
-    .put(`${this.apiUrl}/api/update-route`, body)
+    .put(`${this.apiUrl}/api/update-route`, body, { headers:this.headers })
     .pipe(
       catchError((e, source) => {
         console.error(e)
@@ -87,7 +93,7 @@ export class RouteListService {
 
   addStopToRoute(body: AddStopToRoute) {
     return this.http
-    .post(`${this.apiUrl}/api/add-stop-route`, body)
+    .post(`${this.apiUrl}/api/add-stop-route`, body, { headers:this.headers })
     .pipe(
       catchError((e, source) => {
         console.error(e)
