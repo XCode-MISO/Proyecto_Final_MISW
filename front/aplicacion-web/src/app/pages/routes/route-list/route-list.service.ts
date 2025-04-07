@@ -26,7 +26,7 @@ export type Ruta = {
 })
 export class RouteListService {
 
-  apiUrl = `http://104.197.210.216`
+  apiUrl = `logistica`
 
   private http = inject(HttpClient)
 

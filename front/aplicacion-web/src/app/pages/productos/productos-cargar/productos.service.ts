@@ -17,7 +17,7 @@ export interface ProductoDto {
 
 @Injectable({ providedIn: 'root' })
 export class ProductosService {
-  private readonly apiUrl = `http://34.136.88.113/api`;
+  private readonly apiUrl = `/compras`;
 
   constructor(private http: HttpClient) {}
 
