@@ -17,6 +17,7 @@ spec:
       containers:
       - name: ms-compras
         image: gcr.io/misw-4301-native-cloud-433702/ms_compras:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 5001
         env:

@@ -93,7 +93,7 @@ paths:
     options:
       operationId: corsAddFabricante
       x-google-backend:
-        address: http://compras.cppxcode.shop
+        address: http://compras.cppxcode.shop/api/fabricantes
       responses:
         '200':
           description: A successful response
