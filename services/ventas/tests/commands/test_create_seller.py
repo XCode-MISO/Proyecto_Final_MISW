@@ -1,7 +1,7 @@
 from src.commands.create_seller import CreateSeller
 from src.session import Session, engine
 from src.models.model import Base
-from src.models.seller import SeCreateSeller
+from src.models.seller import Seller
 
 class TestCreateSeller():
 
@@ -23,7 +23,7 @@ class TestCreateSeller():
         assert 'id' in seller
         assert 'createdAt' in seller
 
-        sellers = self.session.query(SeCreateSeller).all()
+        sellers = self.session.query(Seller).all()
         assert len(sellers) == 1
         assert sellers[0].nombre == "Maria Lopez"
 
