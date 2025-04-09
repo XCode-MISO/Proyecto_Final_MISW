@@ -16,7 +16,8 @@ class TestCreateSeller():
             "direccion": "Calle 123",
             "telefono": "123-456-789",
             "latitud": 10.1234,
-            "longitud": 20.5678
+            "longitud": 20.5678,
+            "imagen": "<url>"
         }
         seller = CreateSeller(data).execute()
 

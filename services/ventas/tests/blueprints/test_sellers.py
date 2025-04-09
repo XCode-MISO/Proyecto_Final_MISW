@@ -11,13 +11,14 @@ class TestSellers():
     def test_create_client(self):
         with app.test_client() as test_client:
             response = test_client.post(
-                '/sellers', json={
+                '/api/vendedores', json={
                     "nombre": "Maria Lopez",
                     "correo": "mlopez@gmail.com",
                     "direccion": "Calle 123",
                     "telefono": "123-456-789",
                     "latitud": 10.1234,
-                    "longitud": 20.5678
+                    "longitud": 20.5678,
+                    "imagen": "<img>"
                 }
             )
             response_json = json.loads(response.data)

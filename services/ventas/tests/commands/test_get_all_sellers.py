@@ -17,7 +17,8 @@ class TestGetAllSellers():
             "direccion": "Avenida Siempre Viva 123",
             "telefono": "111-222-333",
             "latitud": 15.6789,
-            "longitud": 25.9876
+            "longitud": 25.9876,
+            "imagen": "<url>"
         }
         self.seller_data_2 = {
             "nombre": "Ana Torres",
@@ -25,7 +26,8 @@ class TestGetAllSellers():
             "direccion": "Calle Falsa 456",
             "telefono": "444-555-666",
             "latitud": 12.3456,
-            "longitud": 34.5678
+            "longitud": 34.5678,
+            "imagen": "<url>"
         }
         CreateSeller(self.seller_data_1).execute()
         CreateSeller(self.seller_data_2).execute()
