@@ -5,7 +5,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { RegistrarVendedorProps, RegistrarVendedorResponse, VendedorAddService } from './vendedor-add.service';
+import { RegistrarVendedorProps, RegistrarVendedorResponse, VendedorService } from '../vendedor.service';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
@@ -56,7 +56,7 @@ export class VendedorAddComponent {
 
   registroResponse?: Observable<RegistrarVendedorResponse>
   
-  private vendedorAddService = inject(VendedorAddService)
+  private vendedorAddService = inject(VendedorService)
 
   private router: Router = inject(Router)
 

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Cliente } from '../../routes/routes.component';
 
 export type RegistrarVendedorResponse = {
   id: string
@@ -19,9 +20,9 @@ export type RegistrarVendedorProps = {
 @Injectable({
   providedIn: 'root'
 })
-export class VendedorAddService {
+export class VendedorService {
 
-  apiUrl = `http://localhost:5000`
+  apiUrl = `https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api`
 
   private http = inject(HttpClient)
 
@@ -30,7 +31,15 @@ export class VendedorAddService {
   }
 
   registrarVendedor(props: RegistrarVendedorProps) {
-    return this.http.post<RegistrarVendedorResponse>(`${this.apiUrl}/api/vendedores`, props)
+    return this.http.post<RegistrarVendedorResponse>(`${this.apiUrl}/vendedores`, props)
+  }
+
+  getVendedores() {
+    return this.http.get<Cliente[]>(`${this.apiUrl}/vendedores`)
+  }
+
+  getClientes() {
+    return this.http.get<Cliente[]>(`${this.apiUrl}/clients`)
   }
 
 }
