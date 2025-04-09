@@ -8,6 +8,8 @@ import { FabricantesListarComponent } from './pages/fabricantes/fabricantes-list
 import { FabricantesCrearComponent } from './pages/fabricantes/fabricantes-crear/fabricantes-crear.component'
 import { ProductosCargarComponent } from './pages/productos/productos-cargar/productos-cargar.component';
 import { GestionFabricantesComponent } from './pages/fabricantes/gestion-fabricantes/gestion-fabricantes.component';
+import { MenuComponent } from './pages/ventas/menu/menu.component';
+import { VendedorAddComponent } from './pages/ventas/vendedor/vendedor-add/vendedor-add.component';
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   {
@@ -32,5 +34,7 @@ export const routes: Routes = [
   { path: 'fabricantes/crear',component: FabricantesCrearComponent },
   { path: 'fabricantes/menu',component: GestionFabricantesComponent },
   { path: 'productos/crear',component: ProductosCargarComponent },
+  { path: 'ventas',component: MenuComponent },
+  { path: 'ventas/vendedor/add',component: VendedorAddComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];

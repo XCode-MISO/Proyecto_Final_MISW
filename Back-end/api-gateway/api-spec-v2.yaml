@@ -437,3 +437,19 @@ paths:
       x-google-backend:
         address: "http://ventas.cppxcode.shop/visits"
     
+  /api/vendedores:
+    post:
+        operationId: "crearVendedor"
+        summary: Crear Vendedor nueva
+        responses:
+            200:
+            description: Vendedor nueva creada correctamente
+        x-google-backend:
+            address: "http://ventas.cppxcode.shop/vendedores"
+    options:
+        operationId: corsCrearVendedor
+        x-google-backend:
+            address: http://ventas.cppxcode.shop/vendedores
+        responses:
+            '200':
+            description: A successful response
