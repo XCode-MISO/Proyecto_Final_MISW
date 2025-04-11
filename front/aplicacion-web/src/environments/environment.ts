@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: '/api'
+  apiUrl: 'https://microservicios-gateway-1qkjvfz9.uc.gateway.dev'
 };

@@ -9,6 +9,8 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { catchError, Observable } from 'rxjs';
 import { Parada, RouteListService } from '../route-list/route-list.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { VendedorService } from '../../ventas/vendedor/vendedor.service';
+import { AsyncPipe } from '@angular/common';
 
 export type UpdateRoute = Route
 
@@ -27,7 +29,8 @@ export type AddStopToRoute = {
     MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AsyncPipe
   ],
   templateUrl: './stop-add.component.html',
   styleUrl: './stop-add.component.css',
@@ -36,39 +39,13 @@ export type AddStopToRoute = {
 export class StopAddComponent {
 
   baseRoute?: Route
-  @Input()
   route_id?: string
 
-  clientes: Cliente[] = [
-    {
-      id: "1",
-      nombre: "Cliente1",
-      direccion: "Cra. 11, 82-71, Bogotá, Colombia"
-    },
-    {
-      id: "2",
-      nombre: "Cliente 2",
-      direccion: "Calle 149, 16-56, Bogotá, Colombia"
-    },
-    {
-      id: "3",
-      nombre: "Cliente 3",
-      direccion: "Cra. 11, 82-71, Bogotá, Colombia"
-    },
-  ]
+  clientes?: Observable<Cliente[]>
+  clientesDTO?: Cliente[]
 
-  vendedores: Vendedor[] = [
-    {
-      id: "1",
-      nombre: "Vendedor 1",
-      direccion: "Cl. 81 # 13 05, Bogotá"
-    },
-    {
-      id: "2",
-      nombre: "Vendedor 2",
-      direccion: "Cra. 15 #78-33, Bogotá"
-    },
-  ]
+  vendedores?: Observable<Vendedor[]>
+  vendedoresDTO?: Vendedor[]
 
   crearParadaForm = new FormGroup({
     vendedor: new FormControl(''),
@@ -80,13 +57,28 @@ export class StopAddComponent {
   router: Router = inject(Router)
 
   routeService: RouteListService = inject(RouteListService)
+  vendedorService: VendedorService = inject(VendedorService)
 
   constructor(private activatedRoute: ActivatedRoute) {
+    this.vendedores = this.getVendedores()
+    this.clientes = this.getClientes()
   }
 
   ngOnInit() {
     this.route_id = this.activatedRoute.snapshot.paramMap.get("id") || ""
     this.routeService.getRoute(this.route_id).subscribe(this.getRoute.bind(this))
+  }
+  
+  getVendedores() {
+    const obs = this.vendedorService.getVendedores()
+    obs.subscribe((r) => [this.vendedoresDTO = r])
+    return obs
+  }
+
+  getClientes() {
+    const obs = this.vendedorService.getClientes()
+    obs.subscribe((r) => [this.clientesDTO = r])
+    return obs
   }
 
   getRoute(route: Route) {
@@ -97,8 +89,8 @@ export class StopAddComponent {
     const formVal = this.crearParadaForm.value
     const fecha = formVal.fecha
     const nombre = formVal.nombre
-    const vendedor = this.vendedores.find(c => c.nombre === formVal.vendedor)
-    const cliente = this.clientes.find(c => c.nombre === formVal.cliente)
+    const vendedor = this.vendedoresDTO!!.find(c => c.id === formVal.vendedor)
+    const cliente = this.clientesDTO!!.find(c => c.id === formVal.cliente)
 
     if (!fecha || !vendedor || !cliente || !nombre) {
       return
@@ -107,7 +99,7 @@ export class StopAddComponent {
       console.error("NO BASE ROUTE")
     }
     this.addStopToRoute({
-      id: this.baseRoute!!.id,
+      id: this.route_id!!,
       parada: { cliente, vendedor, nombre, fecha }
     })
   }

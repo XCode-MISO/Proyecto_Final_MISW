@@ -7,7 +7,7 @@ from logistica.infrastructure.db.model import Route as RouteDB
 
 comandos_bp = Blueprint('comandos', __name__)
 
-@comandos_bp.route('/generate-route', methods=['POST'])
+@comandos_bp.route('/api/generate-route', methods=['POST'])
 def generate_route():
   try:
     body = request.json
@@ -22,7 +22,7 @@ def generate_route():
      return e.as_http_error()
   
 
-@comandos_bp.route('/update-route', methods=['PUT'])
+@comandos_bp.route('/api/update-route', methods=['PUT'])
 def update_route():
   
   try:
@@ -48,7 +48,7 @@ class MyException(Exception):
         return Response(str(self), self.code)
     
     
-@comandos_bp.route('/add-stop-route', methods=['POST'])
+@comandos_bp.route('/api/add-stop-route', methods=['POST'])
 def add_stop_route():
   
   try:

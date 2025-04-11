@@ -22,6 +22,7 @@ httpmock = "*"
 httmock = "*"
 python-dateutil= "*"
 faker = "*"
+flask_cors = "*"
 
 [dev-packages]
 pytest = "*"

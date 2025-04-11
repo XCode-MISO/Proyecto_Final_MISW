@@ -21,8 +21,8 @@
           <mat-form-field  appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
             <mat-label i18n>Nombre </mat-label>
             <mat-select formControlName="vendedor">
-              @for (vendedor of vendedores; track vendedor) {
-                <mat-option value="{{vendedor.nombre}}">{{vendedor.nombre}}</mat-option>
+              @for (vendedor of vendedores | async; track vendedor) {
+                <mat-option value="{{vendedor.id}}">{{vendedor.nombre}}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -34,8 +34,8 @@
           <mat-form-field appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
             <mat-label i18n>Nombre </mat-label>
             <mat-select formControlName="cliente">
-              @for (cliente of clientes; track cliente) {
-                <mat-option value={{cliente.nombre}}>{{cliente.nombre}}</mat-option>
+              @for (cliente of clientes | async; track cliente) {
+                <mat-option value={{cliente.id}}>{{cliente.nombre}}</mat-option>
               }
             </mat-select>
           </mat-form-field>

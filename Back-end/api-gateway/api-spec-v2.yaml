@@ -7,6 +7,9 @@ schemes:
   - "https"
 security:
   - firebase: []
+x-google-endpoints:
+  - name: "microservicios-gateway-1qkjvfz9.uc.gateway.dev"
+    allowCors: True
 paths:
   /api/compras/detalle:
     post:
@@ -38,6 +41,13 @@ paths:
           description: "Detalle de compra creado"
       x-google-backend:
         address: "http://compras.cppxcode.shop/api/compras/detalle"
+    options:
+      operationId: corsCreateCompraDetalle
+      x-google-backend:
+        address: http://compras.cppxcode.shop
+      responses:
+        '200':
+          description: A successful response
 
   /api/fabricantes:
     get:
@@ -51,6 +61,42 @@ paths:
           description: "Lista de fabricantes"
       x-google-backend:
         address: "http://compras.cppxcode.shop/api/fabricantes"
+    post:
+      operationId: "createFabricante"
+      summary: "Crear fabricante"
+      description: "Crea un detalle de compra en el sistema de compras."
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Datos del fabricante"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              nombre:
+                type: "string"
+              correo:
+                type: "string"
+              telefono:
+                type: "string"
+              empresa:
+                type: "string"
+      responses:
+        201:
+          description: "Fabricante creado"
+      x-google-backend:
+        address: "http://compras.cppxcode.shop/api/fabricantes"
+    options:
+      operationId: corsAddFabricante
+      x-google-backend:
+        address: http://compras.cppxcode.shop/api/fabricantes
+      responses:
+        '200':
+          description: A successful response
 
   /api/inventarios/productos:
     get:
@@ -65,7 +111,7 @@ paths:
       x-google-backend:
         address: "http://inventarios.cppxcode.shop/api/inventarios/productos"
   
-  /api/rutas:
+  /api/route:
     get:
       operationId: "listRutas"
       summary: "Listas rutas que han sido generadas"
@@ -76,9 +122,9 @@ paths:
         200:
           description: "Lista de rutas generadas"
       x-google-backend:
-        address: "http://logistica.cppxcode.shop/route"
+        address: "http://logistica.cppxcode.shop/api/route"
 
-  /api/rutas/{route_id}:
+  /api/route/{route_id}:
     get:
       operationId: "getRuta"
       summary: "Obtener una rutas que ha sido generada"
@@ -97,7 +143,8 @@ paths:
         404:
           description: "No se encontró esa ruta"
       x-google-backend:
-        address: "http://logistica.cppxcode.shop/route"
+        address: "http://logistica.cppxcode.shop"
+        path_translation: APPEND_PATH_TO_ADDRESS
         
   /api/add-stop-route:
     post:
@@ -164,7 +211,14 @@ paths:
         500:
           description: Server error
       x-google-backend:
-        address: "http://logistica.cppxcode.shop/add-stop-route"
+        address: "http://logistica.cppxcode.shop/api/add-stop-route"
+    options:
+      operationId: corsAddStop
+      x-google-backend:
+        address: http://logistica.cppxcode.shop
+      responses:
+        '200':
+          description: A successful response
   
   /api/generate-route:
     post:
@@ -225,10 +279,17 @@ paths:
         404:
           description: "No se encontró esa ruta"
       x-google-backend:
-        address: "http://logistica.cppxcode.shop/generate-route"
-
+        address: "http://logistica.cppxcode.shop/api/generate-route"
+    options:
+      operationId: corsGenerateRoute
+      x-google-backend:
+        address: http://logistica.cppxcode.shop
+      responses:
+        '200':
+          description: A successful response
   /api/productos:
     get:
+      operationId: "getProductos"
       summary: Obtener lista de productos
       responses:
         200:
@@ -253,6 +314,7 @@ paths:
 
   /api/clientes:
     get:
+      operationId: "getClientes"
       summary: Obtener lista de clientes
       responses:
         200:
@@ -272,117 +334,133 @@ paths:
 
   /api/pedidos:
     get:
+      operationId: "getPedidos"
       summary: Obtener lista de pedidos
       responses:
         200:
           description: Lista de pedidos
-          schema:
-            type: array
-            items:
-              type: object
-              properties:
-                id:
-                  type: string
-                  format: uuid
-                name:
-                  type: string
-                price:
-                  type: number
-                  format: float
-                state:
-                  type: string
-                deliveryDate:
-                  type: string
-                  format: date
-                createdAt:
-                  type: string
-                  format: date-time
-                  nullable: true
-                client:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      format: uuid
-                    name:
-                      type: string
       x-google-backend:
         address: "http://pedidos.cppxcode.shop/pedidos"
 
   /api/create_pedido:
     post:
+      operationId: "crearPedido"
       summary: Crear un nuevo pedido
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            type: object
-            required:
-              - name
-              - clientId
-              - products
-              - price
-              - state
-              - deliveryDate
-            properties:
-              name:
-                type: string
-              clientId:
-                type: string
-                format: uuid
-              products:
-                type: array
-                items:
-                  type: object
-                  required:
-                    - id
-                    - amount
-                  properties:
-                    id:
-                      type: string
-                      format: uuid
-                    amount:
-                      type: integer
-              price:
-                type: number
-                format: float
-              state:
-                type: string
-              deliveryDate:
-                type: string
-                format: date
       responses:
         200:
           description: Pedido creado correctamente
-          schema:
-            type: object
-            properties:
-              id:
-                type: string
-                format: uuid
-              name:
-                type: string
-              price:
-                type: number
-                format: float
-              state:
-                type: string
-              deliveryDate:
-                type: string
-                format: date
-              createdAt:
-                type: string
-                format: date-time
-                nullable: true
-              client:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                  name:
-                    type: string
       x-google-backend:
         address: "http://pedidos.cppxcode.shop/create_pedido"
+    options:
+      operationId: corsCreatePedido
+      x-google-backend:
+        address: http://pedidos.cppxcode.shop
+      responses:
+        '200':
+          description: A successful response
 
+  /api/clients:
+    post:
+      operationId: "crearCliente"
+      summary: Crear Visita nueva
+      responses:
+        200:
+          description: Visita nueva creada correctamente
+      x-google-backend:
+        address: "http://ventas.cppxcode.shop/clients"
+    options:
+      operationId: corsCrearCliente
+      x-google-backend:
+        address: http://ventas.cppxcode.shop
+      responses:
+        '200':
+          description: A successful response
+    get:
+      operationId: "listclientes"
+      summary: "Listas clientes que han sido generadas"
+      description: "Devuleve la lista de clientes que se han generado"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Lista de clientes generadas"
+      x-google-backend:
+        address: "http://ventas.cppxcode.shop/clients"
+
+  /api/clients/{client_id}:
+    get:
+      operationId: "getCliente"
+      summary: "Obtener una Clientes que ha sido generada"
+      description: "Devuleve la Cliente que se han generado"
+      produces: 
+        - "application/json"
+      parameters:        
+      - in: path
+        name: client_id
+        type: string
+        required: true
+        description: String ID de la Cliente
+      responses:
+        200:
+          description: "Lista de Clientes generadas"
+        404:
+          description: "No se encontró esa Cliente"
+      x-google-backend:
+        address: "http://ventas.cppxcode.shop"
+        path_translation: APPEND_PATH_TO_ADDRESS
+
+  /api/visits:
+    post:
+      operationId: "crearVisita"
+      summary: Crear Visita nueva
+      responses:
+        200:
+          description: Visita nueva creada correctamente
+      x-google-backend:
+        address: "http://ventas.cppxcode.shop/visits"
+    options:
+      operationId: corsCrearVisita
+      x-google-backend:
+        address: http://ventas.cppxcode.shop/visits
+      responses:
+        '200':
+          description: A successful response
+    get:
+      operationId: "listvisitas"
+      summary: "Listas visitas que han sido generadas"
+      description: "Devuleve la lista de visitas que se han generado"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Lista de visitas generadas"
+      x-google-backend:
+        address: "http://ventas.cppxcode.shop/visits"
+    
+  /api/vendedores:
+    post:
+      operationId: "crearVendedor"
+      summary: Crear Vendedor nueva
+      responses:
+        200:
+          description: Visita nueva creada correctamente
+      x-google-backend:
+        address: "http://ventas.cppxcode.shop/api/vendedores"
+    options:
+      operationId: corsCrearVendedor
+      x-google-backend:
+        address: http://ventas.cppxcode.shop/api/vendedores
+      responses:
+        '200':
+          description: A successful response
+    get:
+      operationId: "listvendedores"
+      summary: "Listas vendedores que han sido generadas"
+      description: "Devuleve la lista de vendedores que se han generado"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Lista de vendedores generadas"
+      x-google-backend:
+        address: "http://ventas.cppxcode.shop/api/vendedores"

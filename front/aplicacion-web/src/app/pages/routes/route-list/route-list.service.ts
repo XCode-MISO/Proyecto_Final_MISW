@@ -26,7 +26,7 @@ export type Ruta = {
 })
 export class RouteListService {
 
-  apiUrl = `${environment.apiUrl}`
+  apiUrl = `https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api`
 
   private http = inject(HttpClient)
 
@@ -34,7 +34,7 @@ export class RouteListService {
 
   getRoutes(){
     return this.http
-    .get(`${this.apiUrl}/rutas`)
+    .get(`${this.apiUrl}/route`)
     .pipe(
       catchError((e, source) => {
         console.error(e)
@@ -48,7 +48,7 @@ export class RouteListService {
   
   getRoute(route_id: string){
     return this.http
-    .get(`${this.apiUrl}/rutas/${route_id}`)
+    .get(`${this.apiUrl}/route/${route_id}`)
     .pipe(
       catchError((e, source) => {
         console.error(e)

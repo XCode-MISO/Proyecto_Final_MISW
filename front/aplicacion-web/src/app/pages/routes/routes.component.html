@@ -9,36 +9,33 @@
       </button>
     </div>
     <div class="route-list">
-      @for (parada of route?.paradas; track $index; let idx = $index) {
-      <div class="route-row">
-        <span class="route-row-text">
-          {{parada.nombre}}
-        </span>
-         <span class="route-row-text" i18n>
-          Desplazamiento: {{Math.ceil(getPedidoDuration(getPedidoAndLeg((route?.paradas && route!!.paradas.length > 0) ? route!!.paradas : [], route?.mapsResponse, $index)))}} min
-         </span >
-        <span class="route-row-text">
-          {{parada.fecha}}
-        </span>
-      </div>
-      }
-    </div>
-    <div class="map-container">
-      @if (mapLoaded){
-      <google-map class="map" [width]="'100%'" [center]="center" [zoom]="zoom" [options]="{}" (mapInitialized)="onMapLoad($event)">
-        @if (route && encoding){
-          <map-polyline [path]="route_path" [options]="{
-                strokeColor: 'blue',
-                strokeOpacity: 0.5,
-                strokeWeight: 4
-              }" />
+      @if( route | async; as route){
+        @for (parada of route.paradas; track $index; let idx = $index) {
+        <div class="route-row">
+          <span class="route-row-text">
+            {{parada.nombre}}
+          </span>
+           <span class="route-row-text" i18n>
+            Desplazamiento: {{Math.ceil(getPedidoDuration(getPedidoAndLeg((route?.paradas && route!!.paradas.length > 0) ? route!!.paradas : [], route?.mapsResponse, $index)))}} min
+           </span >
+          <span class="route-row-text">
+            {{parada.fecha}}
+          </span>
+        </div>
         }
-        @if (mapMarkers && mapMarkers.length > 0) {
-          @for (marker of mapMarkers; track marker; let idx = $index) {
-            <map-marker [position]="marker.start_location" [title]="marker.start_address" [label]="`${idx}`"/>
-          }
-        }
-      </google-map>
+        <div class="map-container">
+          @if(route.mapsResponse){
+          <google-map class="map" [width]="'100%'" [center]="getCenter(route.mapsResponse[0].bounds)" (mapInitialized)="fitBounds(route, $event)" >
+            @for (marker of getMarkers(route.mapsResponse[0].legs); track marker.position){
+              <map-marker 
+                [position]="marker.position" 
+                [title]="marker.title" 
+                [label]="marker.label"  
+              />
+            }
+            <map-polyline [options]="getPath(route.mapsResponse)"/>
+          </google-map>}
+        </div>
       }
     </div>
   </div>

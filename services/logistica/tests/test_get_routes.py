@@ -39,7 +39,7 @@ def test_get_route(client):
 def test_get_routes(client):
     generate_route(client)
     response = client.get(
-            f'/route',
+            f'/api/route',
             content_type='application/json'
         )
     assert response.status_code == 200

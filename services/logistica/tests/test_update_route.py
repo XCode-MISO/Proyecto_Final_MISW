@@ -68,7 +68,7 @@ def update_route(client):
         "fin": "Cl. 114a #45-78, Bogota, Colombia",
         "nombre": "Ruta 1"
     }
-    response = client.post('/generate-route', data=json.dumps(data),
+    response = client.post('/api/generate-route', data=json.dumps(data),
                            content_type='application/json')
     return response
 
@@ -81,7 +81,7 @@ def test_update_route(client):
 
     id = route_resp_json["route_id"]
     response = client.get(
-            f'/route/{id}',
+            f'/api/route/{id}',
             content_type='application/json'
         )
     

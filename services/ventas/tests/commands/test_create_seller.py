@@ -1,0 +1,33 @@
+from src.commands.create_seller import CreateSeller
+from src.session import Session, engine
+from src.models.model import Base
+from src.models.seller import Seller
+
+class TestCreateSeller():
+
+    def setup_method(self):
+        Base.metadata.create_all(engine)
+        self.session = Session()
+
+    def test_create_seller(self):
+        data = {
+            "nombre": "Maria Lopez",
+            "correo": "mlopez@gmail.com",
+            "direccion": "Calle 123",
+            "telefono": "123-456-789",
+            "latitud": 10.1234,
+            "longitud": 20.5678,
+            "imagen": "<url>"
+        }
+        seller = CreateSeller(data).execute()
+
+        assert 'id' in seller
+        assert 'createdAt' in seller
+
+        sellers = self.session.query(Seller).all()
+        assert len(sellers) == 1
+        assert sellers[0].nombre == "Maria Lopez"
+
+    def teardown_method(self):
+        self.session.close()
+        Base.metadata.drop_all(bind=engine)
