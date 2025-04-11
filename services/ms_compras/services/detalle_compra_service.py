@@ -3,7 +3,6 @@
 import os
 import json
 import sys
-import traceback
 import logging
 from models.db import db
 from models.compra import Compra
