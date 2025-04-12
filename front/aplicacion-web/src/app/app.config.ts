@@ -6,6 +6,11 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideNativeDateAdapter } from '@angular/material/core';
 
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+
+import keys from '../../keys.json'
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }), 
@@ -14,6 +19,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withFetch(),
     ),
-    provideNativeDateAdapter()
+    provideNativeDateAdapter(),
+    provideFirebaseApp(() => initializeApp(keys)),
+    provideFirestore(() => getFirestore()),
   ]
 };

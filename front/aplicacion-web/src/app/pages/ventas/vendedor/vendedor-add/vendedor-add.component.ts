@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { Auth, sendPasswordResetEmail } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-vendedor-add',
@@ -41,27 +42,29 @@ export class VendedorAddComponent {
     direccion: new FormControl('', [Validators.required, Validators.minLength(4)]),
   });
 
-  get nombre(){
+  get nombre() {
     return this.crearVendedorForm.get("nombre")
   }
-  get correo(){
+  get correo() {
     return this.crearVendedorForm.get("correo")
   }
-  get telefono(){
+  get telefono() {
     return this.crearVendedorForm.get("telefono")
   }
-  get direccion(){
+  get direccion() {
     return this.crearVendedorForm.get("direccion")
   }
 
   registroResponse?: Observable<RegistrarVendedorResponse>
-  
+
   private vendedorAddService = inject(VendedorService)
 
   private router: Router = inject(Router)
 
+  private auth = inject(Auth)
+
   onSubmit() {
-    
+
     const formVal = this.crearVendedorForm.value
     const nombre = formVal.nombre
     const correo = formVal.correo
@@ -82,8 +85,9 @@ export class VendedorAddComponent {
   }
   crearVendedor(params: RegistrarVendedorProps) {
     this.registroResponse = this.vendedorAddService.registrarVendedor(params)
-    this.registroResponse.subscribe((result) => {
-      if (result.id){
+    this.registroResponse.subscribe(async (result) => {
+      if (result.id) {
+        await sendPasswordResetEmail(this.auth, params.correo);
         this.router.navigate(["/ventas"])
       }
     })
