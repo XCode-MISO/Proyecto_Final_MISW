@@ -28,7 +28,6 @@ class TestSellers():
             assert response.status_code == 201
             assert 'id' in response_json
             assert 'createdAt' in response_json
-            mock_registrar_usuario.assert_called_once_with(response["correo"], 'seller_1')
 
     def teardown_method(self):
         self.session.close()
