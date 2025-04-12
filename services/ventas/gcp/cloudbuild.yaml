@@ -1,7 +1,7 @@
 steps:
   - name: Create Firebase keys files
     run: |
-      echo _FIREBASE_ADMIN_KEYS | base64 -d > /services/ventas/keys.json
+      echo _FIREBASE_ADMIN_KEYS | base64 -d > ./services/ventas/keys.json
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'build'
