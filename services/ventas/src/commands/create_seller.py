@@ -1,4 +1,4 @@
-from services.ventas.src.commands.util import registrarUsuarioEnFirebase
+from ..commands.util import registrarUsuarioEnFirebase
 from .base_command import BaseCommannd
 from ..models.seller import Seller, SellerSchema, CreatedSellerJsonSchema
 from ..session import Session
