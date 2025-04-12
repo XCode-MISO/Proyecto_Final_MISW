@@ -5,3 +5,7 @@ class ApiError(Exception):
 class IncompleteParams(ApiError):
     code = 400
     description = "Bad request"
+
+class CodigoNoGenerado(ApiError):
+    code = 500
+    description = "ID not generated"
