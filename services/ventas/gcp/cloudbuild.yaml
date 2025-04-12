@@ -1,7 +1,7 @@
 steps:
   - name: Create Firebase keys files
         run: |
-          echo FIREBASE_ADMIN_KEYS | base64 -d > /services/ventas/cypress.json
+          echo FIREBASE_ADMIN_KEYS | base64 -d > /services/ventas/keys.json
       src: services/ventas
   - name: 'gcr.io/cloud-builders/docker'
     args:
