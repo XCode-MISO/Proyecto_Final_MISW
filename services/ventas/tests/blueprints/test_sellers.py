@@ -1,3 +1,4 @@
+from unittest.mock import patch
 from src.session import Session, engine
 from src.models.model import Base
 from src.main import app
