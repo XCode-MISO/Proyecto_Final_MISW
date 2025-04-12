@@ -4,6 +4,7 @@ from src.commands.create_visit import CreateVisit
 from src.session import Session, engine
 from src.models.model import Base
 from src.models.visit import Visit
+from unittest.mock import patch
 
 class TestGetAllVisits():
 
@@ -20,7 +21,8 @@ class TestGetAllVisits():
             "latitud": 10.1234,
             "longitud": 20.5678
         }
-        self.client = CreateClient(self.client_data).execute()
+        with patch('src.commands.create_client.registrarUsuarioEnFirebase', return_value="xxxxxxxxxxxxxx"):
+            self.client = CreateClient(self.client_data).execute()
 
         # Create sample visits
         self.visit_data_1 = {

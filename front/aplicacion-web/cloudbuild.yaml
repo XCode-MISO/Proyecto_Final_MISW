@@ -1,4 +1,7 @@
 steps:
+  - name: Create Firebase keys files
+    run: |
+      echo __FIREBASE_ADMIN_KEYS | base64 -d > ./front/aplicacion-web/keys.json
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:

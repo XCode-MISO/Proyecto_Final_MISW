@@ -14,7 +14,7 @@ import { FooterComponent } from "./footer/footer.component";
     GoogleMapsModule,
     LeftSidebarComponent,
     RightSidebarComponent,
-    FooterComponent
+    FooterComponent,
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

@@ -1,3 +1,4 @@
+from unittest.mock import patch
 from src.session import Session, engine
 from src.models.model import Base
 from src.main import app
@@ -8,7 +9,8 @@ class TestSellers():
         Base.metadata.create_all(engine)
         self.session = Session()
 
-    def test_create_client(self):
+    @patch('src.commands.create_seller.registrarUsuarioEnFirebase', return_value="seller_1")
+    def test_create_client(self, mock_registrar_usuario):
         with app.test_client() as test_client:
             response = test_client.post(
                 '/api/vendedores', json={

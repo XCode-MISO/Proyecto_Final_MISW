@@ -6,6 +6,8 @@ import com.example.sigccp.activity.clients.data.model.Client
 import com.example.sigccp.activity.clients.data.model.ClientPost
 import com.example.sigccp.activity.clients.data.model.VisitRequest
 import com.example.sigccp.activity.clients.repository.ClienteRepository
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -63,7 +65,9 @@ class ClienteViewModel: ViewModel() {
             _isLoading.value = true
             try {
                 val response = repository.postCliente(ClientPost(nombre, correo, direccion, telefono, latitud, longitud))
+
                 if (response.isSuccessful) {
+                    Firebase.auth.sendPasswordResetEmail(correo)
                     onSuccess()
                 } else {
                     onError("Error en el envío: ${response.errorBody()?.string()}")
