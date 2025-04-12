@@ -10,7 +10,7 @@ class TestCreateSeller():
         Base.metadata.create_all(engine)
         self.session = Session()
 
-    @patch('src.commands.create_client.registrarUsuarioEnFirebase', return_value="seller_1")
+    @patch('src.commands.create_seller.registrarUsuarioEnFirebase', return_value="seller_1")
     def test_create_seller(self, mock_registrar_usuario):
         data = {
             "nombre": "Maria Lopez",

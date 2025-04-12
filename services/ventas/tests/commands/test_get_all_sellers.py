@@ -30,9 +30,9 @@ class TestGetAllSellers():
             "longitud": 34.5678,
             "imagen": "<url>"
         }
-        with patch('src.commands.create_client.registrarUsuarioEnFirebase', return_value="vendedor_1"):
+        with patch('src.commands.create_seller.registrarUsuarioEnFirebase', return_value="vendedor_1"):
             CreateSeller(self.seller_data_1).execute()
-        with patch('src.commands.create_client.registrarUsuarioEnFirebase', return_value="vendedor_2"):
+        with patch('src.commands.create_seller.registrarUsuarioEnFirebase', return_value="vendedor_2"):
             CreateSeller(self.seller_data_2).execute()
 
     def test_get_all_sellers(self):
