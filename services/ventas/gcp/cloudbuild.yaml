@@ -1,4 +1,11 @@
 steps:
+  - name: create-json
+    id: create-json
+    uses: jsdaniell/create-json@1.1.2
+    with:
+      name: "keys.json"
+      json: _FIREBASE_ADMIN_KEYS
+      src: services/ventas
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'build'
