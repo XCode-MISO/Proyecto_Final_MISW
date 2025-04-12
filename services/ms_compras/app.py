@@ -2,7 +2,7 @@
 from flask import Flask
 from models.db import init_db
 from apis.fabricante_api import fabricante_bp
-from apis.detalle_compra_api import detalle_compra_bp
+from apis.producto_api import producto_bp
 from werkzeug.exceptions import HTTPException
 import os
 import logging
@@ -25,7 +25,11 @@ def create_app():
         db_name = os.getenv('DB_NAME', 'compras_db')
         app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
 
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        "pool_recycle": 300, 
+        "pool_pre_ping": True  
+        }
     
     init_db(app)
     
@@ -37,7 +41,7 @@ def create_app():
 
     # Registrar blueprints
     app.register_blueprint(fabricante_bp, url_prefix='/api/fabricantes')
-    app.register_blueprint(detalle_compra_bp, url_prefix='/api/compras/detalle')
+    app.register_blueprint(producto_bp, url_prefix='/api/productos')
     
     @app.route("/")
     def root_path():

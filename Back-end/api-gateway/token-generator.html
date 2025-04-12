@@ -29,8 +29,20 @@
       
       try {
         const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
-        const token = await userCredential.user.getIdToken();
-        document.getElementById('token').textContent = token;
+        
+
+        
+
+        const tokenResult = await userCredential.user.getIdTokenResult();
+        
+        const role = tokenResult.claims.role; 
+        const token = tokenResult.token;
+
+        document.getElementById('token').textContent = "Token: " + token + "\nRol: " + role;
+
+
+
+
       } catch (error) {
         document.getElementById('token').textContent = 'Error: ' + error.message;
       }

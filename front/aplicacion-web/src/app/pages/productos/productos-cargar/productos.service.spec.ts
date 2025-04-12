@@ -8,22 +8,34 @@ describe('ProductosService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
+      imports: [HttpClientTestingModule],
+      providers: [ProductosService]
     });
     service = TestBed.inject(ProductosService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
-  afterEach(() => httpMock.verify());
+  afterEach(() => {
+    httpMock.verify(); 
+  });
 
-  it('should POST producto', () => {
-    const prod: ProductoDto = { nombre: 'P', fabricanteId: 1, cantidad: 5, precio: 3 };
+  it('debe enviar un POST para cargar producto', () => {
+    const productoMock: ProductoDto = {
+      nombre: 'Producto de prueba',
+      fabricanteId: 1,
+      cantidad: 10,
+      precio: 100
+    };
 
-    service.cargarProducto(prod).subscribe();
+    service.cargarProducto(productoMock).subscribe(response => {
+      expect(response).toBeNull(); 
+    });
 
-    const req = httpMock.expectOne('/api/compras/detalle');
-    expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual(prod);
-    req.flush(null);
+    const req = httpMock.expectOne((req) =>
+      req.method === 'POST' && req.url.includes('compras/detalle')
+    );
+
+    expect(req.request.body).toEqual(productoMock);
+    req.flush(null); 
   });
 });

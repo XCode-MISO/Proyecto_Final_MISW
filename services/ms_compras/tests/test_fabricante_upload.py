@@ -19,10 +19,7 @@ def client():
         # En caso de usar SQLite en memoria, es recomendable hacer drop_all() y create_all()
         # si se quiere partir de una base limpia. (Ten en cuenta que si existen restricciones en cascada,
         # drop_all() podría fallar. En tal caso, podrías omitir drop_all())
-        try:
-            db.drop_all()
-        except Exception:
-            pass
+      
         db.create_all()
     with app.test_client() as client:
         yield client

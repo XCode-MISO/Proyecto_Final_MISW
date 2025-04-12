@@ -54,7 +54,6 @@ def listar_fabricantes():
 
 @fabricante_bp.route('/upload', methods=['POST'])
 def upload_fabricantes():
-    # Verificar que se haya enviado un archivo
     file = request.files.get("file")
     if not file:
         return jsonify({"error": "No se proporcionó ningún archivo"}), 400
