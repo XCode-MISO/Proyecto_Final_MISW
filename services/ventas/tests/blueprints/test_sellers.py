@@ -10,7 +10,7 @@ class TestSellers():
         self.session = Session()
 
     @patch('src.commands.create_seller.registrarUsuarioEnFirebase', return_value="seller_1")
-    def test_create_client(self):
+    def test_create_client(self, mock_registrar_usuario):
         with app.test_client() as test_client:
             response = test_client.post(
                 '/api/vendedores', json={
@@ -28,6 +28,7 @@ class TestSellers():
             assert response.status_code == 201
             assert 'id' in response_json
             assert 'createdAt' in response_json
+            mock_registrar_usuario.assert_called_once_with(data["correo"], 'seller_1')
 
     def teardown_method(self):
         self.session.close()
