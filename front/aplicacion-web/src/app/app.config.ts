@@ -10,6 +10,7 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 import keys from '../../keys.json'
+import { getAuth, provideAuth } from '@angular/fire/auth';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,6 +22,6 @@ export const appConfig: ApplicationConfig = {
     ),
     provideNativeDateAdapter(),
     provideFirebaseApp(() => initializeApp(keys)),
-    provideFirestore(() => getFirestore()),
+    provideAuth(() => getAuth()),
   ]
 };
