@@ -27,7 +27,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r services/ventas/requirements.txt
     - name: Get Keys File
-      run: echo ${{ secrets._FIREBASE_ADMIN_KEYS }} | base64 -d > /services/ventas/keys.json
+      run: echo ${{ secrets._FIREBASE_ADMIN_KEYS }} | base64 -d > ./services/ventas/keys.json
     - name: Start PostgreSQL
       run: |
         docker run --name postgres -e POSTGRES_USER=${{vars.DATABASE_USER}} -e POSTGRES_PASSWORD=${{vars.DATABASE_PASSWORD}} -e POSTGRES_DB=${{vars.DATABASE_NAME}}  -p ${{vars.DATABASE_PORT}}:5432 -d postgres 
