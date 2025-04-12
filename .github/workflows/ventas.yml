@@ -41,7 +41,7 @@ jobs:
         DATABASE_PORT: ${{ vars.DATABASE_PORT }}
         DATABASE_URL: ${{ vars.DATABASE_URL }}
       run: |
-        coverage run -m pytest services/ventas
+        coverage run -m pytest
     - name: Coverage Report
       working-directory: services/ventas
       run: |
