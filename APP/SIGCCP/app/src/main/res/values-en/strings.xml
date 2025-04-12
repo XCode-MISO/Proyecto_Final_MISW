@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">SIGCCP</string>
-    <string name="hello">H</string>
+    <string name="hello">Hello</string>
     <string name="welcome_message">Welcome to our app</string>
-    <string name="menuVendedor">!Hello, Seller¡ </string>
-    <string name="ListPedidos">!Your Orders¡ </string>
-    <string name="CrearPedido">!Your Order¡</string>
+    <string name="menuCliente">¡Hello, Client!</string>
+    <string name="menuVendedor">¡Hello, Seller!</string>
+    <string name="ListPedidos">¡Your Orders!</string>
+    <string name="CrearPedido">¡Your Order!</string>
 </resources>

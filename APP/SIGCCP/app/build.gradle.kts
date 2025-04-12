@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     kotlin("kapt")
+    id("com.google.gms.google-services")
 }
 
 hilt {
@@ -72,6 +73,10 @@ dependencies {
     // Maps
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
+
+    //Firebase
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
+    implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
 
     // Testing
     testImplementation(libs.junit)
