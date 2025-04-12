@@ -4,6 +4,7 @@ steps:
     args:
     - '-c'
     - echo $_FIREBASE_ADMIN_KEYS | base64 -d > ./keys.json
+    - echo $PWD
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'build'
