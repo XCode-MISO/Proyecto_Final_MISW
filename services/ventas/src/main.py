@@ -2,6 +2,7 @@ from dotenv import load_dotenv, find_dotenv
 import os
 from pathlib import Path
 from flask_cors import CORS
+#from firebase_init import init_firebase
 
 # Verificar si el archivo .env.development existe antes de cargarlo
 env_path = Path('.env.development')
@@ -22,6 +23,7 @@ app.register_blueprint(client_blueprint)
 app.register_blueprint(seller_blueprint)
 app.register_blueprint(visit_blueprint)
 CORS(app)
+#init_firebase()
 
 Base.metadata.create_all(engine)
 
