@@ -3,7 +3,7 @@ steps:
     entrypoint: bash
     args:
     - '-c'
-    - echo $_FIREBASE_ADMIN_KEYS | base64 -d > ./keys.json && pwd && ls -la
+    - echo $_FIREBASE_ADMIN_KEYS | base64 -d > ./services/ventas/keys.json
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'build'
