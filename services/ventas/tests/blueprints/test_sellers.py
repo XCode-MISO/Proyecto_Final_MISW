@@ -8,6 +8,7 @@ class TestSellers():
         Base.metadata.create_all(engine)
         self.session = Session()
 
+    @patch('src.commands.create_seller.registrarUsuarioEnFirebase', return_value="seller_1")
     def test_create_client(self):
         with app.test_client() as test_client:
             response = test_client.post(
