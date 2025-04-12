@@ -14,7 +14,7 @@ class TestCreateSeller():
     def test_create_seller(self, mock_registrar_usuario):
         data = {
             "nombre": "Maria Lopez",
-            "correo": "mlopez@gmail.com",
+            "correo": "mlopez3@gmail.com",
             "direccion": "Calle 123",
             "telefono": "123-456-789",
             "latitud": 10.1234,
