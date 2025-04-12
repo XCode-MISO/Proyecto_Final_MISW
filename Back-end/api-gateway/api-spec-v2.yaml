@@ -287,50 +287,6 @@ paths:
       responses:
         '200':
           description: A successful response
-  /api/productos:
-    get:
-      operationId: "getProductos"
-      summary: Obtener lista de productos
-      responses:
-        200:
-          description: Lista de productos
-          schema:
-            type: array
-            items:
-              type: object
-              properties:
-                id:
-                  type: string
-                  format: uuid
-                name:
-                  type: string
-                amount:
-                  type: integer
-                price:
-                  type: number
-                  format: float
-      x-google-backend:
-        address: "http://pedidos.cppxcode.shop/productos"
-
-  /api/clientes:
-    get:
-      operationId: "getClientes"
-      summary: Obtener lista de clientes
-      responses:
-        200:
-          description: Lista de clientes
-          schema:
-            type: array
-            items:
-              type: object
-              properties:
-                id:
-                  type: string
-                  format: uuid
-                name:
-                  type: string
-      x-google-backend:
-        address: "http://pedidos.cppxcode.shop/clientes"
 
   /api/pedidos:
     get:
