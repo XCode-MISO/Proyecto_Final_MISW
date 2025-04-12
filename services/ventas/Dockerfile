@@ -9,6 +9,8 @@ COPY requirements.txt ./
 # Instalar dependencias
 RUN pip install --no-cache-dir -r requirements.txt
 
+COPY ./keys.json /app/
+
 # Copiar el código fuente de la aplicación
 COPY src/ ./src
 
