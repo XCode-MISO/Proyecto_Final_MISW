@@ -32,6 +32,7 @@ jobs:
       run: |
         docker run --name postgres -e POSTGRES_USER=${{vars.DATABASE_USER}} -e POSTGRES_PASSWORD=${{vars.DATABASE_PASSWORD}} -e POSTGRES_DB=${{vars.DATABASE_NAME}}  -p ${{vars.DATABASE_PORT}}:5432 -d postgres 
     - name: Test with pytest
+      working-directory: services/ventas
       env:
         FLASK_DEBUG: ${{ vars.FLASK_DEBUG }}
         DATABASE_USER: ${{ vars.DATABASE_USER }}
@@ -42,6 +43,7 @@ jobs:
       run: |
         coverage run -m pytest services/ventas
     - name: Coverage Report
+      working-directory: services/ventas
       run: |
         coverage report
       
