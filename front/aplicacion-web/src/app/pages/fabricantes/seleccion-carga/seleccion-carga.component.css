@@ -1,0 +1,27 @@
+.contenedor-botones {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.btn-carga {
+  background-color: #5c857f; 
+  color: black;             
+  border: none;            
+  border-radius: 24px;      
+  font-weight: bold;
+  font-size: 16px;
+  padding: 12px 24px;
+  margin: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-carga:hover {
+  background-color: #2e4d5f;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}

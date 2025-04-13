@@ -41,7 +41,7 @@ describe('ProductosCargarComponent', () => {
     const comp = fixture.componentInstance;
     comp.ngOnInit();
 
-    comp.form.setValue({ nombre: 'Prod', fabricanteId: 1, cantidad: 10, precio: 5.5 });
+    comp.form.setValue({ nombre: 'Prod', fabricanteId: 1, cantidad: 10, precio: 5.5, moneda: 'USD', bodega: 'Bodega 1', estante: 'Estante 1', pasillo: 'Pasillo 1' });
     comp.onSubmit();
 
     expect(serviceSpy.cargarProducto).toHaveBeenCalledWith(jasmine.objectContaining({ nombre: 'Prod' }));
@@ -66,12 +66,12 @@ xdescribe('ProductosCargarComponent – validaciones', () => {
     });
   
     it('cantidad negativa es inválida', () => {
-      comp.form.patchValue({ nombre: 'P', fabricanteId: 8, cantidad: -1, precio: 10 });
+      comp.form.patchValue({ nombre: 'P', fabricanteId: 8, cantidad: -1, precio: 10, moneda: 'COP', bodega: 'Bodega 1', estante: 'Estante 1', pasillo: 'Pasillo 1' });
       expect(comp.f['cantidad'].valid).toBeFalse();
     });
   
     it('precio cero es inválido', () => {
-      comp.form.patchValue({ nombre: 'P', fabricanteId: 8, cantidad: 1, precio: 0 });
+      comp.form.patchValue({ nombre: 'P', fabricanteId: 8, cantidad: 1, precio: 0, moneda: 'COP', bodega: 'Bodega 1', estante: 'Estante 1', pasillo: 'Pasillo 1' });
       expect(comp.f['precio'].valid).toBeFalse();
     });
   });

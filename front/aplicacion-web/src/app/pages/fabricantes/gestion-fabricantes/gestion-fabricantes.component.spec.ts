@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { RouterTestingModule } from '@angular/router/testing';
 import { GestionFabricantesComponent } from './gestion-fabricantes.component';
 
 describe('GestionFabricantesComponent', () => {
@@ -8,10 +8,14 @@ describe('GestionFabricantesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GestionFabricantesComponent]
-    })
-    .compileComponents();
+      imports: [
+        GestionFabricantesComponent, 
+        RouterTestingModule  
+      ]
+    }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(GestionFabricantesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

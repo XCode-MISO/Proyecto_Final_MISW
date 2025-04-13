@@ -24,7 +24,11 @@ describe('ProductosService', () => {
       nombre: 'Producto de prueba',
       fabricanteId: 1,
       cantidad: 10,
-      precio: 100
+      precio: 100,
+      moneda: 'COP',
+      bodega: 'Bodega 1',
+      estante: 'Estante 1',
+      pasillo: 'Pasillo 1'
     };
 
     service.cargarProducto(productoMock).subscribe(response => {
@@ -32,7 +36,7 @@ describe('ProductosService', () => {
     });
 
     const req = httpMock.expectOne((req) =>
-      req.method === 'POST' && req.url.includes('compras/detalle')
+      req.method === 'POST' && req.url.includes('productos')
     );
 
     expect(req.request.body).toEqual(productoMock);
