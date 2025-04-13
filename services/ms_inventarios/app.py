@@ -9,8 +9,7 @@ from flask_cors import CORS
 def create_app():
     app = Flask(__name__)
 
-    CORS(app)
-
+  
     if app.config.get('TESTING'):
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     else:
@@ -35,6 +34,8 @@ def create_app():
         return jsonify({"error": str(e)}), 500
 
     app.register_blueprint(inventario_bp, url_prefix='/api/inventarios')
+
+    CORS(app)
     return app
 
 if __name__ == '__main__':
