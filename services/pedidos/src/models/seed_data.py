@@ -16,6 +16,7 @@ fake = Faker()
 session = Session()
 
 def seed_database_if_empty():
+    # Verificar si ya existen pedidos en la base de datos
     has_orders = session.query(exists().where(Pedido.id != None)).scalar()
 
     if has_orders:
@@ -38,14 +39,14 @@ def seed_database_if_empty():
         productos = []
         total_price = 0.0
         for _ in range(random.randint(1, 5)):
-            productId = str(uuid.uuid4())
+            product_id = str(uuid.uuid4())
             precio = round(random.uniform(5.0, 100.0), 2)
             cantidad = random.randint(1, 10)
             total_price += precio * cantidad
 
-            # Crear el producto y asociarlo a un pedido
+            # Crear el producto
             producto = PedidoProducto(
-                productId=productId,
+                productId=product_id,
                 amount=cantidad
             )
             productos.append(producto)
@@ -59,10 +60,9 @@ def seed_database_if_empty():
             vendedorName=vendedor_name,
             price=round(total_price, 2),
             state=random.choice(estados),
-            deliveryDate=(datetime.utcnow() + timedelta(days=random.randint(0, 2))).date(),
-            products=productos  # Asociar los productos aquí
+            deliveryDate=(datetime.utcnow() + timedelta(days=random.randint(0, 2))).date()
         )
-        
+
         # Asociar productos al pedido
         for producto in productos:
             producto.pedido = pedido  # Aseguramos que cada producto tenga la referencia correcta al pedido
