@@ -2,6 +2,7 @@ from src.commands.create_seller import CreateSeller
 from src.session import Session, engine
 from src.models.model import Base
 from src.models.seller import Seller
+from unittest.mock import patch
 
 class TestCreateSeller():
 
@@ -9,7 +10,8 @@ class TestCreateSeller():
         Base.metadata.create_all(engine)
         self.session = Session()
 
-    def test_create_seller(self):
+    @patch('src.commands.create_seller.registrarUsuarioEnFirebase', return_value="seller_1")
+    def test_create_seller(self, mock_registrar_usuario):
         data = {
             "nombre": "Maria Lopez",
             "correo": "mlopez@gmail.com",
@@ -27,6 +29,9 @@ class TestCreateSeller():
         sellers = self.session.query(Seller).all()
         assert len(sellers) == 1
         assert sellers[0].nombre == "Maria Lopez"
+
+        # Ensure the mocked function was called
+        mock_registrar_usuario.assert_called_once_with(data["correo"], 'vendedor')
 
     def teardown_method(self):
         self.session.close()

@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { FabricantesCrearService } from './fabricantes-crear.service';
+import { environment } from '../../../../environments/environment';
 
 interface Fabricante {
   nombre: string;
@@ -41,7 +42,7 @@ describe('FabricantesCrearService', () => {
       expect(resp).toEqual(mockFabricante);
     });
 
-    const req = httpMock.expectOne('/api/fabricantes');
+    const req = httpMock.expectOne(`${environment.apiUrl}/api/fabricantes`);
     expect(req.request.method).toBe('POST');
     req.flush(mockFabricante);
   });

@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from marshmallow import Schema, fields, validate, ValidationError
 from services.fabricante_service import FabricanteService
+from models.fabricante import Fabricante
 
 fabricante_bp = Blueprint('fabricante_bp', __name__)
 fabricante_service = FabricanteService()
@@ -50,3 +51,25 @@ def listar_fabricantes():
             "empresa": fab.empresa
         })
     return jsonify(result), 200
+
+@fabricante_bp.route('/upload', methods=['POST'])
+def upload_fabricantes():
+    file = request.files.get("file")
+    if not file:
+        return jsonify({"error": "No se proporcionó ningún archivo"}), 400
+
+    # Validar la extensión del archivo (debe ser CSV)
+    if not file.filename.lower().endswith('.csv'):
+        return jsonify({"error": "El archivo debe ser un CSV"}), 400
+
+    try:
+        # Leemos el contenido del archivo y lo decodificamos a UTF-8
+        file_content = file.read().decode("utf-8")
+    except Exception as e:
+        return jsonify({"error": f"Error al leer el archivo: {str(e)}"}), 400
+
+    # Llamamos al método de carga masiva (estático) y obtenemos el resultado
+    result = FabricanteService.upload_fabricantes_from_file(file_content)
+    # Si se insertó al menos un registro, retornamos 201; de lo contrario 200
+    status_code = 201 if result.get("inserted", 0) > 0 else 200
+    return jsonify(result), status_code

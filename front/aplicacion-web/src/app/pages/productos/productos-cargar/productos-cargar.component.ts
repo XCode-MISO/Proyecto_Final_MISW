@@ -38,7 +38,12 @@ export class ProductosCargarComponent implements OnInit {
       nombre: ['', Validators.required],
       fabricanteId: ['', Validators.required],
       cantidad: [null, [Validators.required, Validators.min(1)]],
-      precio: [null, [Validators.required, Validators.min(0.01)]]
+      precio: [null, [Validators.required, Validators.min(0.01)]],
+      moneda: ['COP', Validators.required],
+      bodega: ['', Validators.required],
+      estante: ['', Validators.required],
+      pasillo: ['', Validators.required],
+
     });
 
     this.service.obtenerFabricantes().subscribe((fab) => (this.fabricantes = fab));
@@ -57,7 +62,11 @@ export class ProductosCargarComponent implements OnInit {
       nombre: this.f['nombre'].value,
       fabricanteId: this.f['fabricanteId'].value,
       cantidad: +this.f['cantidad'].value,
-      precio: +this.f['precio'].value
+      precio: +this.f['precio'].value,
+      moneda: this.f['moneda'].value,
+      bodega: this.f['bodega'].value,
+      estante: this.f['estante'].value,
+      pasillo: this.f['pasillo'].value
     };
 
     this.service.cargarProducto(producto).pipe(

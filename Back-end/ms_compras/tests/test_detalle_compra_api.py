@@ -54,3 +54,25 @@ def test_registrar_detalle_compra_falla_validacion(client):
     assert response.status_code == 400, f"Se esperaba 400, se obtuvo {response.status_code}"
     data = response.get_json()
     assert "error" in data
+
+
+def test_registrar_detalle_compra_error_interno(monkeypatch, client):
+    # Utilizamos monkeypatch para forzar que la función del servicio lance un error inesperado.
+    from services.detalle_compra_service import DetalleCompraService
+
+    def fake_registrar_detalle_compra(*args, **kwargs):
+        raise Exception("Error simulado en el servicio")
+
+    monkeypatch.setattr(DetalleCompraService, "registrar_detalle_compra_individual", fake_registrar_detalle_compra)
+
+    payload = {
+        "nombre": "Producto Compra Ejemplo",
+        "fabricanteId": 1,
+        "cantidad": 10,
+        "precio": 29.99
+    }
+    response = client.post("/api/compras/detalle", json=payload)
+    assert response.status_code == 500, f"Se esperaba 500, se obtuvo {response.status_code}"
+    data = response.get_json()
+    assert "error" in data, "Se esperaba un mensaje de error en la respuesta"
+    assert "Error al registrar el detalle de compra" in data.get("error"), "El mensaje de error no es el esperado"

@@ -1,3 +1,4 @@
+from unittest.mock import patch
 from src.commands.get_all_sellers import GetAllSellers
 from src.commands.create_seller import CreateSeller
 from src.session import Session, engine
@@ -29,8 +30,10 @@ class TestGetAllSellers():
             "longitud": 34.5678,
             "imagen": "<url>"
         }
-        CreateSeller(self.seller_data_1).execute()
-        CreateSeller(self.seller_data_2).execute()
+        with patch('src.commands.create_seller.registrarUsuarioEnFirebase', return_value="vendedor_1"):
+            CreateSeller(self.seller_data_1).execute()
+        with patch('src.commands.create_seller.registrarUsuarioEnFirebase', return_value="vendedor_2"):
+            CreateSeller(self.seller_data_2).execute()
 
     def test_get_all_sellers(self):
         sellers = GetAllSellers().execute()

@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpClientModule } from '@angular/common/http';
-
+import { Router } from '@angular/router';
 
 
 
@@ -39,7 +39,8 @@ export class FabricantesCrearComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private fabricanteService: FabricantesCrearService
+    private fabricanteService: FabricantesCrearService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -98,5 +99,6 @@ export class FabricantesCrearComponent implements OnInit {
     this.fabricanteForm.reset();
     this.enviado = false;
     this.mensajeServidor = '';
+    this.router.navigate(['/fabricantes/seleccion-carga']);
   }
 }
