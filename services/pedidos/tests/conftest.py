@@ -10,3 +10,5 @@ def pytest_configure(config):
   env_file = find_dotenv('src./.env.test')
   load_dotenv(env_file)
   return config
+
+  
