@@ -1,4 +1,9 @@
 steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+    - '-c'
+    - echo $_FIREBASE_ADMIN_KEYS | base64 -d > ./services/ventas/keys.json
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'build'

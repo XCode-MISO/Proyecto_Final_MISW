@@ -1,0 +1,72 @@
+<div class="vendedor-add-page">
+  <span class="vendedor-add-title" i18n>
+    Registrar Vendedor
+  </span>
+  <div class="vendedor-add-column">
+
+    <form class="form-column-root" [formGroup]="crearVendedorForm" (ngSubmit)="onSubmit()">
+      <div class="vendedor-imagen-wrap">
+        <img class="vendedor-imagen" src="vendedor.png" />
+        <div class="form-column">
+          <div class="form-row">
+            <span class="form-row-text" i18n>
+              Nombre:
+            </span>
+            <mat-form-field appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
+              <mat-label i18n>Nombre </mat-label>
+              <input matInput formControlName="nombre" name="nombre">
+              @if(nombre?.invalid){<mat-error> Error en el nombre</mat-error>}
+            </mat-form-field>
+          </div>
+          <div class="form-row">
+            <span class="form-row-text" i18n>
+              Correo:
+            </span>
+            <mat-form-field appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
+              <mat-label i18n>{{"Ex: 123@facebook.com"}} </mat-label>
+              <input matInput formControlName="correo">
+              @if(correo?.invalid){<mat-error> Error en el formato de correo</mat-error>}
+            </mat-form-field>
+          </div>
+          <div class="form-row">
+            <span class="form-row-text" i18n>
+              Telefono:
+            </span>
+            <mat-form-field appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
+              <mat-label i18n>3154155813 </mat-label>
+              <input matInput formControlName="telefono" name="telefono">
+              @if(telefono?.invalid){<mat-error> Error en el telefono</mat-error>}
+            </mat-form-field>
+          </div>
+          <div class="form-row">
+            <span class="form-row-text" i18n>
+              Direccion:
+            </span>
+            <mat-form-field appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
+              <mat-label i18n>Ex: Cr. 13#26-50 </mat-label>
+              <input matInput formControlName="direccion" name="direccion">
+              @if(direccion?.invalid){<mat-error> Error en la direccion</mat-error>}
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="form-column">
+        <div class="form-row">
+          <div class="agregar-buttons-row">
+            <button mat-flat-button class="crear-ruta-button" i18n>
+              Registrar Vendedor
+            </button>
+            <button mat-flat-button class="cancelar-crear-ruta-button" i18n (click)="cancelar()">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    @if(registroResponse | async){
+    <div>
+      {{ (registroResponse | async) ? 'Registro exitoso' : registroResponse }}
+    </div>
+    }
+  </div>

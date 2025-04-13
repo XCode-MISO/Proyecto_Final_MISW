@@ -9,6 +9,7 @@ import { Route } from '../routes.component';
 import { Parada, RouteListService } from '../route-list/route-list.service';
 import { Router } from '@angular/router';
 import { catchError, Observable } from 'rxjs';
+import { VendedorService } from '../../ventas/vendedor/vendedor.service';
 
 export type CreateRoute = {
   nombre: string

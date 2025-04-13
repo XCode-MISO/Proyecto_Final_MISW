@@ -6,6 +6,7 @@ from src.commands.create_visit import CreateVisit
 from src.commands.create_client import CreateClient
 import json
 from datetime import datetime, timedelta
+from unittest.mock import patch
 
 class TestVisits():
   def setup_method(self):
@@ -20,7 +21,8 @@ class TestVisits():
       "latitud":12.3454,
       "longitud":43.987
     }
-    self.client = CreateClient(self.data).execute()
+    with patch('src.commands.create_client.registrarUsuarioEnFirebase', return_value="xxxxxxxxxxxxxx"):
+        self.client = CreateClient(self.data).execute()
 
   def test_create_visit(self):
     with app.test_client() as test_client:

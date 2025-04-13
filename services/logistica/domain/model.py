@@ -134,7 +134,7 @@ class Route():
 
 
 def parseMapsResponseToRoute(requestJson, mapsResponse):
-    parsedResponse = parse_json(mapsResponse)[0]
+    parsedResponse = next(iter(parse_json(mapsResponse) or []), TypedObject(bounds=[], legs=[]))
 
     def getDistance(legs):
         return sum(leg.distance.value for leg in legs)

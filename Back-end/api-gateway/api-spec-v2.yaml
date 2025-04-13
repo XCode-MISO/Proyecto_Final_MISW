@@ -650,3 +650,33 @@ paths:
       responses:
         '200':
           description: "Respuesta CORS exitosa"
+
+    
+  /api/vendedores:
+    post:
+      operationId: "crearVendedor"
+      summary: Crear Vendedor nueva
+      responses:
+        200:
+          description: Visita nueva creada correctamente
+      x-google-backend:
+        address: "http://ventas.cppxcode.shop/api/vendedores"
+    options:
+      operationId: corsCrearVendedor
+      x-google-backend:
+        address: http://ventas.cppxcode.shop/api/vendedores
+      responses:
+        '200':
+          description: A successful response
+    get:
+      operationId: "listvendedores"
+      summary: "Listas vendedores que han sido generadas"
+      description: "Devuleve la lista de vendedores que se han generado"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Lista de vendedores generadas"
+      x-google-backend:
+        address: "http://ventas.cppxcode.shop/api/vendedores"
+

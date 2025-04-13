@@ -31,6 +31,7 @@ flask run -h 0.0.0.0 --port=3000
 - Activar el entorno local, ejecutar una BD local, y correr el siguiente comando:
 ```
 pytest --cov-fail-under=70 --cov=src
+pytest src/tests/commands/test.py --cov-fail-under=70 --cov=src
 ```
 ## Despliegue en nube
 1. Crear proyecto en GCP (pry-ventas)
