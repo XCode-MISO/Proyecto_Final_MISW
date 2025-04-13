@@ -28,9 +28,7 @@ class CreatePedido(BaseCommannd):
             pedido_productos = []
             for prod_data in productos_data:
                 pedido_producto = PedidoProducto(
-                    productoId=prod_data["id"],
-                    productoName=prod_data["name"],
-                    productoPrice=prod_data["price"],
+                    productId=prod_data["id"],
                     amount=prod_data["amount"]
                 )
                 pedido_productos.append(pedido_producto)
@@ -42,22 +40,46 @@ class CreatePedido(BaseCommannd):
         nuevo_pedido = Pedido(
             name=validated_data["name"],
             clientId=validated_data["clientId"],
-            clientName=validated_data.get("clientName"),
-            vendedorId=validated_data.get("vendedorId"),
-            vendedorName=validated_data.get("vendedorName"),
+            clientName=validated_data["clientName"],
+            vendedorId=validated_data["vendedorId"],
+            vendedorName=validated_data["vendedorName"],
             price=validated_data["price"],
             state=validated_data.get("state", "Pendiente"),
             deliveryDate=validated_data["deliveryDate"]
-        )
-        nuevo_pedido.pedido_productos = pedido_productos  # relación intermedia
+        ) # relación intermedia
 
         # Guardar en la base de datos
         session = db.session()
         session.add(nuevo_pedido)
         session.commit()
+        
+        for prod_data in productos_data:
+            pedido_producto = PedidoProducto(
+                pedidoId=nuevo_pedido.id,  # Asegura la relación
+                productId=prod_data["id"],
+                amount=prod_data["amount"]
+            )
+            session.add(pedido_producto)
+
+        session.commit()
         session.refresh(nuevo_pedido)
 
         # Serializar y devolver
         pedido_json = PedidoJsonSchema().dump(nuevo_pedido)
+
+
+        # Crear el formato deseado para client y vendedor
+        if 'clientId' in pedido_json:
+            pedido_json['client'] = {
+                "id": pedido_json.pop("clientId"),
+                "name": pedido_json.pop("clientName")
+            }
+        
+        if 'vendedorId' in pedido_json:
+            pedido_json['vendedor'] = {
+                "id": pedido_json.pop("vendedorId"),
+                "name": pedido_json.pop("vendedorName")
+            }
+
         session.close()
         return pedido_json

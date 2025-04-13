@@ -12,7 +12,7 @@ from .pedido_producto import PedidoProducto
 # Función de validación para deliveryDate (+2 días Maximo)
 def validate_deliveryDate(value):
     if isinstance(value, datetime):
-        value = value.date()  # 💡 convertir si viene como datetime
+        value = value.date()  # convertir si viene como datetime
 
     today = datetime.utcnow().date()
     max_date = today + timedelta(days=2)
@@ -27,9 +27,9 @@ class Pedido(Base, Model):
 
     id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     name = Column(String(50), nullable=False)
-    clientId = Column(String(36), ForeignKey('clientes.id'), nullable=False)  # Almacena el ID del cliente
+    clientId = Column(String(36), nullable=False)  # Almacena el ID del cliente
     clientName = Column(String(50), nullable=False)  # Almacena el nombre del cliente
-    vendedorId = Column(String(36), ForeignKey('vendedores.id'), nullable=False)  # Almacena el ID del vendedor
+    vendedorId = Column(String(36),  nullable=False)  # Almacena el ID del vendedor
     vendedorName = Column(String(50), nullable=False)  # Almacena el nombre del vendedor
     price = Column(Float, nullable=False)
     state = Column(String(50), default="Pendiente", nullable=False)
@@ -38,12 +38,11 @@ class Pedido(Base, Model):
 
 
     # Relaciones
-    client = relationship("Cliente", back_populates="pedidos", uselist=False)  # Relación opcional
-    pedido_productos = relationship("PedidoProducto", back_populates="pedido")
+    products = relationship("PedidoProducto", back_populates="pedido", lazy="dynamic")
 
 
 
-    def __init__(self, name, clientId, clientName, products, price, state, deliveryDate, vendedorId=None, vendedorName=None):
+    def __init__(self, name, clientId, clientName, price, state, deliveryDate, vendedorId=None, vendedorName=None):
         super().__init__()
         self.name = name
         self.clientId = clientId
@@ -52,15 +51,13 @@ class Pedido(Base, Model):
         self.vendedorName = vendedorName
         self.price = price
         self.state = state
-        self.deliveryDate = deliveryDate
-
+        self.deliveryDate = deliveryDate  # Ensure this field is properly populated
+       
 
 # Esquema para la  visualizacion de productos en un pedido
 
 class ProductoSchema(Schema):
-    id = fields.UUID()
-    name = fields.Str()
-    price = fields.Float()
+    id = fields.Str(attribute="productId")
     amount = fields.Int()
 
 

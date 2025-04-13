@@ -5,6 +5,8 @@ from sqlalchemy import create_engine
 import uuid
 from datetime import datetime, timezone
 
+from src.commands.get_pedido import GetPedido
+
 
 from ..commands.fields_pedido import ValidatePedidoFields
 from ..commands.create_pedido import CreatePedido
@@ -45,5 +47,16 @@ def get_pedidos():
     ##user_id = ValidateToken(auth_header).execute()
     ##data=request.args.to_dict()
     result = GetPedidos().execute()
+    return jsonify(result), 200
+
+
+
+## Obtener Pedidos
+@operations_blueprint.route('/pedido/<id>', methods=['GET'])
+def get_pedido(id):
+    ##auth_header = request.headers.get('Authorization')
+    ##user_id = ValidateToken(auth_header).execute()
+    ##data=request.args.to_dict()
+    result = GetPedido(id).execute()
     return jsonify(result), 200
 
