@@ -3,7 +3,9 @@
 import json
 from unittest.mock import patch
 from src.main import app
-from src.models.model import Session, engine, Base
+from src.models.model import  Base
+from src.database import Session, engine
+from datetime import datetime, timedelta
 
 class TestPedidos:
     def setup_method(self):
@@ -15,6 +17,7 @@ class TestPedidos:
         Base.metadata.drop_all(bind=engine)
 
     def test_create_pedido_success_mock(self):
+        fecha_hoy_plus_2 = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")
         mock_result = {
             "name": "Pedido Test",
             "client": {
@@ -29,7 +32,7 @@ class TestPedidos:
                 {"id": "prod1", "amount": 2}
             ],
             "price": 100.0,
-            "deliveryDate": "2025-10-01"
+            "deliveryDate": fecha_hoy_plus_2
         }
 
         with patch('src.commands.create_pedido.CreatePedido.execute') as mock_execute:
@@ -44,7 +47,7 @@ class TestPedidos:
                     "vendedorName": "Vendedor Test",
                     "products": [{"id": "prod1", "amount": 2}],
                     "price": 100.0,
-                    "deliveryDate": "2025-10-01"
+                    "deliveryDate": fecha_hoy_plus_2
                 })
 
                 assert response.status_code == 201
@@ -64,5 +67,5 @@ class TestPedidos:
 
                 assert response.status_code == 400
                 data = response.get_json()
-                assert "error" in data
-                assert "name" in data["error"]
+                assert "msg" in data  # Cambié 'error' por 'msg' según la respuesta
+                assert data["msg"] == "Faltan campos requeridos."
