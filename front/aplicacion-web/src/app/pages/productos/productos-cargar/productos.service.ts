@@ -13,11 +13,15 @@ export interface ProductoDto {
   fabricanteId: number;
   cantidad: number;
   precio: number;
+  moneda: string;
+  bodega: string;     
+  estante: string;       
+  pasillo: string; 
 }
 
 @Injectable({ providedIn: 'root' })
 export class ProductosService {
-  private readonly apiUrl = `https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api`;
+  private readonly apiUrl = `${environment.apiUrl}/api`;
 
   constructor(private http: HttpClient) {}
 
@@ -27,6 +31,6 @@ export class ProductosService {
   }
 
   cargarProducto(prod: ProductoDto): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/compras/detalle`, prod);
+    return this.http.post<void>(`${this.apiUrl}/productos`, prod);
   }
 }

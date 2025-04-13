@@ -5,17 +5,17 @@ info:
 host: "microservicios-gateway-1qkjvfz9.uc.gateway.dev"
 schemes:
   - "https"
-security:
-  - firebase: []
+security: []
+
 x-google-endpoints:
   - name: "microservicios-gateway-1qkjvfz9.uc.gateway.dev"
     allowCors: True
 paths:
-  /api/compras/detalle:
+  /api/productos:
     post:
-      operationId: "createDetalleCompra"
-      summary: "Crear detalle de compra"
-      description: "Crea un detalle de compra en el sistema de compras."
+      operationId: "createProducto"
+      summary: "Crear prductos"
+      description: "Crea productos en el sistema de compras."
       consumes:
         - "application/json"
       produces:
@@ -23,7 +23,7 @@ paths:
       parameters:
         - in: "body"
           name: "body"
-          description: "Datos del detalle de compra"
+          description: "Datos del producto"
           required: true
           schema:
             type: "object"
@@ -36,13 +36,31 @@ paths:
                 type: "integer"
               precio:
                 type: "number"
+              moneda:
+                type: "string"
+              bodega:
+                type: "string"
+              estante:
+                type: "string"
+              pasillo:
+                type: "string"
+            required:
+            - nombre
+            - fabricante_id
+            - cantidad
+            - precio
+            - moneda
+            - bodega
+            - estante
+            - pasillo
+              
       responses:
         201:
-          description: "Detalle de compra creado"
+          description: "Producto creado"
       x-google-backend:
-        address: "http://compras.cppxcode.shop/api/compras/detalle"
+        address: "http://compras.cppxcode.shop/api/productos"
     options:
-      operationId: corsCreateCompraDetalle
+      operationId: corsCreateProducto
       x-google-backend:
         address: http://compras.cppxcode.shop
       responses:
@@ -64,7 +82,7 @@ paths:
     post:
       operationId: "createFabricante"
       summary: "Crear fabricante"
-      description: "Crea un detalle de compra en el sistema de compras."
+      description: "Crea un fabricante en el sistema de compras."
       consumes:
         - "application/json"
       produces:
@@ -98,18 +116,155 @@ paths:
         '200':
           description: A successful response
 
-  /api/inventarios/productos:
+  /api/fabricantes/upload:
+    post:
+      operationId: "uploadFabricantes"
+      summary: "Carga masiva de fabricantes"
+      description: "Permite la carga masiva de fabricantes mediante un archivo CSV con los campos: nombre, correo, telefono y empresa."
+      consumes:
+        - "multipart/form-data"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "formData"
+          name: "file"
+          description: "Archivo CSV con los campos: nombre, correo, telefono y empresa"
+          required: true
+          type: "string"
+          format: "binary"
+      responses:
+        200:
+          description: "Carga masiva procesada"
+          schema:
+            type: "object"
+            properties:
+              inserted:
+                type: "integer"
+              errors:
+                type: "array"
+                items:
+                  type: "string"
+      x-google-backend:
+        address: "http://compras.cppxcode.shop/api/fabricantes/upload"
+    options:
+      operationId: "corsUploadFabricantes"
+      x-google-backend:
+        address: "http://compras.cppxcode.shop/api/fabricantes/upload"
+      responses:
+        '200':
+          description: "CORS response"        
+
+  /api/inventarios/pedidos:
     get:
-      operationId: "listInventarioProductos"
-      summary: "Listar productos en inventario"
-      description: "Devuelve la lista de productos registrados en inventario."
+      operationId: "listInventarioPedidos"
+      summary: "Listar productos en invematrio para pedidos"
+      description: "Lista todos los productos del inventario con campos básicos: producto_id, nombre, precio y stock para realizar pedidos"
       produces:
         - "application/json"
       responses:
         200:
           description: "Lista de productos en inventario"
+          schema:
+            type: "array"
+            items:
+              type: "object"
+              properties:
+                producto_id:
+                  type: "integer"
+                nombre:
+                  type: "string"
+                precio:
+                  type: "number"
+                fabricante_id:
+                  type: "integer"
+                stock:
+                  type: "integer"
       x-google-backend:
-        address: "http://inventarios.cppxcode.shop/api/inventarios/productos"
+        address: "http://inventarios.cppxcode.shop/api/inventarios/pedidos"
+    options:
+      operationId: "corsListInventarioProductos"
+      x-google-backend:
+        address: "http://inventarios.cppxcode.shop/api/inventarios/pedidos"
+      responses:
+        '200':
+          description: "CORS preflight response"
+
+  /api/inventarios/ubicacion:
+    get:
+      operationId: "listInventarioUbicacion"
+      summary: "Listar productos con ubicación"
+      description: "Lista productos con ubicación; retorna producto_id, nombre, bodega y cantidad para la localizacion de productos en bodega"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Lista de productos con ubicación"
+          schema:
+            type: "array"
+            items:
+              type: "object"
+              properties:
+                producto_id:
+                  type: "integer"
+                nombre:
+                  type: "string"
+                bodega:
+                  type: "string"
+                cantidad:
+                  type: "integer"
+      x-google-backend:
+        address: "http://inventarios.cppxcode.shop/api/inventarios/ubicacion"
+    options:
+      operationId: "corsListInventarioUbicacion"
+      x-google-backend:
+        address: "http://inventarios.cppxcode.shop/api/inventarios/ubicacion"
+      responses:
+        '200':
+          description: "CORS preflight response"
+
+  /api/inventarios/{producto_id}:
+    get:
+      operationId: "getInventarioProducto"
+      summary: "Detalle completo de producto en inventario"
+      description: "Devuelve el detalle completo de un producto, incluyendo datos del producto y del inventario (stock, bodega, estante y pasillo)."
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "producto_id"
+          type: "integer"
+          required: true
+          description: "ID del producto"
+      responses:
+        200:
+          description: "Detalle completo del producto en inventario"
+          schema:
+            type: "object"
+            properties:
+              producto_id:
+                type: "integer"
+              nombre:
+                type: "string"
+              descripcion:
+                type: "string"
+              precio:
+                type: "number"
+              fabricante_id:
+                type: "integer"
+              stock:
+                type: "integer"
+              bodega:
+                type: "string"
+              estante:
+                type: "string"
+              pasillo:
+                type: "string"
+        404:
+          description: "Producto no encontrado"
+      x-google-backend:
+        address: "http://inventarios.cppxcode.shop/api/inventarios"
+        path_translation: APPEND_PATH_TO_ADDRESS
+  
   
   /api/route:
     get:
@@ -287,30 +442,6 @@ paths:
       responses:
         '200':
           description: A successful response
-  /api/productos:
-    get:
-      operationId: "getProductos"
-      summary: Obtener lista de productos
-      responses:
-        200:
-          description: Lista de productos
-          schema:
-            type: array
-            items:
-              type: object
-              properties:
-                id:
-                  type: string
-                  format: uuid
-                name:
-                  type: string
-                amount:
-                  type: integer
-                price:
-                  type: number
-                  format: float
-      x-google-backend:
-        address: "http://pedidos.cppxcode.shop/productos"
 
   /api/clientes:
     get:
@@ -436,6 +567,90 @@ paths:
           description: "Lista de visitas generadas"
       x-google-backend:
         address: "http://ventas.cppxcode.shop/visits"
+  
+  /command/api/upload:
+    post:
+      operationId: "uploadVideoCommand"
+      summary: "Subir video para procesamiento"
+      description: >
+        Sube un video para iniciar el procesamiento. El endpoint recibe un archivo en el 
+        campo "video" y retorna un `job_id` junto 
+        con el estado del procesamiento.
+      consumes:
+        - "multipart/form-data"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "formData"
+          name: "video"
+          type: "string"
+          format: "binary"
+          description: "Archivo de video a subir"
+          required: true
+      responses:
+        201:
+          description: "Video subido exitosamente. Se retorna el job_id y el estado del procesamiento."
+          schema:
+            type: "object"
+            properties:
+              job_id:
+                type: "string"
+              status:
+                type: "string"
+      x-google-backend:
+        address: "http://videoprocess/command/api/upload"
+    options:
+      operationId: "corsUploadVideo"
+      x-google-backend:
+        address: "http://videoprocess.cppxcode.shop/command/api/upload"
+      responses:
+        '200':
+          description: "Respuesta CORS exitosa"
+
+    
+  /query/api/recommend:
+    get:
+      operationId: "getRecommendation"
+      summary: "Obtener recomendación por job_id"
+      description: >
+        Consulta la recomendación generada para un job a partir de su `job_id` pasado como 
+        parámetro de query. Retorna los datos completos de la recomendación basado en el video.
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "job_id"
+          type: "string"
+          required: true
+          description: "Identificador del job para buscar la recomendación"
+      responses:
+        200:
+          description: "Recomendación encontrada"
+          schema:
+            type: "object"
+            properties:
+              job_id:
+                type: "string"
+              final_state:
+                type: "string"
+              final_recommendation:
+                type: "string"
+              identified_objects:
+                type: "string"
+        400:
+          description: "El parámetro 'job_id' es requerido."
+        404:
+          description: "No se encontró una recomendación para el job_id proporcionado."
+      x-google-backend:
+        address: "http://recomendations.cppxcode.shop/query/api/recommend"
+    options:
+      operationId: "corsGetRecommendation"
+      x-google-backend:
+        address: "http://recomendations.cppxcode.shop/query/api/recommend"
+      responses:
+        '200':
+          description: "Respuesta CORS exitosa"
+
     
   /api/vendedores:
     post:
@@ -464,3 +679,4 @@ paths:
           description: "Lista de vendedores generadas"
       x-google-backend:
         address: "http://ventas.cppxcode.shop/api/vendedores"
+

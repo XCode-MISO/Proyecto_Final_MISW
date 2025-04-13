@@ -1,67 +1,61 @@
 from flask import Blueprint, request, jsonify
+from marshmallow import ValidationError
+from apis.schemas.producto_schema import ProductoSchema
 from services.producto_service import ProductoService
-from models.producto import Producto
 
+# Primero, se define el Blueprint
 producto_bp = Blueprint('producto_bp', __name__)
-producto_service = ProductoService()
 
-@producto_bp.route('/fabricante/<int:fabricante_id>', methods=['POST'])
-def crear_producto(fabricante_id):
+schema = ProductoSchema()
+service = ProductoService()
+
+@producto_bp.route('', methods=['POST'])
+def registrar_producto():
+    """
+    Endpoint: POST /api/productos
+    Payload esperado:
+    {
+      "nombre": "Producto Compra Ejemplo",
+      "fabricanteId": 1,
+      "cantidad": 10,
+      "precio": 29.99,
+      "moneda": "USD",
+      "bodega": "Bodega 1",
+      "estante": "Estante A",
+      "pasillo": "Pasillo 3"
+    }
+    """
     data = request.get_json() or {}
-    nombre = data.get('nombre')
-    cantidad = data.get('cantidad')
-    precio_compra = data.get('precioCompra')
-    moneda = data.get('moneda')
-    prod = producto_service.crear_producto(
-        fabricante_id=fabricante_id,
-        nombre=nombre,
-        cantidad=cantidad,
-        precio_compra=precio_compra,
-        moneda=moneda
-    )
-    return jsonify({
-        "id": prod.id,
-        "nombre": prod.nombre,
-        "cantidad": prod.cantidad,
-        "precioCompra": prod.precio_compra,
-        "moneda": prod.moneda,
-        "fabricanteId": prod.fabricante_id
-    }), 201
-
-@producto_bp.route('/search', methods=['GET'])
-def buscar_producto():
-    """
-    Endpoint para buscar productos por nombre y fabricante.
-    Parámetros de consulta:
-      - nombre: texto para la búsqueda (usamos ilike para autocompletar)
-      - fabricanteId: ID del fabricante (entero)
-    """
-    nombre = request.args.get('nombre')
-    fabricante_id = request.args.get('fabricanteId')
-    
-    if not nombre or not fabricante_id:
-        return jsonify({"error": "Se requieren los parámetros 'nombre' y 'fabricanteId'"}), 400
-
     try:
-        fabricante_id = int(fabricante_id)
-    except ValueError:
-        return jsonify({"error": "El parámetro 'fabricanteId' debe ser un entero"}), 400
+        valid_data = schema.load(data)
+    except ValidationError as err:
+        return jsonify({"error": "Validación fallida", "details": err.messages}), 400
+    try:
+        producto = service.registrar_producto_individual(
+            nombre=valid_data["nombre"],
+            fabricante_id=valid_data["fabricanteId"],
+            cantidad=valid_data["cantidad"],
+            precio=valid_data["precio"],
+            moneda=valid_data["moneda"],
+            bodega=valid_data["bodega"],
+            estante=valid_data["estante"],
+            pasillo=valid_data["pasillo"]
+        )
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        return jsonify({"error": "Error al registrar el detalle de compra", "details": str(e)}), 500
 
-   
-    # Buscar productos cuyo nombre contenga el texto (fuzzy search) y que pertenezcan al fabricante
-    productos = Producto.query.filter(
-        Producto.nombre.ilike(f"%{nombre}%"),
-        Producto.fabricante_id == fabricante_id
-    ).all()
-    
-    result = []
-    for p in productos:
-        result.append({
-            "id": p.id,
-            "nombre": p.nombre,
-            "descripcion": p.descripcion,
-            "precioCompra": p.precio_compra,
-            "moneda": p.moneda,
-            "fabricanteId": p.fabricante_id
-        })
-    return jsonify(result), 200
+    return jsonify({
+        "message": "Producto registrado exitosamente",
+        "Compra": {
+            "productoId": producto.id,
+            "fabricanteId": producto.fabricante_id,
+            "precio": float(producto.precio),
+            "cantidad": valid_data.get("cantidad"),
+            "moneda": valid_data.get("moneda"),
+            "bodega": valid_data.get("bodega"),
+            "estante": valid_data.get("estante"),
+            "pasillo": valid_data.get("pasillo")
+        }
+    }), 201

@@ -25,3 +25,33 @@ def test_listar_fabricantes(client):
     data = response.get_json()
     assert isinstance(data, list)
     assert len(data) >= 2
+
+def test_crear_fabricante_success(client):
+    """Prueba la creación exitosa de un fabricante mediante POST."""
+    # Datos válidos para crear un nuevo fabricante
+    payload = {
+        "nombre": "Fábrica Tres",
+        "correo": "tres@fab.com",
+        "telefono": "5551234",
+        "empresa": "Empresa Tres"
+    }
+    response = client.post("/api/fabricantes", json=payload)
+    assert response.status_code == 201, f"Se esperaba 201, se obtuvo {response.status_code}"
+    data = response.get_json()
+    # Suponemos que el endpoint devuelve algún identificador o mensaje de éxito
+    assert "id" in data or "message" in data, "La respuesta debe incluir un id o un mensaje de éxito"
+
+def test_crear_fabricante_validation_error(client):
+    """Prueba que al enviar datos incompletos se retorne un error de validación."""
+    # Omitimos el campo "correo", que es obligatorio
+    payload = {
+        "nombre": "Fábrica Incompleta",
+        "telefono": "5550000",
+        "empresa": "Empresa Incompleta"
+    }
+    response = client.post("/api/fabricantes", json=payload)
+    # Se espera 400 (o el código de error definido) por error de validación
+    assert response.status_code == 400, f"Se esperaba 400, se obtuvo {response.status_code}"
+    data = response.get_json()
+    assert "error" in data, "La respuesta debe incluir el campo 'error'"
+    # Puedes agregar comprobaciones específicas según la estructura de errores que implementes
