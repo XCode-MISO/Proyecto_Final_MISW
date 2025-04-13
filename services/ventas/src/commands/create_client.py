@@ -1,8 +1,9 @@
 from .base_command import BaseCommannd
 from ..models.client import Client, ClientSchema, CreatedClientJsonSchema
 from ..session import Session
-from ..errors.errors import IncompleteParams
+from ..errors.errors import IncompleteParams, CodigoNoGenerado
 from sqlalchemy import or_
+from .util import registrarUsuarioEnFirebase
 
 class CreateClient(BaseCommannd):
     def __init__(self, data):
@@ -15,6 +16,12 @@ class CreateClient(BaseCommannd):
                       'telefono', 'latitud', 'longitud')
             ).load(self.data)
             client = Client(**posted_client)
+
+            firebse_uuid = registrarUsuarioEnFirebase(client.correo, "cliente")  
+            if firebse_uuid is None:
+                raise CodigoNoGenerado()
+
+            client.id = firebse_uuid
             session = Session()
 
             session.add(client)

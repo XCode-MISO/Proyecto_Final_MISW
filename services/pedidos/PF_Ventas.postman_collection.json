@@ -1,0 +1,110 @@
+{
+	"info": {
+		"_postman_id": "b7828a96-a5dd-4a84-a8a7-6c255ef6d580",
+		"name": "PF_Ventas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38826606"
+	},
+	"item": [
+		{
+			"name": "create pedido",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Pedido especial\",\r\n  \"clientId\": \"696ea246-c7d8-472b-9088-4b595fbc3a4e\",\r\n  \"products\": [\r\n    { \"id\": \"24696da3-9c21-4004-8e14-50c0670737d5\", \"amount\": 3 },\r\n    { \"id\": \"5f1e7e4c-376a-4379-bae7-13f060197802\", \"amount\": 5 }\r\n],\r\n  \"price\": 150.75,\r\n  \"state\": \"Pendiente\",\r\n  \"deliveryDate\": \"2025-04-08\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api/create_pedido",
+					"protocol": "https",
+					"host": [
+						"microservicios-gateway-1qkjvfz9",
+						"uc",
+						"gateway",
+						"dev"
+					],
+					"path": [
+						"api",
+						"create_pedido"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get pedidos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api/pedidos",
+					"protocol": "https",
+					"host": [
+						"microservicios-gateway-1qkjvfz9",
+						"uc",
+						"gateway",
+						"dev"
+					],
+					"path": [
+						"api",
+						"pedidos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get prodcutos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api/productos",
+					"protocol": "https",
+					"host": [
+						"microservicios-gateway-1qkjvfz9",
+						"uc",
+						"gateway",
+						"dev"
+					],
+					"path": [
+						"api",
+						"productos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get clientes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api/clientes",
+					"protocol": "https",
+					"host": [
+						"microservicios-gateway-1qkjvfz9",
+						"uc",
+						"gateway",
+						"dev"
+					],
+					"path": [
+						"api",
+						"clientes"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

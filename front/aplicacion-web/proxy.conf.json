@@ -1,19 +1,19 @@
 {
-    "/compras": {
+    "/api/compras": {
       "target": "http://compras.cppxcode.shop/api",
       "secure": false,
       "changeOrigin": true,
       "logLevel": "debug",
       "pathRewrite": { "^/compras": "" }
     },
-    "/logistica": {
+    "/api/logistica": {
       "target": "http://logistica.cppxcode.shop",
       "secure": false,
       "changeOrigin": true,
       "logLevel": "debug",
       "pathRewrite": { "^/logistica": "" }
     },
-    "/ventas": {
+    "/api/ventas": {
       "target": "http://ventas.cppxcode.shop/api",
       "secure": false,
       "changeOrigin": true,
