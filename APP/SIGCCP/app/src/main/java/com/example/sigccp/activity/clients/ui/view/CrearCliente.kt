@@ -130,7 +130,7 @@ fun CrearCliente(viewModel: ClienteViewModel = viewModel(), navController: NavCo
                                         onSuccess = {
                                             Toast.makeText(
                                                 context,
-                                                "Cliente creado exitosamente", Toast.LENGTH_SHORT
+                                                "Usuario creado, revise su correo", Toast.LENGTH_LONG
                                             ).show()
                                             navController.popBackStack()
                                         },
