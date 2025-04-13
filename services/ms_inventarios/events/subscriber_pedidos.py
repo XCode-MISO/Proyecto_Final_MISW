@@ -6,7 +6,7 @@ from models.db import db
 from app import create_app
 
 # Configurar credenciales si es necesario (o via variable de entorno GOOGLE_APPLICATION_CREDENTIALS)
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/esneiderrestrepo/Documents/credentials.json"
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/esneiderrestrepo/Documents/credentials.json"
 
 # Creamos la aplicación una sola vez para usar su contexto
 app = create_app()

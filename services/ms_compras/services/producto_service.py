@@ -6,7 +6,7 @@ from models.db import db
 from models.producto import Producto
 from google.cloud import pubsub_v1
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/esneiderrestrepo/Documents/credentials.json"
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/esneiderrestrepo/Documents/credentials.json"
 
 # Configuración del logger
 logging.basicConfig(level=logging.DEBUG)
