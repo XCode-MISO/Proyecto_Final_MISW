@@ -7,7 +7,6 @@ from sqlalchemy import exists
 
 from src.database import Session, engine  # <- Usa tu engine y Session definidos
 from src.models.model import Base
-from src.models.cliente import Cliente
 from src.models.producto import Producto
 from src.models.pedido import Pedido
 

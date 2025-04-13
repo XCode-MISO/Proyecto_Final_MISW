@@ -1,12 +1,10 @@
-#./blueprints/pedidos.py
+## src\blueprints\pedidos.py
 from flask import Flask, jsonify, request, Blueprint
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 import uuid
 from datetime import datetime, timezone
 
-from src.commands.get_clientes import GetClientes
-from src.commands.get_productos import GetProductos
 
 from ..commands.fields_pedido import ValidatePedidoFields
 from ..commands.create_pedido import CreatePedido
@@ -46,25 +44,6 @@ def get_pedidos():
     ##auth_header = request.headers.get('Authorization')
     ##user_id = ValidateToken(auth_header).execute()
     ##data=request.args.to_dict()
-    result = request.args.to_dict()
     result = GetPedidos().execute()
     return jsonify(result), 200
 
-## Obtener productos
-@operations_blueprint.route('/productos', methods=['GET'])
-def get_productos():
-    ##auth_header = request.headers.get('Authorization')
-    ##user_id = ValidateToken(auth_header).execute()
-    ##data=request.args.to_dict()
-    result = request.args.to_dict()
-    result = GetProductos().execute()
-    return jsonify(result), 200
-
-@operations_blueprint.route('/clientes', methods=['GET'])
-def get_clientes():
-    ##auth_header = request.headers.get('Authorization')
-    ##user_id = ValidateToken(auth_header).execute()
-    ##data=request.args.to_dict()
-    result = request.args.to_dict()
-    result = GetClientes().execute()
-    return jsonify(result), 200
