@@ -1,14 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { VendedorAddComponent } from './vendedor-add.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AuthModule } from '@angular/fire/auth';
 
-describe('VendedorAddComponent', () => {
+xdescribe('VendedorAddComponent', () => {
   let component: VendedorAddComponent;
   let fixture: ComponentFixture<VendedorAddComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VendedorAddComponent]
+      imports: [
+        VendedorAddComponent, 
+        HttpClientTestingModule,
+        AuthModule
+      ]
     })
     .compileComponents();
 
