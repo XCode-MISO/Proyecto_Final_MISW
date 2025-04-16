@@ -1,4 +1,5 @@
 #./blueprints/pedidos.py
+import json
 from flask import Flask, jsonify, request, Blueprint
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
@@ -68,3 +69,11 @@ def get_clientes():
     result = request.args.to_dict()
     result = GetClientes().execute()
     return jsonify(result), 200
+
+@operations_blueprint.route("/info")
+def info_path():
+    try:
+        return json.load(open(os.path.join("version.json"), "r"))
+    except Exception as e:
+        print(str(e))
+        return "No version.json, this means this deployment was manual or there is an error."

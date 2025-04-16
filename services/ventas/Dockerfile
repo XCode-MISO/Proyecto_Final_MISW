@@ -11,6 +11,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./keys.json .
 
+COPY ./version.json .
+
 # Copiar el código fuente de la aplicación
 COPY src/ ./src
 
