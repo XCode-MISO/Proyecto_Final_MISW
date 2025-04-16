@@ -1,4 +1,5 @@
 import json
+import os
 import threading
 from flask import Flask
 from logistica.infrastructure.config import Config
@@ -34,8 +35,9 @@ def create_app():
     @app.route("/info")
     def info_path():
         try:
-            return json.stringify(json.load('version.json'))
-        except:
+            return json.load(open(os.path.join("version.json"), "r"))
+        except Exception as e:
+            print(str(e))
             return "No version.json, this means this deployment was manual or there is an error."
 
     return app

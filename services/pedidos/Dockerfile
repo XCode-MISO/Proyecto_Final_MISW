@@ -11,6 +11,8 @@ RUN pip install pipenv psycopg2
 
 COPY Pipfile ./
 
+COPY ./version.json .
+
 RUN pipenv install
 
 COPY . .
