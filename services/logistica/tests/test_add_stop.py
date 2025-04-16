@@ -57,7 +57,7 @@ def test_add_stop(client):
     route_resp_update_json = json.loads(route_resp_update.data)
 
     response = client.get(
-        f'/route/{id}',
+        f'/api/route/{id}',
         content_type='application/json'
     )
 

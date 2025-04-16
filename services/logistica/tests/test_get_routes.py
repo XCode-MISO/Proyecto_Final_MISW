@@ -28,7 +28,7 @@ def test_get_route(client):
     route_resp_json = json.loads(route_resp.data)
     id = route_resp_json["route_id"]
     response = client.get(
-            f'/route/{id}',
+            f'/api/route/{id}',
             content_type='application/json'
         )
     assert response.status_code == 200
