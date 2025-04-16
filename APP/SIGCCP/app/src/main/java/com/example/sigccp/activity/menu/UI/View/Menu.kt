@@ -19,17 +19,18 @@ import com.example.sigccp.PreferenceKeys
 import com.example.sigccp.PreferencesManager
 import com.example.sigccp.R
 import com.example.sigccp.navigation.AppScreen
+import com.example.sigccp.navigation.NavigationController
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.newMenuButton
 
 @Composable
-fun Menu(navController: NavController)
+fun Menu()
 {
-    Options(navController)
+    Options()
 }
 
 @Composable
-fun Options(navController: NavController)
+fun Options()
 {
     val role = PreferencesManager.getString(PreferenceKeys.ROLE)
     val saludo = if (role == "cliente") stringResource(id = R.string.menuCliente) else stringResource(id = R.string.menuVendedor)
@@ -82,7 +83,7 @@ fun Options(navController: NavController)
                     {
                         //newMenuButton(onClick = { "navController.navigate(AppScreen.CrearAlarma.route) }", nombre = "CREAR ALARMA", imagen = R.drawable.editar)
                         newMenuButton(
-                            onClick = { navController.navigate(AppScreen.ListarPedidos.route) },
+                            onClick = { NavigationController.navigate(AppScreen.ListarPedidos.route) },
                             nombre = "PEDIDOS",
                             imagen = R.drawable.editar,
                             enabled = true
@@ -112,7 +113,7 @@ fun Options(navController: NavController)
                             enabled = false
                         )
                         newMenuButton(
-                            onClick = { navController.navigate(AppScreen.RegistrarVisita.route) },
+                            onClick = { NavigationController.navigate(AppScreen.RegistrarVisita.route) },
                             nombre = "REGISTRAR VISITA",
                             imagen = R.drawable.editar,
                             enabled = true

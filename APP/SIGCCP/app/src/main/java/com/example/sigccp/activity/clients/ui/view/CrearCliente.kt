@@ -20,8 +20,11 @@ import com.example.sigccp.ui.View.Components.ScreenContainer
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.sp
+import com.example.sigccp.navigation.AppScreen
+import com.example.sigccp.navigation.NavigationController
 import com.example.sigccp.ui.View.Components.CustomButton
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -31,7 +34,9 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
-fun CrearCliente(viewModel: ClienteViewModel = viewModel(), navController: NavController) {
+fun CrearCliente(
+    viewModel: ClienteViewModel = viewModel()
+) {
     val isLoading = viewModel.isLoading.collectAsState().value
     val context = LocalContext.current
     var nombre by remember { mutableStateOf("") }
@@ -115,7 +120,9 @@ fun CrearCliente(viewModel: ClienteViewModel = viewModel(), navController: NavCo
                         }
 
                         Row {
-                            CustomButton(text = "Cancelar") { navController.popBackStack() }
+                            CustomButton(text = "Cancelar") {
+                                NavigationController.navigate(AppScreen.Login.route)
+                            }
                             CustomButton(text = "Aceptar") {
                                 if (nombre.isNotBlank() &&
                                     correo.isNotBlank() &&
@@ -132,7 +139,7 @@ fun CrearCliente(viewModel: ClienteViewModel = viewModel(), navController: NavCo
                                                 context,
                                                 "Usuario creado, revise su correo", Toast.LENGTH_LONG
                                             ).show()
-                                            navController.popBackStack()
+                                            NavigationController.navigate(AppScreen.Login.route)
                                         },
                                         onError = { msg ->
                                             Toast.makeText(
@@ -174,7 +181,9 @@ fun CustomTextField(
             isNumeric -> KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
             else -> KeyboardOptions.Default
         },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag(label),
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = Color.DarkGray,
             unfocusedBorderColor = Color.DarkGray

@@ -10,6 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.sigccp.PreferenceKeys
@@ -66,7 +67,7 @@ fun loginAndExtractRole(
 }
 
 @Composable
-fun Login(navController: NavController) {
+fun Login() {
     var correo by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
@@ -116,7 +117,7 @@ fun Login(navController: NavController) {
                             password = contrasena,
                             onSuccess = {
                                 isLoading = false
-                                navController.navigate(AppScreen.Menu.route)
+                                NavigationController.navigate(AppScreen.Menu.route)
                             },
                             onError = {
                                 isLoading = false
@@ -128,7 +129,7 @@ fun Login(navController: NavController) {
                 )
 
                 newButton(
-                    onClick = { navController.navigate(AppScreen.CrearCliente.route) },
+                    onClick = { NavigationController.navigate(AppScreen.CrearCliente.route) },
                     nombre = "Crear Cliente"
                 )
             }
