@@ -1,4 +1,9 @@
 steps:
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: 'bash'
+    args:
+    - '-c'
+    - 'echo "{\"version\": \"$TAG_NAME\"}" > ./services/logistica/version.json'
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'build'

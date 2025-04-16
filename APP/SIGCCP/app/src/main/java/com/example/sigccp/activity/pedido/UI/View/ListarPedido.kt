@@ -20,6 +20,7 @@ import androidx.navigation.NavController
 import com.example.sigccp.R
 import com.example.sigccp.activity.pedido.UI.ViewModel.PedidoViewModel
 import com.example.sigccp.navigation.AppScreen
+import com.example.sigccp.navigation.NavigationController
 import com.example.sigccp.ui.View.Components.ListaDePedidos
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.locationDropdown
@@ -28,13 +29,13 @@ import com.example.sigccp.ui.View.moneda
 
 //@Preview
 @Composable
-fun ListarPedidos(navController: NavController)
+fun ListarPedidos()
 {
-    Pedidos(navController)
+    Pedidos()
 }
 
 @Composable
-fun Pedidos (navController: NavController, viewModel: PedidoViewModel = viewModel())
+fun Pedidos (viewModel: PedidoViewModel = viewModel())
 {
     val pedidos = viewModel.pedidos.collectAsState().value
     ScreenContainer(title = stringResource(id = R.string.ListPedidos),false,null) {
@@ -83,7 +84,7 @@ fun Pedidos (navController: NavController, viewModel: PedidoViewModel = viewMode
                         horizontalAlignment = Alignment.CenterHorizontally
                     )
                     {
-                        newButton(onClick = {navController.navigate(AppScreen.CrearPedido.route)}, nombre= "Crear Pedido")
+                        newButton(onClick = {NavigationController.navigate(AppScreen.CrearPedido.route)}, nombre= "Crear Pedido")
                         locationDropdown(
                             locations = moneda,
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }

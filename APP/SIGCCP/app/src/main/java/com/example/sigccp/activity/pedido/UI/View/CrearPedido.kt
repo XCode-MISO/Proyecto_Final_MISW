@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import com.example.sigccp.R
 import com.example.sigccp.activity.pedido.UI.ViewModel.PedidoViewModel
 import com.example.sigccp.navigation.AppScreen
+import com.example.sigccp.navigation.NavigationController
 import com.example.sigccp.ui.View.Components.ClientDropdown
 import com.example.sigccp.ui.View.Components.ListaDeProductosPedido
 import com.example.sigccp.ui.View.Components.ScreenContainer
@@ -29,14 +30,13 @@ import com.example.sigccp.ui.View.moneda
 
 //@Preview
 @Composable
-fun CrearPedido(navController: NavController, viewModel: PedidoViewModel)
+fun CrearPedido(viewModel: PedidoViewModel)
 {
-    Pedido(navController, viewModel)
+    Pedido()
 }
 
 @Composable
-fun Pedido( navController: NavController,
-            viewModel: PedidoViewModel = viewModel()
+fun Pedido( viewModel: PedidoViewModel = viewModel()
 )
 {
     val productos = viewModel.productosSeleccionados.value
@@ -86,7 +86,7 @@ fun Pedido( navController: NavController,
                         horizontalAlignment = Alignment.CenterHorizontally
                     )
                     {
-                        newAgregarButton(onClick = {navController.navigate(AppScreen.AgregarProductos.route)}, nombre= "Agregar")
+                        newAgregarButton(onClick = {NavigationController.navigate(AppScreen.AgregarProductos.route)}, nombre= "Agregar")
                         ClientDropdown(
                             clients = viewModel.clientes.value,
                             onClientSelected = { id -> viewModel.clienteId.value = id.toString() }
@@ -101,7 +101,7 @@ fun Pedido( navController: NavController,
                                 viewModel.crearPedido(
                                     onSuccess = {
                                         viewModel.limpiarPedido()
-                                        navController.navigate(AppScreen.ListarPedidos.route)
+                                        NavigationController.navigate(AppScreen.ListarPedidos.route)
                                     },
                                     onError = {
                                         println("Error al crear pedido: ${it.localizedMessage}")
@@ -110,7 +110,7 @@ fun Pedido( navController: NavController,
                             },
                             nombreDerecho = "Cancelar",
                             onClickDerecho = {
-                                navController.navigate(AppScreen.ListarPedidos.route)
+                                NavigationController.navigate(AppScreen.ListarPedidos.route)
                             },
                             buttonWidth = 320.dp,
                         )

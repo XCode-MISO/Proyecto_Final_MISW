@@ -1,5 +1,6 @@
 package com.example.sigccp.activity.clients.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sigccp.activity.clients.data.model.Client
@@ -67,7 +68,16 @@ class ClienteViewModel: ViewModel() {
                 val response = repository.postCliente(ClientPost(nombre, correo, direccion, telefono, latitud, longitud))
 
                 if (response.isSuccessful) {
-                    Firebase.auth.sendPasswordResetEmail(correo)
+                    try {
+                        Firebase.auth.sendPasswordResetEmail(correo)
+                        //3. Notify when email was sended correctly
+                        Log.d("PasswordReset", "Password reset email sent to: $correo")
+                        Result.success("Password reset email sent successfully.")
+                    } catch (e: Exception) {
+                        // 4. Catch specific exceptions for better error handling
+                        Log.e("PasswordReset", "Failed to send password reset email", e)
+                        Result.failure(e)
+                    }
                     onSuccess()
                 } else {
                     onError("Error en el envío: ${response.errorBody()?.string()}")

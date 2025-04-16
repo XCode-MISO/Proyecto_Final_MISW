@@ -23,12 +23,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import com.example.sigccp.PreferencesManager
+import com.example.sigccp.navigation.AppScreen
+import com.example.sigccp.navigation.NavigationController
 import com.example.sigccp.ui.theme.AmarilloApp
 import com.example.sigccp.ui.theme.AppTypography
 import com.example.sigccp.ui.theme.CcpColors
@@ -93,7 +97,8 @@ fun ScreenContainer(
                 title = {
                     Text(
                         modifier = Modifier.fillMaxWidth()
-                            .wrapContentHeight(Alignment.CenterVertically),
+                            .wrapContentHeight(Alignment.CenterVertically)
+                            .testTag(title),
                         textAlign = TextAlign.Center,
                         text = "SIGCCP",
                         style = AppTypography.titleLarge
@@ -101,8 +106,13 @@ fun ScreenContainer(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = {/* TODO */ },
-                        modifier = Modifier.padding(start = 20.dp, end = 25.dp)
+                        onClick = {
+                            PreferencesManager.clearAll()
+                            NavigationController.navigate(AppScreen.Login.route)
+                        },
+                        modifier = Modifier
+                            .padding(start = 20.dp, end = 25.dp)
+                            .testTag("logout")
                     ) {
                         Icon(
                             imageVector = Icons.Filled.PowerSettingsNew,
@@ -128,7 +138,7 @@ fun ScreenContainer(
                 SubTitleBar(
                     texto = title,
                     imagen = imagen,
-                    enabled = enabled,
+                    enabled = enabled
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 content()
@@ -142,7 +152,9 @@ fun CustomButton(text: String, onClick: () -> Unit) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(containerColor = CcpColors.ColorButton),
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier
+            .padding(8.dp)
+            .testTag(text)
     ) {
         Text(text, color = CcpColors.ColorText, fontWeight = FontWeight.Bold)
     }
@@ -168,7 +180,9 @@ fun PasswordTextField(
                 Icon(imageVector = icon, contentDescription = description, tint = Color.DarkGray)
             }
         },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag(label),
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = Color.DarkGray,
             unfocusedBorderColor = Color.DarkGray
