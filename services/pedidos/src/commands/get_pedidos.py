@@ -13,6 +13,17 @@ class GetPedidos(BaseCommannd):
 
             # Serializar los pedidos incluyendo los productos
             pedidos_json = PedidoJsonSchema(many=True).dump(pedidos)
+            for pedido in pedidos_json:
+                if 'clientId' in pedido:
+                    pedido['client'] = {
+                        "id": pedido.pop("clientId"),
+                        "name": pedido.pop("clientName")
+                    }
+                if 'vendedorId' in pedido:
+                    pedido['vendedor'] = {
+                        "id": pedido.pop("vendedorId"),
+                        "name": pedido.pop("vendedorName")
+                    }
         except Exception as e:
             print(f"ERROR: {str(e)}")
             return {"error": "Error al obtener los pedidos"}, 500

@@ -1,3 +1,4 @@
+## src\commands\fields_pedido.py
 from datetime import datetime, timedelta
 from dateutil import parser
 from marshmallow import ValidationError
@@ -14,6 +15,15 @@ class ValidatePedidoFields:
                 raise MissingField()
             clientId = self.data['clientId']
             if not clientId:
+                raise MissingField()
+            clientName = self.data['clientName']
+            if not clientName:
+                raise MissingField()
+            vendedorId = self.data['vendedorId']
+            if not vendedorId:
+                raise MissingField()
+            vendedorName = self.data['vendedorName']
+            if not vendedorName:
                 raise MissingField()
             products = self.data['products']
             if not products:
@@ -38,6 +48,9 @@ class ValidatePedidoFields:
         return {
             "name": name,
             "clientId": clientId,
+            "clientName": clientName,
+            "vendedorId": vendedorId,
+            "vendedorName": vendedorName,
             "products": products,
             "price": price,
             "deliveryDate": deliveryDate_str

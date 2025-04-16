@@ -1,9 +1,12 @@
+## src\database.py
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
 
+load_dotenv() 
 db = SQLAlchemy()
 
 class DataBase:
@@ -26,12 +29,18 @@ class DataBase:
         DATABASE_NAME = os.getenv("DATABASE_NAME")
 
         print(f"DEBUG: db_type = {db_type}")
+        print(f"DEBUG: DATABASE_USER = {DATABASE_USER}")
+        print(f"DEBUG: db_pass = {db_pass}")
+        print(f"DEBUG: DATABASE_URL = {DATABASE_URL}")
+        print(f"DEBUG: DATABASE_PORT = {DATABASE_PORT}")
+        print(f"DEBUG: DATABASE_NAME = {DATABASE_NAME}")
+        print(f"DEBUG: db_type = {db_type}://{DATABASE_USER}:{db_pass}@{DATABASE_URL}:{DATABASE_PORT}/{DATABASE_NAME}")
 
         if db_type == "":
             raise ValueError("No tiene DB Type  - no permitido en este entorno.")
         
         if not all([db_type, DATABASE_USER, db_pass, DATABASE_URL, DATABASE_PORT, DATABASE_NAME]):
-            raise ValueError("Faltan variables de entorno necesarias para la conexión a la base de datos.")
+            raise ValueError(f"Faltan variables de entorno necesarias para la conexión a la base de datos.: {db_type}://{DATABASE_USER}:{db_pass}@{DATABASE_URL}:{DATABASE_PORT}/{DATABASE_NAME}")
 
         return f"{db_type}://{DATABASE_USER}:{db_pass}@{DATABASE_URL}:{DATABASE_PORT}/{DATABASE_NAME}"
 

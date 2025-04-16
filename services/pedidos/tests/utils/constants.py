@@ -1,0 +1,1 @@
+STATIC_FAKE_UUID = 'dd7c5fce-33be-4337-9cb6-a1190161d0b9'

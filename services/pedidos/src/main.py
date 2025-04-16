@@ -10,8 +10,7 @@ from .database import engine
 from .errors.errors import ApiError
 import os
 from src.models.pedido import Pedido
-from src.models.producto import Producto
-from src.models.cliente import Cliente
+from src.models.pedido_producto import PedidoProducto
 from src.database import db, database
 from src.models.seed_data import seed_database_if_empty  # Solo con importarlo se ejecutará el código del archivo
 
