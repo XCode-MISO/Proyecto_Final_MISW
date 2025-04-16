@@ -11,3 +11,6 @@ steps:
   - '-c'
   - |
     gcloud api-gateway gateways update microservicios-gateway  --api=microservicios-api  --api-config=microservicios-config-v34 --location=us-central1  --project=$PROJECT_ID
+options:
+  logging: CLOUD_LOGGING_ONLY
+  automapSubstitutions: true
