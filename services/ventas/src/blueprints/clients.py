@@ -1,3 +1,4 @@
+import json
 from flask import Flask, jsonify, request, Blueprint
 from ..commands.create_client import CreateClient
 from ..commands.get_client import GetClient
@@ -23,6 +24,13 @@ def getAllClients():
 @client_blueprint.route("/")
 def root_path():
     return "<p>Servicio de Ventas</p>"
+
+@client_blueprint.route("/info")
+def info_path():
+    try:
+        return json.stringify(json.load('version.json'))
+    except:
+        return "No version.json, this means this deployment was manual or there is an error."
 
 @client_blueprint.route("/health")
 def health_check():

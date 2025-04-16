@@ -1,0 +1,24 @@
+steps:
+- name: 'gcr.io/cloud-builders/git'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        TAG=$(git describe --tags --abbrev=0)
+        echo "{\"version\": \"${TAG}\"}" > version.json
+- id: 'deploy logistica'
+  name: 'gcr.io/cloud-builders/gcloud'
+  args: ['builds', 'submit', '--config services/logistica/gcp/cloudbuild.yaml']
+  waitFor: ['-'] #start in parallel
+- id: 'deploy ventas'
+  name: 'gcr.io/cloud-builders/gcloud'
+  args: ['builds', 'submit', '--config services/ventas/gcp/cloudbuild.yaml']
+  waitFor: ['-'] # start in parallel
+- id: 'deploy pedidos'
+  name: 'gcr.io/cloud-builders/gcloud'
+  args: ['builds', 'submit', '--config services/pedidos/gcp/cloudbuild.yaml']
+  waitFor: ['-'] # start in parallel
+- id: 'deploy api-gateway'
+  name: 'gcr.io/cloud-builders/gcloud'
+  args: ['builds', 'submit', '--config Back-end/api-gateway/cloudbuild.yaml']
+  waitFor: ['-'] # start in parallel
