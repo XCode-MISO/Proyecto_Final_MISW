@@ -1,11 +1,11 @@
 steps:
   - name: 'gcr.io/cloud-builders/git'
-      entrypoint: 'bash'
-      args:
-        - '-c'
-        - |
-          TAG=$(git describe --tags --abbrev=0)
-          echo "{\"version\": \"${TAG}\"}" > version.json
+    entrypoint: 'bash'
+    args:
+    - '-c'
+    - |
+      TAG=$(git describe --tags --abbrev=0)
+      echo "{\"version\": \"${TAG}\"}" > version.json
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'build'
