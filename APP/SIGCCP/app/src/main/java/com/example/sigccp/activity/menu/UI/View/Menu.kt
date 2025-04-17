@@ -107,10 +107,10 @@ fun Options()
                             enabled = false
                         )
                         newMenuButton(
-                            onClick = {/*TODO*/ },
+                            onClick = {NavigationController.navigate(AppScreen.Recomendacion.route) },
                             nombre = "RECOMENDACION",
                             imagen = R.drawable.config,
-                            enabled = false
+                            enabled = true
                         )
                         newMenuButton(
                             onClick = { NavigationController.navigate(AppScreen.RegistrarVisita.route) },

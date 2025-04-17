@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <!-- Permitir tráfico en texto claro (HTTP sin HTTPS) Quitar despues(android:usesCleartextTraffic="true") -->
+
     <application
         android:name=".SIGCCPApp"
         android:usesCleartextTraffic="true"
