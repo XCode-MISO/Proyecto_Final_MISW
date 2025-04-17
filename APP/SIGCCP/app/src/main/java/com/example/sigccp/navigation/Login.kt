@@ -124,6 +124,7 @@ fun Login() {
                                 errorMessage = it
                             }
                         )
+                        NavigationController.navigate(AppScreen.Menu.route)
                     },
                     nombre = "Ingresar"
                 )

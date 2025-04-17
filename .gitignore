@@ -213,4 +213,6 @@ test-output/
 # Archivos de dependencias de NPM (si usas React Native o alguna integración)
 node_modules/
 
+#Archivos de credenciales
 keys.json
+google-services.json
