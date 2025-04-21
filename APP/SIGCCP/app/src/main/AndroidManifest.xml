@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".SIGCCPApp"
@@ -28,6 +29,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".activity.recomendacion.service.RecomendacionService"
+            android:exported="false" />
+        <receiver android:exported="false" android:enabled="true"
+            android:name=".MainActivity" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAUeA0tVvrF8O0JNJohoKBtIaMCV3uNZdI" />
