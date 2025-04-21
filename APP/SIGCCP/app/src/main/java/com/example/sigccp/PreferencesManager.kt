@@ -8,6 +8,8 @@ object PreferenceKeys {
     const val TOKEN = "token"
     const val USER_ID = "userId"
     const val USER_NAME = "userName"
+    const val JOB_ID = "job_id"
+    const val RECOMENDACION = "final_recommendation"
 }
 
 object PreferencesManager { // Change to 'object'
