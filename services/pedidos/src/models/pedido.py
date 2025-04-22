@@ -83,7 +83,7 @@ class PedidoSchema(Schema):
     vendedorId = fields.Str(required=False, allow_none=True)
     vendedorName = fields.Str(required=False, allow_none=True)
     products = fields.List(fields.Dict(keys=fields.Str(), values=fields.Raw()), required=True)
-    state = fields.Str(missing="Pendiente")
+    state = fields.Str(load_default="Pendiente")
     price = fields.Float(required=True)
     deliveryDate = fields.Date(required=True, format="iso", validate=validate_deliveryDate)
 
