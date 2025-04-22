@@ -57,6 +57,10 @@ def handle_exception(err):
     return jsonify(response), err.code
 
 
+@app.route("/")
+def hello_world():
+    return "<p>Hello, World!</p>"
+
 # print("Variables de Entorno:")
 # print(f"VERSION: {os.getenv('VERSION')}")
 # print(f"DATABASE_USER: {os.getenv('DATABASE_USER')}")

@@ -88,3 +88,5 @@ class PedidoSchema(Schema):
     price = fields.Float(required=True)
     deliveryDate = fields.Date(required=True, format="iso", validate=validate_deliveryDate)
 
+class PedidoInvetnacioSchema(Schema):
+    products = fields.Nested(ProductoSchema, many=True)
