@@ -8,7 +8,6 @@ from .model import Base,Model
 from marshmallow import Schema, fields, ValidationError
 from .pedido_producto import PedidoProducto
 
-
 # Función de validación para deliveryDate (+2 días Maximo)
 def validate_deliveryDate(value):
     if isinstance(value, datetime):
@@ -88,5 +87,7 @@ class PedidoSchema(Schema):
     price = fields.Float(required=True)
     deliveryDate = fields.Date(required=True, format="iso", validate=validate_deliveryDate)
 
-class PedidoInvetnacioSchema(Schema):
-    products = fields.Nested(ProductoSchema, many=True)
+class PedidoInventarioSchema(Schema):
+    products = fields.List(fields.Dict(keys=fields.Str(), values=fields.Raw()), required=True)
+
+    

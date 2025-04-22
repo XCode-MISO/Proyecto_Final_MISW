@@ -4,6 +4,7 @@ from ..models.pedido import Pedido, PedidoSchema, PedidoJsonSchema
 from ..models.pedido_producto import PedidoProducto
 from marshmallow import ValidationError
 from src.database import db
+from src.infraestructure.pub_sub import publish_pedido_creado, publish_pedido_creado_inventario
 
 class CreatePedido(BaseCommannd):
     def __init__(self, data):
@@ -81,5 +82,14 @@ class CreatePedido(BaseCommannd):
                 "name": pedido_json.pop("vendedorName")
             }
 
+        # Publicar el evento de pedido creado
+        publish_pedido_creado(pedido_json)
+        # Publicar el evento de inventario
+        pedido_inventario_json = {
+            "products": pedido_json.get("products", [])
+        }
+        publish_pedido_creado_inventario(pedido_inventario_json)
+
         session.close()
+
         return pedido_json

@@ -61,6 +61,10 @@ def handle_exception(err):
 def hello_world():
     return "<p>Hello, World!</p>"
 
+@app.route("/health")
+def health_check():
+    return "Ok"
+
 # print("Variables de Entorno:")
 # print(f"VERSION: {os.getenv('VERSION')}")
 # print(f"DATABASE_USER: {os.getenv('DATABASE_USER')}")

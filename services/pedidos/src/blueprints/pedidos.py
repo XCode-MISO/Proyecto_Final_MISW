@@ -61,15 +61,6 @@ def get_pedido(id):
     result = GetPedido(id).execute()
     return jsonify(result), 200
 
-@operations_blueprint.route('/clientes', methods=['GET'])
-def get_clientes():
-    ##auth_header = request.headers.get('Authorization')
-    ##user_id = ValidateToken(auth_header).execute()
-    ##data=request.args.to_dict()
-    result = request.args.to_dict()
-    result = GetClientes().execute()
-    return jsonify(result), 200
-
 @operations_blueprint.route("/info")
 def info_path():
     try:
