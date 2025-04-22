@@ -86,7 +86,7 @@ class CreatePedido(BaseCommannd):
         publish_pedido_creado(pedido_json)
         # Publicar el evento de inventario
         pedido_inventario_json = {
-            "products": pedido_json.get("products", [])
+            "items": pedido_json.get("products", [])
         }
         publish_pedido_creado_inventario(pedido_inventario_json)
 
