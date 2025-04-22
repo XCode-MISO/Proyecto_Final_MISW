@@ -68,7 +68,7 @@ class CreatePedido(BaseCommannd):
         # Serializar y devolver
         pedido_json = PedidoJsonSchema().dump(nuevo_pedido)
 
-
+        
         # Crear el formato deseado para client y vendedor
         if 'clientId' in pedido_json:
             pedido_json['client'] = {
@@ -82,12 +82,16 @@ class CreatePedido(BaseCommannd):
                 "name": pedido_json.pop("vendedorName")
             }
 
+        print("DEBUG: Pedido_Json",pedido_json)
+
         # Publicar el evento de pedido creado
         publish_pedido_creado(pedido_json)
         # Publicar el evento de inventario
         pedido_inventario_json = {
             "items": pedido_json.get("products", [])
         }
+
+        print("DEBUG: Pedido_Inventario_Json",pedido_inventario_json)
         publish_pedido_creado_inventario(pedido_inventario_json)
 
         session.close()

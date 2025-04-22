@@ -11,7 +11,9 @@ def publish_pedido_creado(pedido_dict: dict):
     future = publisher.publish(
         topic_name,
         data=json.dumps(pedido_dict).encode("utf-8")
-    )
+    )    
+
+    print("DEBUG: Pedido_Dict",pedido_dict)
     try:
         future.result()
     except:
@@ -27,6 +29,7 @@ def publish_pedido_creado_inventario(inventario_dict: dict):
         topic_name,
         data=json.dumps(inventario_dict).encode("utf-8")
     )
+    print("DEBUG: Inventario_Dict",inventario_dict)
     try:
         future.result()
     except:
