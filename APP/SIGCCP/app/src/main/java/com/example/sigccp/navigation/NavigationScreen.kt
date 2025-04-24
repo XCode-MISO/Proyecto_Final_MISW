@@ -1,6 +1,7 @@
 package com.example.sigccp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -16,6 +17,9 @@ import com.example.sigccp.activity.clients.ui.viewmodel.ClienteViewModel
 import com.example.sigccp.activity.pedido.UI.View.AgregarProductos
 import com.example.sigccp.activity.pedido.UI.View.CrearPedido
 import com.example.sigccp.activity.pedido.UI.ViewModel.PedidoViewModel
+import com.example.sigccp.activity.recomendacion.ui.view.Recomendacion
+import com.example.sigccp.activity.recomendacion.ui.viewmodel.RecomendacionServiceViewModel
+import com.example.sigccp.activity.recomendacion.ui.viewmodel.RecomendacionViewModel
 
 
 class NavigationController {
@@ -28,12 +32,18 @@ class NavigationController {
 }
 
 @Composable
-fun NavigationScreen(clientViewModel: ClienteViewModel)
+fun NavigationScreen(recomendacionServiceViewModel: RecomendacionServiceViewModel)
 {
     val token = PreferencesManager.getString(PreferenceKeys.TOKEN)
     val startDestination = if (token.isNotEmpty()) AppScreen.Menu.route else AppScreen.Login.route
 
     val viewModel: PedidoViewModel = viewModel()
+    val clientViewModel: ClienteViewModel = viewModel()
+    val recomendacionViewModel: RecomendacionViewModel = viewModel()
+
+    //clientViewModel = ViewModelProvider(this).get(ClienteViewModel::class.java)
+
+
     NavigationController.navController = rememberNavController()
 
     NavHost(navController=NavigationController.navController, startDestination = startDestination)
@@ -66,6 +76,10 @@ fun NavigationScreen(clientViewModel: ClienteViewModel)
         composable(route = AppScreen.AgregarProductos.route)
         {
             AgregarProductos(viewModel)
+        }
+        composable(route = AppScreen.Recomendacion.route)
+        {
+            Recomendacion(recomendacionViewModel, recomendacionServiceViewModel)
         }
     }
 }
