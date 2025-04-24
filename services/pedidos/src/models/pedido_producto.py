@@ -10,7 +10,7 @@ class PedidoProducto(Base):
 
     id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     pedidoId = Column(String(36), ForeignKey('pedidos.id'), nullable=False)
-    productId = Column(String(36),  nullable=False)
+    productId = Column(Integer,  nullable=False)
     amount = Column(Integer, nullable=False)
 
     pedido = relationship("Pedido", back_populates="products")

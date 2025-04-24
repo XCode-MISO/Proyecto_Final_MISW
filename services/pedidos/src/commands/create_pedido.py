@@ -88,9 +88,13 @@ class CreatePedido(BaseCommannd):
         publish_pedido_creado(pedido_json)
         # Publicar el evento de inventario
         pedido_inventario_json = {
-            "items": pedido_json.get("products", [])
-        }
-
+    "items": [
+        {
+            "productoId": prod["id"],
+            "cantidad": prod["amount"]
+        } for prod in productos_data
+    ]
+}
         print("DEBUG: Pedido_Inventario_Json",pedido_inventario_json)
         publish_pedido_creado_inventario(pedido_inventario_json)
 
