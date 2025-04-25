@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
         PreferencesManager.init(this)
 
         viewModel = RecomendacionServiceViewModel()
-        registerReceiver(serviceStopReceiver, IntentFilter("com.example.sigccp.SERVICE_STOPPED"))
+        registerReceiver(serviceStopReceiver, IntentFilter("com.example.sigccp.SERVICE_STOPPED"), Context.RECEIVER_NOT_EXPORTED)
 
         enableEdgeToEdge()
         setContent {
