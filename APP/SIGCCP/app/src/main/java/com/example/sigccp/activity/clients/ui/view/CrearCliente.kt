@@ -14,7 +14,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.example.sigccp.activity.clients.ui.viewmodel.ClienteViewModel
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import androidx.compose.foundation.text.KeyboardOptions
@@ -44,12 +43,14 @@ fun CrearCliente(
     var correo by remember { mutableStateOf("") }
     var telefono by remember { mutableStateOf("") }
 
-    var mostrarMapa by remember { mutableStateOf(false) } // Controla la visibilidad del mapa
     var selectedPosition by remember { mutableStateOf<LatLng?>(null) }
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(LatLng(4.6097, -74.0817), 10f) // Bogotá
     }
 
+    fun isEmailValid(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
 
     ScreenContainer(title = "Crear Cliente", false, null) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
@@ -89,32 +90,26 @@ fun CrearCliente(
                         )
                         // Switch para mostrar u ocultar el mapa
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("Agregar ubicación de la visita")
+                            Text("Ubicación:")
                             Spacer(modifier = Modifier.width(8.dp))
-                            Switch(
-                                checked = mostrarMapa,
-                                onCheckedChange = { mostrarMapa = it }
-                            )
                         }
                         Spacer(modifier = Modifier.height(4.dp))
-                        if (mostrarMapa) {
-                            Box(modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight(0.4f))
-                            {
-                                GoogleMap(
-                                    modifier = Modifier.fillMaxSize(),
-                                    cameraPositionState = cameraPositionState,
-                                    onMapClick = { latLng ->
-                                        selectedPosition = latLng
-                                    }
-                                ) {
-                                    selectedPosition?.let {
-                                        Marker(
-                                            state = MarkerState(position = it),
-                                            title = "Ubicación seleccionada"
-                                        )
-                                    }
+                        Box(modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.4f))
+                        {
+                            GoogleMap(
+                                modifier = Modifier.fillMaxSize(),
+                                cameraPositionState = cameraPositionState,
+                                onMapClick = { latLng ->
+                                    selectedPosition = latLng
+                                }
+                            ) {
+                                selectedPosition?.let {
+                                    Marker(
+                                        state = MarkerState(position = it),
+                                        title = "Ubicación seleccionada"
+                                    )
                                 }
                             }
                         }
@@ -124,33 +119,40 @@ fun CrearCliente(
                                 NavigationController.navigate(AppScreen.Login.route)
                             }
                             CustomButton(text = "Aceptar") {
-                                if (nombre.isNotBlank() &&
-                                    correo.isNotBlank() &&
-                                    direccion.isNotBlank() &&
-                                    telefono.isNotBlank())
-                                {
-                                    val latitud = selectedPosition?.latitude ?: 0.0
-                                    val longitud = selectedPosition?.longitude ?: 0.0
+                                val allFieldsFilled = nombre.isNotBlank() &&
+                                        correo.isNotBlank() &&
+                                        direccion.isNotBlank() &&
+                                        telefono.isNotBlank() &&
+                                        selectedPosition != null
 
-                                    viewModel.createClient(
-                                        nombre, correo, direccion, telefono, latitud, longitud,
-                                        onSuccess = {
-                                            Toast.makeText(
-                                                context,
-                                                "Usuario creado, revise su correo", Toast.LENGTH_LONG
-                                            ).show()
-                                            NavigationController.navigate(AppScreen.Login.route)
-                                        },
-                                        onError = { msg ->
-                                            Toast.makeText(
-                                                context,
-                                                msg, Toast.LENGTH_LONG
-                                            ).show()
-                                        }
-                                    )
-                                } else {
+                                if (!allFieldsFilled) {
                                     Toast.makeText(context, "Por favor, complete todos los campos.", Toast.LENGTH_SHORT).show()
+                                    return@CustomButton
                                 }
+
+                                if (!isEmailValid(correo)) {
+                                    Toast.makeText(context, "Correo no valido", Toast.LENGTH_SHORT).show()
+                                    return@CustomButton
+                                }
+                                val latitud = selectedPosition?.latitude ?: 0.0
+                                val longitud = selectedPosition?.longitude ?: 0.0
+
+                                viewModel.createClient(
+                                    nombre, correo, direccion, telefono, latitud, longitud,
+                                    onSuccess = {
+                                        Toast.makeText(
+                                            context,
+                                            "Usuario creado, revise su correo", Toast.LENGTH_LONG
+                                        ).show()
+                                        NavigationController.navigate(AppScreen.Login.route)
+                                    },
+                                    onError = { msg ->
+                                        Toast.makeText(
+                                            context,
+                                            msg, Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                )
                             }
                         }
                     }
