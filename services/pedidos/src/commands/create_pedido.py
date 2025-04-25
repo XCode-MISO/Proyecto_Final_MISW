@@ -1,9 +1,10 @@
+## src\commands\create_pedido.py
 from .base_command import BaseCommannd
 from ..models.pedido import Pedido, PedidoSchema, PedidoJsonSchema
 from ..models.pedido_producto import PedidoProducto
 from marshmallow import ValidationError
-from src.models.producto import Producto
 from src.database import db
+from src.infraestructure.pub_sub import publish_pedido_creado, publish_pedido_creado_inventario
 
 class CreatePedido(BaseCommannd):
     def __init__(self, data):
@@ -20,27 +21,16 @@ class CreatePedido(BaseCommannd):
             return {"error": err.messages}, 400
 
         try:
+            
             productos_data = validated_data.get("products", [])
             if not productos_data:
                 raise ValueError("No se han proporcionado productos con cantidad.")
 
-            productos_ids = [str(prod["id"]) for prod in productos_data]
-            productos_objetos = db.session.query(Producto).filter(Producto.id.in_(productos_ids)).all()
-
-            productos_encontrados = {str(p.id) for p in productos_objetos}
-            faltantes = set(productos_ids) - productos_encontrados
-            if faltantes:
-                raise ValueError(f"Los siguientes productos no existen en la base de datos: {faltantes}")
-
-            # Construir lista de relaciones con cantidades
             pedido_productos = []
             for prod_data in productos_data:
-                producto = next(p for p in productos_objetos if str(p.id) == str(prod_data["id"]))
-                amount = prod_data["amount"]
-
                 pedido_producto = PedidoProducto(
-                    producto=producto,
-                    amount=amount
+                    productId=prod_data["id"],
+                    amount=prod_data["amount"]
                 )
                 pedido_productos.append(pedido_producto)
 
@@ -51,20 +41,63 @@ class CreatePedido(BaseCommannd):
         nuevo_pedido = Pedido(
             name=validated_data["name"],
             clientId=validated_data["clientId"],
-            products=[pp.producto for pp in pedido_productos],  # relación many-to-many
+            clientName=validated_data["clientName"],
+            vendedorId=validated_data["vendedorId"],
+            vendedorName=validated_data["vendedorName"],
             price=validated_data["price"],
             state=validated_data.get("state", "Pendiente"),
             deliveryDate=validated_data["deliveryDate"]
-        )
-        nuevo_pedido.pedido_productos = pedido_productos  # relación intermedia
+        ) # relación intermedia
 
         # Guardar en la base de datos
         session = db.session()
         session.add(nuevo_pedido)
         session.commit()
+        
+        for prod_data in productos_data:
+            pedido_producto = PedidoProducto(
+                pedidoId=nuevo_pedido.id,  # Asegura la relación
+                productId=prod_data["id"],
+                amount=prod_data["amount"]
+            )
+            session.add(pedido_producto)
+
+        session.commit()
         session.refresh(nuevo_pedido)
 
         # Serializar y devolver
         pedido_json = PedidoJsonSchema().dump(nuevo_pedido)
+
+        
+        # Crear el formato deseado para client y vendedor
+        if 'clientId' in pedido_json:
+            pedido_json['client'] = {
+                "id": pedido_json.pop("clientId"),
+                "name": pedido_json.pop("clientName")
+            }
+        
+        if 'vendedorId' in pedido_json:
+            pedido_json['vendedor'] = {
+                "id": pedido_json.pop("vendedorId"),
+                "name": pedido_json.pop("vendedorName")
+            }
+
+        print("DEBUG: Pedido_Json",pedido_json)
+
+        # Publicar el evento de pedido creado
+        publish_pedido_creado(pedido_json)
+        # Publicar el evento de inventario
+        pedido_inventario_json = {
+    "items": [
+        {
+            "productoId": prod["id"],
+            "cantidad": prod["amount"]
+        } for prod in productos_data
+    ]
+}
+        print("DEBUG: Pedido_Inventario_Json",pedido_inventario_json)
+        publish_pedido_creado_inventario(pedido_inventario_json)
+
         session.close()
+
         return pedido_json

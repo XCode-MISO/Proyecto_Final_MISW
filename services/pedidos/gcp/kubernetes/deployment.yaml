@@ -38,3 +38,7 @@ spec:
           value: "%SQLALCHEMY_DATABASE_URI%"
         - name: DB_TYPE
           value: "%DB_TYPE%"
+        - name: PEDIDO_CREADO_TOPIC
+          value: "PedidoCreado" 
+        - name: PEDIDO_INVENTARIO_TOPIC
+          value: "PedidoCreadoInventarios"
