@@ -61,7 +61,7 @@ steps:
     - run
     - --filename=services/ventas/gcp/kubernetes/deployment.yaml
     - --location=us-central1-c
-    - --cluster=manual-cluster-clone-1
+    - --cluster=manual-cluster-clone-1-clone-1
     - --image=gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/ventas:latest
   # Kubernetes Service Updated
   - name: "gcr.io/cloud-builders/gke-deploy"
@@ -69,7 +69,7 @@ steps:
     - run
     - --filename=services/ventas/gcp/kubernetes/service.yaml
     - --location=us-central1-c
-    - --cluster=manual-cluster-clone-1
+    - --cluster=manual-cluster-clone-1-clone-1
     - --output=output/service
 options:
   logging: CLOUD_LOGGING_ONLY
