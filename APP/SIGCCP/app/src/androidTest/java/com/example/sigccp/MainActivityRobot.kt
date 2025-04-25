@@ -1,6 +1,8 @@
 package com.example.sigccp
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
@@ -38,6 +40,18 @@ class MainActivityRobot(private val composeTestRule: ComposeTestRule) {
 
     fun esperarProcesamiento(segundos: Long){
         runBlocking { delay(segundos) }
+    }
+
+    fun botonEstaActivo(tag: String){
+        composeTestRule
+            .onNodeWithTag(tag)
+            .assertIsEnabled()
+    }
+
+    fun botonNoEstaActivo(tag: String){
+        composeTestRule
+            .onNodeWithTag(tag)
+            .assertIsNotEnabled()
     }
 
 }

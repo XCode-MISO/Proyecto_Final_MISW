@@ -41,4 +41,38 @@ class MainActivityE2eAssetTests {
         robot.esperarProcesamiento(500)
     }
 
+    @Test
+    fun confidencialidadMenuVendedor() {
+        robot.escribirEnCampo("Correo", "vendedor@gmail.com")
+        robot.escribirEnCampo("Contraseña", "12345678")
+        robot.clickEnBoton("Ingresar")
+        robot.esperarProcesamiento(3000)
+        robot.verificarScreenConTituloSeMuestra("¡Hello, Seller!")
+        robot.botonEstaActivo("PEDIDOS")
+        robot.botonEstaActivo("CLIENTES")
+        robot.botonEstaActivo("INVENTARIO")
+        robot.botonEstaActivo("RUTAS")
+        robot.botonEstaActivo("RECOMENDACION")
+        robot.botonEstaActivo("REGISTRAR VISITA")
+        robot.clickEnBoton("logout")
+        robot.esperarProcesamiento(500)
+    }
+
+    @Test
+    fun confidencialidadMenuCliente() {
+        robot.escribirEnCampo("Correo", "cliente@gmail.com")
+        robot.escribirEnCampo("Contraseña", "12345678")
+        robot.clickEnBoton("Ingresar")
+        robot.esperarProcesamiento(3000)
+        robot.verificarScreenConTituloSeMuestra("¡Hello, Client!")
+        robot.botonEstaActivo("PEDIDOS")
+        robot.botonNoEstaActivo("CLIENTES")
+        robot.botonEstaActivo("INVENTARIO")
+        robot.botonNoEstaActivo("RUTAS")
+        robot.botonNoEstaActivo("RECOMENDACION")
+        robot.botonNoEstaActivo("REGISTRAR VISITA")
+        robot.clickEnBoton("logout")
+        robot.esperarProcesamiento(500)
+    }
+
 }

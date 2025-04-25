@@ -189,6 +189,7 @@ fun newMenuButton(
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .testTag(nombre)
                     .semantics { contentDescription = nombre },
                 interactionSource = interactionSource
             ) {
