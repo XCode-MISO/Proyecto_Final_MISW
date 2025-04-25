@@ -21,7 +21,7 @@ spec:
         - containerPort: 5002
         env:
         - name: DB_HOST
-          value: "34.171.48.199"
+          value: "%DATABASE_URL%"
         - name: DB_PORT
           value: "5432"
         - name: DB_USER

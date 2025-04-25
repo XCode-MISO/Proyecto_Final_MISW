@@ -68,7 +68,7 @@ steps:
     - run
     - --filename=services/pedidos/gcp/kubernetes/deployment.yaml
     - --location=us-central1
-    - --cluster=manual-cluster
+    - --cluster=manual-cluster-clone-1
     - --image=gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/pedidos:latest
   # Kubernetes Service Updated
   - name: "gcr.io/cloud-builders/gke-deploy"
@@ -76,7 +76,7 @@ steps:
     - run
     - --filename=services/pedidos/gcp/kubernetes/service.yaml
     - --location=us-central1
-    - --cluster=manual-cluster
+    - --cluster=manual-cluster-clone-1
     - --output=output/service
 options:
   logging: CLOUD_LOGGING_ONLY

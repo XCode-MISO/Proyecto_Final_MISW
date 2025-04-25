@@ -4,7 +4,7 @@ gcloud config set project misw-4301-native-cloud-433702
 
 
 
-gcloud container clusters create-auto manual-cluster \ 
+gcloud container clusters create-auto manual-cluster-clone-1 \ 
   --region us-central1 \
   --scopes=https://www.googleapis.com/auth/cloud-platform
 
@@ -62,7 +62,7 @@ gcloud pubsub subscriptions create recommendations-pull-sub \
 
 
 
-gcloud compute instances describe gke-manual-cluster-default-pool-ba89f0a0-3t0f \
+gcloud compute instances describe gke-manual-cluster-clone-1-default-pool-ba89f0a0-3t0f \
   --zone us-central1-a \
   --format="value(serviceAccounts.email)"
   92636439949-compute@developer.gserviceaccount.com
