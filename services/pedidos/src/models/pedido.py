@@ -1,5 +1,4 @@
 ##src\models\pedido.py
-from sqlite3 import Date
 import uuid
 from datetime import date, datetime, timedelta
 from sqlalchemy import Column, String, Float, Date, ForeignKey, Table

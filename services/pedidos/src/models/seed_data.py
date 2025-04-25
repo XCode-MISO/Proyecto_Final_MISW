@@ -39,7 +39,7 @@ def seed_database_if_empty():
         productos = []
         total_price = 0.0
         for _ in range(random.randint(1, 5)):
-            product_id = str(uuid.uuid4())
+            product_id = random.randint(1, 100)
             precio = round(random.uniform(5.0, 100.0), 2)
             cantidad = random.randint(1, 10)
             total_price += precio * cantidad
