@@ -1,8 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: clusterip-ingress
+  name: ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/proxy-intercept-errors: "false"
+    nginx.ingress.kubernetes.io/proxy-body-size: "1000m" 
 spec:
+  ingressClassName: "nginx"
+  tls:
+  - secretName: tls-secret
   rules:
     - http:
         paths:
@@ -41,4 +50,3 @@ spec:
                 name: ventas
                 port:
                   number: 80
-          # Add more services here
