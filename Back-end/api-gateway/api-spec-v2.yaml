@@ -263,8 +263,8 @@ paths:
           description: "Producto no encontrado"
       x-google-backend:
         address: "http://inventarios.cppxcode.shop/api/inventarios"
-        path_translation: APPEND_PATH_TO_ADDRESS
-    
+        path_translation: APPEND_PATH_TO_ADDRESS  
+  
   /api/route:
     get:
       operationId: "listRutas"

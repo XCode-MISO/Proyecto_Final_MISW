@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: clusterip-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /logistica
+            pathType: Prefix
+            backend:
+              service:
+                name: logistica
+                port:
+                  number: 80
+          - path: /compras
+            pathType: Prefix
+            backend:
+              service:
+                name: ms-compras-service
+                port:
+                  number: 80
+          - path: /inventarios
+            pathType: Prefix
+            backend:
+              service:
+                name: ms-inventarios-service
+                port:
+                  number: 80
+          - path: /pedidos
+            pathType: Prefix
+            backend:
+              service:
+                name: pedidos
+                port:
+                  number: 80
+          - path: /ventas
+            pathType: Prefix
+            backend:
+              service:
+                name: ventas
+                port:
+                  number: 80
+          # Add more services here
