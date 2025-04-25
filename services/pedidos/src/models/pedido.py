@@ -55,7 +55,7 @@ class Pedido(Base, Model):
 # Esquema para la  visualizacion de productos en un pedido
 
 class ProductoSchema(Schema):
-    id = fields.int(attribute="productId")
+    id = fields.Int(attribute="productId")
     amount = fields.Int()
 
 
