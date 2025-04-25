@@ -5,7 +5,7 @@ gcloud config set project misw-4301-native-cloud-433702
 
 
 gcloud container clusters create-auto manual-cluster-clone-1 \ 
-  --region us-central1 \
+  --region us-central1-c \
   --scopes=https://www.googleapis.com/auth/cloud-platform
 
 
@@ -27,12 +27,12 @@ kubectl apply -f recommendations-ingress.yaml
 gcloud sql instances create write-instance \ 
 --database-version=POSTGRES_13 \
   --tier=db-f1-micro \
-  --region=us-central1
+  --region=us-central1-c
 
 gcloud sql instances create read-instance \
   --database-version=POSTGRES_13 \
   --tier=db-f1-micro \
-  --region=us-central1
+  --region=us-central1-c
 
 
   gcloud sql users create query_user \
@@ -63,7 +63,7 @@ gcloud pubsub subscriptions create recommendations-pull-sub \
 
 
 gcloud compute instances describe gke-manual-cluster-clone-1-default-pool-ba89f0a0-3t0f \
-  --zone us-central1-a \
+  --zone us-central1-c-a \
   --format="value(serviceAccounts.email)"
   92636439949-compute@developer.gserviceaccount.com
   92636439949
@@ -122,17 +122,17 @@ gcloud api-gateway api-configs create my-config \
   gcloud api-gateway gateways create my-gateway \
   --api=my-api \
   --api-config=my-config \
-  --location=us-central1 \
+  --location=us-central1-c \
   --project=misw-4301-native-cloud-433702
 
 
 
-  gcloud api-gateway gateways describe my-gateway --location=us-central1 --project=misw-4301-native-cloud-433702
+  gcloud api-gateway gateways describe my-gateway --location=us-central1-c --project=misw-4301-native-cloud-433702
 
 
 
 
-  gcloud api-gateway gateways describe my-gateway --location=us-central1 --format="value(defaultHostname)"
+  gcloud api-gateway gateways describe my-gateway --location=us-central1-c --format="value(defaultHostname)"
 
 
 
@@ -177,19 +177,19 @@ gcloud api-gateway apis create microservicios-api \
   gcloud api-gateway gateways create microservicios-gateway \
   --api=microservicios-api \
   --api-config=microservicios-config-v1 \
-  --location=us-central1 \
+  --location=us-central1-c \
   --project=misw-4301-native-cloud-433702
 
 
  gcloud api-gateway gateways update microservicios-gateway \
   --api=microservicios-api \
   --api-config=ms-config-fixed \
-  --location=us-central1 \
+  --location=us-central1-c \
   --project=misw-4301-native-cloud-433702
 
 
   gcloud api-gateway gateways describe microservicios-gateway \
-  --location=us-central1 \
+  --location=us-central1-c \
   --project=misw-4301-native-cloud-433702 \
   --format="value(defaultHostname)"git add .
   

@@ -55,7 +55,7 @@ steps:
     args:
     - run
     - --filename=services/logistica/gcp/kubernetes/deployment.yaml
-    - --location=us-central1
+    - --location=us-central1-c
     - --cluster=manual-cluster-clone-1
     - --image=gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/logistica:latest
   # Kubernetes Service Updated
@@ -63,7 +63,7 @@ steps:
     args:
     - run
     - --filename=services/logistica/gcp/kubernetes/service.yaml
-    - --location=us-central1
+    - --location=us-central1-c
     - --cluster=manual-cluster-clone-1
     - --output=output/service
 options:
