@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import * as versionJson from '../../../public/version.json'
+import versionJson from '../../../public/version.json'
 
 @Component({
   selector: 'app-footer',

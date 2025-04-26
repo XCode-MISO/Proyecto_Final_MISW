@@ -3,7 +3,7 @@ steps:
     entrypoint: 'bash'
     args:
     - '-c'
-    - 'echo "{\"version\": \"$TAG_NAME\"}" > ./front/aplicacion-web/version.json'
+    - 'echo "{\"version\": \"$TAG_NAME\"}" > ./front/aplicacion-web/public/version.json'
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:
