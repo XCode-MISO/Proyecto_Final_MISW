@@ -58,11 +58,11 @@ paths:
         201:
           description: "Producto creado"
       x-google-backend:
-        address: "http://34.102.201.113/compras/api/productos"
+        address: "http://kubernetes-gateway.cppxcode.shop/compras/api/productos"
     options:
       operationId: corsCreateProducto
       x-google-backend:
-        address: http://34.102.201.113/compras
+        address: http://kubernetes-gateway.cppxcode.shop/compras
       responses:
         '200':
           description: A successful response
@@ -78,7 +78,7 @@ paths:
         200:
           description: "Lista de fabricantes"
       x-google-backend:
-        address: "http://34.102.201.113/compras/api/fabricantes"
+        address: "http://kubernetes-gateway.cppxcode.shop/compras/api/fabricantes"
     post:
       operationId: "createFabricante"
       summary: "Crear fabricante"
@@ -107,11 +107,11 @@ paths:
         201:
           description: "Fabricante creado"
       x-google-backend:
-        address: "http://34.102.201.113/compras/api/fabricantes"
+        address: "http://kubernetes-gateway.cppxcode.shop/compras/api/fabricantes"
     options:
       operationId: corsAddFabricante
       x-google-backend:
-        address: http://34.102.201.113/compras/api/fabricantes
+        address: http://kubernetes-gateway.cppxcode.shop/compras/api/fabricantes
       responses:
         '200':
           description: A successful response
@@ -145,11 +145,11 @@ paths:
                 items:
                   type: "string"
       x-google-backend:
-        address: "http://34.102.201.113/compras/api/fabricantes/upload"
+        address: "http://kubernetes-gateway.cppxcode.shop/compras/api/fabricantes/upload"
     options:
       operationId: "corsUploadFabricantes"
       x-google-backend:
-        address: "http://34.102.201.113/compras/api/fabricantes/upload"
+        address: "http://kubernetes-gateway.cppxcode.shop/compras/api/fabricantes/upload"
       responses:
         '200':
           description: "CORS response"        
@@ -180,11 +180,11 @@ paths:
                 stock:
                   type: "integer"
       x-google-backend:
-        address: "http://34.102.201.113/inventario/api/inventarios/pedidos"
+        address: "http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios/pedidos"
     options:
       operationId: "corsListInventarioProductos"
       x-google-backend:
-        address: "http://34.102.201.113/inventario/api/inventarios/pedidos"
+        address: "http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios/pedidos"
       responses:
         '200':
           description: "CORS preflight response"
@@ -213,11 +213,11 @@ paths:
                 cantidad:
                   type: "integer"
       x-google-backend:
-        address: "http://34.102.201.113/inventario/api/inventarios/ubicacion"
+        address: "http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios/ubicacion"
     options:
       operationId: "corsListInventarioUbicacion"
       x-google-backend:
-        address: "http://34.102.201.113/inventario/api/inventarios/ubicacion"
+        address: "http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios/ubicacion"
       responses:
         '200':
           description: "CORS preflight response"
@@ -262,7 +262,7 @@ paths:
         404:
           description: "Producto no encontrado"
       x-google-backend:
-        address: "http://34.102.201.113/inventario/api/inventarios"
+        address: "http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios"
         path_translation: APPEND_PATH_TO_ADDRESS  
   
   /api/route:
@@ -276,7 +276,7 @@ paths:
         200:
           description: "Lista de rutas generadas"
       x-google-backend:
-        address: "http://34.102.201.113/logistica/api/route"
+        address: "http://kubernetes-gateway.cppxcode.shop/logistica/api/route"
 
   /api/route/{route_id}:
     get:
@@ -297,7 +297,7 @@ paths:
         404:
           description: "No se encontró esa ruta"
       x-google-backend:
-        address: "http://34.102.201.113/logistica"
+        address: "http://kubernetes-gateway.cppxcode.shop/logistica"
         path_translation: APPEND_PATH_TO_ADDRESS
         
   /api/add-stop-route:
@@ -365,11 +365,11 @@ paths:
         500:
           description: Server error
       x-google-backend:
-        address: "http://34.102.201.113/logistica/api/add-stop-route"
+        address: "http://kubernetes-gateway.cppxcode.shop/logistica/api/add-stop-route"
     options:
       operationId: corsAddStop
       x-google-backend:
-        address: http://34.102.201.113/logistica
+        address: http://kubernetes-gateway.cppxcode.shop/logistica
       responses:
         '200':
           description: A successful response
@@ -433,11 +433,11 @@ paths:
         404:
           description: "No se encontró esa ruta"
       x-google-backend:
-        address: "http://34.102.201.113/logistica/api/generate-route"
+        address: "http://kubernetes-gateway.cppxcode.shop/logistica/api/generate-route"
     options:
       operationId: corsGenerateRoute
       x-google-backend:
-        address: http://34.102.201.113/logistica
+        address: http://kubernetes-gateway.cppxcode.shop/logistica
       responses:
         '200':
           description: A successful response
@@ -451,7 +451,7 @@ paths:
         200:
           description: Lista de pedidos
       x-google-backend:
-        address: "http://34.102.201.113/pedidos/pedidos"
+        address: "http://kubernetes-gateway.cppxcode.shop/pedidos/pedidos"
 
   /api/pedidos/{pedido_id}:
     get:
@@ -470,7 +470,7 @@ paths:
         404:
           description: "No se encontró ese pedido"
       x-google-backend:
-        address: "http://34.102.201.113/pedidos/pedidos"
+        address: "http://kubernetes-gateway.cppxcode.shop/pedidos/pedidos"
 
   /api/pedidos/create_pedido:
     post:
@@ -480,11 +480,11 @@ paths:
         200:
           description: Pedido creado correctamente
       x-google-backend:
-        address: "http://34.102.201.113/pedidos/create_pedido"
+        address: "http://kubernetes-gateway.cppxcode.shop/pedidos/create_pedido"
     options:
       operationId: corsCreatePedido
       x-google-backend:
-        address: http://34.102.201.113/pedidos
+        address: http://kubernetes-gateway.cppxcode.shop/pedidos
       responses:
         '200':
           description: A successful response
@@ -497,11 +497,11 @@ paths:
         200:
           description: Visita nueva creada correctamente
       x-google-backend:
-        address: "http://34.102.201.113/ventas/clients"
+        address: "http://kubernetes-gateway.cppxcode.shop/ventas/clients"
     options:
       operationId: corsCrearCliente
       x-google-backend:
-        address: http://34.102.201.113/ventas
+        address: http://kubernetes-gateway.cppxcode.shop/ventas
       responses:
         '200':
           description: A successful response
@@ -515,7 +515,7 @@ paths:
         200:
           description: "Lista de clientes generadas"
       x-google-backend:
-        address: "http://34.102.201.113/ventas/clients"
+        address: "http://kubernetes-gateway.cppxcode.shop/ventas/clients"
 
   /api/clients/{client_id}:
     get:
@@ -536,7 +536,7 @@ paths:
         404:
           description: "No se encontró esa Cliente"
       x-google-backend:
-        address: "http://34.102.201.113/ventas"
+        address: "http://kubernetes-gateway.cppxcode.shop/ventas"
         path_translation: APPEND_PATH_TO_ADDRESS
 
   /api/visits:
@@ -547,11 +547,11 @@ paths:
         200:
           description: Visita nueva creada correctamente
       x-google-backend:
-        address: "http://34.102.201.113/ventas/visits"
+        address: "http://kubernetes-gateway.cppxcode.shop/ventas/visits"
     options:
       operationId: corsCrearVisita
       x-google-backend:
-        address: http://34.102.201.113/ventas/visits
+        address: http://kubernetes-gateway.cppxcode.shop/ventas/visits
       responses:
         '200':
           description: A successful response
@@ -565,7 +565,7 @@ paths:
         200:
           description: "Lista de visitas generadas"
       x-google-backend:
-        address: "http://34.102.201.113/ventas/visits"
+        address: "http://kubernetes-gateway.cppxcode.shop/ventas/visits"
   
   /command/api/upload:
     post:
@@ -659,11 +659,11 @@ paths:
         200:
           description: Visita nueva creada correctamente
       x-google-backend:
-        address: "http://34.102.201.113/ventas/api/vendedores"
+        address: "http://kubernetes-gateway.cppxcode.shop/ventas/api/vendedores"
     options:
       operationId: corsCrearVendedor
       x-google-backend:
-        address: http://34.102.201.113/ventas
+        address: http://kubernetes-gateway.cppxcode.shop/ventas
       responses:
         '200':
           description: A successful response
@@ -677,5 +677,5 @@ paths:
         200:
           description: "Lista de vendedores generadas"
       x-google-backend:
-        address: "http://34.102.201.113/ventas/api/vendedores"
+        address: "http://kubernetes-gateway.cppxcode.shop/ventas/api/vendedores"
 
