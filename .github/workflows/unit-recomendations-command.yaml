@@ -25,14 +25,15 @@ jobs:
           pip install pytest pytest-cov
 
       - name: Run tests + coverage
+        working-directory: services/recomendations_command
         run: |
           export PYTHONPATH=$PYTHONPATH:$(pwd)
-          pytest -q services/recomendations_command/tests \
-            --cov=services/recomendations_command \
+          pytest -q tests \
+            --cov=src \
             --cov-report=xml \
             --cov-report=html:cov_html
 
       - uses: actions/upload-artifact@v4
         with:
           name: coverage-recomendations_command
-          path: cov_html
+          path: services/recomendations_command/cov_html
