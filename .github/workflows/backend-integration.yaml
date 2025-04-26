@@ -8,7 +8,7 @@ on:
   push:
     branches: [master]
     paths:
-      - "services/**"
+      - "services/integration-test/**"
 
 jobs:
   integration:
@@ -40,7 +40,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r services/requirements.txt
+          pip install -r services/integration-test/requirements.txt
           pip install pytest pytest-cov
 
       - name: Wait for Postgres
@@ -49,7 +49,7 @@ jobs:
 
       - name: Run integration tests
         run: |
-          pytest -q services/integration \
+          pytest -q services/integration-test \
             --cov=services \
             --cov-report=xml \
             --cov-report=html:cov_html

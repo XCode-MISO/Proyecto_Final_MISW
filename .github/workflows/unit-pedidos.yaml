@@ -16,16 +16,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with: {python-version: "3.12"}
+        with:
+          python-version: "3.12"
+
+      - name: Install pipenv
+        run: pip install pipenv
 
       - name: Install deps
-        run: |
-          pip install -r services/pedidos/requirements.txt
-          pip install pytest pytest-cov
+        working-directory: services/pedidos
+        run: pipenv install --dev
 
       - name: Run tests + coverage
+        working-directory: services/pedidos
         run: |
-          pytest -q services/pedidos/tests \
+          pipenv run pytest -q tests \
             --cov=services/pedidos \
             --cov-report=xml \
             --cov-report=html:cov_html
@@ -33,4 +37,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: coverage-pedidos
-          path: cov_html
+          path: services/pedidos/cov_html
