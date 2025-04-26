@@ -13,6 +13,9 @@ on:
 jobs:
   unit:
     runs-on: ubuntu-latest
+    env:
+      VIDEO_BUCKET: "videos_tiendas"
+      GCP_PROJECT: "misw-4301-native-cloud-433702"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
