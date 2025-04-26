@@ -97,11 +97,11 @@ paths:
                 items:
                   type: "string"
       x-google-backend:
-        address: "http://compras.cppxcode.shop/api/productos/upload"
+        address: "http://kubernetes-gateway.cppxcode.shop/compras/api/productos/upload"
     options:
       operationId: "corsUploadProductos"
       x-google-backend:
-        address: "http://compras.cppxcode.shop/api/productos/upload"
+        address: "http://kubernetes-gateway.cppxcode.shop/compras/api/productos/upload"
       responses:
         '200':
           description: "CORS response"     

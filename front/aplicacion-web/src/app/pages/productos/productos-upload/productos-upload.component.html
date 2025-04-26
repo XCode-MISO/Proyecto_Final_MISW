@@ -1,0 +1,39 @@
+
+  <div class="form-wrapper">
+    <h2>Carga Masiva de Productos</h2>
+   
+
+    <div class="file-upload-container">
+      <label class="file-label" for="archivo">Archivo:</label>
+      
+      <div class="custom-file-upload">
+     
+        <input
+          id="archivo"
+          type="file"
+          (change)="onFileSelected($event)"
+          accept=".csv"
+        />
+        <span class="upload-icon"> 
+          &#x1F4E4;
+        </span>
+      </div>
+    </div>
+
+    <div *ngIf="message" class="response-message">{{ message }}</div>
+    <div *ngIf="errorMessages && errorMessages.length" class="error-messages">
+      <ul>
+        <li *ngFor="let err of errorMessages">{{ err }}</li>
+      </ul>
+    </div>
+
+    <div class="acciones">
+      <button mat-flat-button class="subir-btn" (click)="uploadFile()">Cargar Productos</button>
+      <button mat-flat-button class="cancel-btn" (click)="cancelar()">Cancelar</button>
+    </div>
+
+
+  
+  <div class="loading-overlay" *ngIf="isLoading">
+    <img src="loading.gif" alt="Cargando..." />
+  </div>

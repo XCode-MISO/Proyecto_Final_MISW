@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ProductosService, FabricanteDto, ProductoDto } from './productos.service';
 import { HttpClientModule } from '@angular/common/http';
 import { tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-productos-cargar',
@@ -27,6 +28,7 @@ import { tap } from 'rxjs';
 export class ProductosCargarComponent implements OnInit {
   private fb = inject(FormBuilder);
   private service = inject(ProductosService);
+  private router: Router = inject(Router);
 
   form!: FormGroup;
   fabricantes: FabricanteDto[] = [];
@@ -84,5 +86,7 @@ export class ProductosCargarComponent implements OnInit {
     this.form.reset();
     this.enviado = false;
     this.mensaje = '';
+    this.router.navigate(['/productos/seleccion-carga-producto']);
   }
+
 }

@@ -10,8 +10,10 @@ import { ProductosCargarComponent } from './pages/productos/productos-cargar/pro
 import { GestionFabricantesComponent } from './pages/fabricantes/gestion-fabricantes/gestion-fabricantes.component';
 
 import { SeleccionCargaComponent } from './pages/fabricantes/seleccion-carga/seleccion-carga.component';
-import { FabricantesUploadComponent } from './pages/fabricantes/fabricantes-upload/fabricantes-upload.component';
 
+import { SeleccionCargaProductoComponent } from './pages/productos/seleccion-carga-producto/seleccion-carga-producto.component';
+import { FabricantesUploadComponent } from './pages/fabricantes/fabricantes-upload/fabricantes-upload.component';
+import { ProductosUploadComponent } from './pages/productos/productos-upload/productos-upload.component';
 import { MenuComponent } from './pages/ventas/menu/menu.component';
 import { VendedorAddComponent } from './pages/ventas/vendedor/vendedor-add/vendedor-add.component';
 export const routes: Routes = [
@@ -39,7 +41,9 @@ export const routes: Routes = [
   { path: 'fabricantes/menu',component: GestionFabricantesComponent },
   { path: 'productos/crear',component: ProductosCargarComponent },
   { path: 'fabricantes/seleccion-carga', component: SeleccionCargaComponent },
+  { path: 'productos/seleccion-carga-producto', component: SeleccionCargaProductoComponent },
   { path: 'fabricantes/upload',component: FabricantesUploadComponent },
+  { path: 'productos/upload',component: ProductosUploadComponent },
 
   { path: 'ventas',component: MenuComponent },
   { path: 'ventas/vendedor/add',component: VendedorAddComponent },
