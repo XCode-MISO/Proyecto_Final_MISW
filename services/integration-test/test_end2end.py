@@ -26,7 +26,7 @@ def test_flujo_creacion_y_pedido(create_topics):
     csv = ("nombre,fabricante_id,cantidad,precio,moneda,bodega,estante,pasillo\n"
            "Laptop,1,10,1000,USD,B1,E1,P1\n")
     files = {"file": ("prod.csv", io.BytesIO(csv.encode()))}
-    r = requests.post(f"{BASE['compras']}/compras/productos/carga-masiva", files=files)
+    r = requests.post(f"{BASE['compras']}/productos/upload", files=files)
     assert r.ok
 
     # 2. esperar consistencia eventual

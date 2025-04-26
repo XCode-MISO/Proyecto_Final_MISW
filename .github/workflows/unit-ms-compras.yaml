@@ -24,7 +24,7 @@ jobs:
           pip install -r services/ms_compras/requirements.txt
           pip install pytest pytest-cov
 
-      # ▶ Ejecuta pytest con cobertura XML + HTML
+  
       - name: Run tests with coverage
         run: |
           pytest \
@@ -33,7 +33,7 @@ jobs:
             --cov-report=html:cov_html \
             -q services/ms_compras/tests
 
-      # ▽ Sube la carpeta HTML como artefacto
+  
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
         with:

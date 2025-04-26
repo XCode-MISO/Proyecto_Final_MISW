@@ -1,14 +1,14 @@
-name: unit-ms_inventarios
+name: unit-recomendations-query
 
 on:
   pull_request:
     paths:
-      - "services/ms_inventarios/**"
-      - ".github/workflows/unit-ms-inventarios.yml"
+      - "services/recomendations-query/**"
+      - ".github/workflows/unit-recomendations-query.yml"
   push:
     branches: [master]
     paths:
-      - "services/ms_inventarios/**"
+      - "services/recomendations-query/**"
 
 jobs:
   unit:
@@ -16,21 +16,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with: {python-version: "3.10"}
+        with: {python-version: "3.9"}
 
       - name: Install deps
         run: |
-          pip install -r services/ms_inventarios/requirements.txt
+          pip install -r services/recomendations-query/requirements.txt
           pip install pytest pytest-cov
 
       - name: Run tests + coverage
         run: |
-          pytest -q services/ms_inventarios/tests \
-            --cov=services/ms_inventarios \
+          pytest -q services/recomendations-query/tests \
+            --cov=services/recomendations-query \
             --cov-report=xml \
             --cov-report=html:cov_html
 
       - uses: actions/upload-artifact@v4
         with:
-          name: coverage-ms_inventarios
+          name: coverage-recomendations-query
           path: cov_html
