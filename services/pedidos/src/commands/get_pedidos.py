@@ -3,6 +3,9 @@ from ..models.pedido import Pedido, PedidoJsonSchema
 from src.database import db
 
 class GetPedidos(BaseCommannd):
+    def __init__(self, client_id=None):
+        self.client_id = client_id
+        
     def execute(self):
         print("DEBUG: Entrando en GetPedidos.execute()")
 
@@ -15,7 +18,7 @@ class GetPedidos(BaseCommannd):
                 query = query.filter(Pedido.clientId == self.client_id)  # <-- filtramos por clientId si viene
 
             pedidos = query.all()
-            
+
             print(f"DEBUG: Se encontraron {len(pedidos)} pedidos")
 
             # Serializar los pedidos incluyendo los productos
