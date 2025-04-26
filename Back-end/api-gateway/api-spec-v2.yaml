@@ -67,6 +67,44 @@ paths:
         '200':
           description: A successful response
 
+  /api/productos/upload:
+    post:
+      operationId: "uploadProductos"
+      summary: "Carga masiva de productos"
+      description: "Permite la carga masiva de productos mediante un archivo CSV con los campos: nombre, fabricante_id, cantidad, precio, moneda, bodega, estante y pasillo."
+      consumes:
+        - "multipart/form-data"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "formData"
+          name: "file"
+          description: "Archivo CSV con los campos: nombre, fabricante_id, cantidad, precio, moneda, bodega, estante y pasillo."
+          required: true
+          type: "string"
+          format: "binary"
+      responses:
+        200:
+          description: "Carga masiva procesada"
+          schema:
+            type: "object"
+            properties:
+              inserted:
+                type: "integer"
+              errors:
+                type: "array"
+                items:
+                  type: "string"
+      x-google-backend:
+        address: "http://compras.cppxcode.shop/api/productos/upload"
+    options:
+      operationId: "corsUploadProductos"
+      x-google-backend:
+        address: "http://compras.cppxcode.shop/api/productos/upload"
+      responses:
+        '200':
+          description: "CORS response"     
+
   /api/fabricantes:
     get:
       operationId: "listFabricantes"
@@ -567,7 +605,7 @@ paths:
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/ventas/visits"
   
-  /command/api/upload:
+  /api/upload:
     post:
       operationId: "uploadVideoCommand"
       summary: "Subir video para procesamiento"
@@ -597,17 +635,17 @@ paths:
               status:
                 type: "string"
       x-google-backend:
-        address: "http://videoprocess/command/api/upload"
+        address: "http://recomendation-command.cppxcode.shop/api/upload"
     options:
       operationId: "corsUploadVideo"
       x-google-backend:
-        address: "http://videoprocess.cppxcode.shop/command/api/upload"
+        address: "http://recomendation-command.cppxcode.shop/api/upload"
       responses:
         '200':
           description: "Respuesta CORS exitosa"
 
     
-  /query/api/recommend:
+  /api/recommend:
     get:
       operationId: "getRecommendation"
       summary: "Obtener recomendación por job_id"
@@ -641,11 +679,11 @@ paths:
         404:
           description: "No se encontró una recomendación para el job_id proporcionado."
       x-google-backend:
-        address: "http://recomendations.cppxcode.shop/query/api/recommend"
+        address: "http://recomendation-query.cppxcode.shop/api/recommend"
     options:
       operationId: "corsGetRecommendation"
       x-google-backend:
-        address: "http://recomendations.cppxcode.shop/query/api/recommend"
+        address: "http://recomendation-query.cppxcode.shop/api/recommend"
       responses:
         '200':
           description: "Respuesta CORS exitosa"
