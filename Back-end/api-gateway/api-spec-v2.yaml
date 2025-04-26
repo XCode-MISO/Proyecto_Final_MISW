@@ -535,7 +535,7 @@ paths:
         200:
           description: Visita nueva creada correctamente
       x-google-backend:
-        address: "http://kubernetes-gateway.cppxcode.shop/ventas/api/clients"
+        address: "http://kubernetes-gateway.cppxcode.shop/ventas"
     options:
       operationId: corsCrearCliente
       x-google-backend:
