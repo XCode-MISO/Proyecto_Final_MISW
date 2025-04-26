@@ -10,7 +10,10 @@ TOPICS        = {
     "products": "inventarios-products",
     "stock":    "inventarios-stock",
 }
-SUBS          = {k: f"{v}-sub" for k, v in TOPICS.items()}
+SUBS = {
+    "inventarios-products": "sub-products",
+    "inventarios-orders": "sub-orders",
+}
 
 # ---------------------------------------------------------------------------
 @pytest.fixture(scope="session", autouse=True)
