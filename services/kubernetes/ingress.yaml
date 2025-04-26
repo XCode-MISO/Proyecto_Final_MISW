@@ -1,52 +1,90 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
 metadata:
-  name: ingress
-  annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/proxy-intercept-errors: "false"
-    nginx.ingress.kubernetes.io/proxy-body-size: "1000m" 
+  name: my-gateway
+  namespace: default
 spec:
-  ingressClassName: "nginx"
-  tls:
-  - secretName: tls-secret
+  gatewayClassName: "gke-l7-global-external-managed"
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: service-router
+  namespace: default
+spec:
+  parentRefs:
+    - name: my-gateway
   rules:
-    - http:
-        paths:
-          - path: /logistica
-            pathType: Prefix
-            backend:
-              service:
-                name: logistica
-                port:
-                  number: 80
-          - path: /compras
-            pathType: Prefix
-            backend:
-              service:
-                name: ms-compras-service
-                port:
-                  number: 80
-          - path: /inventarios
-            pathType: Prefix
-            backend:
-              service:
-                name: ms-inventarios-service
-                port:
-                  number: 80
-          - path: /pedidos
-            pathType: Prefix
-            backend:
-              service:
-                name: pedidos
-                port:
-                  number: 80
-          - path: /ventas
-            pathType: Prefix
-            backend:
-              service:
-                name: ventas
-                port:
-                  number: 80
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /logistica
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: logistica
+          port: 80
+
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /pedidos
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: pedidos
+          port: 80
+
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /ventas
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: ventas
+          port: 80
+
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /compras
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: ms-compras
+          port: 80
+
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /inventario
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: ms-inventarios
+          port: 80

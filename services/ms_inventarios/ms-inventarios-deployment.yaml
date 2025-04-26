@@ -23,13 +23,13 @@ spec:
         - name: DB_HOST
           value: "%DATABASE_URL%"
         - name: DB_PORT
-          value: "5432"
+          value: "%DATABASE_PORT%"
         - name: DB_USER
-          value: "admin_write"
+          value: "%DATABASE_USER%"
         - name: DB_PASS
-          value: "PASSWORD_123"
+          value: "%DATABASE_PASSWORD%"
         - name: DB_NAME
-          value: "inventarios_db"
+          value: "%DATABASE_NAME%"
         - name: GCP_PROJECT_ID
           value: "misw-4301-native-cloud-433702"
         - name: PUBSUB_SUBSCRIPTION_ID

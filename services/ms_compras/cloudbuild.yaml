@@ -3,71 +3,71 @@ steps:
     entrypoint: 'bash'
     args:
     - '-c'
-    - 'echo "{\"version\": \"$TAG_NAME\"}" > ./services/ms_inventarios/version.json'
+    - 'echo "{\"version\": \"$TAG_NAME\"}" > ./services/ms_compras/version.json'
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:
     - '-c'
-    - echo $_FIREBASE_ADMIN_KEYS | base64 -d > ./services/ms_inventarios/keys.json
+    - echo $_FIREBASE_ADMIN_KEYS | base64 -d > ./services/ms_compras/keys.json
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'build'
     - '-t'
-    - 'gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/ms_inventarios:latest'
+    - 'gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/ms_compras:latest'
     - '-f'
-    - 'services/ms_inventarios/Dockerfile'
-    - 'services/ms_inventarios'
+    - 'services/ms_compras/Dockerfile'
+    - 'services/ms_compras'
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/ms_inventarios:latest']
+    args: ['push', 'gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/ms_compras:latest']
   # REPLACE GOOGLE PROJECT
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:
     - '-c'
-    - sed -i 's/%GOOGLE_CLOUD_PROJECT%/'${_GOOGLE_CLOUD_PROJECT}'/g' services/ms_inventarios/gcp/kubernetes/deployment.yaml
+    - sed -i 's/%GOOGLE_CLOUD_PROJECT%/'${_GOOGLE_CLOUD_PROJECT}'/g' services/ms_compras/gcp/kubernetes/deployment.yaml
   # REPLACE DATABASE_URL
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:
     - '-c'
-    - sed -i 's/%DATABASE_URL%/'${_DATABASE_URL}'/g' services/ms_inventarios/gcp/kubernetes/deployment.yaml
+    - sed -i 's/%DATABASE_URL%/'${_DATABASE_URL}'/g' services/ms_compras/gcp/kubernetes/deployment.yaml
   # REPLACE DATABASE_NAME
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:
     - '-c'
-    - sed -i 's/%DATABASE_NAME%/'${_DATABASE_NAME}'/g' services/ms_inventarios/gcp/kubernetes/deployment.yaml
+    - sed -i 's/%DATABASE_NAME%/'${_DATABASE_NAME}'/g' services/ms_compras/gcp/kubernetes/deployment.yaml
   # REPLACE DATABASE_USER
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:
     - '-c'
-    - sed -i 's/%DATABASE_USER%/'${_DATABASE_USER}'/g' services/ms_inventarios/gcp/kubernetes/deployment.yaml
+    - sed -i 's/%DATABASE_USER%/'${_DATABASE_USER}'/g' services/ms_compras/gcp/kubernetes/deployment.yaml
   # REPLACE DATABASE_PASSWORD
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:
     - '-c'
-    - sed -i 's/%DATABASE_PASSWORD%/'${_DATABASE_PASSWORD}'/g' services/ms_inventarios/gcp/kubernetes/deployment.yaml
+    - sed -i 's/%DATABASE_PASSWORD%/'${_DATABASE_PASSWORD}'/g' services/ms_compras/gcp/kubernetes/deployment.yaml
   # REPLACE DATABASE_PORT
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:
     - '-c'
-    - sed -i 's/%DATABASE_PORT%/'${_DATABASE_PORT}'/g' services/ms_inventarios/gcp/kubernetes/deployment.yaml
+    - sed -i 's/%DATABASE_PORT%/'${_DATABASE_PORT}'/g' services/ms_compras/gcp/kubernetes/deployment.yaml
   # Kubernetes Deploy
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
     - run
-    - --filename=services/ms_inventarios/gcp/kubernetes/deployment.yaml
+    - --filename=services/ms_compras/gcp/kubernetes/deployment.yaml
     - --location=us-central1-c
     - --cluster=manual-cluster-clone-1-clone-1
-    - --image=gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/ms_inventarios:latest
+    - --image=gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/ms_compras:latest
   # Kubernetes Service Updated
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
     - run
-    - --filename=services/ms_inventarios/gcp/kubernetes/service.yaml
+    - --filename=services/ms_compras/gcp/kubernetes/service.yaml
     - --location=us-central1-c
     - --cluster=manual-cluster-clone-1-clone-1
     - --output=output/service
