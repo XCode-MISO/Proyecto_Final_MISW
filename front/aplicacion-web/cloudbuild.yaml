@@ -26,7 +26,7 @@ steps:
         'aplicacion-web',
         '--allow-unauthenticated',
         '--region',
-        'us-central1-c',
+        'us-central1',
         '--source',
         'front/aplicacion-web',
       ]
