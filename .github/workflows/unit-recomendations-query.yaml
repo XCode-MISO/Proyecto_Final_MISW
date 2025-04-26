@@ -16,7 +16,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with: {python-version: "3.9"}
+        with:
+          python-version: "3.9"
 
       - name: Install deps
         run: |
@@ -24,14 +25,15 @@ jobs:
           pip install pytest pytest-cov
 
       - name: Run tests + coverage
+        working-directory: services/recomendations_query
         run: |
           export PYTHONPATH=$PYTHONPATH:$(pwd)
-          pytest -q services/recomendations_query/tests \
-            --cov=services/recomendations_query \
+          pytest -q tests \
+            --cov=src \
             --cov-report=xml \
             --cov-report=html:cov_html
 
       - uses: actions/upload-artifact@v4
         with:
           name: coverage-recomendations_query
-          path: cov_html
+          path: services/recomendations_query/cov_html
