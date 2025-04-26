@@ -1,50 +1,51 @@
-"""
-Fixtures y preparación de Pub/Sub emulador para los tests E2E.
-"""
-import os, time, subprocess, pytest
+import pytest
+import os
+import time
 from google.cloud import pubsub_v1
+from flask import Flask
 
-EMULATOR_HOST = "localhost:8681"
-PROJECT       = "test-proj"
-TOPICS        = {
+PROJECT = "test-project"
+TOPICS = {
     "products": "inventarios-products",
-    "stock":    "inventarios-stock",
+    "orders": "inventarios-orders",
+    "stock": "inventarios-stock",  
 }
+
 SUBS = {
     "inventarios-products": "sub-products",
     "inventarios-orders": "sub-orders",
+    "inventarios-stock": "sub-stock",
 }
 
-# ---------------------------------------------------------------------------
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="session")
 def pubsub_emulator():
-    os.environ["PUBSUB_EMULATOR_HOST"] = EMULATOR_HOST
-    proc = subprocess.Popen(
-        ["gcloud", "beta", "emulators", "pubsub", "start",
-         f"--host-port={EMULATOR_HOST}"],
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    time.sleep(3)          # espera arranque
+    
+    os.environ["PUBSUB_EMULATOR_HOST"] = "localhost:8085"
+    os.environ["GOOGLE_CLOUD_PROJECT"] = PROJECT
     yield
-    proc.terminate()
+   
 
-# ---------------------------------------------------------------------------
 @pytest.fixture(scope="session", autouse=True)
 def create_topics(pubsub_emulator):
-    publisher  = pubsub_v1.PublisherClient()
+    publisher = pubsub_v1.PublisherClient()
     subscriber = pubsub_v1.SubscriberClient()
 
-    for topic in TOPICS.values():
-        topic_path = publisher.topic_path(PROJECT, topic)
-        sub_path   = subscriber.subscription_path(PROJECT, SUBS[topic])
+    for key, topic_name in TOPICS.items():
+        topic_path = publisher.topic_path(PROJECT, topic_name)
         try:
             publisher.create_topic(request={"name": topic_path})
-        except Exception:
-            pass
+            print(f"Topic created: {topic_path}")
+        except Exception as e:
+            print(f"Topic exists or error: {e}")
+
+        sub_name = SUBS[topic_name]
+        subscription_path = subscriber.subscription_path(PROJECT, sub_name)
         try:
             subscriber.create_subscription(
-                request={"name": sub_path, "topic": topic_path}
+                request={"name": subscription_path, "topic": topic_path}
             )
-        except Exception:
-            pass
-    yield
+            print(f"Subscription created: {subscription_path}")
+        except Exception as e:
+            print(f"Subscription exists or error: {e}")
+
+    time.sleep(2)  

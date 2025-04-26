@@ -1,47 +1,51 @@
-"""
-Escenario E2E:
-1) ms_compras publica un producto nuevo con stock 10
-2) ms_inventarios lo persiste vía Pub/Sub
-3) pedidos descuenta 3 unidades
-4) ms_inventarios muestra stock final 7
-"""
-import io, time, requests
+import pytest
+import requests
+import time
 
-BASE = {
-    "compras":     "http://localhost:5001/api",
-    "pedidos":     "http://localhost:5003/api",
-    "inventarios": "http://localhost:5002/api",
-}
+MS_COMPRAS = "http://localhost:5001/api/productos/upload"
+MS_PEDIDOS = "http://localhost:5002/api/pedidos"
+MS_INVENTARIOS = "http://localhost:5003/api/inventarios"
 
-def wait_until(predicate, timeout=10, step=0.5):
-    end = time.time() + timeout
-    while time.time() < end:
-        if predicate():
-            return True
-        time.sleep(step)
-    return False
+def wait_for_product(product_id, timeout=10):
+    """Espera hasta que el producto aparezca en inventarios"""
+    start = time.time()
+    while time.time() - start < timeout:
+        resp = requests.get(f"{MS_INVENTARIOS}/{product_id}")
+        if resp.status_code == 200:
+            return resp.json()
+        time.sleep(1)
+    return None
 
-def test_flujo_creacion_y_pedido(create_topics):
-    # 1. carga masiva (stock inicial 10)
-    csv = ("nombre,fabricante_id,cantidad,precio,moneda,bodega,estante,pasillo\n"
-           "Laptop,1,10,1000,USD,B1,E1,P1\n")
-    files = {"file": ("prod.csv", io.BytesIO(csv.encode()))}
-    r = requests.post(f"{BASE['compras']}/productos/upload", files=files)
-    assert r.ok
+def test_flujo_creacion_y_pedido():
+    # 1. Cargar un producto al micro compras
+    files = {
+        'file': ('productos.csv', 
+            b"nombre,fabricante_id,cantidad,precio,moneda,bodega,estante,pasillo\n"
+            b"Producto Test,1,10,100,COP,B1,E1,P1", 
+            'text/csv')
+    }
+    resp = requests.post(MS_COMPRAS, files=files)
+    assert resp.status_code in (200, 201), f"Error en carga masiva: {resp.text}"
 
-    # 2. esperar consistencia eventual
-    assert wait_until(
-        lambda: requests.get(f"{BASE['inventarios']}/inventarios/1").status_code == 200
-    ), "El producto no llegó a ms_inventarios"
+    # 2. Esperamos que llegue a inventarios (consistencia eventual)
+    producto = wait_for_product(1)
+    assert producto is not None, "Producto no encontrado en inventarios"
+    assert producto['stock'] == 10, f"Stock incorrecto inicialmente: {producto['stock']}"
 
-    # 3. crear pedido que descuenta 3 unidades
-    body_pedido = {"productoId": 1, "cantidad": 3}
-    r = requests.post(f"{BASE['pedidos']}/pedidos", json=body_pedido)
-    assert r.ok
+    # 3. Crear un pedido en pedidos
+    pedido_payload = {
+        "pedido_id": 1,
+        "productos": [
+            {"producto_id": 1, "cantidad": 2}
+        ]
+    }
+    resp = requests.post(MS_PEDIDOS, json=pedido_payload)
+    assert resp.status_code in (200, 201), f"Error en crear pedido: {resp.text}"
 
-    # 4. stock final = 7
-    def stock_es_7():
-        det = requests.get(f"{BASE['inventarios']}/inventarios/1")
-        return det.ok and det.json().get("stock") == 7
+    # 4. Esperamos un pequeño tiempo a que stock se actualice
+    time.sleep(3)
 
-    assert wait_until(stock_es_7), "Stock final distinto de 7"
+    # 5. Verificar que stock se descontó en inventarios
+    producto_actualizado = wait_for_product(1)
+    assert producto_actualizado is not None, "Producto desapareció después de pedido"
+    assert producto_actualizado['stock'] == 8, f"Stock no descontado correctamente: {producto_actualizado['stock']}"
