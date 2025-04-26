@@ -3,12 +3,12 @@ name: unit-recomendations-query
 on:
   pull_request:
     paths:
-      - "services/recomendations-query/**"
+      - "services/recomendations_query/**"
       - ".github/workflows/unit-recomendations-query.yml"
   push:
     branches: [master]
     paths:
-      - "services/recomendations-query/**"
+      - "services/recomendations_query/**"
 
 jobs:
   unit:
@@ -20,17 +20,17 @@ jobs:
 
       - name: Install deps
         run: |
-          pip install -r services/recomendations-query/requirements.txt
+          pip install -r services/recomendations_query/requirements.txt
           pip install pytest pytest-cov
 
       - name: Run tests + coverage
         run: |
-          pytest -q services/recomendations-query/tests \
-            --cov=services/recomendations-query \
+          pytest -q services/recomendations_query/tests \
+            --cov=services/recomendations_query \
             --cov-report=xml \
             --cov-report=html:cov_html
 
       - uses: actions/upload-artifact@v4
         with:
-          name: coverage-recomendations-query
+          name: coverage-recomendations_query
           path: cov_html
