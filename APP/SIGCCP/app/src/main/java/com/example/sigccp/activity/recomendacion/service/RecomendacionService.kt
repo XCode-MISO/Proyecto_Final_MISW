@@ -3,6 +3,8 @@ package com.example.sigccp.activity.recomendacion.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import android.util.Log
+import android.widget.Toast
 import com.example.sigccp.PreferenceKeys
 import com.example.sigccp.PreferencesManager
 import com.example.sigccp.activity.recomendacion.data.network.RetrofitInstanceRecomendacion
@@ -21,18 +23,33 @@ class RecomendacionService : Service() {
         }
         return START_STICKY
     }
-
+    /*
+        Inicialmente el servicio devuelve 404, not found, entonces se realizan 10 intentos cada 5
+        segundos para obtener el resultado.
+        Repetimos la consulta hasta que se procese el video
+    */
     private fun monitorJobStatus(id: String) {
         serviceScope.launch {
+            var intentos = 0
             while (true) {
+                intentos++
                 val response = try {
                     RetrofitInstanceRecomendacion.apiService.getJobStatus(id)
                 } catch (e: Exception) {
-                    stopSelf()
-                    return@launch
+                    Log.e("Recomendacion Error($intentos)", e.message.toString())
+                    if(intentos > 10){
+                        stopSelf()
+                        return@launch
+                    } else {
+                        delay(5_000)
+                        continue
+                    }
                 }
+                delay(10_000)
 
-                if (response.final_state != "pending") {
+                Log.d("Recomendacion", response.toString())
+
+                if (response.final_state == "processed") {
                     PreferencesManager.saveString(PreferenceKeys.JOB_ID, response.job_id)
                     PreferencesManager.saveString(PreferenceKeys.RECOMENDACION, response.final_recommendation)
 
@@ -42,8 +59,9 @@ class RecomendacionService : Service() {
                     sendBroadcast(intent)
                     stopSelf()
                     break
+                } else {
+                    delay(10_000)
                 }
-                delay(10_000)
             }
         }
     }

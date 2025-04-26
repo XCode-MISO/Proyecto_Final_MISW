@@ -129,6 +129,7 @@ fun Recomendacion(
         Column(Modifier.fillMaxSize().padding(16.dp)) {
             if (isLoading) {
                 CircularProgressIndicator()
+                Text("Cargando video...")
             } else {
                 Box(
                     modifier = Modifier
@@ -154,7 +155,7 @@ fun Recomendacion(
                         }
                         if (isRunning) {
                             CircularProgressIndicator()
-                            Text("Procesando solicitud...")
+                            Text("Procesando recomendacion...")
                         } else if (recommendation.isNotBlank()) {
                             Text("Recomendación: $recommendation")
                         }
