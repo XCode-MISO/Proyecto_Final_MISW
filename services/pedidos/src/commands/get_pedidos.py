@@ -8,7 +8,14 @@ class GetPedidos(BaseCommannd):
 
         session = db.session()
         try:
-            pedidos = session.query(Pedido).all()
+            
+            query = session.query(Pedido)
+            
+            if self.client_id:
+                query = query.filter(Pedido.clientId == self.client_id)  # <-- filtramos por clientId si viene
+
+            pedidos = query.all()
+            
             print(f"DEBUG: Se encontraron {len(pedidos)} pedidos")
 
             # Serializar los pedidos incluyendo los productos
