@@ -3,62 +3,59 @@ name: backend-integration
 on:
   pull_request:
     paths:
-      - "services/ms_compras/**"
-      - "services/ms_inventarios/**"
-      - "services/pedidos/**"
-      - "services/tests/integration/**"
-      - ".github/workflows/backend-integration.yml"
+      - "services/**"
+      - ".github/workflows/backend-integration.yaml"
   push:
     branches: [master]
+    paths:
+      - "services/**"
 
 jobs:
   integration:
     runs-on: ubuntu-latest
 
     services:
-      pubsub:
-        image: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
-        ports: ["8681:8681"]
+      postgres:
+        image: postgres:13
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_pass
         options: >-
-          --health-cmd "curl -f http://localhost:8681 || exit 1"
-          --health-interval 5s --health-retries 10
-        command: |
-          gcloud beta emulators pubsub start --host-port=0.0.0.0:8681
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Build & run compose
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
         run: |
-          docker compose -f services/integration-test/docker-compose.integration.yml \
-            up -d --build
+          pip install -r services/requirements.txt
+          pip install pytest pytest-cov
 
-      - uses: actions/setup-python@v5
-        with: {python-version: "3.10"}
-
-      - run: pip install -r services/integration-test/requirements.txt
-
-      - name: Run E2E + coverage (append)
-        env:
-          PUBSUB_EMULATOR_HOST: localhost:8681
+      - name: Wait for Postgres
         run: |
-          pytest -q services/integration-test \
-            --cov-append --cov=services \
+          sleep 15
+
+      - name: Run integration tests
+        run: |
+          pytest -q services/integration \
+            --cov=services \
             --cov-report=xml \
-            --cov-report=html:int_cov_html
+            --cov-report=html:cov_html
 
       - name: Upload HTML coverage
         uses: actions/upload-artifact@v4
         with:
           name: coverage-integration
-          path: int_cov_html
-
-      - if: failure()
-        run: |
-          docker compose -f services/integration-test/docker-compose.integration.yml \
-            logs --no-color > integ_logs.txt
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: integration-logs
-          path: integ_logs.txt
+          path: cov_html
