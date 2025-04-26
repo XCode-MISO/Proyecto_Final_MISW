@@ -33,6 +33,10 @@ def create_app():
     
     init_db(app)
     
+    @app.route("/")
+    def hello_world():
+        return "<p>Hello, World!</p>"
+    
     @app.errorhandler(Exception)
     def handle_exception(e):
         if isinstance(e, HTTPException):
