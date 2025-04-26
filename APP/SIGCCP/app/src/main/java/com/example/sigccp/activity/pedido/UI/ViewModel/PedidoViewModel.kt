@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.State
+import com.example.sigccp.PreferenceKeys
+import com.example.sigccp.PreferencesManager
 import com.example.sigccp.activity.pedido.Data.Modelo.ClienteClass
 import com.example.sigccp.activity.pedido.Data.Modelo.PedidoRequest
 import com.example.sigccp.activity.pedido.Data.Modelo.ProductoCantidad
@@ -50,7 +52,7 @@ class PedidoViewModel : ViewModel() {
             )
         }
         _productosSeleccionados.value = productosValidados
-        precioTotal.value = productosValidados.sumOf { it.precioTotal }
+        precioTotal.value = productosValidados.sumOf { it.precioTotal.toDouble() }
     }
 
 
@@ -89,10 +91,35 @@ class PedidoViewModel : ViewModel() {
                         amount = it.cantidadRequerida
                     )
                 }
+                val role = PreferencesManager.getString(PreferenceKeys.ROLE)
+                val userId = PreferencesManager.getString(PreferenceKeys.USER_ID)
+                val userName = PreferencesManager.getString(PreferenceKeys.USER_NAME)
+
+                val clientIdValue: String
+                val clientNameValue: String
+                val vendedorIdValue: String
+                val vendedorNameValue: String
+
+                if (role == "vendedor") {
+                    // Si es vendedor, el cliente y el vendedor son el usuario actual
+                    clientIdValue = userId ?: ""
+                    clientNameValue = userName ?: ""
+                    vendedorIdValue = userId ?: ""
+                    vendedorNameValue = userName ?: ""
+                } else {
+                    // Si no es vendedor, usa el cliente seleccionado y el usuario actual como vendedor
+                    clientIdValue = clienteId.value
+                    clientNameValue = clientes.value.find { it.id == clienteId.value }?.nombre ?: ""
+                    vendedorIdValue = userId ?: ""
+                    vendedorNameValue = userName ?: ""
+                }
 
                 val pedido = PedidoRequest(
                     name = nombrePedido.value,
-                    clientId = clienteId.value,
+                    clientId = clientIdValue,
+                    clientName = clientNameValue,
+                    vendedorId = vendedorIdValue,
+                    vendedorName = vendedorNameValue,
                     products = productos,
                     price = precioTotal.value,
                     state = estado.value,

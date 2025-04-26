@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,6 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.sigccp.PreferenceKeys
+import com.example.sigccp.PreferencesManager
 import com.example.sigccp.R
 import com.example.sigccp.activity.pedido.UI.ViewModel.PedidoViewModel
 import com.example.sigccp.navigation.AppScreen
@@ -26,7 +29,9 @@ import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.locationDropdown
 import com.example.sigccp.ui.View.Components.newAgregarButton
 import com.example.sigccp.ui.View.Components.newDualButton
-import com.example.sigccp.ui.View.moneda
+import com.example.sigccp.ui.View.Components.moneda
+import com.example.sigccp.ui.theme.AppTypography
+import androidx.compose.runtime.*
 
 //@Preview
 @Composable
@@ -39,8 +44,13 @@ fun CrearPedido(viewModel: PedidoViewModel)
 fun Pedido( viewModel: PedidoViewModel = viewModel()
 )
 {
+    var showDialog by remember { mutableStateOf(false) }
+    var dialogMessage by remember { mutableStateOf("") }
+    val role = PreferencesManager.getString(PreferenceKeys.ROLE)
+    val userId = PreferencesManager.getString(PreferenceKeys.USER_ID)
+    val userName = PreferencesManager.getString(PreferenceKeys.USER_NAME)
     val productos = viewModel.productosSeleccionados.value
-    ScreenContainer(title = stringResource(id = R.string.CrearPedido),false,null) {
+    ScreenContainer(title = stringResource(id = R.string.CrearPedido),false,true,null) {
         Box(
             modifier = Modifier
                 .fillMaxSize(), // Ocupa toda la pantalla para centrar el contenido
@@ -87,13 +97,22 @@ fun Pedido( viewModel: PedidoViewModel = viewModel()
                     )
                     {
                         newAgregarButton(onClick = {NavigationController.navigate(AppScreen.AgregarProductos.route)}, nombre= "Agregar")
-                        ClientDropdown(
-                            clients = viewModel.clientes.value,
-                            onClientSelected = { id -> viewModel.clienteId.value = id.toString() }
-                        )
+
+                        if(role=="vendedor")
+                        {
+                            ClientDropdown(
+                                clients = viewModel.clientes.value,
+                                onClientSelected = { id -> viewModel.clienteId.value = id.toString() }
+                            )
+                        }
                         locationDropdown(
                             locations = moneda,
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
+                        )
+                        Text(
+                            text = "Total: $${"%.2f".format(viewModel.precioTotal.value)}",
+                            style = AppTypography.labelLarge,
+                            modifier = Modifier.padding(end = 16.dp)
                         )
                         newDualButton(
                             nombreIzquierdo = "Aceptar",
@@ -101,6 +120,8 @@ fun Pedido( viewModel: PedidoViewModel = viewModel()
                                 viewModel.crearPedido(
                                     onSuccess = {
                                         viewModel.limpiarPedido()
+                                        dialogMessage = "Pedido creado exitosamente."
+                                        showDialog = true
                                         NavigationController.navigate(AppScreen.ListarPedidos.route)
                                     },
                                     onError = {

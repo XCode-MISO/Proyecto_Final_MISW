@@ -21,28 +21,39 @@ data class PedidoClass(
     val name: String,
     val price: Double,
     val state: String,
-    val client: ClienteClass
+    val client: ClienteSingleClass
 )
 
 data class Pedidos(
     val pedidos: List<PedidoClass>
 )
 
-data class ClienteClass(
+data class ClienteSingleClass(
     val id: String,
     val name: String
+)
+
+data class ClienteClass(
+    val id: String,
+    val nombre: String,
+    val correo: String,
+    val direccion: String,
+    val telefono: String
 )
 
 data class PedidoRequest(
     val name: String,
     val clientId: String,
+    val clientName: String,
+    val vendedorId: String,
+    val vendedorName: String,
     val products: List<ProductoCantidad>,
     val price: Double,
-    val state: String = "Pendiente",
-    val deliveryDate: String  // formato: "2025-04-08"
+    val state: String,
+    val deliveryDate: String
 )
 
 data class ProductoCantidad(
-    val id: String,
+    val id: Int,
     val amount: Int
 )

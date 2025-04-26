@@ -32,6 +32,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -291,32 +292,39 @@ fun LanguageDropdown(activity: Activity?) {
                 color = MoradoApp,
                 style = AppTypography.titleSmall
             )
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
+
+            Box(
+                modifier = Modifier
+                    .wrapContentSize(Alignment.TopEnd)
             ) {
-                DropdownMenuItem(
-                    text = { Text("ES", style =AppTypography.titleSmall) },
-                    onClick = {
-                        selectedLanguage = "ES"
-                        setAppLocale(activity, "es")
-                        saveLanguage(context, "ES")
-                        expanded = false
-                        restartActivity(activity)
-                        recomposer.value++
-                    }
-                )
-                DropdownMenuItem(
-                    text = { Text("EN", style =AppTypography.titleSmall) },
-                    onClick = {
-                        selectedLanguage = "EN"
-                        setAppLocale(activity, "en")
-                        saveLanguage(context, "EN")
-                        expanded = false
-                        restartActivity(activity)
-                        recomposer.value++
-                    }
-                )
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.background(AmarilloApp)
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("ES", style = AppTypography.titleSmall) },
+                        onClick = {
+                            selectedLanguage = "ES"
+                            setAppLocale(activity, "es")
+                            saveLanguage(context, "ES")
+                            expanded = false
+                            restartActivity(activity)
+                            recomposer.value++
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("EN", style = AppTypography.titleSmall) },
+                        onClick = {
+                            selectedLanguage = "EN"
+                            setAppLocale(activity, "en")
+                            saveLanguage(context, "EN")
+                            expanded = false
+                            restartActivity(activity)
+                            recomposer.value++
+                        }
+                    )
+                }
             }
         }
     }
@@ -341,7 +349,7 @@ fun ClientDropdown(
         contentAlignment = Alignment.CenterStart
     ) {
         Text(
-            text = selectedClient?.name ?: "Seleccione un cliente",
+            text = selectedClient?.nombre ?: "Seleccione un cliente",
             style = AppTypography.labelLarge
         )
 
@@ -353,11 +361,12 @@ fun ClientDropdown(
 
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.background(AmarilloApp)
         ) {
             clients.forEach { client ->
                 DropdownMenuItem(
-                    text = { Text(client.name) },
+                    text = { Text(client.nombre) },
                     onClick = {
                         selectedClient = client
                         onClientSelected(client.id) // Ahora es String
@@ -401,7 +410,8 @@ fun locationDropdown(
 
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.background(AmarilloApp)
         ) {
             locations.forEach { location ->
                 DropdownMenuItem(
@@ -732,13 +742,13 @@ fun ProductoEditableBox(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = producto.name,
+                    text = producto.nombre,
                     style = AppTypography.labelMedium,
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Start
                 )
                 Text(
-                    text = "Disponible: ${producto.amount}",
+                    text = "Disponible: ${producto.stock}",
                     style = AppTypography.labelMedium,
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.End
@@ -767,9 +777,9 @@ fun ProductoEditableBox(
                     singleLine = true
                 )
                 val cantidadActual = cantidadTexto.toIntOrNull() ?: 0
-                val cantidadInvalida = cantidadActual > producto.amount
+                val cantidadInvalida = cantidadActual > producto.stock
                 Text(
-                    text = "$${producto.price}",
+                    text = "$${producto.stock}",
                     style = AppTypography.labelMedium,
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.End
@@ -792,8 +802,8 @@ fun ProductoEditableBox(
 @Composable
 fun ListaDeProductosEditable(
     productos: List<ProductoClass>,
-    cantidades: Map<String, Int>,
-    onCantidadChange: (String, Int) -> Unit
+    cantidades: Map<Int, Int>,
+    onCantidadChange: (Int, Int) -> Unit
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -802,9 +812,9 @@ fun ListaDeProductosEditable(
         items(productos) { producto ->
             ProductoEditableBox(
                 producto = producto,
-                cantidadRequerida = cantidades[producto.id] ?: 0,
+                cantidadRequerida = cantidades[producto.producto_id] ?: 0,
                 onCantidadChange = { nuevaCantidad ->
-                    onCantidadChange(producto.id, nuevaCantidad)
+                    onCantidadChange(producto.producto_id, nuevaCantidad)
                 }
             )
         }
