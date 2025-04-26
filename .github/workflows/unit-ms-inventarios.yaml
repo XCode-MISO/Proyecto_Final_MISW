@@ -1,0 +1,36 @@
+name: unit-ms_inventarios
+
+on:
+  pull_request:
+    paths:
+      - "services/ms_inventarios/**"
+      - ".github/workflows/unit-ms-inventarios.yml"
+  push:
+    branches: [master]
+    paths:
+      - "services/ms_inventarios/**"
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.10"}
+
+      - name: Install deps
+        run: |
+          pip install -r services/ms_inventarios/requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Run tests + coverage
+        run: |
+          pytest -q services/ms_inventarios/tests/unit \
+            --cov=services/ms_inventarios \
+            --cov-report=xml \
+            --cov-report=html:cov_html
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-ms_inventarios
+          path: cov_html

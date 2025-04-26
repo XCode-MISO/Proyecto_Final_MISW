@@ -1,0 +1,41 @@
+name: unit-ms_compras
+
+on:
+  pull_request:
+    paths:
+      - "services/ms_compras/**"
+  push:
+    branches: [master]
+    paths:
+      - "services/ms_compras/**"
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.10"}
+
+      - name: Install deps
+        run: |
+          pip install -r services/ms_compras/requirements.txt
+          pip install pytest pytest-cov
+
+      # ▶ Ejecuta pytest con cobertura XML + HTML
+      - name: Run tests with coverage
+        run: |
+          pytest \
+            --cov=services/ms_compras \
+            --cov-report=xml \
+            --cov-report=html:cov_html \
+            -q services/ms_compras/tests
+
+      # ▽ Sube la carpeta HTML como artefacto
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-ms_compras
+          path: cov_html
