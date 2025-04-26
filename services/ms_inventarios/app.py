@@ -9,6 +9,13 @@ from flask_cors import CORS
 def create_app():
     app = Flask(__name__)
 
+    @app.route("/")
+    def hello_world():
+        return "<p>Hello, World!</p>"
+
+    @app.route("/health")
+    def health_check():
+        return "Ok"
   
     if app.config.get('TESTING'):
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
@@ -27,9 +34,6 @@ def create_app():
 
     init_db(app)
     
-    @app.route("/")
-    def hello_world():
-        return "<p>Hello, World!</p>"
 
     @app.errorhandler(Exception)
     def handle_exception(e):
