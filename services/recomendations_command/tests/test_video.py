@@ -1,5 +1,5 @@
 import io, json, pytest
-from src.app import create_app, db
+from services.recomendations_command.src.app import create_app, db
 
 @pytest.fixture
 def client():
