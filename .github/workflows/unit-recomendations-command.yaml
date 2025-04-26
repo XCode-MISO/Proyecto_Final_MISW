@@ -1,14 +1,14 @@
-name: unit-ms_inventarios
+name: unit-recomendations-commnad
 
 on:
   pull_request:
     paths:
-      - "services/ms_inventarios/**"
-      - ".github/workflows/unit-ms-inventarios.yml"
+      - "services/recomendations-commnad/**"
+      - ".github/workflows/unit-recomendations-commnad.yml"
   push:
     branches: [master]
     paths:
-      - "services/ms_inventarios/**"
+      - "services/recomendations-commnad/**"
 
 jobs:
   unit:
@@ -20,17 +20,17 @@ jobs:
 
       - name: Install deps
         run: |
-          pip install -r services/ms_inventarios/requirements.txt
+          pip install -r services/recomendations-commnad/requirements.txt
           pip install pytest pytest-cov
 
       - name: Run tests + coverage
         run: |
-          pytest -q services/ms_inventarios/tests \
-            --cov=services/ms_inventarios \
+          pytest -q services/recomendations-commnad/tests \
+            --cov=services/recomendations-commnad \
             --cov-report=xml \
             --cov-report=html:cov_html
 
       - uses: actions/upload-artifact@v4
         with:
-          name: coverage-ms_inventarios
+          name: coverage-recomendations-commnad
           path: cov_html
