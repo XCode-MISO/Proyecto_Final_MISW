@@ -4,18 +4,6 @@ from src.services.recommendation_service import create_pending_recommendation
 
 recommendation_bp = Blueprint('recommendation', __name__)
 
-@recommendation_bp.route('/pubsub_update', methods=['POST'])
-def pubsub_update():
-    data = request.get_json()
-    current_app.logger.info("Mensaje recibido de Pub/Sub: %s", data)
-    if not data or "job_id" not in data:
-        return jsonify({"error": "Falta job_id en el mensaje"}), 400
-    try:
-        job_id = data["job_id"]
-        rec = create_pending_recommendation(job_id, db, Recommendation)
-        return jsonify({"message": "Recomendación pendiente creada", "job_id": rec.job_id}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 @recommendation_bp.route('/recommend', methods=['GET'])
 def get_recommendation():

@@ -25,6 +25,7 @@ jobs:
 
       - name: Run tests + coverage
         run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
           pytest -q services/recomendations_query/tests \
             --cov=services/recomendations_query \
             --cov-report=xml \
