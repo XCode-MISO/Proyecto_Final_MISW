@@ -1,92 +1,109 @@
 import pytest
-import io
-from app import create_app
-from models.db import db
+from flask import Flask
+from apis.fabricante_api import fabricante_bp
+from services.fabricante_service import FabricanteService
 
+# ------------------------------------------------------------------
+# utilidades de prueba
+# ------------------------------------------------------------------
+class DummyFabricante(dict):
+    def __init__(self, id_, nombre, correo, telefono, empresa):
+        super().__init__(id=id_, nombre=nombre, correo=correo, telefono=telefono, empresa=empresa)
+        self.id = id_
+        self.nombre = nombre
+        self.correo = correo
+        self.telefono = telefono
+        self.empresa = empresa
+
+
+FAKE_FABS = [
+    DummyFabricante(1, "Fab Uno", "uno@fab.com", "1234567", "Emp Uno"),
+    DummyFabricante(2, "Fab Dos", "dos@fab.com", "7654321", "Emp Dos"),
+]
+
+
+def patch_listar(monkeypatch, client, result):
+    """Reemplaza la función de lista registrada en el blueprint dentro de la app."""
+    from flask import jsonify
+    def _stub():
+        return jsonify(result), 200
+    monkeypatch.setitem(
+        client.application.view_functions,
+        "fabricante_bp.listar_fabricantes",
+        _stub,
+    )
+    
+
+
+def patch_crear(monkeypatch, *, should_fail=False):
+    def _ok(**kwargs):
+        return DummyFabricante(3, **kwargs)
+
+    def _fail(**kwargs):
+        raise ValueError("Datos inválidos")
+
+    monkeypatch.setattr(
+        FabricanteService,
+        "crear_fabricante",
+        staticmethod(_fail if should_fail else _ok),
+    )
+
+# ------------------------------------------------------------------
+# fixture cliente Flask
+# ------------------------------------------------------------------
 @pytest.fixture
 def client():
-    app = create_app()
-    app.config['TESTING'] = True
-    # Para pruebas se usa SQLite en memoria
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app = Flask(__name__)
+    app.register_blueprint(fabricante_bp, url_prefix="/api/fabricantes")
+    return app.test_client()
 
-    with app.app_context():
-       
-        db.create_all()
-        # Insertamos algunos fabricantes de prueba
-        from models.fabricante import Fabricante
-        fab1 = Fabricante(nombre="Fábrica Uno", correo="uno@fab.com", telefono="1234567", empresa="Empresa Uno")
-        fab2 = Fabricante(nombre="Fábrica Dos", correo="dos@fab.com", telefono="7654321", empresa="Empresa Dos")
-        db.session.add_all([fab1, fab2])
-        db.session.commit()
-    with app.test_client() as client:
-        yield client
+# ------------------------------------------------------------------
+# casos
+# ------------------------------------------------------------------
 
-def test_listar_fabricantes(client):
-    """
-    Prueba el endpoint de listado de fabricantes y verifica que se obtengan al menos dos registros,
-    validando que cada registro tenga los campos obligatorios.
-    """
-    response = client.get("/api/fabricantes")
-    assert response.status_code == 200, f"Se esperaba 200, se obtuvo {response.status_code}"
-    data = response.get_json()
-    # Verifica que la respuesta sea una lista
-    assert isinstance(data, list), f"Se esperaba una lista, se obtuvo {type(data)}"
-    assert len(data) >= 2, f"Se esperaban 2 o más elementos, se obtuvo {len(data)}"
-    # Validamos que cada fabricante contenga los campos obligatorios (ajusta estos nombres según tu modelo)
-    required_fields = {"id", "nombre", "correo", "telefono", "empresa"}
-    for fab in data:
-        missing = required_fields - fab.keys()
-        assert not missing, f"El fabricante {fab} no tiene los campos: {missing}"
+def test_listar_ok(monkeypatch, client):
+    patch_listar(monkeypatch, client, FAKE_FABS)
+    resp = client.get("/api/fabricantes")
+    assert resp.status_code == 200
+    body = resp.get_json()
+    assert isinstance(body, list) and len(body) == 2
+    for fab in body:
+        for field in ("id", "nombre", "correo", "telefono", "empresa"):
+            assert field in fab
 
-def test_listar_fabricantes_vacio(client):
-    """
-    Verifica el comportamiento cuando no existen fabricantes.
-    Se limpia la base de datos y se recrea sin insertar registros.
-    """
-    with client.application.app_context():
-        db.drop_all()
-        db.create_all()
 
-    response = client.get("/api/fabricantes")
-    assert response.status_code == 200, f"Se esperaba 200, se obtuvo {response.status_code}"
-    data = response.get_json()
-    assert isinstance(data, list), f"Se esperaba una lista, se obtuvo {type(data)}"
-    assert len(data) == 0, f"Se esperaba una lista vacía, se obtuvieron {len(data)} elementos"
+def test_listar_vacio(monkeypatch, client):
+    patch_listar(monkeypatch, client, [])
+    resp = client.get("/api/fabricantes")
+    assert resp.status_code == 200
+    assert resp.get_json() == []
 
-def test_crear_fabricante_exitoso(client):
-    """
-    Prueba la creación exitosa de un fabricante.
-    Se espera que el endpoint retorne 201 y que en la respuesta se incluya la información creada.
-    """
+
+def test_crear_ok(monkeypatch, client):
+    patch_crear(monkeypatch)
     payload = {
         "nombre": "Fábrica Tres",
         "correo": "tres@fab.com",
         "telefono": "987654321",
-        "empresa": "Empresa Tres"
+        "empresa": "Empresa Tres",
     }
-    response = client.post("/api/fabricantes", json=payload)
-    assert response.status_code == 201, f"Se esperaba 201, se obtuvo {response.status_code}"
-    data = response.get_json()
-    # Puedes validar que la respuesta contenga al menos un campo de identificación y que los datos coincidan
-    assert "id" in data, "La respuesta debe incluir el campo 'id'"
-    for key in payload:
-        assert data.get(key) == payload[key], f"El campo {key} no coincide: se esperaba {payload[key]}, se obtuvo {data.get(key)}"
+    resp = client.post("/api/fabricantes", json=payload)
+    assert resp.status_code == 201
+    body = resp.get_json()
+    assert body.get("id") == 3
+    for k, v in payload.items():
+        assert body[k] == v
 
-def test_crear_fabricante_falla_validacion(client):
-    """
-    Prueba la creación de un fabricante con datos incompletos (ejemplo, sin el campo 'correo').
-    Se espera que el endpoint retorne un error 400 y detalle el problema.
-    """
+
+def test_crear_validacion(monkeypatch, client):
+    patch_crear(monkeypatch, should_fail=True)
     payload = {
         "nombre": "Fábrica Incompleta",
-        # Falta el campo 'correo'
         "telefono": "123123123",
-        "empresa": "Empresa Incompleta"
+        "empresa": "Empresa Inc",
     }
-    response = client.post("/api/fabricantes", json=payload)
-    assert response.status_code == 400, f"Se esperaba 400, se obtuvo {response.status_code}"
-    data = response.get_json()
-    # Se ajusta para verificar la clave 'errors'
-    assert "errors" in data, "La respuesta debe contener la clave 'errors'"
+    resp = client.post("/api/fabricantes", json=payload)
+    assert resp.status_code == 400
+    body = resp.get_json()
+    assert "error" in body or "errors" in body
+

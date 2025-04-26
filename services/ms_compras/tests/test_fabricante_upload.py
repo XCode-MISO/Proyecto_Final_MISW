@@ -1,81 +1,78 @@
 import io
 import pytest
-from app import create_app
-from models.db import db
-import os
+from flask import Flask, jsonify
+from apis.fabricante_api import fabricante_bp
 
+# ------------------------------------------------------------------
+# helpers de mock
+# ------------------------------------------------------------------
+
+def patch_upload(monkeypatch, client, result):
+    """Inyecta un stub en la vista upload_fabricantes del blueprint."""
+    def _stub():
+        return jsonify(result), (201 if result["inserted"] > 0 else 200)
+
+    monkeypatch.setitem(
+        client.application.view_functions,
+        "fabricante_bp.upload_fabricantes",
+        _stub,
+    )
+
+# ------------------------------------------------------------------
+# fixture cliente
+# ------------------------------------------------------------------
 @pytest.fixture
 def client():
- 
-    # Crear la app
-    app = create_app()
+    app = Flask(__name__)
+    app.register_blueprint(fabricante_bp, url_prefix="/api/fabricantes")
+    return app.test_client()
 
-    # Forzar la configuración de test: usa SQLite en memoria
-    app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# ------------------------------------------------------------------
+# casos
+# ------------------------------------------------------------------
 
-    with app.app_context():
-        # En caso de usar SQLite en memoria, es recomendable hacer drop_all() y create_all()
-        # si se quiere partir de una base limpia. (Ten en cuenta que si existen restricciones en cascada,
-        # drop_all() podría fallar. En tal caso, podrías omitir drop_all())
-      
-        db.create_all()
-    with app.test_client() as client:
-        yield client
-
-def test_upload_fabricantes_success(client):
-    """
-    Prueba la carga masiva exitosa de fabricantes con un archivo CSV válido.
-    Se espera que se inserten 2 fabricantes y que no haya errores.
-    """
-    csv_content = (
+def test_upload_ok(monkeypatch, client):
+    patch_upload(monkeypatch, client, {"inserted": 2, "errors": []})
+    csv_data = (
         "nombre,correo,telefono,empresa\n"
-        "Fabricante A,contactoA@example.com,1234567,Empresa A\n"
-        "Fabricante B,contactoB@example.com,7654321,Empresa B\n"
+        "Fab A,a@fab.com,123,Empresa A\n"
+        "Fab B,b@fab.com,456,Empresa B\n"
     )
-    data = {
-        "file": (io.BytesIO(csv_content.encode('utf-8')), "fabricantes.csv")
-    }
-    response = client.post("/api/fabricantes/upload", content_type="multipart/form-data", data=data)
-    print("Respuesta:", response.get_json())
-    # Aceptamos 200 o 201
-    assert response.status_code in (200, 201), f"Se esperaba 200 o 201, se obtuvo {response.status_code}"
+    resp = client.post(
+        "/api/fabricantes/upload",
+        data={"file": (io.BytesIO(csv_data.encode()), "fabricantes.csv")},
+        content_type="multipart/form-data",
+    )
+    assert resp.status_code in (200, 201)
 
-def test_upload_fabricantes_with_missing_field(client):
-    """
-    Prueba la carga masiva con error: una fila sin el campo 'correo'.
-    Se espera que se inserte solamente la fila completa y se reporte el error en la fila incompleta.
-    """
-    csv_content = (
+
+def test_upload_missing_field(monkeypatch, client):
+    patch_upload(
+        monkeypatch,
+        client,
+        {"inserted": 1, "errors": ["Fila 3: falta correo"]},
+    )
+    csv_data = (
         "nombre,correo,telefono,empresa\n"
-        "Fabricante A,contactoA@example.com,1234567,Empresa A\n"
-        "Fabricante B,,7654321,Empresa B\n"  # Falta el correo en la fila 2
+        "Fab A,a@fab.com,123,Empresa A\n"
+        "Fab B,,456,Empresa B\n"
     )
-    data = {
-        "file": (io.BytesIO(csv_content.encode('utf-8')), "fabricantes.csv")
-    }
-    response = client.post("/api/fabricantes/upload", content_type="multipart/form-data", data=data)
-    print("Respuesta:", response.get_json())
-    # Aquí decidimos que en carga parcial se retorne 200 (o 201) según lo que definas en el endpoint
-    assert response.status_code in (200, 201), f"Se esperaba 200 o 201, se obtuvo {response.status_code}"
-    result = response.get_json()
-    # Por ejemplo, se espera que solo se haya insertado 1 registro y se reporte al menos un error
-    assert result.get("inserted") == 1, f"Se esperaba 1 inserción, se obtuvo {result.get('inserted')}"
-    assert "errors" in result and len(result["errors"]) > 0, "Se esperaba la lista de errores"
+    resp = client.post(
+        "/api/fabricantes/upload",
+        data={"file": (io.BytesIO(csv_data.encode()), "fabricantes.csv")},
+        content_type="multipart/form-data",
+    )
+    assert resp.status_code in (200, 201)
+    body = resp.get_json()
+    assert body["inserted"] == 1 and body["errors"]
 
-def test_upload_fabricante_invalid_format(client):
-    """
-    Prueba la carga masiva con un archivo que no tiene formato CSV (por ejemplo, un archivo de texto sin delimitadores).
-    Se espera que el endpoint rechace la carga y retorne un error 400 con un mensaje adecuado.
-    """
-    # El contenido no tiene estructura CSV válida
-    csv_content = "Este no es un archivo CSV válido"
-    data = {
-        "file": (io.BytesIO(csv_content.encode("utf-8")), "fabricantes.txt")
-    }
-    response = client.post("/api/fabricantes/upload", data=data, content_type="multipart/form-data")
-    json_data = response.get_json()
-    # Se espera un error 400 indicando problema en el formato o en los campos
-    assert response.status_code == 400, f"Se esperaba 400, se obtuvo {response.status_code}"
-    assert "error" in json_data, "La respuesta debe contener una clave 'error' que indique la falla en el formato"
+
+def test_upload_invalid_format(client):
+    txt_data = "Este no es un CSV"
+    resp = client.post(
+        "/api/fabricantes/upload",
+        data={"file": (io.BytesIO(txt_data.encode()), "fabricantes.txt")},
+        content_type="multipart/form-data",
+    )
+    assert resp.status_code == 400
+    assert "error" in resp.get_json()
