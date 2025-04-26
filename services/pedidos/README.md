@@ -1,8 +1,7 @@
 # Api Pedidos
 ## Descripcion
 Api de pedidos, contiene los siguientes endpoints
-- pedido/<pedidoId>: POST que crea una pedido
-- pedido/<pedidoId>: DELETE elimina un pedido
+- create_pedido: POST que crea una pedido
 - pedido/<pedidoId>: GET que obtiene los datos de un pedido
 - pedidos: GET que obtiene los datos de los pedidos
 ## Entorno local
@@ -15,24 +14,22 @@ docker run --name db-postgres-pedidos-dev \
   -p 5432:5432 \
   -d postgres:13
 ```
-- Activar el entorno virtual
-```
-python3 -m venv venv
-source venv/bin/activate
-```
 - Instalar las dependencias:
 ```
-pip install -r requirements.txt
+pipenv install
+```
+- Activar el entorno virtual
+```
+pipenv shell
 ```
 - Ejecutar la aplicacion
 ```
-export FLASK_APP="./src/main.py"
-flask run -h 0.0.0.0 --port=3000
+pipenv run flask --app src.main run --host=0.0.0.0 --port=3000 --debug     
 ```
 ## Ejecucion de pruebas
 - Activar el entorno local, ejecutar una BD local, y correr el siguiente comando:
 ```
-pytest --cov-fail-under=70 --cov=src
+pipenv run pytest
 ```
 ## Despliegue en nube
 1. Crear proyecto en GCP (pry-pedidos)
@@ -43,28 +40,28 @@ pytest --cov-fail-under=70 --cov=src
 5. Otorgar los permisos necesarios para tener acceso al repositorio:
 ```
 gcloud projects add-iam-policy-binding pry-pedidos \
---member="user:emersonchaparroampa@gmail.com" \
+--member="user:cristianarnulfoariasvargas10b@gmail.com" \
 --role="roles/artifactregistry.writer"
 ```
 - Tambien ejecutar este comando
 ```
 gcloud auth configure-docker \
-    us-central1-docker.pkg.dev
+    us-central1-c-docker.pkg.dev
 ```
 6. Compilar el contenedor:
 ```
-docker build -t us-central1-docker.pkg.dev/pry-pedidos/repositorio-pruebas/pedidos:latest .
+docker build -t us-central1-c-docker.pkg.dev/pry-pedidos/repositorio-pruebas/pedidos:latest .
 ```
 7. Subir el contenedor al repositorio:
 ```
-docker push us-central1-docker.pkg.dev/pry-pedidos/repositorio-pruebas/pedidos:latest
+docker push us-central1-c-docker.pkg.dev/pry-pedidos/repositorio-pruebas/pedidos:latest
 ```
 8. Desplegar el servicio, colocar la IP correcta de la BD: 
 ```
 gcloud run deploy api-pedidos \
-    --image us-central1-docker.pkg.dev/pry-pedidos/repositorio-pruebas/pedidos:latest \
+    --image us-central1-c-docker.pkg.dev/pry-pedidos/repositorio-pruebas/pedidos:latest \
     --platform managed \
-    --region us-central1 \
+    --region us-central1-c \
     --allow-unauthenticated \
     --set-env-vars DATABASE_USER=user_pedidos_user,DATABASE_PASSWORD=user_pedidos_pass,DATABASE_PORT=5432,DATABASE_NAME=pedidos_db,DATABASE_URL=0.0.0.0    
 ```
@@ -72,11 +69,11 @@ gcloud run deploy api-pedidos \
 9. Otros Comandos
 -  Borra el servicio desplegado:
 ```
-gcloud run services delete api-pedidos --region us-central1
+gcloud run services delete api-pedidos --region us-central1-c
 ```
 - Borra la imagen desplegada:
 ```
-gcloud artifacts packages delete pedidos --repository=repositorio-pruebas --location=us-central1
+gcloud artifacts packages delete pedidos --repository=repositorio-pruebas --location=us-central1-c
 ```
 - Borrar los folders "pycache" recursivamente
 ```
@@ -84,16 +81,18 @@ find . -type d -name "__pycache__" -exec rm -rf {} +
 ```
 - Borrar la carpeta donde esta el entorno
 ```
-rm -r ./venv
+pipenv --rm
 ```
 - Actualizar el archivo de dependencias
 ```
-pip freeze > requirements.txt
+pipenv lock
 ```
 - Verificar si las dependencias estan correctas
 ```
-pip check
+pipenv check
 ```
-
-
+- Ver el contenido actual del entorno (similar a pip freeze)
+```
+pipenv graph
+```
 

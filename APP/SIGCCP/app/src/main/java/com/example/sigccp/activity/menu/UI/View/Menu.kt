@@ -19,20 +19,22 @@ import com.example.sigccp.PreferenceKeys
 import com.example.sigccp.PreferencesManager
 import com.example.sigccp.R
 import com.example.sigccp.navigation.AppScreen
+import com.example.sigccp.navigation.NavigationController
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.newMenuButton
 
 @Composable
-fun Menu(navController: NavController)
+fun Menu()
 {
-    Options(navController)
+    Options()
 }
 
 @Composable
-fun Options(navController: NavController)
+fun Options()
 {
     val role = PreferencesManager.getString(PreferenceKeys.ROLE)
-    val saludo = if (role == "cliente") stringResource(id = R.string.menuCliente) else stringResource(id = R.string.menuVendedor)
+    val rolEsCliente = (role == "cliente")
+    val saludo = if (rolEsCliente) stringResource(id = R.string.menuCliente) else stringResource(id = R.string.menuVendedor)
 
     ScreenContainer(title = saludo, false, null) {
         Box(
@@ -82,7 +84,7 @@ fun Options(navController: NavController)
                     {
                         //newMenuButton(onClick = { "navController.navigate(AppScreen.CrearAlarma.route) }", nombre = "CREAR ALARMA", imagen = R.drawable.editar)
                         newMenuButton(
-                            onClick = { navController.navigate(AppScreen.ListarPedidos.route) },
+                            onClick = { NavigationController.navigate(AppScreen.ListarPedidos.route) },
                             nombre = "PEDIDOS",
                             imagen = R.drawable.editar,
                             enabled = true
@@ -91,31 +93,31 @@ fun Options(navController: NavController)
                             onClick = {/*TODO*/ },
                             nombre = "CLIENTES",
                             imagen = R.drawable.ver,
-                            enabled = false
+                            enabled = !rolEsCliente
                         )
                         newMenuButton(
                             onClick = {/*TODO*/ },
                             nombre = "INVENTARIO",
                             imagen = R.drawable.ver,
-                            enabled = false
+                            enabled = true
                         )
                         newMenuButton(
                             onClick = {/*TODO*/ },
                             nombre = "RUTAS",
                             imagen = R.drawable.ia,
-                            enabled = false
+                            enabled = !rolEsCliente
                         )
                         newMenuButton(
-                            onClick = {/*TODO*/ },
+                            onClick = {NavigationController.navigate(AppScreen.Recomendacion.route) },
                             nombre = "RECOMENDACION",
                             imagen = R.drawable.config,
-                            enabled = false
+                            enabled = !rolEsCliente
                         )
                         newMenuButton(
-                            onClick = { navController.navigate(AppScreen.RegistrarVisita.route) },
+                            onClick = { NavigationController.navigate(AppScreen.RegistrarVisita.route) },
                             nombre = "REGISTRAR VISITA",
                             imagen = R.drawable.editar,
-                            enabled = true
+                            enabled = !rolEsCliente
                         )
                     }
                 }

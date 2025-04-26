@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: logistica
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
 spec:
   selector:
     app: logistica
@@ -9,4 +11,4 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8080
-  type: LoadBalancer
+  type: ClusterIP

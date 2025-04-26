@@ -16,6 +16,8 @@ import com.example.sigccp.ui.View.Components.CustomButton
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.activity.clients.data.model.Client
 import com.example.sigccp.activity.clients.ui.viewmodel.ClienteViewModel
+import com.example.sigccp.navigation.AppScreen
+import com.example.sigccp.navigation.NavigationController
 import com.example.sigccp.ui.theme.CcpColors
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -27,7 +29,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegistrarVisita(viewModel: ClienteViewModel = viewModel(), navController: NavController) {
+fun RegistrarVisita(viewModel: ClienteViewModel = viewModel()) {
     val context = LocalContext.current
     val clientes = viewModel.clientes.collectAsState().value
     val isLoading = viewModel.isLoading.collectAsState().value
@@ -141,7 +143,9 @@ fun RegistrarVisita(viewModel: ClienteViewModel = viewModel(), navController: Na
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Row {
-                    CustomButton(text = "Cancelar") { navController.popBackStack() }
+                    CustomButton(text = "Cancelar") {
+                        NavigationController.navigate(AppScreen.Menu.route)
+                    }
                     CustomButton(text = "Aceptar") {
                         if (selectedCliente == null || informe.isBlank()) {
                             Toast.makeText(
@@ -162,7 +166,7 @@ fun RegistrarVisita(viewModel: ClienteViewModel = viewModel(), navController: Na
                                         context,
                                         "Visita Registrada", Toast.LENGTH_SHORT
                                     ).show()
-                                    navController.popBackStack()
+                                    NavigationController.navigate(AppScreen.Menu.route)
                                 },
                                 onError = { msg ->
                                     Toast.makeText(

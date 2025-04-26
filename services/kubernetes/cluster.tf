@@ -4,7 +4,7 @@ provider "google" {
 
 resource "google_container_cluster" "microservices-proyecto" {
   name               = "microservices-proyecto"
-  location           = "us-central1"
+  location           = "us-central1-c"
   enable_autopilot = true
 }
 

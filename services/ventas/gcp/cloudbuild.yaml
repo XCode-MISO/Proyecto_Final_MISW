@@ -1,4 +1,9 @@
 steps:
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: 'bash'
+    args:
+    - '-c'
+    - 'echo "{\"version\": \"$TAG_NAME\"}" > ./services/ventas/version.json'
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:
@@ -55,16 +60,16 @@ steps:
     args:
     - run
     - --filename=services/ventas/gcp/kubernetes/deployment.yaml
-    - --location=us-central1
-    - --cluster=my-cluster
+    - --location=us-central1-c
+    - --cluster=manual-cluster-clone-1-clone-1
     - --image=gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/ventas:latest
   # Kubernetes Service Updated
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
     - run
     - --filename=services/ventas/gcp/kubernetes/service.yaml
-    - --location=us-central1
-    - --cluster=my-cluster
+    - --location=us-central1-c
+    - --cluster=manual-cluster-clone-1-clone-1
     - --output=output/service
 options:
   logging: CLOUD_LOGGING_ONLY

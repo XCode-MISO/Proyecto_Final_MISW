@@ -48,22 +48,22 @@ gcloud projects add-iam-policy-binding pry-ventas \
 - Tambien ejecutar este comando
 ```
 gcloud auth configure-docker \
-    us-central1-docker.pkg.dev
+    us-central1-c-docker.pkg.dev
 ```
 6. Compilar el contenedor:
 ```
-docker build -t us-central1-docker.pkg.dev/pry-ventas/repositorio-pruebas/ventas:latest .
+docker build -t us-central1-c-docker.pkg.dev/pry-ventas/repositorio-pruebas/ventas:latest .
 ```
 7. Subir el contenedor al repositorio:
 ```
-docker push us-central1-docker.pkg.dev/pry-ventas/repositorio-pruebas/ventas:latest
+docker push us-central1-c-docker.pkg.dev/pry-ventas/repositorio-pruebas/ventas:latest
 ```
 8. Desplegar el servicio, colocar la IP correcta de la BD: 
 ```
 gcloud run deploy api-ventas \
-    --image us-central1-docker.pkg.dev/pry-ventas/repositorio-pruebas/ventas:latest \
+    --image us-central1-c-docker.pkg.dev/pry-ventas/repositorio-pruebas/ventas:latest \
     --platform managed \
-    --region us-central1 \
+    --region us-central1-c \
     --allow-unauthenticated \
     --set-env-vars DB_USER=user_ventas_user,DB_PASSWORD=user_ventas_pass,DB_PORT=5432,DB_NAME=ventas_db,DB_HOST=0.0.0.0    
 ```
@@ -71,11 +71,11 @@ gcloud run deploy api-ventas \
 9. Otros Comandos
 -  Borra el servicio desplegado:
 ```
-gcloud run services delete api-ventas --region us-central1
+gcloud run services delete api-ventas --region us-central1-c
 ```
 - Borra la imagen desplegada:
 ```
-gcloud artifacts packages delete ventas --repository=repositorio-pruebas --location=us-central1
+gcloud artifacts packages delete ventas --repository=repositorio-pruebas --location=us-central1-c
 ```
 - Borrar los folders "pycache" recursivamente
 ```

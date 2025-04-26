@@ -1,7 +1,9 @@
 package com.example.sigccp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -15,45 +17,69 @@ import com.example.sigccp.activity.clients.ui.viewmodel.ClienteViewModel
 import com.example.sigccp.activity.pedido.UI.View.AgregarProductos
 import com.example.sigccp.activity.pedido.UI.View.CrearPedido
 import com.example.sigccp.activity.pedido.UI.ViewModel.PedidoViewModel
+import com.example.sigccp.activity.recomendacion.ui.view.Recomendacion
+import com.example.sigccp.activity.recomendacion.ui.viewmodel.RecomendacionServiceViewModel
+import com.example.sigccp.activity.recomendacion.ui.viewmodel.RecomendacionViewModel
+
+
+class NavigationController {
+    companion object {
+        lateinit var navController: NavHostController
+        fun navigate(route: String) {
+            navController.navigate(route)
+        }
+    }
+}
 
 @Composable
-fun NavigationScreen(clientViewModel: ClienteViewModel)
+fun NavigationScreen(recomendacionServiceViewModel: RecomendacionServiceViewModel)
 {
     val token = PreferencesManager.getString(PreferenceKeys.TOKEN)
     val startDestination = if (token.isNotEmpty()) AppScreen.Menu.route else AppScreen.Login.route
 
     val viewModel: PedidoViewModel = viewModel()
-    val navController=rememberNavController()
-    NavHost(navController=navController, startDestination = startDestination)
+    val clientViewModel: ClienteViewModel = viewModel()
+    val recomendacionViewModel: RecomendacionViewModel = viewModel()
+
+    //clientViewModel = ViewModelProvider(this).get(ClienteViewModel::class.java)
+
+
+    NavigationController.navController = rememberNavController()
+
+    NavHost(navController=NavigationController.navController, startDestination = startDestination)
     {
         composable(route = AppScreen.Login.route)
         {
-            Login(navController)
+            Login()
         }
 
         composable(route = AppScreen.Menu.route)
         {
-            Menu(navController)
+            Menu()
         }
         composable(route = AppScreen.ListarPedidos.route)
         {
-            ListarPedidos(navController)
+            ListarPedidos()
         }
         composable(route = AppScreen.RegistrarVisita.route)
         {
-            RegistrarVisita(clientViewModel, navController)
+            RegistrarVisita(clientViewModel)
         }
         composable(route = AppScreen.CrearCliente.route)
         {
-            CrearCliente(clientViewModel, navController)
+            CrearCliente(clientViewModel)
         }
         composable(route = AppScreen.CrearPedido.route)
         {
-            CrearPedido(navController, viewModel)
+            CrearPedido(viewModel)
         }
         composable(route = AppScreen.AgregarProductos.route)
         {
-            AgregarProductos(navController, viewModel)
+            AgregarProductos(viewModel)
+        }
+        composable(route = AppScreen.Recomendacion.route)
+        {
+            Recomendacion(recomendacionViewModel, recomendacionServiceViewModel)
         }
     }
 }

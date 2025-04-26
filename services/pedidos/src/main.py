@@ -10,8 +10,7 @@ from .database import engine
 from .errors.errors import ApiError
 import os
 from src.models.pedido import Pedido
-from src.models.producto import Producto
-from src.models.cliente import Cliente
+from src.models.pedido_producto import PedidoProducto
 from src.database import db, database
 from src.models.seed_data import seed_database_if_empty  # Solo con importarlo se ejecutará el código del archivo
 
@@ -57,6 +56,14 @@ def handle_exception(err):
     }
     return jsonify(response), err.code
 
+
+@app.route("/")
+def hello_world():
+    return "<p>Hello, World!</p>"
+
+@app.route("/health")
+def health_check():
+    return "Ok"
 
 # print("Variables de Entorno:")
 # print(f"VERSION: {os.getenv('VERSION')}")

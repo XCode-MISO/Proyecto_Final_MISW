@@ -49,22 +49,22 @@ gcloud projects add-iam-policy-binding pry-pedidos \
 - Tambien ejecutar este comando
 ```
 gcloud auth configure-docker \
-    us-central1-docker.pkg.dev
+    us-central1-c-docker.pkg.dev
 ```
 6. Compilar el contenedor:
 ```
-docker build -t us-central1-docker.pkg.dev/pry-pedidos/repositorio-pruebas/pedidos:latest .
+docker build -t us-central1-c-docker.pkg.dev/pry-pedidos/repositorio-pruebas/pedidos:latest .
 ```
 7. Subir el contenedor al repositorio:
 ```
-docker push us-central1-docker.pkg.dev/pry-pedidos/repositorio-pruebas/pedidos:latest
+docker push us-central1-c-docker.pkg.dev/pry-pedidos/repositorio-pruebas/pedidos:latest
 ```
 8. Desplegar el servicio, colocar la IP correcta de la BD: 
 ```
 gcloud run deploy api-pedidos \
-    --image us-central1-docker.pkg.dev/pry-pedidos/repositorio-pruebas/pedidos:latest \
+    --image us-central1-c-docker.pkg.dev/pry-pedidos/repositorio-pruebas/pedidos:latest \
     --platform managed \
-    --region us-central1 \
+    --region us-central1-c \
     --allow-unauthenticated \
     --set-env-vars DATABASE_USER=user_pedidos_user,DATABASE_PASSWORD=user_pedidos_pass,DATABASE_PORT=5432,DATABASE_NAME=pedidos_db,DATABASE_URL=0.0.0.0    
 ```
@@ -72,11 +72,11 @@ gcloud run deploy api-pedidos \
 9. Otros Comandos
 -  Borra el servicio desplegado:
 ```
-gcloud run services delete api-pedidos --region us-central1
+gcloud run services delete api-pedidos --region us-central1-c
 ```
 - Borra la imagen desplegada:
 ```
-gcloud artifacts packages delete pedidos --repository=repositorio-pruebas --location=us-central1
+gcloud artifacts packages delete pedidos --repository=repositorio-pruebas --location=us-central1-c
 ```
 - Borrar los folders "pycache" recursivamente
 ```

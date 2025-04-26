@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ms-compras-service
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
 spec:
   selector:
     app: ms-compras
@@ -9,4 +11,4 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 5001
-  type: LoadBalancer
+  type: ClusterIP

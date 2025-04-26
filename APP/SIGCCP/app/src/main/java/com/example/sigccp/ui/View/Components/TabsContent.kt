@@ -45,6 +45,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -81,7 +82,7 @@ fun newButton(
 
     Box(
         modifier = Modifier
-            .width(buttonWidth) // 🔹 Ancho fijo en lugar de fillMaxWidth()
+            .width(buttonWidth)
             .border(2.dp, MoradoApp, RoundedCornerShape(12.dp))
     ) {
         // Sombra debajo del botón
@@ -111,7 +112,8 @@ fun newButton(
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .width(buttonWidth) // 🔹 Ancho fijo
-                    .semantics { contentDescription = nombre },
+                    .semantics { contentDescription = nombre }
+                    .testTag(nombre),
                 interactionSource = interactionSource
             ) {
                 Row(
@@ -187,6 +189,7 @@ fun newMenuButton(
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .testTag(nombre)
                     .semantics { contentDescription = nombre },
                 interactionSource = interactionSource
             ) {

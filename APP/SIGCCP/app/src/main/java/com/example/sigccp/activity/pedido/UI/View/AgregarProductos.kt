@@ -27,19 +27,19 @@ import kotlin.collections.set
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.example.sigccp.navigation.NavigationController
 import com.example.sigccp.ui.View.moneda
 
 
 //@Preview
 @Composable
-fun AgregarProductos( navController: NavController, viewModel: PedidoViewModel)
+fun AgregarProductos( viewModel: PedidoViewModel)
 {
-    Producto(navController,viewModel)
+    Producto()
 }
 
 @Composable
-fun Producto( navController: NavController,
-              viewModel: PedidoViewModel = viewModel()
+fun Producto(viewModel: PedidoViewModel = viewModel()
 )
 {
     val productos = viewModel.productosDisponibles
@@ -117,10 +117,10 @@ fun Producto( navController: NavController,
                             }
 
                             viewModel.actualizarProductosSeleccionados(productosValidados)
-                            navController.navigate(AppScreen.CrearPedido.route)
+                            NavigationController.navigate(AppScreen.CrearPedido.route)
                         },
                         nombreDerecho = "Cancelar",
-                        onClickDerecho = { navController.popBackStack() },
+                        onClickDerecho = { NavigationController.navigate(AppScreen.CrearPedido.route) },
                             buttonWidth = 320.dp,
                         )
 
