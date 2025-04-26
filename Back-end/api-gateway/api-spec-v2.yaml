@@ -457,7 +457,13 @@ paths:
     get:
       operationId: "getPedido"
       summary: Obtener pedido por ID
-      description: "Devuelve el pedido con el ID especificado"
+      description: "Devuelve el pedido con el ID especificado"      
+      parameters:
+        - in: path
+          name: pedido_id
+          type: string
+          required: true
+          description: ID 
       responses:
         200:
           description: "Pedido con el ID solicitado"
