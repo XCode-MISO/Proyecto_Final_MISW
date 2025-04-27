@@ -88,37 +88,37 @@ fun Options()
                         //newMenuButton(onClick = { "navController.navigate(AppScreen.CrearAlarma.route) }", nombre = "CREAR ALARMA", imagen = R.drawable.editar)
                         newMenuButton(
                             onClick = { NavigationController.navigate(AppScreen.ListarPedidos.route) },
-                            nombre = "PEDIDOS",
+                            nombre = stringResource(id = R.string.pedidos),
                             imagen = R.drawable.editar,
                             enabled = true
                         )
                         newMenuButton(
                             onClick = {/*TODO*/ },
-                            nombre = "CLIENTES",
+                            nombre = stringResource(id = R.string.clientes),
                             imagen = R.drawable.ver,
                             enabled = !rolEsCliente
                         )
                         newMenuButton(
                             onClick = {/*TODO*/ },
-                            nombre = "INVENTARIO",
+                            nombre = stringResource(id = R.string.inventario),
                             imagen = R.drawable.ver,
                             enabled = true
                         )
                         newMenuButton(
                             onClick = {/*TODO*/ },
-                            nombre = "RUTAS",
+                            nombre = stringResource(id = R.string.rutas),
                             imagen = R.drawable.ia,
                             enabled = !rolEsCliente
                         )
                         newMenuButton(
                             onClick = {NavigationController.navigate(AppScreen.Recomendacion.route) },
-                            nombre = "RECOMENDACION",
+                            nombre = stringResource(id = R.string.recomendacion),
                             imagen = R.drawable.config,
                             enabled = !rolEsCliente
                         )
                         newMenuButton(
                             onClick = { NavigationController.navigate(AppScreen.RegistrarVisita.route) },
-                            nombre = "REGISTRAR VISITA",
+                            nombre = stringResource(id = R.string.visita),
                             imagen = R.drawable.editar,
                             enabled = !rolEsCliente
                         )

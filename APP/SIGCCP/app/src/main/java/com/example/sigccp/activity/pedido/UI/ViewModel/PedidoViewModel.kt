@@ -83,7 +83,7 @@ class PedidoViewModel : ViewModel() {
         }
     }
 
-    private fun fetchProductos() {
+    fun fetchProductos() {
         viewModelScope.launch {
             try {
                 val response = RetrofitInstancePedido.api.obtenerProductos()
@@ -92,7 +92,9 @@ class PedidoViewModel : ViewModel() {
                 e.printStackTrace()
             }
         }
-    }fun crearPedido(onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
+    }
+
+    fun crearPedido(onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
         viewModelScope.launch {
             try {
                 val productos = productosSeleccionados.value

@@ -45,7 +45,7 @@ fun Pedidos (viewModel: PedidoViewModel = viewModel())
     val clientId = PreferencesManager.getString(PreferenceKeys.USER_ID)
 
 
-    ScreenContainer(title = stringResource(id = R.string.ListPedidos), true,false,true,null) {
+    ScreenContainer(title = stringResource(id = R.string.ListPedidos), true,false,true,null,AppScreen.Menu.route) {
         Box(
             modifier = Modifier
                 .fillMaxSize(), // Ocupa toda la pantalla para centrar el contenido

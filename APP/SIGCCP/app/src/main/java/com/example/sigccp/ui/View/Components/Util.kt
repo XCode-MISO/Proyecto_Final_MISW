@@ -71,6 +71,7 @@ fun ScreenContainer(
     enabled: Boolean,
     showBackButton: Boolean = false,
     imagen:Int? = null,
+    backDestination: String? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
     val context = LocalContext.current
@@ -151,7 +152,11 @@ fun ScreenContainer(
                     if (showBackButton) {
                         IconButton(
                             onClick = {
-                                activity?.onBackPressedDispatcher?.onBackPressed()
+                                if (backDestination != null) {
+                                    NavigationController.navigate(backDestination)
+                                } else {
+                                    activity?.onBackPressedDispatcher?.onBackPressed()
+                                }
                             },
                             modifier = Modifier
                                 .align(Alignment.CenterStart) // Alinearlo al inicio
