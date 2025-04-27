@@ -111,9 +111,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     console.log(`NavbarComponent: Ruta actual: ${url}, showNavbar: ${this.showNavbar}`);
   }
 
-  isPath(tab: Tab) {
-    const path = this.router.url;
-    return path.includes(tab.route);
+  isPath(tab: any): boolean {
+    return this.router.url === tab.route;
   }
   
   navigate(tab: Tab) {

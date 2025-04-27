@@ -11,7 +11,6 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   
   return from(authService.getToken()).pipe(
     switchMap(token => {
-      // Solo añadir token si existe
       if (token) {
         req = req.clone({
           setHeaders: {

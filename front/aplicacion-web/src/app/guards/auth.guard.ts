@@ -13,7 +13,6 @@ export class AuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     console.log('AuthGuard: verificando acceso a ruta', state.url);
     
-    // Añadir más logs para depurar
     const isAuth = this.authService.isAuthenticated();
     console.log('¿Usuario autenticado?', isAuth);
     

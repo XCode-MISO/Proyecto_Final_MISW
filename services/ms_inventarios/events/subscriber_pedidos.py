@@ -6,7 +6,7 @@ from models.db import db
 from app import create_app
 
 # Configurar credenciales si es necesario (o via variable de entorno GOOGLE_APPLICATION_CREDENTIALS)
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/esneiderrestrepo/Documents/credentials.json"
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/esneiderrestrepo/Documents/credentials.json"
 
 # Creamos la aplicación una sola vez para usar su contexto
 app = create_app()
@@ -20,16 +20,16 @@ def callback(message):
             event_data = json.loads(data_str)
             print(f"[PUBSUB] Mensaje recibido: {event_data}")
             # Validamos que sea un evento de pedido
-            if event_data.get("eventType") == "PedidoCreadoInventarios":
-                items = event_data.get("items", [])
-                for item in items:
-                    producto_id = item.get("productoId")
-                    cantidad = item.get("cantidad", 0)
+            #if event_data.get("eventType") == "PedidoCreadoInventarios":
+            items = event_data.get("items", [])
+            for item in items:
+                producto_id = item.get("productoId")
+                cantidad = item.get("cantidad", 0)
                     # Decrementamos el stock para cada producto
-                    try:
-                        inventario_service.decrementar_stock(producto_id, cantidad)
-                    except Exception as dec_e:
-                        logger.error(f"Error al decrementar stock para producto_id {producto_id}: {dec_e}")
+                try:
+                    inventario_service.decrementar_stock(producto_id, cantidad)
+                except Exception as dec_e:
+                    logger.error(f"Error al decrementar stock para producto_id {producto_id}: {dec_e}")
 
         except Exception as e:
             # Puedes registrar el error y/o reenviar el mensaje según convenga
@@ -39,7 +39,7 @@ def callback(message):
 
 def start_pedidos_subscriber():
     project_id = os.getenv('GCP_PROJECT_ID', 'misw-4301-native-cloud-433702')
-    subscription_id = os.getenv('PEDIDOS_SUBSCRIPTION_ID', 'logistica')
+    subscription_id = os.getenv('PEDIDOS_SUBSCRIPTION_ID', 'PedidoCreadoInventarios-sub')
     subscriber = pubsub_v1.SubscriberClient()
     subscription_path = subscriber.subscription_path(project_id, subscription_id)
     print(f"[PUBSUB] Escuchando suscripción de pedidos: {subscription_path}")
