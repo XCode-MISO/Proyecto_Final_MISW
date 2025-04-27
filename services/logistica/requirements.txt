@@ -9,3 +9,4 @@ google-cloud-pubsub
 pytest
 coverage
 flask-cors
+requests
