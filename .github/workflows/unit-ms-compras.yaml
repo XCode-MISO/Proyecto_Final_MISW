@@ -3,11 +3,11 @@ name: unit-ms_compras
 on:
   pull_request:
     paths:
-      - 'services/ms_compras/**'
+      - "services/ms_compras/**"
   push:
     branches: [master]
     paths:
-      - 'services/ms_compras/**'
+      - "services/ms_compras/**"
 
 jobs:
   unit:
@@ -20,7 +20,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Install dependencies
         run: |
@@ -28,32 +28,32 @@ jobs:
           pip install -r services/ms_compras/requirements.txt
           pip install pytest pytest-cov matplotlib lxml
 
-      - name: Run tests with coverage
+      - name: Run tests & generate coverage reports
+        working-directory: services/ms_compras
         run: |
-          pytest \
-            --cov=services/ms_compras \
+          pytest -q tests \
+            --cov=. \
             --cov-report=xml:coverage.xml \
-            --cov-report=html:cov_html \
-            -q services/ms_compras/tests
-
-      - name: Verify coverage.xml exists
-        run: |
-          test -f coverage.xml || (echo "❌ coverage.xml not found" && exit 1)
+            --cov-report=html:htmlcov
 
       - name: Generate coverage chart
+        working-directory: services/ms_compras
         run: |
-          python services/scripts/generate_coverage_chart.py \
+          python scripts/generate_coverage_chart.py \
             coverage.xml \
             coverage_chart.png
 
-      - name: Upload HTML coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-html-ms_compras
-          path: cov_html
+      - name: Embed coverage chart in summary
+        # Esto añade la imagen al resumen del paso, convertida a Base64
+        run: |
+          echo "### 📊 Coverage" >> $GITHUB_STEP_SUMMARY
+          echo "![coverage](data:image/png;base64,$(base64 -w0 coverage_chart.png))" \
+            >> $GITHUB_STEP_SUMMARY
 
-      - name: Upload coverage chart
+      - name: Upload coverage artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-chart-ms_compras
-          path: coverage_chart.png
+          name: coverage-ms_compras
+          path: |
+            services/ms_compras/htmlcov
+            services/ms_compras/coverage_chart.png
