@@ -22,6 +22,7 @@ import com.example.sigccp.navigation.AppScreen
 import com.example.sigccp.navigation.NavigationController
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.newMenuButton
+import androidx.activity.compose.BackHandler
 //import com.example.sigccp.BuildConfig
 
 
@@ -35,6 +36,12 @@ fun Menu()
 @Composable
 fun Options()
 {
+    val navController = NavigationController.navController
+    BackHandler {
+        navController.navigate(AppScreen.Menu.route) {
+            popUpTo(0)
+        }
+    }
     val role = PreferencesManager.getString(PreferenceKeys.ROLE)
     val rolEsCliente = (role == "cliente")
     val saludo = if (rolEsCliente) stringResource(id = R.string.menuCliente) else stringResource(id = R.string.menuVendedor)

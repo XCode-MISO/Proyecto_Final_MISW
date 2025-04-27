@@ -1,5 +1,6 @@
 package com.example.sigccp.activity.pedido.UI.View
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +40,12 @@ fun ListarPedidos()
 @Composable
 fun Pedidos (viewModel: PedidoViewModel = viewModel())
 {
+    val navController = NavigationController.navController
+    BackHandler {
+        navController.navigate(AppScreen.Menu.route) {
+            popUpTo(0)
+        }
+    }
     val pedidos = viewModel.pedidos.collectAsState().value
     val role = PreferencesManager.getString(PreferenceKeys.ROLE)
     val rolEsCliente = (role == "cliente")
