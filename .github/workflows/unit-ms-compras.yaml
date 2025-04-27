@@ -14,43 +14,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      - name: Install dependencies
+      - name: Install deps
         run: |
-          pip install --upgrade pip
           pip install -r services/ms_compras/requirements.txt
           pip install pytest pytest-cov matplotlib lxml
 
       - name: Run tests & generate coverage reports
         run: |
           pytest -q services/ms_compras/tests \
-            --cov=services/ms_compras \
-            --cov-report=xml:services/ms_compras/coverage.xml \
-            --cov-report=html:services/ms_compras/htmlcov
+            --cov=. \
+            --cov-report=xml:coverage.xml \
+            --cov-report=html:htmlcov
 
-      - name: Generate coverage chart
+      - name: Generate coverage chart PNG
         run: |
-          python services/scripts/generate_coverage_chart.py \
-            services/ms_compras/coverage.xml \
-            services/ms_compras/coverage_chart.png
+          python services/ms_compras/scripts/generate_coverage_chart.py \
+            coverage.xml \
+            coverage_chart.png
 
       - name: Embed coverage chart in summary
+        # esto escribe en el resumen de la acción para que GitHub lo muestre
         run: |
-          echo "### 📊 Coverage" >> $GITHUB_STEP_SUMMARY
-          echo "![coverage](data:image/png;base64,$(base64 -w0 services/ms_compras/coverage_chart.png))" \
-            >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Test Coverage" >> $GITHUB_STEP_SUMMARY
+          # convierte el PNG a base64 y lo inyecta como data-uri
+          echo "![Coverage](" >> $GITHUB_STEP_SUMMARY
+          echo "data:image/png;base64,$(base64 -w0 coverage_chart.png)" >> $GITHUB_STEP_SUMMARY
+          echo ")" >> $GITHUB_STEP_SUMMARY
 
-      - name: Upload coverage artifacts
+      - name: Upload HTML report + chart as artifact
         uses: actions/upload-artifact@v4
         with:
           name: coverage-ms_compras
           path: |
-            services/ms_compras/htmlcov
-            services/ms_compras/coverage_chart.png
+            htmlcov
+            coverage_chart.png
