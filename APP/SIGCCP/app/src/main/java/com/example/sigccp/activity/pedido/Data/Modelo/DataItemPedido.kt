@@ -19,7 +19,7 @@ data class DataItemPedido(
 data class PedidoClass(
     val id: String,
     val name: String,
-    val price: Double,
+    val price: Float,
     val state: String,
     val client: ClienteSingleClass
 )
@@ -48,7 +48,7 @@ data class PedidoRequest(
     val vendedorId: String,
     val vendedorName: String,
     val products: List<ProductoCantidad>,
-    val price: Double,
+    val price: Float,
     val state: String,
     val deliveryDate: String
 )

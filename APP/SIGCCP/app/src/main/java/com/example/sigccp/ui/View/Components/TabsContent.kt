@@ -335,7 +335,7 @@ fun LanguageDropdown(activity: Activity?) {
 @Composable
 fun ClientDropdown(
     clients: List<ClienteClass>, // Lista de clientes (id: String, nombre: String)
-    onClientSelected: (String) -> Unit // Callback con el ID del cliente seleccionado
+    onClientSelected: (ClienteClass) -> Unit // <-- Cambiado aquí
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedClient by remember { mutableStateOf<ClienteClass?>(null) }
@@ -369,7 +369,7 @@ fun ClientDropdown(
                     text = { Text(client.nombre) },
                     onClick = {
                         selectedClient = client
-                        onClientSelected(client.id) // Ahora es String
+                        onClientSelected(client) // <-- Ahora pasamos el objeto completo
                         expanded = false
                     }
                 )
@@ -377,6 +377,7 @@ fun ClientDropdown(
         }
     }
 }
+
 
 
 
@@ -779,7 +780,7 @@ fun ProductoEditableBox(
                 val cantidadActual = cantidadTexto.toIntOrNull() ?: 0
                 val cantidadInvalida = cantidadActual > producto.stock
                 Text(
-                    text = "$${producto.stock}",
+                    text = "$${producto.precio}",
                     style = AppTypography.labelMedium,
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.End

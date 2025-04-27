@@ -8,11 +8,12 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface PedidoService {
     //obtener todos los pedidos
     @GET("pedidos")
-    suspend fun obtenerPedidos(): List<PedidoClass>
+    suspend fun obtenerPedidos(@Query("clientid") clientId: String? = null): List<PedidoClass>
 
     // obtener productos
     @GET("inventarios/pedidos")

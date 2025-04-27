@@ -37,12 +37,11 @@ import com.example.sigccp.ui.theme.AppTypography
 @Composable
 fun AgregarProductos( viewModel: PedidoViewModel)
 {
-    Producto()
+    Producto(viewModel)
 }
 
 @Composable
-fun Producto(viewModel: PedidoViewModel = viewModel()
-)
+fun Producto(viewModel: PedidoViewModel)
 {
     val productos = viewModel.productosDisponibles
     var cantidades by remember { mutableStateOf<Map<Int, Int>>(emptyMap()) }
@@ -101,35 +100,41 @@ fun Producto(viewModel: PedidoViewModel = viewModel()
                             style = AppTypography.labelLarge,
                             modifier = Modifier.padding(end = 16.dp)
                         )
+
                         newDualButton(
-                                nombreIzquierdo = "Agregar",
-                        onClickIzquierdo = {
-                            val productosValidados = productos.value.mapNotNull { producto ->
-                                val cantidad = cantidades[producto.producto_id]
+                            nombreIzquierdo = "Agregar",
+                            onClickIzquierdo = {
+                                val productosValidados = productos.value.mapNotNull { producto ->
+                                    val cantidad = cantidades[producto.producto_id]
 
-                                if (cantidad == null || cantidad <= 0) return@mapNotNull null
+                                    if (cantidad == null || cantidad <= 0) return@mapNotNull null
 
-                                val esValida = cantidad <= producto.stock
-                                val total = cantidad * producto.precio
+                                    val esValida = cantidad <= producto.stock
+                                    val total = (producto.precio * cantidad).toFloat()
 
-                                ProductosPedidoClass(
-                                    id = producto.producto_id,
-                                    nombre = producto.nombre,
-                                    cantidadRequerida = cantidad,
-                                    cantidadDisponible = producto.stock,
-                                    precioUnitario = producto.precio,
-                                    precioTotal = total,
-                                    cantidadEsValida = esValida
-                                )
-                            }
+                                    ProductosPedidoClass(
+                                        id = producto.producto_id,
+                                        nombre = producto.nombre,
+                                        cantidadRequerida = cantidad,
+                                        cantidadDisponible = producto.stock,
+                                        precioUnitario = producto.precio,
+                                        precioTotal = total,
+                                        cantidadEsValida = esValida
+                                    )
+                                }
 
-                            viewModel.actualizarProductosSeleccionados(productosValidados)
-                            NavigationController.navigate(AppScreen.CrearPedido.route)
-                        },
-                        nombreDerecho = "Cancelar",
-                        onClickDerecho = { NavigationController.navigate(AppScreen.CrearPedido.route) },
-                            buttonWidth = 320.dp,
+                                viewModel.actualizarProductosSeleccionados(productosValidados)
+                                // viewModel.precioTotal.value = 0f
+                                NavigationController.navigate(AppScreen.CrearPedido.route)
+                            },
+                            nombreDerecho = "Cancelar",
+                            onClickDerecho = {
+                                viewModel.precioTotal.value = 0f
+                                NavigationController.navigate(AppScreen.CrearPedido.route)
+                            },
+                            buttonWidth = 320.dp
                         )
+
 
                         ListaDeProductosEditable(
                             productos = productos.value,
@@ -138,6 +143,16 @@ fun Producto(viewModel: PedidoViewModel = viewModel()
                                 cantidades = cantidades.toMutableMap().apply {
                                     this[id] = nuevaCantidad
                                 }
+
+                                val total = cantidades.entries.sumOf { (productoId, cantidad) ->
+                                    val producto = productos.value.find { it.producto_id == productoId }
+                                    if (producto != null) {
+                                        (producto.precio * cantidad).toDouble()
+                                    } else {
+                                        0.0
+                                    }
+                                }
+                                viewModel.precioTotal.value = total.toFloat()
                             }
                         )
                     }

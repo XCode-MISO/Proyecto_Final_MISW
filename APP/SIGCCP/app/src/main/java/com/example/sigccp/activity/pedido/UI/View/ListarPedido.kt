@@ -17,6 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.sigccp.PreferenceKeys
+import com.example.sigccp.PreferencesManager
 import com.example.sigccp.R
 import com.example.sigccp.activity.pedido.UI.ViewModel.PedidoViewModel
 import com.example.sigccp.navigation.AppScreen
@@ -38,6 +40,11 @@ fun ListarPedidos()
 fun Pedidos (viewModel: PedidoViewModel = viewModel())
 {
     val pedidos = viewModel.pedidos.collectAsState().value
+    val role = PreferencesManager.getString(PreferenceKeys.ROLE)
+    val rolEsCliente = (role == "cliente")
+    val clientId = PreferencesManager.getString(PreferenceKeys.USER_ID)
+
+
     ScreenContainer(title = stringResource(id = R.string.ListPedidos),false,true,null) {
         Box(
             modifier = Modifier
