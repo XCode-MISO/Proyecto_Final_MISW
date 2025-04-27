@@ -1,3 +1,4 @@
+# .github/workflows/unit-ms_compras.yaml
 name: unit-ms_compras
 
 on:
@@ -16,48 +17,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout the repo
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # 2. Set up Python 3.10
-      - uses: actions/setup-python@v5
+      - name: Setup Python 3.10
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      # 3. Install dependencies
-      - name: Install deps
+      - name: Install dependencies
         run: |
-          # Activate venv if you use one; otherwise install globally
           pip install --upgrade pip
           pip install -r services/ms_compras/requirements.txt
           pip install pytest pytest-cov matplotlib lxml
 
-      # 4. Run pytest with coverage, output XML + HTML
-      - name: Run tests & generate coverage reports
+      - name: Run tests & generate coverage files
         working-directory: services/ms_compras
         run: |
-          pytest \
+          # Ejecuta los tests, fuerza XML y HTML en el cwd (services/ms_compras)
+          pytest -q tests \
             --cov=. \
             --cov-report=xml:coverage.xml \
-            --cov-report=html:htmlcov \
-            tests/
+            --cov-report=html:htmlcov
 
-      # 5. Generate coverage chart (PNG)
+          # Para debug: listar archivos y confirmar que coverage.xml existe
+          ls -la .
+
       - name: Generate coverage chart
+        # Este paso se ejecuta desde la raíz del repo
         run: |
           python services/scripts/generate_coverage_chart.py \
             services/ms_compras/coverage.xml \
             services/ms_compras
 
-      # 6. Upload HTML coverage report
       - name: Upload HTML coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-html-ms_compras
           path: services/ms_compras/htmlcov
 
-      # 7. Upload coverage chart PNG
-      - name: Upload coverage chart
+      - name: Upload coverage chart PNG
         uses: actions/upload-artifact@v4
         with:
           name: coverage-chart-ms_compras
