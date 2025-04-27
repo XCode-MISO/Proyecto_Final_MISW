@@ -102,10 +102,10 @@ def consume_pedido_creado():
             pedidoJson = json.loads(message.data)
             parsedPedido = CreatePedidoEvent(
                 name=pedidoJson.get("name"),
-                clientId=pedidoJson.get("clientId"),
-                clientName=pedidoJson.get("clientName"),
-                vendedorId=pedidoJson.get("vendedorId"),
-                vendedorName=pedidoJson.get("vendedorName"),
+                clientId=pedidoJson.get("client").get("id"),
+                clientName=pedidoJson.get("client").get("name"),
+                vendedorId=pedidoJson.get("vendedor").get("id"),
+                vendedorName=pedidoJson.get("vendedor").get("name"),
                 products=pedidoJson.get("products"),
                 price=pedidoJson.get("price"),
                 state=pedidoJson.get("state"),
