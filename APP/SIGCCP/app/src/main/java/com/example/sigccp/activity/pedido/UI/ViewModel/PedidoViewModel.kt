@@ -159,7 +159,7 @@ class PedidoViewModel : ViewModel() {
     }
 
 
-    private fun fetchClientes() {
+    fun fetchClientes() {
         viewModelScope.launch {
             try {
                 val response = RetrofitInstancePedido.api.obtenerClientes()
