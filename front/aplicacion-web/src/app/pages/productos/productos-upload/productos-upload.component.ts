@@ -27,12 +27,12 @@ export class ProductosUploadComponent {
   constructor(private uploadService: ProductosUploadService, private router: Router) { }
 
   irCargaIndividual() {
-    this.router.navigate(['/Productos/crear']);
+    this.router.navigate(['/fabricantes/crear-producto']);
   }
 
   
   irCargaMasiva() {
-    this.router.navigate(['/Productos/upload']);
+    this.router.navigate(['/fabricantes/upload-productos']);
   }
 
   onFileSelected(event: any) {
@@ -84,7 +84,7 @@ export class ProductosUploadComponent {
     this.errorMessages = [];
     this.isLoading = false;
 
-    this.router.navigate(['/productos/seleccion-carga-producto']);
+    this.router.navigate(['/fabricantes/seleccion-carga-producto']);
 
   }
 

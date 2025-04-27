@@ -81,7 +81,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       case 'directorcompras':
         // DirectorCompras solo puede ver Inicio y Gestión de Fabricantes
         this.tabs = this.allTabs.filter(tab => 
-          tab.route === '/home' || tab.route === '/fabricantes/menu'
+          tab.route === '/home' || tab.route === '/fabricantes/menu' || tab.route === '/productos'
         );
         break;
       case 'directorventas':

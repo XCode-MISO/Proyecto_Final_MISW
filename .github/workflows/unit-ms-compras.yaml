@@ -2,42 +2,32 @@ name: unit-ms_compras
 
 on:
   pull_request:
-    paths:
-      - "services/ms_compras/**"
   push:
     branches: [master]
-    paths:
-      - "services/ms_compras/**"
 
 jobs:
   unit:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: services/ms_compras
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      - name: Install deps
+      - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          pip install -r services/ms_compras/requirements.txt
           pip install pytest pytest-cov
 
-      - name: Run tests & produce XML coverage report
+      - name: Run tests + coverage
         run: |
-          pytest \
+          pytest -q services/ms_compras/tests \
             --cov=services/ms_compras \
-            --cov-report=term \
             --cov-report=xml:coverage.xml \
-            -q tests/
+            --cov-report=html:cov_html
 
-      - name: Upload coverage.xml
+      - name: Upload HTML coverage report
         uses: actions/upload-artifact@v4
         with:
-          name: cov-ms_compras
-          path: services/ms_compras/coverage.xml
+          name: coverage-ms_compras
+          path: cov_html
