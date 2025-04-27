@@ -1,4 +1,5 @@
 # ms_compras/app.py
+import json
 from flask import Flask
 from models.db import init_db
 from apis.fabricante_api import fabricante_bp
@@ -33,6 +34,10 @@ def create_app():
     
     init_db(app)
     
+    @app.route("/")
+    def hello_world():
+        return "<p>Hello, World!</p>"
+    
     @app.errorhandler(Exception)
     def handle_exception(e):
         if isinstance(e, HTTPException):
@@ -50,6 +55,15 @@ def create_app():
     @app.route("/health")
     def health_check():
         return "Ok"
+
+    @app.route("/info")
+    def info_path():
+        try:
+            return json.load(open(os.path.join("version.json"), "r"))
+        except Exception as e:
+            print(str(e))
+            return "No version.json, this means this deployment was manual or there is an error."
+
     
     CORS(app)
     return app

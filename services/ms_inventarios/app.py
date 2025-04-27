@@ -1,3 +1,4 @@
+import json
 import os, sys
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 from flask import Flask, jsonify
@@ -8,6 +9,22 @@ from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
+
+    @app.route("/")
+    def hello_world():
+        return "<p>Hello, World!</p>"
+
+    @app.route("/health")
+    def health_check():
+        return "Ok"
+
+    @app.route("/info")
+    def info_path():
+        try:
+            return json.load(open(os.path.join("version.json"), "r"))
+        except Exception as e:
+            print(str(e))
+            return "No version.json, this means this deployment was manual or there is an error."
 
   
     if app.config.get('TESTING'):
@@ -26,6 +43,7 @@ def create_app():
         }
 
     init_db(app)
+    
 
     @app.errorhandler(Exception)
     def handle_exception(e):

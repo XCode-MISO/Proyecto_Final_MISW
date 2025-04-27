@@ -14,7 +14,7 @@ class TestClients():
     def test_create_client(self, mock_registrar_usuario):
         with app.test_client() as test_client:
             response = test_client.post(
-                '/clients', json={
+                '/api/clients', json={
                     "nombre": "Maria Lopez",
                     "correo": "mlopez@gmail.com",
                     "direccion": "Calle 123",
@@ -30,7 +30,7 @@ class TestClients():
             assert 'createdAt' in response_json
 
             # Ensure the mocked function was called
-            mock_registrar_usuario.assert_called_once_with("mlopez@gmail.com", "cliente")
+            mock_registrar_usuario.assert_called_once_with("mlopez@gmail.com", "cliente", "Maria Lopez")
 
     def teardown_method(self):
         self.session.close()

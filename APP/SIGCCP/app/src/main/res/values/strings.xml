@@ -2,8 +2,20 @@
     <string name="app_name">SIGCCP</string>
     <string name="hello">Hola</string>
     <string name="welcome_message">Bienvenido a nuestra app</string>
+    <string name="menuCliente">¡Hola, Cliente!</string>
     <string name="menuVendedor">¡Hola, Vendedor!</string>
     <string name="ListPedidos">¡Tus Pedidos!</string>
     <string name="CrearPedido">¡Tu Pedido!</string>
-    <string name="menuCliente">¡Hola, Cliente!</string>
+    <string name="pedidos">PEDIDOS</string>
+    <string name="clientes">CLIENTES</string>
+    <string name="inventario">INVENTARIO</string>
+    <string name="rutas">RUTAS</string>
+    <string name="recomendacion">RECOMENDACION</string>
+    <string name="visita">REGISTRAR VISITA</string>
+    <string name="productos">Productos</string>
+    <string name="recomendation">!Recomendación¡</string>
+    <string name="visit">Registrar Visita</string>
+    <string name="client">Crear Cliente</string>
+    <string name="login">Iniciar Sesion</string>
+
 </resources>

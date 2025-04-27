@@ -6,15 +6,15 @@ data class DataItemProducto(
     @PrimaryKey
     val id:String ="",
     val name:String ="",
-    val price: Double =0.0,
+    val price: Float =0.0f,
     val amount:Int=0,
 )
 
 data class ProductoClass(
-    val id: String,
-    val name: String,
-    val price: Double,
-    val amount: Int,
+    val producto_id: Int,
+    val nombre: String,
+    val precio: Float,
+    val stock: Int
 )
 
 data class ProductosPedido(
@@ -22,11 +22,11 @@ data class ProductosPedido(
 )
 
 data class ProductosPedidoClass(
-    val id: String,
+    val id: Int,
     val nombre: String,
-    val precioUnitario: Double,
+    val precioUnitario: Float,
     val cantidadDisponible: Int,
     val cantidadRequerida: Int = 0,
-    val precioTotal: Double = 0.0,
+    val precioTotal: Float = 0.0f,
     val cantidadEsValida: Boolean = true
 )

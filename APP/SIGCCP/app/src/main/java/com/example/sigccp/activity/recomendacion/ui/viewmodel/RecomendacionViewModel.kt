@@ -19,6 +19,12 @@ class RecomendacionViewModel:ViewModel() {
     val isLoading = _isLoading.asStateFlow()
 
     fun uploadVideoFile(file: File, onSuccess: (String) -> Unit, onError: (String) -> Unit) {
+        val maxSize = 10 * 1024 * 1024 // 10 MB
+        if (file.length() > maxSize) {
+            onError("El archivo es demasiado grande.")
+            return
+        }
+
         val requestFile = file.asRequestBody("video/mp4".toMediaTypeOrNull())
         val body = MultipartBody.Part.createFormData("video", file.name, requestFile)
 
@@ -39,8 +45,6 @@ class RecomendacionViewModel:ViewModel() {
             } finally {
                 _isLoading.value = false
             }
-
-
         }
     }
 }

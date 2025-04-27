@@ -8,18 +8,23 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface PedidoService {
-    @GET("/api/pedidos") // reemplaza por la ruta real
-    suspend fun obtenerPedidos(): List<PedidoClass>
+    //obtener todos los pedidos
+    @GET("pedidos")
+    suspend fun obtenerPedidos(@Query("clientid") clientId: String? = null): List<PedidoClass>
 
-    @GET("/api/productos")
+    // obtener productos
+    @GET("inventarios/pedidos")
     suspend fun obtenerProductos(): List<ProductoClass>
 
-    @POST("/api/create_pedido")
+    // Crear pedido
+    @POST("pedidos/create_pedido")
     suspend fun createPedido(@Body pedido: PedidoRequest): Response<Unit>
 
-    @GET("/api/clientes")
+    //obtener todos los clientes
+    @GET("clients")
     suspend fun obtenerClientes(): List<ClienteClass>
 
 }

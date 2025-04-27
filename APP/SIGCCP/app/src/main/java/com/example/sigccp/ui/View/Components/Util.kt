@@ -6,6 +6,7 @@ import android.content.ContextWrapper
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Visibility
@@ -38,6 +39,13 @@ import com.example.sigccp.ui.theme.AppTypography
 import com.example.sigccp.ui.theme.CcpColors
 import com.example.sigccp.ui.theme.MoradoApp
 import com.example.sigccp.ui.theme.VerdeApp
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+
+val moneda = listOf(
+    1 to "Peso Colombiano",
+    2 to "Dolar Americano",
+)
 
 @Composable
 fun BaseScreen(content: @Composable () -> Unit) {
@@ -54,34 +62,23 @@ fun BaseScreen(content: @Composable () -> Unit) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AppTopBar(title: String) {
-    TopAppBar(
-        title = { Text(title, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center) },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = CcpColors.ColorAppBar // Color sólido similar al degradado
-        ),
-        actions = {
-            IconButton(onClick = { /* Cambiar idioma */ }) {
-                Icon(Icons.Default.Settings, contentDescription = "Idioma")
-            }
-        }
-    )
-}
-
 @SuppressLint("ContextCastToActivity")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreenContainer(
     title: String,
+    salirenabled: Boolean,
     enabled: Boolean,
+    showBackButton: Boolean = false,
     imagen:Int? = null,
+    backDestination: String? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
     val context = LocalContext.current
-    val activity =
-        remember { context as? Activity ?: (context as? ContextWrapper)?.baseContext as? Activity }
+    val activity = remember {
+        context as? ComponentActivity ?: (context as? ContextWrapper)?.baseContext as? ComponentActivity
+    }
+
 
     BaseScreen {
         Column(
@@ -114,12 +111,15 @@ fun ScreenContainer(
                             .padding(start = 20.dp, end = 25.dp)
                             .testTag("logout")
                     ) {
+
+                        if (salirenabled) {
                         Icon(
                             imageVector = Icons.Filled.PowerSettingsNew,
                             contentDescription = "Salir",
                             tint = MoradoApp,
                             modifier = Modifier.size(40.dp)
                         )
+                        }
                     }
                 },
                 actions = {
@@ -135,11 +135,42 @@ fun ScreenContainer(
                 verticalArrangement = Arrangement.Top
             ) {
                 Spacer(modifier = Modifier.height(16.dp)) // Espaciado relativo
-                SubTitleBar(
-                    texto = title,
-                    imagen = imagen,
-                    enabled = enabled
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp), // altura fija razonable como una barra normal
+                    contentAlignment = Alignment.Center
+                ) {
+                    // Subtitulo siempre al centro
+                    SubTitleBar(
+                        texto = title,
+                        imagen = imagen,
+                        enabled = enabled,
+                    )
+
+                    // Botón de volver en la esquina izquierda
+                    if (showBackButton) {
+                        IconButton(
+                            onClick = {
+                                if (backDestination != null) {
+                                    NavigationController.navigate(backDestination)
+                                } else {
+                                    activity?.onBackPressedDispatcher?.onBackPressed()
+                                }
+                            },
+                            modifier = Modifier
+                                .align(Alignment.CenterStart) // Alinearlo al inicio
+                                .padding(start = 8.dp)
+                                .size(40.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Volver atrás",
+                                tint = MoradoApp
+                            )
+                        }
+                    }
+                }
                 Spacer(modifier = Modifier.height(16.dp))
                 content()
             }

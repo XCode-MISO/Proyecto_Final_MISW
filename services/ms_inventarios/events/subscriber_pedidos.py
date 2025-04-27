@@ -4,15 +4,12 @@ from google.cloud import pubsub_v1
 from services.inventario_service import InventarioService
 from models.db import db
 from app import create_app
-
 # Configurar credenciales si es necesario (o via variable de entorno GOOGLE_APPLICATION_CREDENTIALS)
 #os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/esneiderrestrepo/Documents/credentials.json"
 
 # Creamos la aplicación una sola vez para usar su contexto
 app = create_app()
-
 inventario_service = InventarioService()
-
 def callback(message):
     with app.app_context():
         try:
@@ -36,7 +33,6 @@ def callback(message):
             print(f"[PUBSUB] Error en el callback de pedidos: {e}")
         finally:
             message.ack()
-
 def start_pedidos_subscriber():
     project_id = os.getenv('GCP_PROJECT_ID', 'misw-4301-native-cloud-433702')
     subscription_id = os.getenv('PEDIDOS_SUBSCRIPTION_ID', 'PedidoCreadoInventarios-sub')
@@ -51,4 +47,7 @@ def start_pedidos_subscriber():
         subscriber.close()
 
 
-   
+
+
+
+

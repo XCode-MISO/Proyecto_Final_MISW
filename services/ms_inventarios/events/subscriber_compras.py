@@ -6,7 +6,7 @@ from models.db import db
 from models.producto import Producto
 from app import create_app
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/esneiderrestrepo/Documents/credentials.json"
+##os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
 
 app = create_app()
 

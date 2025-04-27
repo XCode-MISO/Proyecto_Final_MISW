@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: ms-inventarios
-        image: gcr.io/misw-4301-native-cloud-433702/ms_inventarios:latest
+        image: gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/ms_inventarios:latest
         ports:
         - containerPort: 5002
         env:

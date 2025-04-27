@@ -9,9 +9,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.sigccp.R
 import com.example.sigccp.ui.View.Components.CustomButton
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.activity.clients.data.model.Client
@@ -44,7 +46,7 @@ fun RegistrarVisita(viewModel: ClienteViewModel = viewModel()) {
         position = CameraPosition.fromLatLngZoom(LatLng(4.6097, -74.0817), 10f) // Bogotá
     }
     LaunchedEffect(Unit) { viewModel.fetchClientes() }
-    ScreenContainer(title = "Registrar Visita",false,null) {
+    ScreenContainer(title = stringResource(id = R.string.visit),true,false,true,null) {
         Box(
             modifier = Modifier
                 .fillMaxSize(),

@@ -5,6 +5,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ApiServiceRecomendacion {
-    @GET("status")
+    @GET("api/recommend")
     suspend fun getJobStatus(@Query("job_id") jobId: String): StatusResponse
 }

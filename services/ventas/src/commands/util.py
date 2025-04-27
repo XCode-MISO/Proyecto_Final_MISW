@@ -1,9 +1,9 @@
 import firebase_admin
 from firebase_admin import auth, exceptions
 
-def registrarUsuarioEnFirebase(correo, rol):
+def registrarUsuarioEnFirebase(correo, rol,display_name):
     try:
-        user_record = auth.create_user(email=correo)
+        user_record = auth.create_user(email=correo, display_name=display_name)
         claims = {"role": rol}
         auth.set_custom_user_claims(user_record.uid, claims)
         return user_record.uid

@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.State
+import com.example.sigccp.PreferenceKeys
+import com.example.sigccp.PreferencesManager
 import com.example.sigccp.activity.pedido.Data.Modelo.ClienteClass
 import com.example.sigccp.activity.pedido.Data.Modelo.PedidoRequest
 import com.example.sigccp.activity.pedido.Data.Modelo.ProductoCantidad
@@ -25,7 +27,8 @@ class PedidoViewModel : ViewModel() {
 
     val nombrePedido = mutableStateOf("Pedido #${(1..9999).random()}")
     val clienteId = mutableStateOf("")
-    val precioTotal = mutableStateOf(0.0)
+    val clienteNombre = mutableStateOf("")
+    val precioTotal = mutableStateOf(0f)
     val estado = mutableStateOf("Pendiente")
 
     val deliveryDate: String = LocalDate.now().plusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE)
@@ -43,14 +46,16 @@ class PedidoViewModel : ViewModel() {
     fun actualizarProductosSeleccionados(productos: List<ProductosPedidoClass>) {
         val productosValidados = productos.map { producto ->
             val esValida = producto.cantidadRequerida <= producto.cantidadDisponible
-            val total = producto.precioUnitario * producto.cantidadRequerida
+            //val total = producto.precioUnitario * producto.cantidadRequerida.toFloat()
+            val total = (producto.precioUnitario * producto.cantidadRequerida.toFloat()).toFloat()
+
             producto.copy(
                 cantidadEsValida = esValida,
                 precioTotal = total
             )
         }
         _productosSeleccionados.value = productosValidados
-        precioTotal.value = productosValidados.sumOf { it.precioTotal }
+        precioTotal.value = productosValidados.sumOf { it.precioTotal.toDouble() }.toFloat()
     }
 
 
@@ -63,14 +68,22 @@ class PedidoViewModel : ViewModel() {
     private fun fetchPedidos() {
         viewModelScope.launch {
             try {
-                val response = RetrofitInstancePedido.api.obtenerPedidos()
+                val role = PreferencesManager.getString(PreferenceKeys.ROLE)
+                val clientId = PreferencesManager.getString(PreferenceKeys.USER_ID)
+
+                val response = if (role == "cliente") {
+                    RetrofitInstancePedido.api.obtenerPedidos(clientId)
+                } else {
+                    RetrofitInstancePedido.api.obtenerPedidos()
+                }
                 _pedidos.value = response
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
-    private fun fetchProductos() {
+
+    fun fetchProductos() {
         viewModelScope.launch {
             try {
                 val response = RetrofitInstancePedido.api.obtenerProductos()
@@ -80,19 +93,47 @@ class PedidoViewModel : ViewModel() {
             }
         }
     }
+
     fun crearPedido(onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
         viewModelScope.launch {
             try {
-                val productos = productosSeleccionados.value.map {
-                    ProductoCantidad(
-                        id = it.id,
-                        amount = it.cantidadRequerida
-                    )
+                val productos = productosSeleccionados.value
+                    .filter { it.cantidadRequerida > 0 }
+                    .map {
+                        ProductoCantidad(
+                            id = it.id,
+                            amount = it.cantidadRequerida
+                        )
+                    }
+                val role = PreferencesManager.getString(PreferenceKeys.ROLE)
+                val userId = PreferencesManager.getString(PreferenceKeys.USER_ID)
+                val userName = PreferencesManager.getString(PreferenceKeys.USER_NAME)
+
+                val clientIdValue: String
+                val clientNameValue: String
+                val vendedorIdValue: String?
+                val vendedorNameValue: String?
+
+                if (role == "vendedor") {
+                    // Si es vendedor, el cliente es el seleccionado, el vendedor es el usuario actual
+                    clientIdValue = clienteId.value
+                    clientNameValue = clienteNombre.value
+                    vendedorIdValue = userId
+                    vendedorNameValue = userName
+                } else {
+                    // Si es cliente, el cliente es el usuario actual, no hay vendedor
+                    clientIdValue = userId ?: "1ase123zsasd1"
+                    clientNameValue = userName ?: "alvaro"
+                    vendedorIdValue = "1"
+                    vendedorNameValue = "1"
                 }
 
                 val pedido = PedidoRequest(
                     name = nombrePedido.value,
-                    clientId = clienteId.value,
+                    clientId = clientIdValue,
+                    clientName = clientNameValue,
+                    vendedorId = vendedorIdValue,
+                    vendedorName = vendedorNameValue,
                     products = productos,
                     price = precioTotal.value,
                     state = estado.value,
@@ -117,6 +158,7 @@ class PedidoViewModel : ViewModel() {
         }
     }
 
+
     private fun fetchClientes() {
         viewModelScope.launch {
             try {
@@ -131,7 +173,7 @@ class PedidoViewModel : ViewModel() {
         clienteId.value = ""
         _productosSeleccionados.value = emptyList()
         nombrePedido.value = "Pedido #${(1..9999).random()}"
-        precioTotal.value = 0.0
+        precioTotal.value = 0.0f
     }
 
 
