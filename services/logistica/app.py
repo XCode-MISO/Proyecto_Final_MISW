@@ -17,15 +17,14 @@ def create_app():
     app.register_blueprint(comandos_bp)
     app.register_blueprint(query_bp)
     CORS(app)
-    db.create_all()
+    with app.context():
+        db.create_all()
+        def consumidor_pedido_creado():
+                consume_pedido_creado()
 
-    def consumidor_pedido_creado():
-        with app.app_context() as context:
-            consume_pedido_creado(context)
-
-    thread = threading.Thread(target=consumidor_pedido_creado)
-    thread.daemon = True
-    thread.start()
+        thread = threading.Thread(target=consumidor_pedido_creado)
+        thread.daemon = True
+        thread.start()
 
     @app.route("/")
     def hello_world():
