@@ -17,12 +17,7 @@ def create_app():
     app.register_blueprint(comandos_bp)
     app.register_blueprint(query_bp)
     CORS(app)
-
-    with app.app_context() as context:
-        db.create_all()
-        thread = threading.Thread(target=lambda: consume_pedido_creado(context))
-        thread.daemon = True
-        thread.start()
+    db.create_all()
 
     @app.route("/")
     def hello_world():
@@ -41,3 +36,13 @@ def create_app():
             return "No version.json, this means this deployment was manual or there is an error."
 
     return app
+
+if __name__ == '__main__':
+    flask_app = create_app()
+    # Iniciar el subscriber en un hilo aparte
+    with flask_app.app_context() as context:
+        thread = threading.Thread(target=lambda: consume_pedido_creado(context))
+        thread.daemon = True
+        thread.start()
+
+    flask_app.run(host='0.0.0.0', port=8080, debug=True)
