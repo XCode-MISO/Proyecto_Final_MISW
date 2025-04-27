@@ -1,5 +1,6 @@
 package com.example.sigccp.activity.pedido.UI.View
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,6 +46,12 @@ fun CrearPedido(viewModel: PedidoViewModel)
 }
 @Composable
 fun Pedido(viewModel: PedidoViewModel) {
+    val navController = NavigationController.navController
+    BackHandler {
+        navController.navigate(AppScreen.ListarPedidos.route) {
+            popUpTo(0)
+        }
+    }
     var showDialog by remember { mutableStateOf(false) }
     var dialogMessage by remember { mutableStateOf("") }
     val role = PreferencesManager.getString(PreferenceKeys.ROLE)

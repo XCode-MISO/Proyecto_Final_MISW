@@ -1,5 +1,6 @@
 package com.example.sigccp.navigation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -14,6 +15,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import android.app.Activity
+import androidx.compose.ui.platform.LocalContext
 import com.example.sigccp.PreferenceKeys
 import com.example.sigccp.PreferencesManager
 import com.example.sigccp.R
@@ -70,6 +73,11 @@ fun loginAndExtractRole(
 
 @Composable
 fun Login() {
+    val context = LocalContext.current
+    val navController = NavigationController.navController
+    BackHandler {
+        (context as? Activity)?.finish()
+    }
     var correo by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
