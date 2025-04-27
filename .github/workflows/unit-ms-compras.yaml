@@ -29,25 +29,22 @@ jobs:
           pip install pytest pytest-cov matplotlib lxml
 
       - name: Run tests & generate coverage reports
-        working-directory: services/ms_compras
         run: |
-          pytest -q tests \
-            --cov=. \
-            --cov-report=xml:coverage.xml \
-            --cov-report=html:htmlcov
+          pytest -q services/ms_compras/tests \
+            --cov=services/ms_compras \
+            --cov-report=xml:services/ms_compras/coverage.xml \
+            --cov-report=html:services/ms_compras/htmlcov
 
       - name: Generate coverage chart
-        working-directory: services/ms_compras
         run: |
-          python scripts/generate_coverage_chart.py \
-            coverage.xml \
-            coverage_chart.png
+          python services/scripts/generate_coverage_chart.py \
+            services/ms_compras/coverage.xml \
+            services/ms_compras/coverage_chart.png
 
       - name: Embed coverage chart in summary
-        # Esto añade la imagen al resumen del paso, convertida a Base64
         run: |
           echo "### 📊 Coverage" >> $GITHUB_STEP_SUMMARY
-          echo "![coverage](data:image/png;base64,$(base64 -w0 coverage_chart.png))" \
+          echo "![coverage](data:image/png;base64,$(base64 -w0 services/ms_compras/coverage_chart.png))" \
             >> $GITHUB_STEP_SUMMARY
 
       - name: Upload coverage artifacts
