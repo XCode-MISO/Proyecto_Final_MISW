@@ -1,7 +1,7 @@
 import json
 import os
 import threading
-from flask import Flask, current_app
+from flask import Flask
 from logistica.infrastructure.config import Config
 from logistica.infrastructure.pub_sub import consume_pedido_creado
 from logistica.application.command.generate_route import comandos_bp
@@ -19,10 +19,13 @@ def create_app():
     CORS(app)
     db.create_all()
 
-    with current_app.app_context() as context:
-        thread = threading.Thread(target=lambda: consume_pedido_creado(context))
-        thread.daemon = True
-        thread.start()
+    def consumidor_pedido_creado():
+        with app.app_context() as context:
+            consume_pedido_creado(context)
+
+    thread = threading.Thread(target=consumidor_pedido_creado)
+    thread.daemon = True
+    thread.start()
 
     @app.route("/")
     def hello_world():
