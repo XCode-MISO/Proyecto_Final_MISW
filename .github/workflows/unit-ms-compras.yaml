@@ -35,7 +35,7 @@ jobs:
       - name: Generate coverage chart PNG
         run: |
           # Aquí usamos la ruta correcta al script en scripts/
-          python scripts/generate_coverage_chart.py \
+          python services/scripts/generate_coverage_chart.py \
             coverage.xml \
             coverage_chart.png
 
