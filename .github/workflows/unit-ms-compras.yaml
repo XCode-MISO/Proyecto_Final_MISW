@@ -35,7 +35,7 @@ jobs:
       - name: Generate coverage chart
         working-directory: services/ms_compras
         run: |
-          python ../scripts/generate_coverage_chart.py
+          python scripts/generate_coverage_chart.py
 
       # ───── Artefactos ─────
       - name: Upload HTML coverage
