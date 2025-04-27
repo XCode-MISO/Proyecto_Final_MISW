@@ -34,14 +34,20 @@ jobs:
       - name: Run tests & generate coverage files
         working-directory: services/ms_compras
         run: |
-          # Ejecuta los tests, fuerza XML y HTML en el cwd (services/ms_compras)
+          echo "👉 PWD: $(pwd)"
+          echo "📂 Antes de tests:"
+          ls -R .
+  
           pytest -q tests \
             --cov=. \
             --cov-report=xml:coverage.xml \
             --cov-report=html:htmlcov
-
-          # Para debug: listar archivos y confirmar que coverage.xml existe
-          ls -la .
+  
+          echo "📂 Después de tests:"
+          ls -R .
+  
+          echo "❓ ¿Está coverage.xml?"
+          test -f coverage.xml && echo "✅ coverage.xml encontrado" || (echo "❌ coverage.xml NO está aquí" && exit 1)
 
       - name: Generate coverage chart
         # Este paso se ejecuta desde la raíz del repo
