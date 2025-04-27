@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -28,23 +29,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import com.example.sigccp.navigation.NavigationController
-import com.example.sigccp.ui.View.moneda
+import com.example.sigccp.ui.View.Components.moneda
+import com.example.sigccp.ui.theme.AppTypography
 
 
 //@Preview
 @Composable
 fun AgregarProductos( viewModel: PedidoViewModel)
 {
-    Producto()
+    Producto(viewModel)
 }
 
 @Composable
-fun Producto(viewModel: PedidoViewModel = viewModel()
-)
+fun Producto(viewModel: PedidoViewModel)
 {
     val productos = viewModel.productosDisponibles
-    var cantidades by remember { mutableStateOf<Map<String, Int>>(emptyMap()) }
-    ScreenContainer(title = "!Productos¡",false,null) {
+    var cantidades by remember { mutableStateOf<Map<Int, Int>>(emptyMap()) }
+    ScreenContainer(title = "!Productos¡",false,true,null) {
         Box(
             modifier = Modifier
                 .fillMaxSize(), // Ocupa toda la pantalla para centrar el contenido
@@ -94,35 +95,46 @@ fun Producto(viewModel: PedidoViewModel = viewModel()
                             locations = moneda,
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
                         )
-                        newDualButton(
-                                nombreIzquierdo = "Agregar",
-                        onClickIzquierdo = {
-                            val productosValidados = productos.value.mapNotNull { producto ->
-                                val cantidad = cantidades[producto.id]
-
-                                if (cantidad == null || cantidad <= 0) return@mapNotNull null
-
-                                val esValida = cantidad <= producto.amount
-                                val total = cantidad * producto.price
-
-                                ProductosPedidoClass(
-                                    id = producto.id,
-                                    nombre = producto.name,
-                                    cantidadRequerida = cantidad,
-                                    cantidadDisponible = producto.amount,
-                                    precioUnitario = producto.price,
-                                    precioTotal = total,
-                                    cantidadEsValida = esValida
-                                )
-                            }
-
-                            viewModel.actualizarProductosSeleccionados(productosValidados)
-                            NavigationController.navigate(AppScreen.CrearPedido.route)
-                        },
-                        nombreDerecho = "Cancelar",
-                        onClickDerecho = { NavigationController.navigate(AppScreen.CrearPedido.route) },
-                            buttonWidth = 320.dp,
+                        Text(
+                            text = "Total: $${"%.2f".format(viewModel.precioTotal.value)}",
+                            style = AppTypography.labelLarge,
+                            modifier = Modifier.padding(end = 16.dp)
                         )
+
+                        newDualButton(
+                            nombreIzquierdo = "Agregar",
+                            onClickIzquierdo = {
+                                val productosValidados = productos.value.mapNotNull { producto ->
+                                    val cantidad = cantidades[producto.producto_id]
+
+                                    if (cantidad == null || cantidad <= 0) return@mapNotNull null
+
+                                    val esValida = cantidad <= producto.stock
+                                    val total = (producto.precio * cantidad).toFloat()
+
+                                    ProductosPedidoClass(
+                                        id = producto.producto_id,
+                                        nombre = producto.nombre,
+                                        cantidadRequerida = cantidad,
+                                        cantidadDisponible = producto.stock,
+                                        precioUnitario = producto.precio,
+                                        precioTotal = total,
+                                        cantidadEsValida = esValida
+                                    )
+                                }
+
+                                viewModel.actualizarProductosSeleccionados(productosValidados)
+                                // viewModel.precioTotal.value = 0f
+                                NavigationController.navigate(AppScreen.CrearPedido.route)
+                            },
+                            nombreDerecho = "Cancelar",
+                            onClickDerecho = {
+                                viewModel.precioTotal.value = 0f
+                                NavigationController.navigate(AppScreen.CrearPedido.route)
+                            },
+                            buttonWidth = 320.dp
+                        )
+
 
                         ListaDeProductosEditable(
                             productos = productos.value,
@@ -131,6 +143,16 @@ fun Producto(viewModel: PedidoViewModel = viewModel()
                                 cantidades = cantidades.toMutableMap().apply {
                                     this[id] = nuevaCantidad
                                 }
+
+                                val total = cantidades.entries.sumOf { (productoId, cantidad) ->
+                                    val producto = productos.value.find { it.producto_id == productoId }
+                                    if (producto != null) {
+                                        (producto.precio * cantidad).toDouble()
+                                    } else {
+                                        0.0
+                                    }
+                                }
+                                viewModel.precioTotal.value = total.toFloat()
                             }
                         )
                     }

@@ -47,7 +47,9 @@ def get_pedidos():
     ##auth_header = request.headers.get('Authorization')
     ##user_id = ValidateToken(auth_header).execute()
     ##data=request.args.to_dict()
-    result = GetPedidos().execute()
+    
+    client_id = request.args.get('clientid') 
+    result = GetPedidos(client_id).execute()
     return jsonify(result), 200
 
 

@@ -17,6 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.sigccp.PreferenceKeys
+import com.example.sigccp.PreferencesManager
 import com.example.sigccp.R
 import com.example.sigccp.activity.pedido.UI.ViewModel.PedidoViewModel
 import com.example.sigccp.navigation.AppScreen
@@ -25,7 +27,7 @@ import com.example.sigccp.ui.View.Components.ListaDePedidos
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.locationDropdown
 import com.example.sigccp.ui.View.Components.newButton
-import com.example.sigccp.ui.View.moneda
+import com.example.sigccp.ui.View.Components.moneda
 
 //@Preview
 @Composable
@@ -38,7 +40,12 @@ fun ListarPedidos()
 fun Pedidos (viewModel: PedidoViewModel = viewModel())
 {
     val pedidos = viewModel.pedidos.collectAsState().value
-    ScreenContainer(title = stringResource(id = R.string.ListPedidos),false,null) {
+    val role = PreferencesManager.getString(PreferenceKeys.ROLE)
+    val rolEsCliente = (role == "cliente")
+    val clientId = PreferencesManager.getString(PreferenceKeys.USER_ID)
+
+
+    ScreenContainer(title = stringResource(id = R.string.ListPedidos),false,true,null) {
         Box(
             modifier = Modifier
                 .fillMaxSize(), // Ocupa toda la pantalla para centrar el contenido

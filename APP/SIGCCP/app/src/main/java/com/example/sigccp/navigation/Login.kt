@@ -81,7 +81,7 @@ fun Login() {
         return password.length >= 6
     }
 
-    ScreenContainer(title = "Iniciar Sesión", false, null) {
+    ScreenContainer(title = "Iniciar Sesión", false,false, null) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
             Column(
                 modifier = Modifier.fillMaxSize(),

@@ -16,17 +16,17 @@ fun setAppLocale(activity: Activity?, language: String) {
         val config = Configuration(it.resources.configuration)
         config.setLocale(locale)
 
-        // Usar el nuevo contexto de configuración sin afectar la interfaz de usuario
-        it.applicationContext.createConfigurationContext(config)
+        // Aplica el nuevo locale a la configuración de la aplicación
+        it.createConfigurationContext(config)
+        it.resources.updateConfiguration(config, it.resources.displayMetrics)
     }
 }
+
 
 // RestartActivity para internacionalización
 fun restartActivity(activity: Activity?) {
     activity?.let {
-        Handler(Looper.getMainLooper()).postDelayed({
-            ActivityCompat.recreate(it)
-        }, 100) // Pequeño retraso para evitar la interrupción brusca de la UI
+        ActivityCompat.recreate(it) // Reinicia la actividad inmediatamente
     }
 }
 

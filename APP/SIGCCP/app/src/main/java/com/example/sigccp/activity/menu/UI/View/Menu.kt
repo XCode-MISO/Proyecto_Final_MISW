@@ -22,6 +22,9 @@ import com.example.sigccp.navigation.AppScreen
 import com.example.sigccp.navigation.NavigationController
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import com.example.sigccp.ui.View.Components.newMenuButton
+//import com.example.sigccp.BuildConfig
+
+
 
 @Composable
 fun Menu()
@@ -36,7 +39,7 @@ fun Options()
     val rolEsCliente = (role == "cliente")
     val saludo = if (rolEsCliente) stringResource(id = R.string.menuCliente) else stringResource(id = R.string.menuVendedor)
 
-    ScreenContainer(title = saludo, false, null) {
+    ScreenContainer(title = saludo, false,false, null) {
         Box(
             modifier = Modifier
                 .fillMaxSize(), // Ocupa toda la pantalla para centrar el contenido
@@ -122,6 +125,12 @@ fun Options()
                     }
                 }
             }
+            androidx.compose.material3.Text(
+                text = "aplication-app@0.0.4",
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 16.dp)
+            )
         }
     }
 }
