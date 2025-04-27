@@ -115,6 +115,7 @@ def consume_pedido_creado():
 
             response = requests.get(
                 f'http://ventas.default.svc.cluster.local/api/clients/{parsedPedido.clientId}')
+            print(response)
             responseJson = response.json()
             cliente = Cliente(
                 correo=responseJson.get("correo"),
@@ -128,6 +129,7 @@ def consume_pedido_creado():
 
             response = requests.get(
                 f'http://ventas.default.svc.cluster.local/api/vendedores/{parsedPedido.vendedorId}')
+            print(response)
             responseJson = response.json()
             vendedor = Vendedor(
                 correo=responseJson.get("correo"),
