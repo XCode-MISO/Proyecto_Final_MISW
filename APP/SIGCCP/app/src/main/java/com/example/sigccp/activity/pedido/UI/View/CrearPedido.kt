@@ -52,6 +52,9 @@ fun Pedido(viewModel: PedidoViewModel) {
             popUpTo(0)
         }
     }
+    LaunchedEffect(Unit) {
+        viewModel.fetchClientes() // Asumimos que esta es la función para cargar clientes
+    }
     var showDialog by remember { mutableStateOf(false) }
     var dialogMessage by remember { mutableStateOf("") }
     val role = PreferencesManager.getString(PreferenceKeys.ROLE)
