@@ -91,78 +91,79 @@ def publish_pedido_despachado(route: Route):
         future.cancel()
 
 
-def consume_pedido_creado():
+def consume_pedido_creado(context):
     subscription_name = 'projects/{project_id}/subscriptions/{sub}'.format(
         project_id=os.getenv('GOOGLE_CLOUD_PROJECT'),
         sub=os.getenv('PEDIDO_CREADO_SUB')
     )
 
     def callback(message):
-        try:
-            pedidoJson = json.loads(message.data)
-            parsedPedido = CreatePedidoEvent(
-                name=pedidoJson.get("name"),
-                clientId=pedidoJson.get("client").get("id"),
-                clientName=pedidoJson.get("client").get("name"),
-                vendedorId=pedidoJson.get("vendedor").get("id"),
-                vendedorName=pedidoJson.get("vendedor").get("name"),
-                products=pedidoJson.get("products"),
-                price=pedidoJson.get("price"),
-                state=pedidoJson.get("state"),
-                deliveryDate=pedidoJson.get("deliveryDate"),
-                createdAt=pedidoJson.get("createdAt"),
-            )
+        with context:
+            try:
+                pedidoJson = json.loads(message.data)
+                parsedPedido = CreatePedidoEvent(
+                    name=pedidoJson.get("name"),
+                    clientId=pedidoJson.get("client").get("id"),
+                    clientName=pedidoJson.get("client").get("name"),
+                    vendedorId=pedidoJson.get("vendedor").get("id"),
+                    vendedorName=pedidoJson.get("vendedor").get("name"),
+                    products=pedidoJson.get("products"),
+                    price=pedidoJson.get("price"),
+                    state=pedidoJson.get("state"),
+                    deliveryDate=pedidoJson.get("deliveryDate"),
+                    createdAt=pedidoJson.get("createdAt"),
+                )
 
-            response = requests.get(
-                f'http://ventas.default.svc.cluster.local/api/clients/{parsedPedido.clientId}')
-            print(response)
-            responseJson = response.json()
-            cliente = Cliente(
-                correo=responseJson.get("correo"),
-                direccion=responseJson.get("direccion"),
-                id=responseJson.get("id"),
-                latitud=responseJson.get("latitud"),
-                longitud=responseJson.get("longitud"),
-                nombre=responseJson.get("nombre"),
-                telefono=responseJson.get("telefono")
-            )
+                response = requests.get(
+                    f'http://ventas.default.svc.cluster.local/api/clients/{parsedPedido.clientId}')
+                print(response)
+                responseJson = response.json()
+                cliente = Cliente(
+                    correo=responseJson.get("correo"),
+                    direccion=responseJson.get("direccion"),
+                    id=responseJson.get("id"),
+                    latitud=responseJson.get("latitud"),
+                    longitud=responseJson.get("longitud"),
+                    nombre=responseJson.get("nombre"),
+                    telefono=responseJson.get("telefono")
+                )
 
-            response = requests.get(
-                f'http://ventas.default.svc.cluster.local/api/vendedores/{parsedPedido.vendedorId}')
-            print(response)
-            responseJson = response.json()
-            vendedor = Vendedor(
-                correo=responseJson.get("correo"),
-                direccion=responseJson.get("direccion"),
-                id=responseJson.get("id"),
-                latitud=responseJson.get("latitud"),
-                longitud=responseJson.get("longitud"),
-                nombre=responseJson.get("nombre"),
-                telefono=responseJson.get("telefono")
-            )
+                response = requests.get(
+                    f'http://ventas.default.svc.cluster.local/api/vendedores/{parsedPedido.vendedorId}')
+                print(response)
+                responseJson = response.json()
+                vendedor = Vendedor(
+                    correo=responseJson.get("correo"),
+                    direccion=responseJson.get("direccion"),
+                    id=responseJson.get("id"),
+                    latitud=responseJson.get("latitud"),
+                    longitud=responseJson.get("longitud"),
+                    nombre=responseJson.get("nombre"),
+                    telefono=responseJson.get("telefono")
+                )
 
-            route = generate_route({
-                "nombre": parsedPedido.name,
-                "inicio": [cliente.latitud, cliente.longitud],
-                "fin": [cliente.latitud, cliente.longitud],
-                "paradas": [{
-                    "nombre": parsedPedido.vendedorName,
-                    "fecha": parsedPedido.deliveryDate,
-                    "cliente": {
-                        "nombre": parsedPedido.clientName,
-                        "direccion": [cliente.latitud, cliente.longitud]
-                    },
-                    "vendedor": {
+                route = generate_route({
+                    "nombre": parsedPedido.name,
+                    "inicio": [cliente.latitud, cliente.longitud],
+                    "fin": [cliente.latitud, cliente.longitud],
+                    "paradas": [{
                         "nombre": parsedPedido.vendedorName,
-                        "direccion": [vendedor.latitud, vendedor.longitud]
-                    }
-                }]
-            })
-            print("Se finalizo el pedido\n")
-            print(route.toJSON() + "\n")
-            # publish_pedido_despachado(route)
-            message.ack()
-        except MyException as e: 
+                        "fecha": parsedPedido.deliveryDate,
+                        "cliente": {
+                            "nombre": parsedPedido.clientName,
+                            "direccion": [cliente.latitud, cliente.longitud]
+                        },
+                        "vendedor": {
+                            "nombre": parsedPedido.vendedorName,
+                            "direccion": [vendedor.latitud, vendedor.longitud]
+                        }
+                    }]
+                })
+                print("Se finalizo el pedido\n")
+                print(route.toJSON() + "\n")
+                # publish_pedido_despachado(route)
+                message.ack()
+            except MyException as e: 
             print(e.as_http_error())
             return e.as_http_error()
 

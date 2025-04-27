@@ -19,12 +19,10 @@ def create_app():
     app.register_blueprint(comandos_bp)
     app.register_blueprint(query_bp)
     CORS(app)
-    with app.app_context():
-        db.create_all()
-        def consumidor_pedido_creado():
-                consume_pedido_creado()
 
-        thread = threading.Thread(target=consumidor_pedido_creado)
+    with app.app_context() as context:
+        db.create_all()
+        thread = threading.Thread(target=lambda: consume_pedido_creado(context))
         thread.daemon = True
         thread.start()
 
@@ -45,4 +43,3 @@ def create_app():
             return "No version.json, this means this deployment was manual or there is an error."
 
     return app
-
