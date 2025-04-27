@@ -4,7 +4,7 @@ steps:
   args:
   - '-c'
   - |
-    gcloud api-gateway api-configs create $(echo "$TAG_NAME" | sed -E 's/.*@([0-9]+)\.([0-9]+)\.([0-9]+)(-[^-]+)?$/\1-\2-\3\4/') --api=microservicios-api --openapi-spec=Back-end/api-gateway/api-spec-v2.yaml  --project=$PROJECT_ID --backend-auth-service-account=$PROJECT_ID@appspot.gserviceaccount.com
+    gcloud api-gateway api-configs create $(echo "$TAG_NAME" | sed -E 's/.*@([0-9]+)\.([0-9]+)\.([0-9]+)(-[^-]+)?$/\1-\2-\3\4/') --api=microservicios-api --openapi-spec=api-gateway/api-spec-v2.yaml  --project=$PROJECT_ID --backend-auth-service-account=$PROJECT_ID@appspot.gserviceaccount.com
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
