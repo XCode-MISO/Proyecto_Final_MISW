@@ -7,8 +7,7 @@ on:
       - ".github/workflows/unit-ms_compras.yml"
   push:
     branches: [master]
-    paths:
-      - "services/ms_compras/**"
+   
 
 jobs:
   unit:
