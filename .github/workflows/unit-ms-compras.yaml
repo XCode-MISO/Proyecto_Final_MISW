@@ -1,4 +1,4 @@
-name: Unit Tests – ms_compras
+name: unit-ms_compras
 
 on:
   pull_request:

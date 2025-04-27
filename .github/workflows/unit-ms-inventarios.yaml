@@ -1,4 +1,4 @@
-name: Unit Tests – ms_inventarios
+name: unit-ms_inventarios
 
 on:
   pull_request:
