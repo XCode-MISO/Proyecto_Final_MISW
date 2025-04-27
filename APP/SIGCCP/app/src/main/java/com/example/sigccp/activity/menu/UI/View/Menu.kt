@@ -126,7 +126,7 @@ fun Options()
                 }
             }
             androidx.compose.material3.Text(
-                text = "aplication-app@0.0.4",
+                text = "aplicacion-app@0.0.3",
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 16.dp)
