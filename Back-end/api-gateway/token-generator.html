@@ -30,15 +30,17 @@
       try {
         const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
         
-
+        // Accede al objeto user
+        const user = userCredential.user;
         
 
         const tokenResult = await userCredential.user.getIdTokenResult();
         
         const role = tokenResult.claims.role; 
         const token = tokenResult.token;
+        const displayName = user.displayName; 
 
-        document.getElementById('token').textContent = "Token: " + token + "\nRol: " + role;
+        document.getElementById('token').textContent = "Token: " + token + "\nRol: " + role + "\nDisplay Name: " + (displayName || 'No disponible');
 
 
 

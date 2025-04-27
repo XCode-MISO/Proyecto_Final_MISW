@@ -31,7 +31,7 @@ class TestCreateSeller():
         assert sellers[0].nombre == "Maria Lopez"
 
         # Ensure the mocked function was called
-        mock_registrar_usuario.assert_called_once_with(data["correo"], 'vendedor')
+        mock_registrar_usuario.assert_called_once_with(data["correo"], 'vendedor', 'Maria Lopez')
 
     def teardown_method(self):
         self.session.close()

@@ -37,7 +37,7 @@ class RecomendacionService : Service() {
                     RetrofitInstanceRecomendacion.apiService.getJobStatus(id)
                 } catch (e: Exception) {
                     Log.e("Recomendacion Error($intentos)", e.message.toString())
-                    if(intentos > 10){
+                    if(intentos > 20){
                         stopSelf()
                         return@launch
                     } else {

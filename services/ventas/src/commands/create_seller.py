@@ -17,7 +17,7 @@ class CreateSeller(BaseCommannd):
             ).load(self.data)
             seller = Seller(**posted_seller)
 
-            firebse_uuid = registrarUsuarioEnFirebase(seller.correo, "vendedor")  
+            firebse_uuid = registrarUsuarioEnFirebase(seller.correo, "vendedor", seller.nombre)  
             if firebse_uuid is None:
                 raise CodigoNoGenerado()
             

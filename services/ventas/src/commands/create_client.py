@@ -17,7 +17,7 @@ class CreateClient(BaseCommannd):
             ).load(self.data)
             client = Client(**posted_client)
 
-            firebse_uuid = registrarUsuarioEnFirebase(client.correo, "cliente")  
+            firebse_uuid = registrarUsuarioEnFirebase(client.correo, "cliente", client.nombre)  
             if firebse_uuid is None:
                 raise CodigoNoGenerado()
 
