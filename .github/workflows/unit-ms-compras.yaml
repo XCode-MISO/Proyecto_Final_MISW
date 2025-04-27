@@ -1,4 +1,4 @@
-name: unit-ms_compras
+name: Unit Tests – ms_compras
 
 on:
   pull_request:
@@ -12,6 +12,9 @@ on:
 jobs:
   unit:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/ms_compras
 
     steps:
       - uses: actions/checkout@v4
@@ -22,35 +25,19 @@ jobs:
 
       - name: Install deps
         run: |
-          pip install -r services/ms_compras/requirements.txt
-          pip install pytest pytest-cov matplotlib lxml
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
 
-      - name: Run tests & generate coverage reports
+      - name: Run tests & produce XML coverage report
         run: |
-          pytest services/ms_compras/tests \
+          pytest \
             --cov=services/ms_compras \
+            --cov-report=term \
             --cov-report=xml:coverage.xml \
-            --cov-report=html:htmlcov
+            -q tests/
 
-      - name: Generate coverage chart PNG
-        run: |
-          python services/scripts/generate_coverage_chart.py \
-            coverage.xml \
-            coverage_chart.png
-
-      - name: Embed coverage chart in Summary
-        shell: bash
-        run: |
-          echo "## 📊 Test Coverage" >> $GITHUB_STEP_SUMMARY
-          # codificamos el PNG en base64 sin saltos de línea
-          B64=$(base64 --wrap=0 coverage_chart.png)
-          # y lo incrustamos como una etiqueta <img>
-          echo "<img src=\"data:image/png;base64,$B64\" alt=\"Coverage Chart\" />" >> $GITHUB_STEP_SUMMARY
-
-      - name: Upload HTML report + chart
+      - name: Upload coverage.xml
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-ms_compras
-          path: |
-            htmlcov
-            coverage_chart.png
+          name: cov-ms_compras
+          path: services/ms_compras/coverage.xml

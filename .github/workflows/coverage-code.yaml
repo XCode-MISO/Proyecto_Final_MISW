@@ -1,100 +1,71 @@
-name: Unified Coverage Dashboard
+name: Aggregate Coverage Chart
 
+# Se dispara cuando hayan completado los workflows unitarios de *todos* los micros
 on:
-  pull_request:
-    paths:
-      - "services/**"
-  push:
-    branches:
-      - master
-    paths:
-      - "services/**"
+  workflow_run:
+    workflows:
+      - "Unit Tests – ms_compras"
+      - "Unit Tests – ms_inventarios"
+      # añade aquí el nombre de cada uno
+    types:
+      - completed
 
 jobs:
-  run-coverage:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service:
-          - ms_compras
-          - ms_inventarios
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Setup Python 3.10
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-
-      - name: Install dependencies for ${{ matrix.service }}
-        run: |
-          pip install --upgrade pip
-          pip install -r services/${{ matrix.service }}/requirements.txt
-          pip install pytest pytest-cov coverage
-
-      - name: Run pytest for ${{ matrix.service }}
-        working-directory: services/${{ matrix.service }}
-        run: |
-          pytest \
-            --cov=. \
-            --cov-report=xml:coverage-${{ matrix.service }}.xml \
-            -q tests/
-
-      - name: Upload coverage XML for ${{ matrix.service }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: cov-${{ matrix.service }}
-          path: services/${{ matrix.service }}/coverage-${{ matrix.service }}.xml
-
   aggregate:
-    needs: run-coverage
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
 
-      - name: Download all coverage XMLs
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1) Descarga los artifacts de cobertura de cada micro
+      - name: Download ms_compras coverage.xml
         uses: actions/download-artifact@v4
         with:
           name: cov-ms_compras
           path: cov_reports
-      - uses: actions/download-artifact@v4
+
+      - name: Download ms_inventarios coverage.xml
+        uses: actions/download-artifact@v4
         with:
           name: cov-ms_inventarios
           path: cov_reports
-      - uses: actions/download-artifact@v4
 
-
-      - name: Install tools
+      # 2) Instala herramientas de coverage y matplotlib
+      - name: Setup Python tools
         run: |
+          python -m pip install --upgrade pip
           pip install coverage matplotlib
 
-      - name: Combine coverage data
+      # 3) Combina los XML y genera un XML unificado
+      - name: Combine and emit merged coverage.xml
         run: |
-          # Renombramos para que coverage combine los .xml directamente:
-          mv cov_reports/coverage-ms_compras.xml .
-          mv cov_reports/coverage-ms_inventarios.xml .
-          # Generamos el xml unificado
-          coverage xml -o merged_coverage.xml \
-            --include="services/ms_compras/*,services/ms_inventarios/*,services/*"
+          # coverage combine espera archivos .coverage, pero podemos reusar el xml directamente:
+          coverage xml -i -o merged_coverage.xml \
+            --include="services/ms_compras/*,services/ms_inventarios/*" \
+            cov_reports/coverage-ms_compras.xml \
+            cov_reports/coverage-ms_inventarios.xml
 
-      - name: Generate unified coverage chart
+      # 4) Genera el gráfico (usa tu script)
+      - name: Generate coverage chart
         run: |
-          python scripts/generate_coverage_chart.py merged_coverage.xml merged/coverage_chart.png
+          python scripts/generate_coverage_chart.py \
+            merged_coverage.xml \
+            coverage_chart.png
 
-      - name: Upload coverage chart as PR comment
+      # 5) Publica el gráfico como comentario en el PR
+      - name: Comment coverage chart on PR
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         uses: peter-evans/create-or-update-comment@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.pull_request.number }}
+          issue-number: ${{ github.event.workflow_run.pull_requests[0].number }}
           body: |
-            ### 📊 Cobertura unificada de microservicios
-            ![Coverage Chart](merged/coverage_chart.png)
+            ## 📊 Aggregate Coverage
+            ![Aggregate Coverage](./coverage_chart.png)
 
-      - name: Upload chart as artifact
+      # 6) (Opcional) Guarda el chart como artifact
+      - name: Upload chart artifact
         uses: actions/upload-artifact@v4
         with:
-          name: unified-coverage-chart
-          path: merged/coverage_chart.png
+          name: coverage-chart
+          path: coverage_chart.png

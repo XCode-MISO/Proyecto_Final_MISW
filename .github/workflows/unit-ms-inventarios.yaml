@@ -1,36 +1,54 @@
-name: unit-ms_inventarios
+name: Unit Tests – ms_inventarios
 
 on:
   pull_request:
     paths:
       - "services/ms_inventarios/**"
-      - ".github/workflows/unit-ms-inventarios.yml"
+      - ".github/workflows/unit-ms_inventarios.yml"
   push:
-    branches: [master]
+    branches:
+      - master
     paths:
       - "services/ms_inventarios/**"
 
 jobs:
   unit:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/ms_inventarios
+
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: {python-version: "3.10"}
 
-      - name: Install deps
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
         run: |
-          pip install -r services/ms_inventarios/requirements.txt
+          pip install --upgrade pip
+          pip install -r requirements.txt
           pip install pytest pytest-cov
 
-      - name: Run tests + coverage
+      - name: Run tests & generate coverage reports
         run: |
-          pytest -q services/ms_inventarios/tests \
+          pytest \
             --cov=services/ms_inventarios \
-            --cov-report=xml \
-            --cov-report=html:cov_html
+            --cov-report=term \
+            --cov-report=xml:coverage.xml \
+            --cov-report=html:cov_html \
+            -q tests/
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload coverage.xml artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: coverage-ms_inventarios
+          name: cov-ms_inventarios
+          path: coverage.xml
+
+      - name: Upload HTML coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: cov-html-ms_inventarios
           path: cov_html
