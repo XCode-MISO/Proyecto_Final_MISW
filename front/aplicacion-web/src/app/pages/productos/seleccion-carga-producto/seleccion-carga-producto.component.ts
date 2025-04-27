@@ -11,10 +11,10 @@ export class SeleccionCargaProductoComponent {
   constructor(private router: Router) {}
 
   irCargaIndividual() {
-    this.router.navigate(['/productos/crear']);
+    this.router.navigate(['/fabricantes/crear-producto']);
   }
 
   irCargaMasiva() {
-    this.router.navigate(['/productos/upload']);
+    this.router.navigate(['/fabricantes/upload-productos']);
   }
 }

@@ -47,13 +47,13 @@ export const routes: Routes = [
   
   // Rutas de Productos - Solo para admin y directorcompras
   { 
-    path: 'productos', 
+    path: 'fabricantes', 
     canActivate: [AuthGuard],
     data: { roles: ['admin', 'directorcompras'] },
     children: [
-      { path: 'crear', component: ProductosCargarComponent },
-      { path: 'seleccion-carga', component: SeleccionCargaProductoComponent },
-      { path: 'upload', component: ProductosUploadComponent },
+      { path: 'crear-producto', component: ProductosCargarComponent },
+      { path: 'seleccion-carga-productos', component: SeleccionCargaProductoComponent },
+      { path: 'upload-productos', component: ProductosUploadComponent },
     ]
   },
   
