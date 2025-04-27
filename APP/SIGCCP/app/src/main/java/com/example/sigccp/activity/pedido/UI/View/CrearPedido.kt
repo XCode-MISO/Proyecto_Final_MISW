@@ -48,7 +48,7 @@ fun Pedido(viewModel: PedidoViewModel) {
     val role = PreferencesManager.getString(PreferenceKeys.ROLE)
     val productos = viewModel.productosSeleccionados.value
 
-    ScreenContainer(title = stringResource(id = R.string.CrearPedido), false, true, null) {
+    ScreenContainer(title = stringResource(id = R.string.CrearPedido), true,false, true, null) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center

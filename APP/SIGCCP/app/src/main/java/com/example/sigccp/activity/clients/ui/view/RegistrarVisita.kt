@@ -44,7 +44,7 @@ fun RegistrarVisita(viewModel: ClienteViewModel = viewModel()) {
         position = CameraPosition.fromLatLngZoom(LatLng(4.6097, -74.0817), 10f) // Bogotá
     }
     LaunchedEffect(Unit) { viewModel.fetchClientes() }
-    ScreenContainer(title = "Registrar Visita",false,true,null) {
+    ScreenContainer(title = "Registrar Visita",true,false,true,null) {
         Box(
             modifier = Modifier
                 .fillMaxSize(),

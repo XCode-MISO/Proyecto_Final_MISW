@@ -45,7 +45,7 @@ fun Producto(viewModel: PedidoViewModel)
 {
     val productos = viewModel.productosDisponibles
     var cantidades by remember { mutableStateOf<Map<Int, Int>>(emptyMap()) }
-    ScreenContainer(title = "!Productos¡",false,true,null) {
+    ScreenContainer(title = "!Productos¡", true,false,true,null) {
         Box(
             modifier = Modifier
                 .fillMaxSize(), // Ocupa toda la pantalla para centrar el contenido

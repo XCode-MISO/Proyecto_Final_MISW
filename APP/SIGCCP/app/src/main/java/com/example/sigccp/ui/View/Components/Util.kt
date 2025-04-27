@@ -67,6 +67,7 @@ fun BaseScreen(content: @Composable () -> Unit) {
 @Composable
 fun ScreenContainer(
     title: String,
+    salirenabled: Boolean,
     enabled: Boolean,
     showBackButton: Boolean = false,
     imagen:Int? = null,
@@ -109,12 +110,15 @@ fun ScreenContainer(
                             .padding(start = 20.dp, end = 25.dp)
                             .testTag("logout")
                     ) {
+
+                        if (salirenabled) {
                         Icon(
                             imageVector = Icons.Filled.PowerSettingsNew,
                             contentDescription = "Salir",
                             tint = MoradoApp,
                             modifier = Modifier.size(40.dp)
                         )
+                        }
                     }
                 },
                 actions = {
