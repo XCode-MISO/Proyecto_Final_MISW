@@ -2,48 +2,61 @@ name: unit-ms_compras
 
 on:
   pull_request:
-    paths: ["services/ms_compras/**"]
+    paths:
+      - "services/ms_compras/**"
+      - ".github/workflows/unit-ms_compras.yaml"
   push:
     branches: [master]
-    paths: ["services/ms_compras/**"]
+    paths:
+      - "services/ms_compras/**"
+      - ".github/workflows/unit-ms_compras.yaml"
 
 jobs:
   unit:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout the repo
       - uses: actions/checkout@v4
 
+      # 2. Set up Python 3.10
       - uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
+      # 3. Install dependencies
       - name: Install deps
         run: |
+          # Activate venv if you use one; otherwise install globally
+          pip install --upgrade pip
           pip install -r services/ms_compras/requirements.txt
           pip install pytest pytest-cov matplotlib lxml
 
-      - name: Run tests with coverage
+      # 4. Run pytest with coverage, output XML + HTML
+      - name: Run tests & generate coverage reports
         working-directory: services/ms_compras
         run: |
-          pytest -q tests \
-            --cov=services.ms_compras \
-            --cov-report=xml \
-            --cov-report=html:cov_html
+          pytest \
+            --cov=. \
+            --cov-report=xml:coverage.xml \
+            --cov-report=html:htmlcov \
+            tests/
 
-      # ───── PASO NUEVO ─────
+      # 5. Generate coverage chart (PNG)
       - name: Generate coverage chart
-        working-directory: services/ms_compras
         run: |
-          python scripts/generate_coverage_chart.py
+          python services/scripts/generate_coverage_chart.py \
+            services/ms_compras/coverage.xml \
+            services/ms_compras
 
-      # ───── Artefactos ─────
-      - name: Upload HTML coverage
+      # 6. Upload HTML coverage report
+      - name: Upload HTML coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-html-ms_compras
-          path: services/ms_compras/cov_html
+          path: services/ms_compras/htmlcov
 
+      # 7. Upload coverage chart PNG
       - name: Upload coverage chart
         uses: actions/upload-artifact@v4
         with:
