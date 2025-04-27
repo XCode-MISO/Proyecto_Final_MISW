@@ -59,3 +59,25 @@ def registrar_producto():
             "pasillo": valid_data.get("pasillo")
         }
     }), 201
+
+@producto_bp.route("/upload", methods=["POST"])
+def carga_masiva_productos():
+    """Endpoint: POST /api/productos/upload
+
+    Espera *multipart/form-data* con un campo **file** que sea un `.csv`.
+    """
+    file = request.files.get("file")
+    if file is None:
+        return jsonify({"error": "Debe enviar un archivo CSV en el campo 'file'"}), 400
+
+    if not file.filename.lower().endswith(".csv"):
+        return jsonify({"error": "El archivo debe ser un CSV"}), 400
+
+    try:
+        content = file.read().decode("utf-8")
+    except Exception as exc:
+        return jsonify({"error": f"Error al leer el archivo: {exc}"}), 400
+
+    result = ProductoService.upload_productos_from_file(content)
+    status = 201 if result["inserted"] > 0 else 200
+    return jsonify(result), status

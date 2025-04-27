@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   title: "API de Microservicios"
-  version: "1.0.0"
+  version: "1.1.0"
 host: "microservicios-gateway-1qkjvfz9.uc.gateway.dev"
 schemes:
   - "https"
@@ -67,6 +67,7 @@ paths:
         '200':
           description: A successful response
 
+
   /api/productos/upload:
     post:
       operationId: "uploadProductos"
@@ -96,11 +97,11 @@ paths:
                 items:
                   type: "string"
       x-google-backend:
-        address: "http://compras.cppxcode.shop/api/productos/upload"
+        address: "http://kubernetes-gateway.cppxcode.shop/compras/api/productos/upload"
     options:
       operationId: "corsUploadProductos"
       x-google-backend:
-        address: "http://compras.cppxcode.shop/api/productos/upload"
+        address: "http://kubernetes-gateway.cppxcode.shop/compras/api/productos/upload"
       responses:
         '200':
           description: "CORS response"     

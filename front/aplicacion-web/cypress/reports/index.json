@@ -1,0 +1,362 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 10,
+    "passes": 10,
+    "pending": 0,
+    "failures": 0,
+    "testsRegistered": 10,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false,
+    "start": "2025-04-27T05:16:16.036Z",
+    "end": "2025-04-27T05:17:07.699Z",
+    "duration": 51663
+  },
+  "results": [
+    {
+      "uuid": "be4f541f-bac3-416d-92b7-6c76daea9b44",
+      "title": "",
+      "fullFile": "cypress/e2e/auth/pruebas-confidencialidad.cy.ts",
+      "file": "cypress/e2e/auth/pruebas-confidencialidad.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "e43eb666-4813-4cd3-8332-3569ce3e8637",
+          "title": "Pruebas de confidencialidad según rol",
+          "fullFile": "cypress/e2e/auth/pruebas-confidencialidad.cy.ts",
+          "file": "cypress/e2e/auth/pruebas-confidencialidad.cy.ts",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Administrador debería ver todos los menús",
+              "fullTitle": "Pruebas de confidencialidad según rol Administrador debería ver todos los menús",
+              "timedOut": null,
+              "duration": 3356,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": "[\n    {\n        \"title\": \"Spec video recording\",\n        \"value\": \"videos/pruebas-confidencialidad.cy.ts.mp4\"\n    }\n]",
+              "code": "loginWithUser('admin');",
+              "err": {},
+              "uuid": "a689e53a-d357-4e87-b8d5-437ae91ec67d",
+              "parentUUID": "e43eb666-4813-4cd3-8332-3569ce3e8637",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Director de Ventas debería ver solo sus menús correspondientes",
+              "fullTitle": "Pruebas de confidencialidad según rol Director de Ventas debería ver solo sus menús correspondientes",
+              "timedOut": null,
+              "duration": 1959,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": "[\n    {\n        \"title\": \"Spec video recording\",\n        \"value\": \"videos/pruebas-confidencialidad.cy.ts.mp4\"\n    }\n]",
+              "code": "loginWithUser('directorVentas');",
+              "err": {},
+              "uuid": "2ffa11a8-1b47-409a-9fb2-d571ffca90ca",
+              "parentUUID": "e43eb666-4813-4cd3-8332-3569ce3e8637",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Director de Compras debería ver solo sus menús correspondientes",
+              "fullTitle": "Pruebas de confidencialidad según rol Director de Compras debería ver solo sus menús correspondientes",
+              "timedOut": null,
+              "duration": 2173,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": "[\n    {\n        \"title\": \"Spec video recording\",\n        \"value\": \"videos/pruebas-confidencialidad.cy.ts.mp4\"\n    }\n]",
+              "code": "loginWithUser('directorCompras');",
+              "err": {},
+              "uuid": "2ca1b866-4e21-4099-9d6c-c234fc7aaf26",
+              "parentUUID": "e43eb666-4813-4cd3-8332-3569ce3e8637",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Director de Logística debería ver solo sus menús correspondientes",
+              "fullTitle": "Pruebas de confidencialidad según rol Director de Logística debería ver solo sus menús correspondientes",
+              "timedOut": null,
+              "duration": 2047,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": "[\n    {\n        \"title\": \"Spec video recording\",\n        \"value\": \"videos/pruebas-confidencialidad.cy.ts.mp4\"\n    }\n]",
+              "code": "loginWithUser('directorLogistica');",
+              "err": {},
+              "uuid": "2d4bf4d0-a9ee-434d-b945-cdf0d84d4f6d",
+              "parentUUID": "e43eb666-4813-4cd3-8332-3569ce3e8637",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "a689e53a-d357-4e87-b8d5-437ae91ec67d",
+            "2ffa11a8-1b47-409a-9fb2-d571ffca90ca",
+            "2ca1b866-4e21-4099-9d6c-c234fc7aaf26",
+            "2d4bf4d0-a9ee-434d-b945-cdf0d84d4f6d"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 9535,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        },
+        {
+          "uuid": "008af039-b737-4ba3-9276-7aaf43473b62",
+          "title": "Pruebas de control de acceso por URL",
+          "fullFile": "cypress/e2e/auth/pruebas-confidencialidad.cy.ts",
+          "file": "cypress/e2e/auth/pruebas-confidencialidad.cy.ts",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [],
+          "suites": [
+            {
+              "uuid": "f07eec71-e7db-4d5b-9bc9-8836dbec0f15",
+              "title": "Director de Ventas - Control de acceso",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "no debería tener acceso a una URL de compras",
+                  "fullTitle": "Pruebas de control de acceso por URL Director de Ventas - Control de acceso no debería tener acceso a una URL de compras",
+                  "timedOut": null,
+                  "duration": 6017,
+                  "state": "passed",
+                  "speed": "medium",
+                  "pass": true,
+                  "fail": false,
+                  "pending": false,
+                  "context": "[\n    {\n        \"title\": \"Spec video recording\",\n        \"value\": \"videos/pruebas-confidencialidad.cy.ts.mp4\"\n    }\n]",
+                  "code": "cy.visit('/fabricantes', { failOnStatusCode: false });\ncy.wait(2000); // Esperar a que se complete la navegación\n// Verificar la respuesta usando el enfoque más resiliente\ncy.url().then((url) => {\n    cy.log(`URL actual después de intentar acceder a área restringida: ${url}`);\n    if (url.includes('access-denied')) {\n        // Si fuimos redirigidos a la página de acceso denegado\n        cy.contains('Acceso Denegado').should('be.visible');\n        cy.contains('No tienes permisos para acceder a esta sección').should('be.visible');\n    }\n    else if (url.includes('login')) {\n        // Si fuimos redirigidos al login\n        cy.log('Redirigido a login - control de acceso funcionando');\n    }\n    else if (url.includes('/fabricantes')) {\n        // Si seguimos en la URL, verificar que muestra un mensaje de error\n        cy.get('body').then($body => {\n            const bodyText = $body.text();\n            expect(bodyText).to.include('Acceso Denegado');\n        });\n    }\n    else {\n        // Si estamos en cualquier otra página, es probablemente una redirección por seguridad\n        cy.log('Redirigido a otra página - control de acceso funcionando');\n    }\n});",
+                  "err": {},
+                  "uuid": "4d4b66a2-13be-436c-b20c-d50d7d15ca37",
+                  "parentUUID": "f07eec71-e7db-4d5b-9bc9-8836dbec0f15",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "no debería tener acceso a una URL de logística",
+                  "fullTitle": "Pruebas de control de acceso por URL Director de Ventas - Control de acceso no debería tener acceso a una URL de logística",
+                  "timedOut": null,
+                  "duration": 7094,
+                  "state": "passed",
+                  "speed": "medium",
+                  "pass": true,
+                  "fail": false,
+                  "pending": false,
+                  "context": "[\n    {\n        \"title\": \"Spec video recording\",\n        \"value\": \"videos/pruebas-confidencialidad.cy.ts.mp4\"\n    }\n]",
+                  "code": "cy.visit('/routes', { failOnStatusCode: false });\ncy.wait(3000); // Aumentar tiempo de espera para navegación\n// Verificar la respuesta usando el enfoque más resiliente\ncy.url().then((url) => {\n    cy.log(`URL actual después de intentar acceder a ruta restringida: ${url}`);\n    if (url.includes('access-denied')) {\n        // Si fuimos redirigidos a la página de acceso denegado\n        cy.contains('Acceso Denegado').should('be.visible');\n        cy.contains('No tienes permisos para acceder a esta sección').should('be.visible');\n    }\n    else if (url.includes('login')) {\n        // Si fuimos redirigidos al login\n        cy.log('Redirigido a login - control de acceso funcionando');\n    }\n    else if (url.includes('/routes')) {\n        // Si seguimos en la URL de rutas, verificar que muestra un mensaje de error\n        cy.get('body').then($body => {\n            const bodyText = $body.text();\n            expect(bodyText).to.include('Acceso Denegado');\n        });\n    }\n    else {\n        // Si estamos en cualquier otra página, es probablemente una redirección por seguridad\n        cy.log('Redirigido a otra página - control de acceso funcionando');\n    }\n});",
+                  "err": {},
+                  "uuid": "7cc72db2-669a-4a5d-be4f-82621fd5fc9e",
+                  "parentUUID": "f07eec71-e7db-4d5b-9bc9-8836dbec0f15",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [
+                "4d4b66a2-13be-436c-b20c-d50d7d15ca37",
+                "7cc72db2-669a-4a5d-be4f-82621fd5fc9e"
+              ],
+              "failures": [],
+              "pending": [],
+              "skipped": [],
+              "duration": 13111,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            },
+            {
+              "uuid": "1c6a6139-c95b-44f6-bf8d-eaaf8a569f71",
+              "title": "Director de Compras - Control de acceso",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "no debería tener acceso a una URL de ventas",
+                  "fullTitle": "Pruebas de control de acceso por URL Director de Compras - Control de acceso no debería tener acceso a una URL de ventas",
+                  "timedOut": null,
+                  "duration": 7052,
+                  "state": "passed",
+                  "speed": "medium",
+                  "pass": true,
+                  "fail": false,
+                  "pending": false,
+                  "context": "[\n    {\n        \"title\": \"Spec video recording\",\n        \"value\": \"videos/pruebas-confidencialidad.cy.ts.mp4\"\n    }\n]",
+                  "code": "cy.visit('/ventas', { failOnStatusCode: false });\ncy.wait(3000); // Aumentar tiempo de espera para navegación\n// Verificar la respuesta usando el enfoque más resiliente\ncy.url().then((url) => {\n    cy.log(`URL actual después de intentar acceder a ventas: ${url}`);\n    if (url.includes('access-denied')) {\n        // Si fuimos redirigidos a la página de acceso denegado\n        cy.contains('Acceso Denegado').should('be.visible');\n        cy.contains('No tienes permisos para acceder a esta sección').should('be.visible');\n    }\n    else if (url.includes('login')) {\n        // Si fuimos redirigidos al login\n        cy.log('Redirigido a login - control de acceso funcionando');\n    }\n    else if (url.includes('/ventas')) {\n        // Si seguimos en la URL de ventas, verificar que muestra un mensaje de error\n        cy.get('body').then($body => {\n            const bodyText = $body.text();\n            expect(bodyText).to.include('Acceso Denegado');\n        });\n    }\n    else {\n        // Si estamos en cualquier otra página, es probablemente una redirección por seguridad\n        cy.log('Redirigido a otra página - control de acceso funcionando');\n        // Verificamos que no estamos en la página de ventas\n        const notInVentasPage = !url.includes('/ventas');\n        expect(notInVentasPage).to.be.true;\n    }\n});",
+                  "err": {},
+                  "uuid": "de7563ef-0326-41fb-af96-a283666b3543",
+                  "parentUUID": "1c6a6139-c95b-44f6-bf8d-eaaf8a569f71",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "no debería tener acceso a una URL de logística",
+                  "fullTitle": "Pruebas de control de acceso por URL Director de Compras - Control de acceso no debería tener acceso a una URL de logística",
+                  "timedOut": null,
+                  "duration": 7130,
+                  "state": "passed",
+                  "speed": "medium",
+                  "pass": true,
+                  "fail": false,
+                  "pending": false,
+                  "context": "[\n    {\n        \"title\": \"Spec video recording\",\n        \"value\": \"videos/pruebas-confidencialidad.cy.ts.mp4\"\n    }\n]",
+                  "code": "cy.visit('/routes', { failOnStatusCode: false });\ncy.wait(3000); // Aumentar tiempo de espera para navegación\n// Verificar la respuesta usando el enfoque más resiliente\ncy.url().then((url) => {\n    cy.log(`URL actual después de intentar acceder a rutas: ${url}`);\n    if (url.includes('access-denied')) {\n        // Si fuimos redirigidos a la página de acceso denegado\n        cy.contains('Acceso Denegado').should('be.visible');\n        cy.contains('No tienes permisos para acceder a esta sección').should('be.visible');\n    }\n    else if (url.includes('login')) {\n        // Si fuimos redirigidos al login\n        cy.log('Redirigido a login - control de acceso funcionando');\n    }\n    else if (url.includes('/routes')) {\n        // Si seguimos en la URL de rutas, verificar que muestra un mensaje de error\n        cy.get('body').then($body => {\n            const bodyText = $body.text();\n            expect(bodyText).to.include('Acceso Denegado');\n        });\n    }\n    else {\n        // Si estamos en cualquier otra página, es probablemente una redirección por seguridad\n        cy.log('Redirigido a otra página - control de acceso funcionando');\n        // Verificamos que no estamos en la página de rutas\n        const notInRoutesPage = !url.includes('/routes');\n        expect(notInRoutesPage).to.be.true;\n    }\n});",
+                  "err": {},
+                  "uuid": "2cb3099f-44d4-42ba-a5fc-95eba558afe2",
+                  "parentUUID": "1c6a6139-c95b-44f6-bf8d-eaaf8a569f71",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [
+                "de7563ef-0326-41fb-af96-a283666b3543",
+                "2cb3099f-44d4-42ba-a5fc-95eba558afe2"
+              ],
+              "failures": [],
+              "pending": [],
+              "skipped": [],
+              "duration": 14182,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            },
+            {
+              "uuid": "09efad72-9a6d-4002-8c03-5c132caf62e2",
+              "title": "Director de Logística - Control de acceso",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "no debería tener acceso a una URL de ventas",
+                  "fullTitle": "Pruebas de control de acceso por URL Director de Logística - Control de acceso no debería tener acceso a una URL de ventas",
+                  "timedOut": null,
+                  "duration": 7412,
+                  "state": "passed",
+                  "speed": "medium",
+                  "pass": true,
+                  "fail": false,
+                  "pending": false,
+                  "context": "[\n    {\n        \"title\": \"Spec video recording\",\n        \"value\": \"videos/pruebas-confidencialidad.cy.ts.mp4\"\n    }\n]",
+                  "code": "cy.visit('/ventas', { failOnStatusCode: false });\ncy.wait(3000); // Aumentar tiempo de espera para navegación\n// Verificar la respuesta usando el enfoque más resiliente\ncy.url().then((url) => {\n    cy.log(`URL actual después de intentar acceder a ventas: ${url}`);\n    if (url.includes('access-denied')) {\n        // Si fuimos redirigidos a la página de acceso denegado\n        cy.contains('Acceso Denegado').should('be.visible');\n        cy.contains('No tienes permisos para acceder a esta sección').should('be.visible');\n    }\n    else if (url.includes('login')) {\n        // Si fuimos redirigidos al login\n        cy.log('Redirigido a login - control de acceso funcionando');\n    }\n    else if (url.includes('/ventas')) {\n        // Si seguimos en la URL de ventas, verificar que muestra un mensaje de error\n        cy.get('body').then($body => {\n            const bodyText = $body.text();\n            expect(bodyText).to.include('Acceso Denegado');\n        });\n    }\n    else {\n        // Si estamos en cualquier otra página, es probablemente una redirección por seguridad\n        cy.log('Redirigido a otra página - control de acceso funcionando');\n        // Verificamos que no estamos en la página de ventas\n        const notInVentasPage = !url.includes('/ventas');\n        expect(notInVentasPage).to.be.true;\n    }\n});",
+                  "err": {},
+                  "uuid": "02b1a493-685f-4ebe-8852-0be08c0fab21",
+                  "parentUUID": "09efad72-9a6d-4002-8c03-5c132caf62e2",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "no debería tener acceso a una URL de compras",
+                  "fullTitle": "Pruebas de control de acceso por URL Director de Logística - Control de acceso no debería tener acceso a una URL de compras",
+                  "timedOut": null,
+                  "duration": 7114,
+                  "state": "passed",
+                  "speed": "medium",
+                  "pass": true,
+                  "fail": false,
+                  "pending": false,
+                  "context": "[\n    {\n        \"title\": \"Spec video recording\",\n        \"value\": \"videos/pruebas-confidencialidad.cy.ts.mp4\"\n    }\n]",
+                  "code": "cy.visit('/fabricantes', { failOnStatusCode: false });\ncy.wait(3000); // Aumentar tiempo de espera para navegación\n// Verificar la respuesta usando el enfoque más resiliente\ncy.url().then((url) => {\n    cy.log(`URL actual después de intentar acceder a fabricantes: ${url}`);\n    if (url.includes('access-denied')) {\n        // Si fuimos redirigidos a la página de acceso denegado\n        cy.contains('Acceso Denegado').should('be.visible');\n        cy.contains('No tienes permisos para acceder a esta sección').should('be.visible');\n    }\n    else if (url.includes('login')) {\n        // Si fuimos redirigidos al login\n        cy.log('Redirigido a login - control de acceso funcionando');\n    }\n    else if (url.includes('/fabricantes')) {\n        // Si seguimos en la URL de fabricantes, verificar que muestra un mensaje de error\n        cy.get('body').then($body => {\n            const bodyText = $body.text();\n            expect(bodyText).to.include('Acceso Denegado');\n        });\n    }\n    else {\n        // Si estamos en cualquier otra página, es probablemente una redirección por seguridad\n        cy.log('Redirigido a otra página - control de acceso funcionando');\n        // Verificamos que no estamos en la página de fabricantes\n        const notInFabricantesPage = !url.includes('/fabricantes');\n        expect(notInFabricantesPage).to.be.true;\n    }\n});",
+                  "err": {},
+                  "uuid": "3ec6b85f-96fb-4830-a3d2-d21a44f38a09",
+                  "parentUUID": "09efad72-9a6d-4002-8c03-5c132caf62e2",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [
+                "02b1a493-685f-4ebe-8852-0be08c0fab21",
+                "3ec6b85f-96fb-4830-a3d2-d21a44f38a09"
+              ],
+              "failures": [],
+              "pending": [],
+              "skipped": [],
+              "duration": 14526,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            }
+          ],
+          "passes": [],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 0,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "charts": true,
+        "reportPageTitle": "Pruebas de Confidencialidad",
+        "embeddedScreenshots": true,
+        "inlineAssets": true,
+        "saveHtml": true,
+        "saveJson": true,
+        "actionDelay": 500,
+        "reportDir": "cypress/reports/.jsons",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

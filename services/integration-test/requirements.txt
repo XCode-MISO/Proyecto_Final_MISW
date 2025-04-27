@@ -1,0 +1,5 @@
+Flask==2.3.3
+Flask-SQLAlchemy==3.0.3
+google-cloud-pubsub==2.19.3
+pytest==7.4.2
+requests==2.31.0

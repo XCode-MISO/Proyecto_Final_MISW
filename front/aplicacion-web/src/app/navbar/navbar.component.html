@@ -1,12 +1,15 @@
-<section class="navigation-button-list">
-  <div class="nav-button-row">
-    @for (tab of tabs; track tab) {
-      @if (isPath(tab)) {
-        <a mat-flat-button class="nav-button-disabled" >{{ tab.name }}</a>
+@if (showNavbar) {
+  <section class="navigation-button-list">
+    <div class="nav-button-row">
+      @for (tab of tabs; track tab) {
+        @if (isPath(tab)) {
+          <a mat-flat-button class="nav-button-disabled" [attr.data-cy]="'menu-item-' + tab.name">{{ tab.name }}</a>
+        }
+        @else {
+          <!-- Agregar data-cy para identificar fácilmente el menú en las pruebas -->
+          <a mat-flat-button class="nav-button" [routerLink]="[tab.route]" [attr.data-cy]="'menu-item-' + tab.name">{{ tab.name }}</a>
+        }
       }
-      @else {
-        <a mat-flat-button class="nav-button" href={{tab.route}} (click)="navigate(tab)">{{ tab.name }}</a>
-      }
-    }
-  </div>
-</section>
+    </div>
+  </section>
+}

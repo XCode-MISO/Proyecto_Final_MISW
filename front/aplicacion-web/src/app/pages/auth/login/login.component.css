@@ -1,0 +1,58 @@
+.form-wrapper {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+
+  }
+  
+
+  
+  .titulo {
+    color: #40144c;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    text-align: center;
+  }
+  
+  .campos {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  mat-form-field {
+    margin-bottom: 1rem;
+    width: 100%;
+    
+    border-radius: 3px;
+  }
+  
+  .save-btn {
+    background-color: #e5c39c;
+    color: #40144c;
+    padding: 12px 24px;         /* Aumenta el padding */
+    font-size: 16px;            /* Aumenta el tamaño de la fuente */
+    min-width: 150px;           /* Establece un ancho mínimo */
+    border-radius: 6px;         /* Bordes redondeados */
+    font-weight: 500;           /* Texto un poco más grueso */
+  }
+  
+ 
+  
+  /* Si quieres que los botones ocupen más espacio en el contenedor */
+  .acciones {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;         /* Un poco más de espacio arriba */
+    justify-content: center;
+    padding: 0 20px;            /* Padding horizontal para los botones */
+  }
+  
+  
+  .mensaje {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .error {
+    color: #f44336;
+  }

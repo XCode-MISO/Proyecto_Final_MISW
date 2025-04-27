@@ -6,6 +6,7 @@ from models.db import db
 from app import create_app
 # Configurar credenciales si es necesario (o via variable de entorno GOOGLE_APPLICATION_CREDENTIALS)
 #os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/esneiderrestrepo/Documents/credentials.json"
+
 # Creamos la aplicación una sola vez para usar su contexto
 app = create_app()
 inventario_service = InventarioService()
@@ -26,6 +27,7 @@ def callback(message):
                     inventario_service.decrementar_stock(producto_id, cantidad)
                 except Exception as dec_e:
                     logger.error(f"Error al decrementar stock para producto_id {producto_id}: {dec_e}")
+
         except Exception as e:
             # Puedes registrar el error y/o reenviar el mensaje según convenga
             print(f"[PUBSUB] Error en el callback de pedidos: {e}")

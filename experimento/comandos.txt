@@ -9,10 +9,10 @@ gcloud container clusters create-auto manual-cluster-clone-1-clone-1 \
   --scopes=https://www.googleapis.com/auth/cloud-platform
 
 
-docker build --platform linux/amd64 -t gcr.io/xenon-broker-309217/recomendations-command:latest .
-docker push gcr.io/xenon-broker-309217/recomendations-command:latest
-docker build --platform linux/amd64 -t gcr.io/xenon-broker-309217/recomendations-query:latest .
-docker push gcr.io/xenon-broker-309217/recomendations-query:latest
+docker build --platform linux/amd64 -t gcr.io/misw-4301-native-cloud-433702/recomendations-command:latest .
+docker push gcr.io/misw-4301-native-cloud-433702/recomendations-command:latest
+docker build --platform linux/amd64 -t gcr.io/misw-4301-native-cloud-433702/recomendations-query:latest .
+docker push gcr.io/misw-4301-native-cloud-433702/recomendations-query:latest
 
 
 kubectl apply -f recomendations-command-deployment.yaml
@@ -48,16 +48,23 @@ gcloud sql instances create read-instance \
   --trigger-resource videos_tiendas \
   --trigger-event google.storage.object.finalize \
   --entry-point process_video \
-  --set-env-vars GCP_PROJECT=xenon-broker-309217,PUBSUB_TOPIC=video-procesado-topic \
-  --project=xenon-broker-309217
+  --set-env-vars GCP_PROJECT=misw-4301-native-cloud-433702,PUBSUB_TOPIC=video-procesado-topic \
+  --project=misw-4301-native-cloud-433702
 
 gcloud functions list --project=xenon-broker-309217
 gcloud functions logs read process_video --project=xenon-broker-309217
 
 
+gcloud storage buckets create videos_tiendas \
+  --location=us-central1 \
+  --class=STANDARD
+
+  gcloud pubsub topics create video-procesado-topic\
+  --project=misw-4301-native-cloud-433702
+
 gcloud pubsub subscriptions create recommendations-pull-sub \                            
   --topic=video-procesado-topic \
-  --project=xenon-broker-309217
+  --project=misw-4301-native-cloud-433702
 
 
 
@@ -167,9 +174,9 @@ gcloud api-gateway apis create microservicios-api \
   --project=misw-4301-native-cloud-433702
 
 
-  gcloud api-gateway api-configs create microservicios-config-v2 \
+  gcloud api-gateway api-configs create microservicios-config-vvv4 \
   --api=microservicios-api \
-  --openapi-spec=api-spec.yaml \
+  --openapi-spec=api-spec-v2.yaml \
   --project=misw-4301-native-cloud-433702 \
   --backend-auth-service-account=misw-4301-native-cloud-433702@appspot.gserviceaccount.com
 
@@ -183,8 +190,10 @@ gcloud api-gateway apis create microservicios-api \
 
  gcloud api-gateway gateways update microservicios-gateway \
   --api=microservicios-api \
-  --api-config=ms-config-fixed \
-  --location=us-central1-c \
+  --api-config=microservicios-config-vvv4  \
+  --location=us-central1 \
+
+
   --project=misw-4301-native-cloud-433702
 
 
@@ -195,3 +204,6 @@ gcloud api-gateway apis create microservicios-api \
   
 
   microservicios-gateway-1qkjvfz9.uc.gateway.dev
+
+/opt/homebrew/Cellar/python@3.10/3.10.17/bin/python3.10 -m venv venv  
+ source venv/bin/activate       

@@ -1,0 +1,39 @@
+name: unit-recomendations-query
+
+on:
+  pull_request:
+    paths:
+      - "services/recomendations_query/**"
+      - ".github/workflows/unit-recomendations-query.yml"
+  push:
+    branches: [master]
+    paths:
+      - "services/recomendations_query/**"
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Install deps
+        run: |
+          pip install -r services/recomendations_query/requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Run tests + coverage
+        working-directory: services/recomendations_query
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          pytest -q tests \
+            --cov=src \
+            --cov-report=xml \
+            --cov-report=html:cov_html
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-recomendations_query
+          path: services/recomendations_query/cov_html

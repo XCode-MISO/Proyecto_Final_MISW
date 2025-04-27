@@ -1,0 +1,38 @@
+.access-denied-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .error-card {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 90%;
+  }
+  
+  .error-icon {
+    font-size: 64px;
+    height: 64px;
+    width: 64px;
+    color: #dc3545;
+    margin-bottom: 1rem;
+  }
+  
+  h1 {
+    color: #dc3545;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    margin-bottom: 2rem;
+    color: #6c757d;
+  }
+  
+  button {
+    margin-top: 1rem;
+  }

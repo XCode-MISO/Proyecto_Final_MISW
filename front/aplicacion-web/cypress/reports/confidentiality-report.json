@@ -1,0 +1,101 @@
+{
+  "accessAttempts": {
+    "total": 6,
+    "denied": 6,
+    "byRole": {
+      "admin": {
+        "attempted": 0,
+        "denied": 0,
+        "resources": {}
+      },
+      "directorVentas": {
+        "attempted": 2,
+        "denied": 2,
+        "resources": {
+          "fabricantes": {
+            "attempted": 1,
+            "denied": 1
+          },
+          "routes": {
+            "attempted": 1,
+            "denied": 1
+          }
+        }
+      },
+      "directorCompras": {
+        "attempted": 2,
+        "denied": 2,
+        "resources": {
+          "ventas": {
+            "attempted": 1,
+            "denied": 1
+          },
+          "routes": {
+            "attempted": 1,
+            "denied": 1
+          }
+        }
+      },
+      "directorLogistica": {
+        "attempted": 2,
+        "denied": 2,
+        "resources": {
+          "ventas": {
+            "attempted": 1,
+            "denied": 1
+          },
+          "fabricantes": {
+            "attempted": 1,
+            "denied": 1
+          }
+        }
+      }
+    }
+  },
+  "generalTests": {
+    "total": 4,
+    "passed": 4,
+    "byRole": {
+      "admin": {
+        "total": 1,
+        "passed": 1,
+        "byType": {
+          "ver_todos_menus": {
+            "total": 1,
+            "passed": 1
+          }
+        }
+      },
+      "directorVentas": {
+        "total": 1,
+        "passed": 1,
+        "byType": {
+          "ver_menus_propios": {
+            "total": 1,
+            "passed": 1
+          }
+        }
+      },
+      "directorCompras": {
+        "total": 1,
+        "passed": 1,
+        "byType": {
+          "ver_menus_propios": {
+            "total": 1,
+            "passed": 1
+          }
+        }
+      },
+      "directorLogistica": {
+        "total": 1,
+        "passed": 1,
+        "byType": {
+          "ver_menus_propios": {
+            "total": 1,
+            "passed": 1
+          }
+        }
+      }
+    }
+  }
+}

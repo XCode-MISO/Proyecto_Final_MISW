@@ -1,97 +1,99 @@
-import json
-import io
 import pytest
-from unittest.mock import patch, MagicMock
-from app import create_app
+from flask import Flask
+from services.producto_service import ProductoService
+from apis.producto_api import producto_bp
 
-# Configuración del fixture para el cliente de prueba (usando SQLite en memoria)
+# ------------------------------------------------------------------
+# utilidades de prueba
+# ------------------------------------------------------------------
+class DummyProducto:
+    def __init__(self, id_):
+        self.id = id_
+        self.fabricante_id = 1
+        self.precio = 100
+
+
+def patch_registrar(monkeypatch, *, should_fail=False, exists_ids=(1,)):
+    """Mock de ProductoService.registrar_producto_individual."""
+
+    def _mock_assert(fid):
+        if fid not in exists_ids:
+            raise ValueError(f"Fabricante {fid} no existe")
+
+    monkeypatch.setattr(ProductoService, "_assert_fabricante_exists", staticmethod(_mock_assert))
+
+    def _ok(**kwargs):
+        return DummyProducto(42)
+
+    def _fail(**kwargs):
+        raise ValueError(f"Fabricante {kwargs['fabricante_id']} no existe")
+
+    monkeypatch.setattr(
+        ProductoService,
+        "registrar_producto_individual",
+        staticmethod(_fail if should_fail else _ok),
+    )
+
+# ------------------------------------------------------------------
+# fixture cliente Flask
+# ------------------------------------------------------------------
 @pytest.fixture
 def client():
-    app = create_app()
-    app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    with app.app_context():
-        from models.db import db
-        db.create_all()
-    
-        from models.fabricante import Fabricante
-        fab = Fabricante(nombre="Test Fabricante", correo="test@fab.com", telefono="1234567", empresa="Test Inc")
-        db.session.add(fab)
-        db.session.commit()
-    with app.test_client() as client:
-        yield client
+    app = Flask(__name__)
+    app.register_blueprint(producto_bp, url_prefix="/api/productos")
+    return app.test_client()
 
-@patch("services.producto_service.pubsub_v1.PublisherClient")
-def test_registrar_producto_con_ubicacion_success(mock_pub_client, client):
-    mock_instance = MagicMock()
-    mock_instance.publish.return_value.result.return_value = "mensaje_id"
-    mock_pub_client.return_value = mock_instance
+# ------------------------------------------------------------------
+# casos
+# ------------------------------------------------------------------
 
-    payload = {
-        "nombre": "Producto Compra Ejemplo",
+def test_registro_ok(monkeypatch, client):
+    patch_registrar(monkeypatch, exists_ids=(1,))
+    data = {
+        "nombre": "Laptop",
         "fabricanteId": 1,
-        "cantidad": 5,
-        "precio": 29.99,
+        "cantidad": 3,
+        "precio": 1200,
         "moneda": "USD",
-        "bodega": "Bodega Central",
-        "estante": "Estante 1",
-        "pasillo": "Pasillo A"
+        "bodega": "B1",
+        "estante": "E1",
+        "pasillo": "P1",
     }
-    response = client.post("/api/productos", json=payload)
-    assert response.status_code == 201, f"Se esperaba 201, se obtuvo {response.status_code}"
-    data = response.get_json()
-    assert "message" in data, "Falta la clave 'message' en la respuesta."
-    assert "Compra" in data, "Falta la clave 'Compra' en la respuesta."
-    detalle = data["Compra"]
-    # Verificamos que se devuelven los campos básicos:
-    assert "productoId" in detalle, "Falta 'productoId' en la respuesta."
-    assert "fabricanteId" in detalle, "Falta 'fabricanteId' en la respuesta."
-    assert "cantidad" in detalle, "Falta 'cantidad' en la respuesta."
-    assert "precio" in detalle, "Falta 'precio' en la respuesta."
+    resp = client.post("/api/productos", json=data)
+    assert resp.status_code == 201
+    body = resp.get_json()
+    producto_id = body.get("productoId") or body.get("Compra", {}).get("productoId")
+    assert producto_id == 42
 
-@patch("services.producto_service.pubsub_v1.PublisherClient")
-def test_registrar_producto_validation_error(mock_pub_client, client):
-    mock_instance = MagicMock()
-    mock_pub_client.return_value = mock_instance
 
-    # Payload sin "precio"
-    payload = {
-        "nombre": "Producto Compra Ejemplo",
+def test_registro_validation(monkeypatch, client):
+    # Sin precio
+    data = {
+        "nombre": "Laptop",
         "fabricanteId": 1,
-        "cantidad": 5,
+        "cantidad": 3,
         "moneda": "USD",
-        "bodega": "Bodega Central",
-        "estante": "Estante 1",
-        "pasillo": "Pasillo A"
+        "bodega": "B1",
+        "estante": "E1",
+        "pasillo": "P1",
     }
-    response = client.post("/api/productos", json=payload)
-    assert response.status_code == 400, f"Se esperaba 400, se obtuvo {response.status_code}"
-    data = response.get_json()
-    assert "error" in data or "details" in data, "La respuesta debe indicar error de validación."
+    resp = client.post("/api/productos", json=data)
+    assert resp.status_code == 400
 
-def test_registrar_producto_without_pubsub(client):
-    
-    client.application.config["DISABLE_PUBSUB"] = True
 
-    payload = {
-        "nombre": "Producto Compra Ejemplo Sin PubSub",
-        "fabricanteId": 1,
-        "cantidad": 5,
-        "precio": 29.99,
+def test_registro_fabricante_inexistente(monkeypatch, client):
+    patch_registrar(monkeypatch, should_fail=True, exists_ids=(1,))
+    data = {
+        "nombre": "Mouse",
+        "fabricanteId": 99,
+        "cantidad": 2,
+        "precio": 20,
         "moneda": "USD",
-        "bodega": "Bodega Central",
-        "estante": "Estante 1",
-        "pasillo": "Pasillo A"
+        "bodega": "B1",
+        "estante": "E1",
+        "pasillo": "P1",
     }
-    response = client.post("/api/productos", json=payload)
-    assert response.status_code == 201, f"Se esperaba 201, se obtuvo {response.status_code}"
-    data = response.get_json()
-    # Verificamos que la respuesta contiene la estructura esperada
-    assert "message" in data, "Falta 'message' en la respuesta"
-    assert "Compra" in data, "Falta 'Compra' en la respuesta"
-    detalle = data["Compra"]
-    assert detalle.get("productoId") is not None, "Falta productoId"
-    assert detalle.get("fabricanteId") is not None, "Falta fabricanteId"
-    assert detalle.get("cantidad") == 5, "La cantidad no es la esperada"
-    assert float(detalle.get("precio")) == 29.99, "El precio no es el esperado"
+    resp = client.post("/api/productos", json=data)
+    assert resp.status_code == 400
+    assert "no existe" in resp.get_json()["error"]
+

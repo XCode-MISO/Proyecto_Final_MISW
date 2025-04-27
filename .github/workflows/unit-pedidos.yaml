@@ -1,0 +1,40 @@
+name: unit-pedidos
+
+on:
+  pull_request:
+    paths:
+      - "services/pedidos/**"
+      - ".github/workflows/unit-pedidos.yml"
+  push:
+    branches: [master]
+    paths:
+      - "services/pedidos/**"
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pipenv
+        run: pip install pipenv
+
+      - name: Install deps
+        working-directory: services/pedidos
+        run: pipenv install --dev
+
+      - name: Run tests + coverage
+        working-directory: services/pedidos
+        run: |
+          pipenv run pytest -q tests \
+            --cov=services/pedidos \
+            --cov-report=xml \
+            --cov-report=html:cov_html
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-pedidos
+          path: services/pedidos/cov_html
