@@ -163,6 +163,7 @@ def consume_pedido_creado():
             # publish_pedido_despachado(route)
             message.ack()
         except MyException as e: 
+            print(e.as_http_error())
             return e.as_http_error()
 
     with pubsub_v1.SubscriberClient() as subscriber:
