@@ -13,8 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [CommonModule
     , MatButtonModule],
   
-  templateUrl: './Productos-upload.component.html',
-  styleUrls: ['./Productos-upload.component.css']
+  templateUrl: './productos-upload.component.html',
+  styleUrls: ['./productos-upload.component.css']
 })
 
 
