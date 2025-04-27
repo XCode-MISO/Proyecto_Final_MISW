@@ -12,4 +12,9 @@
     <string name="rutas">RUTAS</string>
     <string name="recomendacion">RECOMENDACION</string>
     <string name="visita">REGISTRAR VISITA</string>
+    <string name="productos">!Productos¡</string>
+    <string name="recomendation">!Recomendación¡</string>
+    <string name="visit">Registrar Visita</string>
+    <string name="client">Crear Cliente</string>
+    <string name="login">Iniciar Sesion</string>
 </resources>

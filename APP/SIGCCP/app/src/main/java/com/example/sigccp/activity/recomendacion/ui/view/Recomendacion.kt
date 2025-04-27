@@ -27,7 +27,9 @@ import com.example.sigccp.ui.View.Components.ScreenContainer
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import com.example.sigccp.PreferencesManager
+import com.example.sigccp.R
 import com.example.sigccp.activity.recomendacion.service.RecomendacionService
 import com.example.sigccp.activity.recomendacion.ui.viewmodel.RecomendacionServiceViewModel
 import com.example.sigccp.ui.View.Components.CustomButton
@@ -125,7 +127,7 @@ fun Recomendacion(
         }
     }
 
-    ScreenContainer(title = "Recomendacion", true,false,true, null) {
+    ScreenContainer(title = stringResource(id = R.string.recomendation), true,false,true, null) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
             if (isLoading) {
                 CircularProgressIndicator()

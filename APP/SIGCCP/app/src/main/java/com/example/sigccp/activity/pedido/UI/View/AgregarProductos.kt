@@ -27,6 +27,8 @@ import kotlin.collections.set
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
+import com.example.sigccp.R
 import com.example.sigccp.navigation.NavigationController
 import com.example.sigccp.ui.View.Components.moneda
 import com.example.sigccp.ui.theme.AppTypography
@@ -47,7 +49,7 @@ fun Producto(viewModel: PedidoViewModel)
     }
     val productos = viewModel.productosDisponibles
     var cantidades by remember { mutableStateOf<Map<Int, Int>>(emptyMap()) }
-    ScreenContainer(title = "!Productos¡", true,false,true,null) {
+    ScreenContainer(title = stringResource(id = R.string.productos), true,false,true,null) {
         Box(
             modifier = Modifier
                 .fillMaxSize(), // Ocupa toda la pantalla para centrar el contenido

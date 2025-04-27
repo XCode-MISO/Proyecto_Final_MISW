@@ -11,10 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.sigccp.PreferenceKeys
 import com.example.sigccp.PreferencesManager
+import com.example.sigccp.R
 import com.example.sigccp.activity.clients.ui.view.CustomTextField
 import com.example.sigccp.ui.View.Components.PasswordTextField
 import com.example.sigccp.ui.View.Components.ScreenContainer
@@ -81,7 +83,7 @@ fun Login() {
         return password.length >= 6
     }
 
-    ScreenContainer(title = "Iniciar Sesión",false, false,false, null) {
+    ScreenContainer(title = stringResource(id = R.string.login),false, false,false, null) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
             Column(
                 modifier = Modifier.fillMaxSize(),
