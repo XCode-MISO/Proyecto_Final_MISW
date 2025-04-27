@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: logistica
-        image: gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/logistica
+        image: gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/logistica:latest
         ports:
         - containerPort: 8080
         env:
