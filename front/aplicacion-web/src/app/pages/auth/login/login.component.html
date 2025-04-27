@@ -1,0 +1,29 @@
+<div class="form-wrapper">
+    <h2 class="titulo">Iniciar Sesión</h2>
+  
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="campos">
+      <mat-form-field appearance="outline">
+        <mat-label>Correo</mat-label>
+        <input data-cy="login-email" matInput type="email" formControlName="email" />
+        <mat-error *ngIf="enviado && f['email'].errors">Correo inválido</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>Contraseña</mat-label>
+        <input data-cy="login-password" matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="enviado && f['password'].errors">Contraseña requerida</mat-error>
+      </mat-form-field>
+  
+      <div class="acciones">
+        <button data-cy="login-submit" mat-flat-button class="save-btn" type="submit" [disabled]="isLoading">
+          <mat-spinner *ngIf="isLoading" [diameter]="20" color="accent"></mat-spinner>
+          <span *ngIf="!isLoading">Iniciar Sesión</span>
+        </button>
+      </div>
+  
+      <p class="mensaje" [ngClass]="{'error': errorMessage}" *ngIf="mensajeServidor">{{ mensajeServidor }}</p>
+    </form>
+  </div>

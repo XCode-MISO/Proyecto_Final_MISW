@@ -1,0 +1,30 @@
+{
+    "admin": {
+      "email": "admin@gmail.com",
+      "password": "12345678",
+      "role": "admin",
+      "expectedMenus": ["Inicio", "Gestion de Fabricantes", "Gestion de Ventas", "Gestion de Inventario"],
+      "unexpectedMenus": []
+    },
+    "directorCompras": {
+      "email": "directorcompras@gmail.com",
+      "password": "12345678",
+      "role": "directorcompras",
+      "expectedMenus": ["Inicio", "Gestion de Fabricantes"],
+      "unexpectedMenus": ["Gestion de Ventas", "Gestion de Inventario"]
+    },
+    "directorVentas": {
+      "email": "directorventas@gmail.com",
+      "password": "12345678",
+      "role": "directorventas",
+      "expectedMenus": ["Inicio", "Gestion de Ventas"],
+      "unexpectedMenus": ["Gestion de Fabricantes", "Gestion de Inventario"]
+    },
+    "directorLogistica": {
+      "email": "directorlogistica@gmail.com",
+      "password": "12345678",
+      "role": "directorlogistica",
+      "expectedMenus": ["Inicio", "Gestion de Inventario"],
+      "unexpectedMenus": ["Gestion de Fabricantes", "Gestion de Ventas"]
+    }
+  }
