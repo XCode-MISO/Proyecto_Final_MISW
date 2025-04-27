@@ -1,7 +1,7 @@
 import json
 import os
 import threading
-from flask import Flask
+from flask import Flask, current_app
 from logistica.infrastructure.config import Config
 from logistica.infrastructure.pub_sub import consume_pedido_creado
 from logistica.application.command.generate_route import comandos_bp
@@ -18,6 +18,11 @@ def create_app():
     app.register_blueprint(query_bp)
     CORS(app)
     db.create_all()
+
+    with current_app.app_context() as context:
+        thread = threading.Thread(target=lambda: consume_pedido_creado(context))
+        thread.daemon = True
+        thread.start()
 
     @app.route("/")
     def hello_world():
@@ -37,12 +42,3 @@ def create_app():
 
     return app
 
-if __name__ == '__main__':
-    flask_app = create_app()
-    # Iniciar el subscriber en un hilo aparte
-    with flask_app.app_context() as context:
-        thread = threading.Thread(target=lambda: consume_pedido_creado(context))
-        thread.daemon = True
-        thread.start()
-
-    flask_app.run(host='0.0.0.0', port=8080, debug=True)
