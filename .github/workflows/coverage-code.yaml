@@ -1,71 +1,97 @@
-name: unified-coverage
+name: Unified Coverage Dashboard
 
 on:
   pull_request:
     paths:
       - "services/**"
+  push:
+    branches:
+      - master
+    paths:
+      - "services/**"
 
 jobs:
-  coverage:
+  run-coverage:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [ms_compras, ms_inventarios]  # todos tus micros
+        service:
+          - ms_compras
+          - ms_inventarios
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: Setup Python 3.10
         uses: actions/setup-python@v5
-        with: python-version: "3.10"
+        with:
+          python-version: "3.10"
 
-      - name: Install deps for ${{ matrix.service }}
+      - name: Install dependencies for ${{ matrix.service }}
         run: |
+          pip install --upgrade pip
           pip install -r services/${{ matrix.service }}/requirements.txt
-          pip install pytest pytest-cov
+          pip install pytest pytest-cov coverage
 
-      - name: Run tests for ${{ matrix.service }}
+      - name: Run pytest for ${{ matrix.service }}
         working-directory: services/${{ matrix.service }}
         run: |
-          pytest --cov=. --cov-report=xml:coverage-${{ matrix.service }}.xml -q tests
+          pytest \
+            --cov=. \
+            --cov-report=xml:coverage-${{ matrix.service }}.xml \
+            -q tests/
 
-      - name: Upload coverage XML
+      - name: Upload coverage XML for ${{ matrix.service }}
         uses: actions/upload-artifact@v4
         with:
           name: cov-${{ matrix.service }}
           path: services/${{ matrix.service }}/coverage-${{ matrix.service }}.xml
 
   aggregate:
-    needs: coverage
+    needs: run-coverage
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
-        with: name: cov-ms_compras, path: cov_reports
-      - uses: actions/download-artifact@v4
-        with: name: cov-ms_inventarios, path: cov_reports
-    
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Merge coverage XMLs
+      - name: Download all coverage XMLs
+        uses: actions/download-artifact@v4
+        with:
+          name: cov-ms_compras
+          path: cov_reports
+      - uses: actions/download-artifact@v4
+        with:
+          name: cov-ms_inventarios
+          path: cov_reports
+      - uses: actions/download-artifact@v4
+
+
+      - name: Install tools
         run: |
-          mkdir merged
-          # asumimos que generate_coverage_chart.py sabe leer varios xml? 
-          # (o usa coverage combine sobre .coverage files)
-          coverage combine \
-            cov_reports/coverage-ms_compras.xml \
-            cov_reports/coverage-ms_inventarios.xml 
-          coverage xml -o merged/coverage.xml
+          pip install coverage matplotlib
+
+      - name: Combine coverage data
+        run: |
+          # Renombramos para que coverage combine los .xml directamente:
+          mv cov_reports/coverage-ms_compras.xml .
+          mv cov_reports/coverage-ms_inventarios.xml .
+          # Generamos el xml unificado
+          coverage xml -o merged_coverage.xml \
+            --include="services/ms_compras/*,services/ms_inventarios/*,services/*"
 
       - name: Generate unified coverage chart
         run: |
-          python scripts/generate_coverage_chart.py merged/coverage.xml merged/coverage_chart.png
+          python scripts/generate_coverage_chart.py merged_coverage.xml merged/coverage_chart.png
 
-      - name: Upload chart to PR
+      - name: Upload coverage chart as PR comment
         uses: peter-evans/create-or-update-comment@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            ![Cobertura unificada](merged/coverage_chart.png)
+            ### 📊 Cobertura unificada de microservicios
+            ![Coverage Chart](merged/coverage_chart.png)
 
       - name: Upload chart as artifact
         uses: actions/upload-artifact@v4
