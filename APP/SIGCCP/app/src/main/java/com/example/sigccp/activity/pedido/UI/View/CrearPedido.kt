@@ -1,5 +1,6 @@
 package com.example.sigccp.activity.pedido.UI.View
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import com.example.sigccp.ui.View.Components.newDualButton
 import com.example.sigccp.ui.View.Components.moneda
 import com.example.sigccp.ui.theme.AppTypography
 import androidx.compose.runtime.*
+import com.example.sigccp.ui.theme.AmarilloApp
 
 //@Preview
 @Composable
@@ -48,7 +50,7 @@ fun Pedido(viewModel: PedidoViewModel) {
     val role = PreferencesManager.getString(PreferenceKeys.ROLE)
     val productos = viewModel.productosSeleccionados.value
 
-    ScreenContainer(title = stringResource(id = R.string.CrearPedido), false, true, null) {
+    ScreenContainer(title = stringResource(id = R.string.CrearPedido), true,false, true, null, AppScreen.ListarPedidos.route) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -171,7 +173,8 @@ fun Pedido(viewModel: PedidoViewModel) {
                     ) {
                         Text("OK")
                     }
-                }
+                },
+                containerColor = AmarilloApp,
             )
         }
     }

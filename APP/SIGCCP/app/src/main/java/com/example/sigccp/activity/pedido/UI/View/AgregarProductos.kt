@@ -15,8 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.compose.runtime.LaunchedEffect
 import com.example.sigccp.activity.pedido.UI.ViewModel.PedidoViewModel
 import com.example.sigccp.activity.producto.Data.Modelo.ProductosPedidoClass
 import com.example.sigccp.navigation.AppScreen
@@ -43,9 +42,12 @@ fun AgregarProductos( viewModel: PedidoViewModel)
 @Composable
 fun Producto(viewModel: PedidoViewModel)
 {
+    LaunchedEffect(Unit) {
+        viewModel.fetchProductos()
+    }
     val productos = viewModel.productosDisponibles
     var cantidades by remember { mutableStateOf<Map<Int, Int>>(emptyMap()) }
-    ScreenContainer(title = "!Productos¡",false,true,null) {
+    ScreenContainer(title = "!Productos¡", true,false,true,null) {
         Box(
             modifier = Modifier
                 .fillMaxSize(), // Ocupa toda la pantalla para centrar el contenido

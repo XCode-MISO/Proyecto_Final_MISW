@@ -6,4 +6,10 @@
     <string name="menuVendedor">¡Hola, Vendedor!</string>
     <string name="ListPedidos">¡Tus Pedidos!</string>
     <string name="CrearPedido">¡Tu Pedido!</string>
+    <string name="pedidos">PEDIDOS</string>
+    <string name="clientes">CLIENTES</string>
+    <string name="inventario">INVENTARIO</string>
+    <string name="rutas">RUTAS</string>
+    <string name="recomendacion">RECOMENDACION</string>
+    <string name="visita">REGISTRAR VISITA</string>
 </resources>

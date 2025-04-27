@@ -125,7 +125,7 @@ fun Recomendacion(
         }
     }
 
-    ScreenContainer(title = "Recomendacion", false,true, null) {
+    ScreenContainer(title = "Recomendacion", true,false,true, null) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
             if (isLoading) {
                 CircularProgressIndicator()

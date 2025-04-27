@@ -52,7 +52,7 @@ fun CrearCliente(
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    ScreenContainer(title = "Crear Cliente", false,true, null) {
+    ScreenContainer(title = "Crear Cliente", false,false,true, null) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
             if (isLoading) {
                 CircularProgressIndicator()
