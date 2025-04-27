@@ -3,54 +3,57 @@ name: unit-ms_compras
 on:
   pull_request:
     paths:
-      - "services/ms_compras/**"
+      - 'services/ms_compras/**'
   push:
     branches: [master]
     paths:
-      - "services/ms_compras/**"
+      - 'services/ms_compras/**'
 
 jobs:
   unit:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: '3.10'
 
-      - name: Install deps
+      - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install -r services/ms_compras/requirements.txt
           pip install pytest pytest-cov matplotlib lxml
 
-      - name: Run tests & generate coverage reports
-        # OJO: working-directory al folder ms_compras para pytest
-        working-directory: services/ms_compras
+      - name: Run tests with coverage
         run: |
-          pytest -q tests \
-            --cov=. \
+          pytest \
+            --cov=services/ms_compras \
             --cov-report=xml:coverage.xml \
-            --cov-report=html:htmlcov
+            --cov-report=html:cov_html \
+            -q services/ms_compras/tests
 
-      - name: Debug ls to verify coverage.xml
-        working-directory: services/ms_compras
+      - name: Verify coverage.xml exists
         run: |
-          echo "Listing contents of services/ms_compras:"
-          ls -R .
+          test -f coverage.xml || (echo "❌ coverage.xml not found" && exit 1)
 
       - name: Generate coverage chart
-        # Ahora invocamos el script pasando la ruta correcta desde el root
-        working-directory: ./  # volvemos al root del repo
         run: |
           python services/scripts/generate_coverage_chart.py \
-            services/ms_compras/coverage.xml \
-            services/ms_compras
+            coverage.xml \
+            coverage_chart.png
 
-      - name: Upload HTML report
+      - name: Upload HTML coverage report
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-ms_compras
-          path: services/ms_compras/htmlcov
+          name: coverage-html-ms_compras
+          path: cov_html
+
+      - name: Upload coverage chart
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-chart-ms_compras
+          path: coverage_chart.png
