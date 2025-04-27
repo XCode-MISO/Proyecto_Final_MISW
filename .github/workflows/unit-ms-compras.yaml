@@ -1,69 +1,56 @@
-# .github/workflows/unit-ms_compras.yaml
 name: unit-ms_compras
 
 on:
   pull_request:
     paths:
       - "services/ms_compras/**"
-      - ".github/workflows/unit-ms_compras.yaml"
   push:
     branches: [master]
     paths:
       - "services/ms_compras/**"
-      - ".github/workflows/unit-ms_compras.yaml"
 
 jobs:
   unit:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Python 3.10
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      - name: Install dependencies
+      - name: Install deps
         run: |
           pip install --upgrade pip
           pip install -r services/ms_compras/requirements.txt
           pip install pytest pytest-cov matplotlib lxml
 
-      - name: Run tests & generate coverage files
+      - name: Run tests & generate coverage reports
+        # OJO: working-directory al folder ms_compras para pytest
         working-directory: services/ms_compras
         run: |
-          echo "👉 PWD: $(pwd)"
-          echo "📂 Antes de tests:"
-          ls -R .
-  
           pytest -q tests \
             --cov=. \
             --cov-report=xml:coverage.xml \
             --cov-report=html:htmlcov
-  
-          echo "📂 Después de tests:"
+
+      - name: Debug ls to verify coverage.xml
+        working-directory: services/ms_compras
+        run: |
+          echo "Listing contents of services/ms_compras:"
           ls -R .
-  
-          echo "❓ ¿Está coverage.xml?"
-          test -f coverage.xml && echo "✅ coverage.xml encontrado" || (echo "❌ coverage.xml NO está aquí" && exit 1)
 
       - name: Generate coverage chart
-        # Este paso se ejecuta desde la raíz del repo
+        # Ahora invocamos el script pasando la ruta correcta desde el root
+        working-directory: ./  # volvemos al root del repo
         run: |
           python services/scripts/generate_coverage_chart.py \
             services/ms_compras/coverage.xml \
             services/ms_compras
 
-      - name: Upload HTML coverage report
+      - name: Upload HTML report
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-html-ms_compras
+          name: coverage-ms_compras
           path: services/ms_compras/htmlcov
-
-      - name: Upload coverage chart PNG
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-chart-ms_compras
-          path: services/ms_compras/coverage_chart.png
