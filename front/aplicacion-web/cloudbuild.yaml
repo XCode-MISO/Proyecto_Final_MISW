@@ -12,6 +12,11 @@ steps:
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:
+    - '-c'
+    - echo "!keys.json"  >> ./front/aplicacion-web/.gitignore
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
       - '-c' 
       - sed -i 's/%GMAPS_API_KEY%/'${_GMAPS_API_KEY}'/g' ./front/aplicacion-web/src/index.html
   - name: 'gcr.io/cloud-builders/gcloud'
