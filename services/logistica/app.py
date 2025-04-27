@@ -8,6 +8,8 @@ from logistica.application.command.generate_route import comandos_bp
 from logistica.application.query.get_routes import query_bp
 from logistica.infrastructure.db.model import db
 from flask_cors import CORS
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 
 def create_app():
