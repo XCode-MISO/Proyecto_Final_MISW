@@ -34,17 +34,20 @@ jobs:
 
       - name: Generate coverage chart PNG
         run: |
-          # Aquí usamos la ruta correcta al script en scripts/
           python services/scripts/generate_coverage_chart.py \
             coverage.xml \
             coverage_chart.png
 
-      - name: Embed coverage chart in summary
+      - name: Embed coverage chart in Summary
+        shell: bash
         run: |
           echo "## 📊 Test Coverage" >> $GITHUB_STEP_SUMMARY
-          echo "![Coverage](data:image/png;base64,$(base64 -w0 coverage_chart.png))" >> $GITHUB_STEP_SUMMARY
+          # codificamos el PNG en base64 sin saltos de línea
+          B64=$(base64 --wrap=0 coverage_chart.png)
+          # y lo incrustamos como una etiqueta <img>
+          echo "<img src=\"data:image/png;base64,$B64\" alt=\"Coverage Chart\" />" >> $GITHUB_STEP_SUMMARY
 
-      - name: Upload HTML report + chart as artifact
+      - name: Upload HTML report + chart
         uses: actions/upload-artifact@v4
         with:
           name: coverage-ms_compras
