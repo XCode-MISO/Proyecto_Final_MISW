@@ -27,25 +27,22 @@ jobs:
 
       - name: Run tests & generate coverage reports
         run: |
-          pytest -q services/ms_compras/tests \
-            --cov=. \
+          pytest services/ms_compras/tests \
+            --cov=services/ms_compras \
             --cov-report=xml:coverage.xml \
             --cov-report=html:htmlcov
 
       - name: Generate coverage chart PNG
         run: |
-          python services/ms_compras/scripts/generate_coverage_chart.py \
+          # Aquí usamos la ruta correcta al script en scripts/
+          python scripts/generate_coverage_chart.py \
             coverage.xml \
             coverage_chart.png
 
       - name: Embed coverage chart in summary
-        # esto escribe en el resumen de la acción para que GitHub lo muestre
         run: |
           echo "## 📊 Test Coverage" >> $GITHUB_STEP_SUMMARY
-          # convierte el PNG a base64 y lo inyecta como data-uri
-          echo "![Coverage](" >> $GITHUB_STEP_SUMMARY
-          echo "data:image/png;base64,$(base64 -w0 coverage_chart.png)" >> $GITHUB_STEP_SUMMARY
-          echo ")" >> $GITHUB_STEP_SUMMARY
+          echo "![Coverage](data:image/png;base64,$(base64 -w0 coverage_chart.png))" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload HTML report + chart as artifact
         uses: actions/upload-artifact@v4
