@@ -12,6 +12,11 @@ steps:
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:
+      - '-c' 
+      - cat ./front/aplicacion-web/keys.json
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
     - '-c'
     - echo "!keys.json"  >> ./front/aplicacion-web/.gitignore
   - name: 'gcr.io/cloud-builders/gcloud'
