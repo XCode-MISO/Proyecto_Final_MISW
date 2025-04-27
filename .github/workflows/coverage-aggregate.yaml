@@ -3,9 +3,8 @@ name: Coverage Aggregate
 on:
   workflow_run:
     # Aquí van los "name:" exactos de tus workflows unitarios
-    workflows:
-      - unit-ms_compras
-      - unit-ms_inventarios
+    workflows: [unit-ms_compras, unit-ms_inventarios]
+
     types:
       - completed
 
