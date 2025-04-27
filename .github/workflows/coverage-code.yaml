@@ -1,0 +1,74 @@
+name: unified-coverage
+
+on:
+  pull_request:
+    paths:
+      - "services/**"
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [ms_compras, ms_inventarios]  # todos tus micros
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with: python-version: "3.10"
+
+      - name: Install deps for ${{ matrix.service }}
+        run: |
+          pip install -r services/${{ matrix.service }}/requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Run tests for ${{ matrix.service }}
+        working-directory: services/${{ matrix.service }}
+        run: |
+          pytest --cov=. --cov-report=xml:coverage-${{ matrix.service }}.xml -q tests
+
+      - name: Upload coverage XML
+        uses: actions/upload-artifact@v4
+        with:
+          name: cov-${{ matrix.service }}
+          path: services/${{ matrix.service }}/coverage-${{ matrix.service }}.xml
+
+  aggregate:
+    needs: coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: name: cov-ms_compras, path: cov_reports
+      - uses: actions/download-artifact@v4
+        with: name: cov-ms_inventarios, path: cov_reports
+    
+
+      - name: Merge coverage XMLs
+        run: |
+          mkdir merged
+          # asumimos que generate_coverage_chart.py sabe leer varios xml? 
+          # (o usa coverage combine sobre .coverage files)
+          coverage combine \
+            cov_reports/coverage-ms_compras.xml \
+            cov_reports/coverage-ms_inventarios.xml 
+          coverage xml -o merged/coverage.xml
+
+      - name: Generate unified coverage chart
+        run: |
+          python scripts/generate_coverage_chart.py merged/coverage.xml merged/coverage_chart.png
+
+      - name: Upload chart to PR
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ![Cobertura unificada](merged/coverage_chart.png)
+
+      - name: Upload chart as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: unified-coverage-chart
+          path: merged/coverage_chart.png
