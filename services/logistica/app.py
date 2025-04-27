@@ -17,7 +17,7 @@ def create_app():
     app.register_blueprint(comandos_bp)
     app.register_blueprint(query_bp)
     CORS(app)
-    with app.context():
+    with app.app_context():
         db.create_all()
         def consumidor_pedido_creado():
                 consume_pedido_creado()
