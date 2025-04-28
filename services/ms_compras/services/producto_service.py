@@ -10,7 +10,7 @@ from models.fabricante import Fabricante
 from google.cloud import pubsub_v1
 
 from typing import Dict, List
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/esneiderrestrepo/Documents/credentials.json"
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/esneiderrestrepo/Documents/credentials.json"
 
 # Configuración del logger
 logging.basicConfig(level=logging.DEBUG)
