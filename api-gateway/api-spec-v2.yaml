@@ -717,4 +717,26 @@ paths:
           description: "Lista de vendedores generadas"
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/ventas/api/vendedores"
+        
+  /api/vendedores/{vendedor_id}:
+    get:
+      operationId: "getvendedore"
+      summary: "Obtener una vendedores que ha sido generada"
+      description: "Devuleve la vendedore que se han generado"
+      produces: 
+        - "application/json"
+      parameters:        
+      - in: path
+        name: vendedor_id
+        type: string
+        required: true
+        description: String ID de la vendedore
+      responses:
+        200:
+          description: "Lista de vendedores generadas"
+        404:
+          description: "No se encontró esa vendedore"
+      x-google-backend:
+        address: "http://kubernetes-gateway.cppxcode.shop/ventas"
+        path_translation: APPEND_PATH_TO_ADDRESS
 
