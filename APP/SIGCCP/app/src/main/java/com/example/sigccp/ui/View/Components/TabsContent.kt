@@ -54,6 +54,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.sigccp.activity.clients.data.model.Client
 import com.example.sigccp.activity.pedido.Data.Modelo.ClienteClass
 import com.example.sigccp.activity.pedido.Data.Modelo.PedidoClass
 import com.example.sigccp.activity.pedido.Data.Modelo.Pedidos
@@ -428,6 +429,63 @@ fun locationDropdown(
     }
 }
 
+
+
+@Composable
+fun ListaDeClientes(clientes: List<Client>) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp) // Espaciado entre elementos
+    ) {
+        items(clientes) { cliente:Client  ->
+            ClienteBox(Cliente = cliente)
+        }
+    }
+}
+
+@Composable
+fun ClienteBox(
+    Cliente: Client
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(AmarilloApp, shape = RoundedCornerShape(8.dp))
+            .border(2.dp, MoradoApp, shape = RoundedCornerShape(8.dp))
+            .padding(8.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = Cliente.nombre,
+                style = AppTypography.labelMedium,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(4.dp)
+                    .align(Alignment.CenterVertically),
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+
+@Composable
+fun ListaDePedidos(pedidos: List<PedidoClass>) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp) // Espaciado entre elementos
+    ) {
+        items(pedidos) { pedido:PedidoClass  ->
+            PedidoBox(pedido = pedido)
+        }
+    }
+}
+
+
 //Componente Listar Pedido
 @Composable
 fun PedidoBox(
@@ -654,19 +712,6 @@ fun newDualButton(
                     style = AppTypography.labelLarge
                 )
             }
-        }
-    }
-}
-
-
-@Composable
-fun ListaDePedidos(pedidos: List<PedidoClass>) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp) // Espaciado entre elementos
-    ) {
-        items(pedidos) { pedido:PedidoClass  ->
-            PedidoBox(pedido = pedido)
         }
     }
 }

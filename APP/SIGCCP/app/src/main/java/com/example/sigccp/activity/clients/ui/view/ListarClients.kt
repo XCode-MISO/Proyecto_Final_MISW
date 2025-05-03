@@ -1,5 +1,6 @@
-package com.example.sigccp.activity.menu.UI.View
+package com.example.sigccp.activity.clients.ui.view
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,43 +11,45 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sigccp.PreferenceKeys
 import com.example.sigccp.PreferencesManager
 import com.example.sigccp.R
+import com.example.sigccp.activity.clients.ui.viewmodel.ClienteViewModel
 import com.example.sigccp.navigation.AppScreen
 import com.example.sigccp.navigation.NavigationController
+import com.example.sigccp.ui.View.Components.ListaDeClientes
 import com.example.sigccp.ui.View.Components.ScreenContainer
-import com.example.sigccp.ui.View.Components.newMenuButton
-import androidx.activity.compose.BackHandler
-//import com.example.sigccp.BuildConfig
 
 
-
+//@Preview
 @Composable
-fun Menu()
+fun ListarClientes()
 {
-    Options()
+    Clients()
 }
 
 @Composable
-fun Options()
+fun Clients (viewModel: ClienteViewModel = viewModel ())
 {
     val navController = NavigationController.navController
     BackHandler {
-        navController.navigate(AppScreen.Menu.route) {
+        navController.navigate(AppScreen.Menu.route){
             popUpTo(0)
         }
     }
+    viewModel.fetchClientes()
+    val clients = viewModel.clientes.collectAsState().value
     val role = PreferencesManager.getString(PreferenceKeys.ROLE)
     val rolEsCliente = (role == "cliente")
-    val saludo = if (rolEsCliente) stringResource(id = R.string.menuCliente) else stringResource(id = R.string.menuVendedor)
+    val clientId = PreferencesManager.getString(PreferenceKeys.USER_ID)
 
-    ScreenContainer(title = saludo, true,false,false, null) {
+    ScreenContainer(title = stringResource(id = R.string.listClients), true,false,true,null,AppScreen.Menu.route) {
         Box(
             modifier = Modifier
                 .fillMaxSize(), // Ocupa toda la pantalla para centrar el contenido
@@ -92,52 +95,13 @@ fun Options()
                         horizontalAlignment = Alignment.CenterHorizontally
                     )
                     {
-                        //newMenuButton(onClick = { "navController.navigate(AppScreen.CrearAlarma.route) }", nombre = "CREAR ALARMA", imagen = R.drawable.editar)
-                        newMenuButton(
-                            onClick = { NavigationController.navigate(AppScreen.ListarPedidos.route) },
-                            nombre = stringResource(id = R.string.pedidos),
-                            imagen = R.drawable.editar,
-                            enabled = true
-                        )
-                        newMenuButton(
-                            onClick = {NavigationController.navigate(AppScreen.ListarClientes.route)},
-                            nombre = stringResource(id = R.string.clientes),
-                            imagen = R.drawable.ver,
-                            enabled = !rolEsCliente
-                        )
-                        newMenuButton(
-                            onClick = {/*TODO*/ },
-                            nombre = stringResource(id = R.string.inventario),
-                            imagen = R.drawable.ver,
-                            enabled = true
-                        )
-                        newMenuButton(
-                            onClick = {/*TODO*/ },
-                            nombre = stringResource(id = R.string.rutas),
-                            imagen = R.drawable.ia,
-                            enabled = !rolEsCliente
-                        )
-                        newMenuButton(
-                            onClick = {NavigationController.navigate(AppScreen.Recomendacion.route) },
-                            nombre = stringResource(id = R.string.recomendacion),
-                            imagen = R.drawable.config,
-                            enabled = !rolEsCliente
-                        )
-                        newMenuButton(
-                            onClick = { NavigationController.navigate(AppScreen.RegistrarVisita.route) },
-                            nombre = stringResource(id = R.string.visita),
-                            imagen = R.drawable.editar,
-                            enabled = !rolEsCliente
-                        )
+                        ListaDeClientes(clients)
                     }
                 }
             }
-            androidx.compose.material3.Text(
-                text = "aplicacion-app@0.0.3",
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 16.dp)
-            )
         }
     }
 }
+
+
+

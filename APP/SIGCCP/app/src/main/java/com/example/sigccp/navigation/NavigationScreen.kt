@@ -1,7 +1,6 @@
 package com.example.sigccp.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -10,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.sigccp.PreferenceKeys
 import com.example.sigccp.PreferencesManager
 import com.example.sigccp.activity.clients.ui.view.CrearCliente
+import com.example.sigccp.activity.clients.ui.view.ListarClientes
 import com.example.sigccp.activity.pedido.UI.View.ListarPedidos
 import com.example.sigccp.activity.menu.UI.View.Menu
 import com.example.sigccp.activity.clients.ui.view.RegistrarVisita
@@ -60,6 +60,10 @@ fun NavigationScreen(recomendacionServiceViewModel: RecomendacionServiceViewMode
         composable(route = AppScreen.ListarPedidos.route)
         {
             ListarPedidos()
+        }
+        composable(route = AppScreen.ListarClientes.route)
+        {
+            ListarClientes()
         }
         composable(route = AppScreen.RegistrarVisita.route)
         {
