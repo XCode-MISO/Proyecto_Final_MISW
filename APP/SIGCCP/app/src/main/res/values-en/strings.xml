@@ -17,4 +17,5 @@
     <string name="visit">Visit Register</string>
     <string name="client">Create Client</string>
     <string name="login">Login</string>
+    <string name="listClients">CLIENTS</string>
 </resources>
