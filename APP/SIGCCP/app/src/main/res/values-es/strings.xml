@@ -18,4 +18,5 @@
     <string name="client">Crear Cliente</string>
     <string name="login">Iniciar Sesion</string>
     <string name="listClients">CLIENTES</string>
+    <string name="delivery">ENTREGAS</string>
 </resources>

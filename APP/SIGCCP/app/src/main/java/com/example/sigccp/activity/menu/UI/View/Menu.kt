@@ -14,14 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.sigccp.PreferenceKeys
 import com.example.sigccp.PreferencesManager
 import com.example.sigccp.R
 import com.example.sigccp.navigation.AppScreen
 import com.example.sigccp.navigation.NavigationController
 import com.example.sigccp.ui.View.Components.ScreenContainer
-import com.example.sigccp.ui.View.Components.newMenuButton
+import com.example.sigccp.ui.View.Components.MenuButton
 import androidx.activity.compose.BackHandler
 //import com.example.sigccp.BuildConfig
 
@@ -92,43 +91,51 @@ fun Options()
                         horizontalAlignment = Alignment.CenterHorizontally
                     )
                     {
-                        //newMenuButton(onClick = { "navController.navigate(AppScreen.CrearAlarma.route) }", nombre = "CREAR ALARMA", imagen = R.drawable.editar)
-                        newMenuButton(
+                        MenuButton(
                             onClick = { NavigationController.navigate(AppScreen.ListarPedidos.route) },
                             nombre = stringResource(id = R.string.pedidos),
-                            imagen = R.drawable.editar,
-                            enabled = true
+                            imagen = R.drawable.editar
                         )
-                        newMenuButton(
-                            onClick = {NavigationController.navigate(AppScreen.ListarClientes.route)},
-                            nombre = stringResource(id = R.string.clientes),
-                            imagen = R.drawable.ver,
-                            enabled = !rolEsCliente
-                        )
-                        newMenuButton(
+                        if(!rolEsCliente){
+                            MenuButton(
+                                onClick = {NavigationController.navigate(AppScreen.ListarClientes.route)},
+                                nombre = stringResource(id = R.string.clientes),
+                                imagen = R.drawable.ver
+                            )
+                        }
+                        MenuButton(
                             onClick = {/*TODO*/ },
                             nombre = stringResource(id = R.string.inventario),
-                            imagen = R.drawable.ver,
-                            enabled = true
+                            imagen = R.drawable.ver
                         )
-                        newMenuButton(
-                            onClick = {/*TODO*/ },
-                            nombre = stringResource(id = R.string.rutas),
-                            imagen = R.drawable.ia,
-                            enabled = !rolEsCliente
-                        )
-                        newMenuButton(
-                            onClick = {NavigationController.navigate(AppScreen.Recomendacion.route) },
-                            nombre = stringResource(id = R.string.recomendacion),
-                            imagen = R.drawable.config,
-                            enabled = !rolEsCliente
-                        )
-                        newMenuButton(
-                            onClick = { NavigationController.navigate(AppScreen.RegistrarVisita.route) },
-                            nombre = stringResource(id = R.string.visita),
-                            imagen = R.drawable.editar,
-                            enabled = !rolEsCliente
-                        )
+                        if(!rolEsCliente) {
+                            MenuButton(
+                                onClick = {/*TODO*/ },
+                                nombre = stringResource(id = R.string.rutas),
+                                imagen = R.drawable.ia
+                            )
+                        }
+                        if(!rolEsCliente){
+                            MenuButton(
+                                onClick = {NavigationController.navigate(AppScreen.Recomendacion.route) },
+                                nombre = stringResource(id = R.string.recomendacion),
+                                imagen = R.drawable.config
+                            )
+                        }
+                        if(!rolEsCliente) {
+                            MenuButton(
+                                onClick = { NavigationController.navigate(AppScreen.RegistrarVisita.route) },
+                                nombre = stringResource(id = R.string.visita),
+                                imagen = R.drawable.editar
+                            )
+                        }
+                        if(rolEsCliente) {
+                            MenuButton(
+                                onClick = { NavigationController.navigate(AppScreen.RegistrarVisita.route) },
+                                nombre = stringResource(id = R.string.delivery),
+                                imagen = R.drawable.editar
+                            )
+                        }
                     }
                 }
             }

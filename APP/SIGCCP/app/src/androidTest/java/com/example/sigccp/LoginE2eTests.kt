@@ -15,7 +15,7 @@ class LoginE2eTests {
     @Test
     fun testScreenCrearClienteSeMuestra() {
         robot.clickOnCrearCliente()
-        robot.verificarScreenConTituloSeMuestra("Crear Cliente")
+        robot.verificarScreenConTituloSeMuestra("Create Client")
         robot.clickEnBoton("Cancelar")
     }
 

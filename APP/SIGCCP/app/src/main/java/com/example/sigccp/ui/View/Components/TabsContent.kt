@@ -32,7 +32,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -57,7 +56,6 @@ import androidx.compose.ui.unit.dp
 import com.example.sigccp.activity.clients.data.model.Client
 import com.example.sigccp.activity.pedido.Data.Modelo.ClienteClass
 import com.example.sigccp.activity.pedido.Data.Modelo.PedidoClass
-import com.example.sigccp.activity.pedido.Data.Modelo.Pedidos
 import com.example.sigccp.activity.producto.Data.Modelo.ProductoClass
 import com.example.sigccp.activity.producto.Data.Modelo.ProductosPedidoClass
 import com.example.sigccp.ui.theme.AmarilloApp
@@ -150,8 +148,8 @@ fun newButton(
 
 
 @Composable
-fun newMenuButton(
-    onClick: () -> Unit, nombre: String, imagen: Int, enabled: Boolean = true)
+fun MenuButton(
+    onClick: () -> Unit, nombre: String, imagen: Int)
 {
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered by interactionSource.collectIsHoveredAsState()
@@ -183,7 +181,6 @@ fun newMenuButton(
                 .background(currentColor)
         ) {
             Button(
-                enabled = enabled,
                 onClick = onClick,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Transparent // Hacer el botón transparente
