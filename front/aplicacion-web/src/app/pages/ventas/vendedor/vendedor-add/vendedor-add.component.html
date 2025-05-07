@@ -66,7 +66,7 @@
 
     @if(registroResponse | async){
     <div>
-      {{ (registroResponse | async) ? 'Registro exitoso' : registroResponse }}
+      {{ (registroResponse | async) ? 'Registro exitoso' : JSON.stringify(registroResponse)  }}
     </div>
     }
   </div>
