@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,7 +39,9 @@ import com.example.sigccp.ui.theme.MoradoApp
 @Composable
 fun ListarEntregas(viewModel: ListarEntregasViewModel = viewModel()) {
     val clientId = PreferencesManager.getString(PreferenceKeys.USER_ID)
-    viewModel.fetchEntregas(clientId)
+    LaunchedEffect(clientId) {
+        viewModel.fetchEntregas(clientId)
+    }
     val isLoading = viewModel.isLoading.collectAsState().value
     val entregas = viewModel.entregas.collectAsState().value
 
@@ -49,16 +52,16 @@ fun ListarEntregas(viewModel: ListarEntregasViewModel = viewModel()) {
         imagen = null,
         backDestination = AppScreen.Menu.route)
     {
-        if (isLoading) {
-            CircularProgressIndicator()
-        } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator()
+            } else {
                 ListaDeEntregas(entregas)
             }
         }
