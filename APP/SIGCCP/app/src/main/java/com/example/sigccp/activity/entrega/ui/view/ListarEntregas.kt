@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -38,6 +39,7 @@ import com.example.sigccp.ui.theme.MoradoApp
 fun ListarEntregas(viewModel: ListarEntregasViewModel = viewModel()) {
     val clientId = PreferencesManager.getString(PreferenceKeys.USER_ID)
     viewModel.fetchEntregas(clientId)
+    val isLoading = viewModel.isLoading.collectAsState().value
     val entregas = viewModel.entregas.collectAsState().value
 
     ScreenContainer(title = stringResource(id = R.string.delivery),
@@ -47,14 +49,18 @@ fun ListarEntregas(viewModel: ListarEntregasViewModel = viewModel()) {
         imagen = null,
         backDestination = AppScreen.Menu.route)
     {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            ListaDeEntregas(entregas)
+        if (isLoading) {
+            CircularProgressIndicator()
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                ListaDeEntregas(entregas)
+            }
         }
     }
 }
