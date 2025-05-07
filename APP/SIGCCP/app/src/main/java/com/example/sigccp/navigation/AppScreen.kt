@@ -13,4 +13,5 @@ sealed class AppScreen(val route:String)
     object Rutas:AppScreen("Rutas")
     object Recomendacion:AppScreen("Recomendacion")
     object RegistrarVisita:AppScreen("RegistrarVisita")
+    object Entregas:AppScreen("Entregas")
 }

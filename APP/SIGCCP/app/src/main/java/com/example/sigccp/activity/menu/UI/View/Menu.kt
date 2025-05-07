@@ -48,8 +48,8 @@ fun Options()
     ScreenContainer(title = saludo, true,false,false, null) {
         Box(
             modifier = Modifier
-                .fillMaxSize(), // Ocupa toda la pantalla para centrar el contenido
-            contentAlignment = Alignment.Center // Centra el contenido en la pantalla
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
         )
         {
             Column(
@@ -131,7 +131,7 @@ fun Options()
                         }
                         if(rolEsCliente) {
                             MenuButton(
-                                onClick = { NavigationController.navigate(AppScreen.RegistrarVisita.route) },
+                                onClick = { NavigationController.navigate(AppScreen.Entregas.route) },
                                 nombre = stringResource(id = R.string.delivery),
                                 imagen = R.drawable.editar
                             )
