@@ -62,7 +62,7 @@ fun ListarEntregas(viewModel: ListarEntregasViewModel = viewModel()) {
             if (isLoading) {
                 CircularProgressIndicator()
             } else {
-                ListaDeEntregas(entregas)
+                ListaDeEntregas(entregas.filter { it.state != "Entregado" })
             }
         }
     }

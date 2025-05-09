@@ -5,4 +5,5 @@ data class Entrega (
     val name: String,
     val deliveryDate: String,
     val price: Float,
+    val state: String
 )
