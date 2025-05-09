@@ -13,7 +13,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.mockito.kotlin.eq
 
-class ClienteTests {
+class ClientesTests {
     private lateinit var repository: ClienteRepository
     private lateinit var api: ApiService
 
