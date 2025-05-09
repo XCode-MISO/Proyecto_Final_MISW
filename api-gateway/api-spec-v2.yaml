@@ -739,4 +739,59 @@ paths:
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/ventas"
         path_translation: APPEND_PATH_TO_ADDRESS
-
+  
+  /api/plan:
+    post:
+      operationId: "crearPlan"
+      summary: Crear Plan nueva
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanInput'
+      responses:
+        200:
+          description: Visita nueva creada correctamente
+      x-google-backend:
+        address: "http://kubernetes-gateway.cppxcode.shop/ventas/api/plan"
+    options:
+      operationId: corsCrearPlan
+      x-google-backend:
+        address: http://kubernetes-gateway.cppxcode.shop/ventas
+      responses:
+        '200':
+          description: A successful response
+    get:
+      operationId: "listplan"
+      summary: "Listas plan que han sido generadas"
+      description: "Devuleve la lista de plan que se han generado"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Lista de plan generadas"
+      x-google-backend:
+        address: "http://kubernetes-gateway.cppxcode.shop/ventas/api/plan"
+        
+  /api/plan/{vendedor_id}:
+    get:
+      operationId: "getplan"
+      summary: "Obtener una plan que ha sido generada"
+      description: "Devuleve la vendedore que se han generado"
+      produces: 
+        - "application/json"
+      parameters:        
+      - in: path
+        name: vendedor_id
+        type: string
+        required: true
+        description: String ID de la vendedore
+      responses:
+        200:
+          description: "Lista de plan generadas"
+        404:
+          description: "No se encontró esa vendedore"
+      x-google-backend:
+        address: "http://kubernetes-gateway.cppxcode.shop/ventas"
+        path_translation: APPEND_PATH_TO_ADDRESS
