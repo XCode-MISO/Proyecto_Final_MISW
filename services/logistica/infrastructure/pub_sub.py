@@ -127,7 +127,7 @@ def consume_pedido_creado(context):
                         )
 
                         response = requests.get(
-                            f'http://localhost:8080/api/clients/{parsedPedido.clientId}')
+                            f'http://ventas.default.svc.cluster.local/api/vendedores/{parsedPedido.clientId}')
                         print(response)
                         responseJson = response.json()
                         cliente = Cliente(
@@ -141,7 +141,7 @@ def consume_pedido_creado(context):
                         )
 
                         response = requests.get(
-                            f'http://localhost:8080/api/vendedores/{parsedPedido.vendedorId}')
+                            f'http://ventas.default.svc.cluster.local/api/vendedores/{parsedPedido.vendedorId}')
                         print(response)
                         responseJson = response.json()
                         vendedor = Vendedor(
