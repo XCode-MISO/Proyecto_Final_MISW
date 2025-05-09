@@ -9,7 +9,7 @@ class TestPlans():
         Base.metadata.create_all(engine)
         self.session = Session()
 
-    def test_create_plan(self, mock_registrar_usuario):
+    def test_create_plan(self):
         with app.test_plan() as test_plan:
             response = test_plan.post(
                 '/api/plans', json={

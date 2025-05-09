@@ -14,20 +14,14 @@ class TestGetAllPlans():
 
         # Create sample plans
         self.plan_data_1 = {
-            "nombre": "Carlos Gomez",
-            "correo": "cgomez@gmail.com",
-            "direccion": "Avenida Siempre Viva 123",
-            "telefono": "111-222-333",
-            "latitud": 15.6789,
-            "longitud": 25.9876
+            "fecha": "2020-08-10T13:00:00.000Z",
+            "descripcion": "cgomez@gmail.com",
+            "vendedores": [{"id":"Calle Falsa 456"}]
         }
         self.plan_data_2 = {
-            "nombre": "Ana Torres",
-            "correo": "atorres@gmail.com",
-            "direccion": "Calle Falsa 456",
-            "telefono": "444-555-666",
-            "latitud": 12.3456,
-            "longitud": 34.5678
+            "fecha": "2020-08-10T12:00:00.000Z",
+            "descripcion": "atorres@gmail.com",
+            "vendedores": [{"id":"Calle Falsa 456"}]
         }
         with patch('src.commands.create_plan.registrarUsuarioEnFirebase', return_value="plane_1"):
             CreatePlan(self.plan_data_1).execute()
@@ -38,8 +32,8 @@ class TestGetAllPlans():
         plans = GetAllPlans().execute()
 
         assert len(plans) == 2
-        assert plans[0]['nombre'] == "Carlos Gomez"
-        assert plans[1]['nombre'] == "Ana Torres"
+        assert plans[0]['fecha'] == "2020-08-10T13:00:00.000Z"
+        assert plans[1]['fecha'] == "2020-08-10T12:00:00.000Z"
 
     def teardown_method(self):
         self.session.close()
