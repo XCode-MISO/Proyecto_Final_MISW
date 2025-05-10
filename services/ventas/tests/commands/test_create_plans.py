@@ -13,12 +13,9 @@ class TestCreatePlan():
 
     def test_create_plan(self):
         data = {
-            "nombre": "Maria Lopez",
-            "correo": "mlopez@gmail.com",
-            "direccion": "Calle 123",
-            "telefono": "123-456-789",
-            "latitud": 10.1234,
-            "longitud": 20.5678
+            "fecha": "2020-08-10T12:00:00.000Z",
+            "descripcion": "atorres@gmail.com",
+            "vendedores": [{"id":"Calle Falsa 456"}]
         }
         plan = CreatePlan(data).execute()
 
@@ -27,7 +24,7 @@ class TestCreatePlan():
 
         plans = self.session.query(Plan).all()
         assert len(plans) == 1
-        assert plans[0].nombre == "Maria Lopez"
+        assert plans[0].fecha == "2020-08-10T12:00:00.000Z"
 
     def teardown_method(self):
         self.session.close()
