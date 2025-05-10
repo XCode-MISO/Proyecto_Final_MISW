@@ -1,6 +1,8 @@
 package com.example.sigccp.ui.View.Components
 
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.widget.DatePicker
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -33,11 +36,13 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,6 +63,7 @@ import com.example.sigccp.activity.pedido.Data.Modelo.ClienteClass
 import com.example.sigccp.activity.pedido.Data.Modelo.PedidoClass
 import com.example.sigccp.activity.producto.Data.Modelo.ProductoClass
 import com.example.sigccp.activity.producto.Data.Modelo.ProductosPedidoClass
+import com.example.sigccp.activity.route.Data.Modelo.RouteSimple
 import com.example.sigccp.ui.theme.AmarilloApp
 import com.example.sigccp.ui.theme.AppTypography
 import com.example.sigccp.ui.theme.MoradoApp
@@ -67,6 +73,7 @@ import com.example.sigccp.utils.getSavedLanguage
 import com.example.sigccp.utils.restartActivity
 import com.example.sigccp.utils.saveLanguage
 import com.example.sigccp.utils.setAppLocale
+import java.util.Calendar
 
 @Composable
 fun newButton(
@@ -554,8 +561,48 @@ fun PedidoBox(
     }
 }
 
+@Composable
+fun ListaDeRutas(rutas: List<RouteSimple>) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(rutas) { ruta ->
+            RutaBox(ruta = ruta)
+        }
+    }
+}
+@Composable
+fun RutaBox(ruta: RouteSimple) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(AmarilloApp, shape = RoundedCornerShape(8.dp))
+            .border(2.dp, MoradoApp, shape = RoundedCornerShape(8.dp))
+            .padding(8.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = ruta.nombreRuta,
+                style = AppTypography.labelMedium,
+                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Start
+            )
 
-
+            Text(
+                text = ruta.fecha,
+                style = AppTypography.labelMedium,
+                textAlign = TextAlign.End
+            )
+        }
+    }
+}
 
 @Composable
 fun newAgregarButton(

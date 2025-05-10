@@ -19,4 +19,5 @@
     <string name="login">Login</string>
     <string name="listClients">CLIENTS</string>
     <string name="delivery">DELIVERY</string>
+    <string name="listRoutes">ROUTES</string>
 </resources>

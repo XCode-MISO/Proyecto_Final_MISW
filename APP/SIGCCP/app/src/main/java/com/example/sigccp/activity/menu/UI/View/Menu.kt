@@ -110,7 +110,7 @@ fun Options()
                         )
                         if(!rolEsCliente) {
                             MenuButton(
-                                onClick = {/*TODO*/ },
+                                onClick = {NavigationController.navigate(AppScreen.ListarRutas.route)},
                                 nombre = stringResource(id = R.string.rutas),
                                 imagen = R.drawable.ia
                             )

@@ -19,4 +19,5 @@
     <string name="login">Iniciar Sesion</string>
     <string name="listClients">CLIENTES</string>
     <string name="delivery">ENTREGAS</string>
+    <string name="listRoutes">RUTAS</string>
 </resources>
