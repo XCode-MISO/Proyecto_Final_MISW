@@ -34,11 +34,24 @@ services:
       PUBSUB_TOPIC_ID: "compras-topic"
       GOOGLE_APPLICATION_CREDENTIALS: "/app/credentials.json"
 
+  ventas:
+    build: 
+      context: ./ventas
+      dockerfile: Dockerfile
+    container_name: ventas_container
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: db
+      DATABASE_PORT: 5432
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_NAME: postgres # DB_NAME: ventas_db
+      GCP_PROJECT_ID: "misw-4301-native-cloud-433702"
+      PUBSUB_TOPIC_ID: "compras-topic"
+      GOOGLE_APPLICATION_CREDENTIALS: "/app/credentials.json"
     ports:
       - "5001:5001"
-    volumes:
-      - /Users/credentials.json:/app/credentials.json
-    command: ["/bin/sh", "-c", "until pg_isready -h db -p 5432; do echo waiting for db; sleep 2; done; python app.py"]
 
   ms_inventarios:
     build:

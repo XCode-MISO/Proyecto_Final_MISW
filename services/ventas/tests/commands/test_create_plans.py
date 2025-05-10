@@ -15,7 +15,7 @@ class TestCreatePlan():
         data = {
             "fecha": "2020-08-10T12:00:00.000Z",
             "descripcion": "atorres@gmail.com",
-            "vendedores": [{"id":"Calle Falsa 456"}]
+            "vendedores": [{"id":"9a04bf1b-fd15-4877-9c46-d6309e1b26fb"}]
         }
         plan = CreatePlan(data).execute()
 
