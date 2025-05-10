@@ -23,10 +23,8 @@ class TestGetAllPlans():
             "descripcion": "atorres@gmail.com",
             "vendedores": [{"id":"Calle Falsa 456"}]
         }
-        with patch('src.commands.create_plan.registrarUsuarioEnFirebase', return_value="plane_1"):
-            CreatePlan(self.plan_data_1).execute()
-        with patch('src.commands.create_plan.registrarUsuarioEnFirebase', return_value="plane_2"):
-            CreatePlan(self.plan_data_2).execute()
+        CreatePlan(self.plan_data_1).execute()
+        CreatePlan(self.plan_data_2).execute()
 
     def test_get_all_plans(self):
         plans = GetAllPlans().execute()
