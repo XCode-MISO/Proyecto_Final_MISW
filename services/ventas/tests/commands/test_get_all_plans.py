@@ -16,12 +16,12 @@ class TestGetAllPlans():
         self.plan_data_1 = {
             "fecha": "2020-08-10T13:00:00.000Z",
             "descripcion": "cgomez@gmail.com",
-            "vendedores": [{"id":"Calle Falsa 456"}]
+            "vendedores": [{"id":"9a04bf1b-fd15-4877-9c46-d6309e1b26fb"}]
         }
         self.plan_data_2 = {
             "fecha": "2020-08-10T12:00:00.000Z",
             "descripcion": "atorres@gmail.com",
-            "vendedores": [{"id":"Calle Falsa 456"}]
+            "vendedores": [{"id":"9a04bf1b-fd15-4877-9c46-d6309e1b26fb"}]
         }
         CreatePlan(self.plan_data_1).execute()
         CreatePlan(self.plan_data_2).execute()
