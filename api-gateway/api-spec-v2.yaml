@@ -7,6 +7,7 @@ schemes:
   - "https"
 security: []
 
+
 x-google-endpoints:
   - name: "microservicios-gateway-1qkjvfz9.uc.gateway.dev"
     allowCors: True
