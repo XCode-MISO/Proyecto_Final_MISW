@@ -746,10 +746,6 @@ paths:
       summary: Crear Plan nueva
       requestBody:
         required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PlanInput'
       responses:
         200:
           description: Visita nueva creada correctamente
