@@ -22,6 +22,7 @@ import com.example.sigccp.activity.pedido.UI.ViewModel.PedidoViewModel
 import com.example.sigccp.activity.recomendacion.ui.view.Recomendacion
 import com.example.sigccp.activity.recomendacion.ui.viewmodel.RecomendacionServiceViewModel
 import com.example.sigccp.activity.recomendacion.ui.viewmodel.RecomendacionViewModel
+import com.example.sigccp.activity.route.UI.view.ListarRutas
 
 
 class NavigationController {
@@ -64,6 +65,10 @@ fun NavigationScreen(recomendacionServiceViewModel: RecomendacionServiceViewMode
         composable(route = AppScreen.ListarClientes.route)
         {
             ListarClientes()
+        }
+        composable(route = AppScreen.ListarRutas.route)
+        {
+            ListarRutas()
         }
         composable(route = AppScreen.RegistrarVisita.route)
         {

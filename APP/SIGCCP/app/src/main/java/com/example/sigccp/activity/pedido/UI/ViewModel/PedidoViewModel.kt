@@ -18,6 +18,7 @@ import com.example.sigccp.activity.pedido.Data.Modelo.ProductoCantidad
 import com.example.sigccp.activity.producto.Data.Modelo.ProductoClass
 import com.example.sigccp.activity.producto.Data.Modelo.ProductosPedidoClass
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
@@ -25,7 +26,9 @@ class PedidoViewModel : ViewModel() {
     private val _clientes = mutableStateOf<List<ClienteClass>>(emptyList())
     val clientes: State<List<ClienteClass>> = _clientes
 
-    val nombrePedido = mutableStateOf("Pedido #${(1..9999).random()}")
+    val formatter = DateTimeFormatter.ofPattern("yyMMddHHmm")
+    val timestamp = LocalDateTime.now().format(formatter)
+    val nombrePedido = mutableStateOf("Pedido #$timestamp")
     val clienteId = mutableStateOf("")
     val clienteNombre = mutableStateOf("")
     val precioTotal = mutableStateOf(0f)
