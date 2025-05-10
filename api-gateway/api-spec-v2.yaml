@@ -744,8 +744,6 @@ paths:
     post:
       operationId: "crearPlan"
       summary: Crear Plan nueva
-      requestBody:
-        required: true
       responses:
         200:
           description: Visita nueva creada correctamente
