@@ -562,23 +562,24 @@ fun PedidoBox(
 }
 
 @Composable
-fun ListaDeRutas(rutas: List<RouteSimple>) {
+fun ListaDeRutas(rutas: List<RouteSimple>, onRutaClick: (String) -> Unit) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(rutas) { ruta ->
-            RutaBox(ruta = ruta)
+            RutaBox(ruta = ruta, onClick = { onRutaClick(ruta.routeId) })
         }
     }
 }
 @Composable
-fun RutaBox(ruta: RouteSimple) {
+fun RutaBox(ruta: RouteSimple, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(AmarilloApp, shape = RoundedCornerShape(8.dp))
             .border(2.dp, MoradoApp, shape = RoundedCornerShape(8.dp))
+            .clickable { onClick() } // ← Aquí se hace clickeable
             .padding(8.dp)
     ) {
         Row(
@@ -596,7 +597,7 @@ fun RutaBox(ruta: RouteSimple) {
             )
 
             Text(
-                text = ruta.fecha,
+                text = ruta.fecha.take(10),
                 style = AppTypography.labelMedium,
                 textAlign = TextAlign.End
             )

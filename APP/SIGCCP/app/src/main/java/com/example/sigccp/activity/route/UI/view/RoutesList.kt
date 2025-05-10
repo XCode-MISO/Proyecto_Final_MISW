@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,7 +21,6 @@ import com.example.sigccp.R
 import com.example.sigccp.activity.route.UI.viewmodel.RouteViewModel
 import com.example.sigccp.navigation.AppScreen
 import com.example.sigccp.navigation.NavigationController
-import com.example.sigccp.ui.View.Components.ListaDeClientes
 import com.example.sigccp.ui.View.Components.ScreenContainer
 import android.app.DatePickerDialog
 import android.widget.DatePicker
@@ -29,15 +28,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-import com.example.sigccp.activity.clients.ui.view.Clients
 import com.example.sigccp.activity.route.Data.Modelo.RouteSimple
 import com.example.sigccp.ui.View.Components.ListaDeRutas
 import com.example.sigccp.ui.theme.AppTypography
@@ -51,14 +45,16 @@ fun ListarRutas()
 }
 
 @Composable
-//fun RoutesList(viewModel: RouteViewModel = viewModel()) {
-fun RoutesList() {
+fun RoutesList(viewModel: RouteViewModel = viewModel()) {
     val navController = NavigationController.navController
     BackHandler {
         navController.navigate(AppScreen.Menu.route){
             popUpTo(0)
         }
     }
+
+    val routes=viewModel.routes.collectAsState().value
+
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
     val year = calendar.get(Calendar.YEAR)
@@ -152,8 +148,22 @@ fun RoutesList() {
                                 )
                             }
                         }
+                        val formattedSelectedDate = remember(selectedDate) {
+                        if (selectedDate.isNotEmpty()) {
+                            val parts = selectedDate.split("/")
+                            "${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}"
+                        } else ""
+                    }
 
-                        ListaDeRutas(rutasSimples)
+                        val filteredRoutes = if (formattedSelectedDate.isNotEmpty()) {
+                            routes.filter { it.fecha.startsWith(formattedSelectedDate) }
+                        } else {
+                            routes
+                        }
+                        ListaDeRutas(filteredRoutes) { selectedRouteId ->
+                            navController.navigate("detalleRuta/$selectedRouteId")
+                        }
+
                     }
                 }
             }
