@@ -16,7 +16,7 @@ class TestPlans():
                     "fecha": "2020-08-10T12:00:00.000Z",
                     "descripcion": "Plan de prueba",
                     "vendedores": [{
-                        id: "1234",
+                        id: "9a04bf1b-fd15-4877-9c46-d6309e1b26fb",
                     }]
                 }
             )
