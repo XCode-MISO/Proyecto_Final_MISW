@@ -70,7 +70,7 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'plan',
+    path: 'plan/add',
     component: AddPlanComponent,
     canActivate: [AuthGuard],
     data: { roles: ['admin', 'directorventas'] }
