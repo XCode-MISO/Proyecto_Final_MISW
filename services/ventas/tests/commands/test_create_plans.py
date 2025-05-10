@@ -11,7 +11,7 @@ class TestCreatePlan():
         Base.metadata.create_all(engine)
         self.session = Session()
 
-    def test_create_plan(self, mock_registrar_usuario):
+    def test_create_plan(self):
         data = {
             "nombre": "Maria Lopez",
             "correo": "mlopez@gmail.com",
