@@ -20,6 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideHttpClient(
       withFetch(),
+      withInterceptors([AuthInterceptor])
     ),
     provideNativeDateAdapter(),
     provideFirebaseApp(() => initializeApp(keys)),
