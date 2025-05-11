@@ -2,6 +2,8 @@ name: ZAP API Scan
 
 on:
   pull_request:
+    branches:
+      - main
     paths:
       - 'api-gateway/**'
 
