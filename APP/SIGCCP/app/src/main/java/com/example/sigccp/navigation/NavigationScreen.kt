@@ -1,7 +1,6 @@
 package com.example.sigccp.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -10,10 +9,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.sigccp.PreferenceKeys
 import com.example.sigccp.PreferencesManager
 import com.example.sigccp.activity.clients.ui.view.CrearCliente
+import com.example.sigccp.activity.clients.ui.view.ListarClientes
 import com.example.sigccp.activity.pedido.UI.View.ListarPedidos
 import com.example.sigccp.activity.menu.UI.View.Menu
 import com.example.sigccp.activity.clients.ui.view.RegistrarVisita
 import com.example.sigccp.activity.clients.ui.viewmodel.ClienteViewModel
+import com.example.sigccp.activity.entrega.ui.view.ListarEntregas
+import com.example.sigccp.activity.entrega.ui.viewmodel.ListarEntregasViewModel
 import com.example.sigccp.activity.pedido.UI.View.AgregarProductos
 import com.example.sigccp.activity.pedido.UI.View.CrearPedido
 import com.example.sigccp.activity.pedido.UI.ViewModel.PedidoViewModel
@@ -40,9 +42,7 @@ fun NavigationScreen(recomendacionServiceViewModel: RecomendacionServiceViewMode
     val viewModel: PedidoViewModel = viewModel()
     val clientViewModel: ClienteViewModel = viewModel()
     val recomendacionViewModel: RecomendacionViewModel = viewModel()
-
-    //clientViewModel = ViewModelProvider(this).get(ClienteViewModel::class.java)
-
+    val entregasViewModel: ListarEntregasViewModel = viewModel()
 
     NavigationController.navController = rememberNavController()
 
@@ -60,6 +60,10 @@ fun NavigationScreen(recomendacionServiceViewModel: RecomendacionServiceViewMode
         composable(route = AppScreen.ListarPedidos.route)
         {
             ListarPedidos()
+        }
+        composable(route = AppScreen.ListarClientes.route)
+        {
+            ListarClientes()
         }
         composable(route = AppScreen.RegistrarVisita.route)
         {
@@ -80,6 +84,10 @@ fun NavigationScreen(recomendacionServiceViewModel: RecomendacionServiceViewMode
         composable(route = AppScreen.Recomendacion.route)
         {
             Recomendacion(recomendacionViewModel, recomendacionServiceViewModel)
+        }
+        composable(route = AppScreen.Entregas.route)
+        {
+            ListarEntregas(entregasViewModel)
         }
     }
 }

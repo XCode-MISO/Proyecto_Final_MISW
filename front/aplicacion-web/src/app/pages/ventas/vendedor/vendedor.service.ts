@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Cliente } from '../../routes/routes.component';
+import { Cliente, Vendedor } from '../../routes/routes.component';
 
 export type RegistrarVendedorResponse = {
   id: string
@@ -35,7 +35,7 @@ export class VendedorService {
   }
 
   getVendedores() {
-    return this.http.get<Cliente[]>(`${this.apiUrl}/vendedores`)
+    return this.http.get<Vendedor[]>(`${this.apiUrl}/vendedores`)
   }
 
   getClientes() {

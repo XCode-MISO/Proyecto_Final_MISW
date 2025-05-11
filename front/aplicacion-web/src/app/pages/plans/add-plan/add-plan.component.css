@@ -1,0 +1,112 @@
+.plan-add-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.plan-add-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70%;
+  padding: 13px;
+  width: 50%;
+  gap: 1rem;
+}
+
+.plan-add-title {
+  font: var(--mat-sys-headline-large);
+  color: #351330;
+}
+
+.agregar-buttons-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.plan-add-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.form-field  {
+  width: 100%;
+  .mat-hint {
+    display: none;
+  }
+}
+
+.form-row-text  {
+  font: var(--mat-sys-body-large);
+  color: #351330;
+  font-weight: 700;
+  width: 7rem;
+}
+.form-row  {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}
+
+.form-column  {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}
+.form-column-root  {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
+}
+
+.crear-ruta-button {
+  background-color: #45847B;
+}
+
+.cancelar-crear-ruta-button {
+  background-color: #AF0F26;
+}
+
+.plan-imagen-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.plan-imagen {
+  max-height: 200px;
+}
+
+.form-field  {
+  width: 100%;
+  .mat-hint {
+    display: none;
+  }
+}
+
+
+.form-row-big  {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 10rem;
+  gap: 1rem;
+}

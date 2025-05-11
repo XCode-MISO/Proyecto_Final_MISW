@@ -1,6 +1,8 @@
 from marshmallow import Schema, fields
 from sqlalchemy import Column, String, Float
+from sqlalchemy.orm import relationship
 from .model import Model, Base
+from .plan import plan_seller_association
 
 class Seller(Model, Base):
     __tablename__ = 'sellers'
@@ -11,6 +13,12 @@ class Seller(Model, Base):
     latitud = Column(Float)
     longitud = Column(Float)
     imagen= Column(String)
+
+    plans = relationship(
+        "Plan",
+        secondary=plan_seller_association,
+        back_populates="vendedores"
+    )
 
 
     def __init__(self, nombre, correo, direccion, telefono, latitud, longitud, imagen):

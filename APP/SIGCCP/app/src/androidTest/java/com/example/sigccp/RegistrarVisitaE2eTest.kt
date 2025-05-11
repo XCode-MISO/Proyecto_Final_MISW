@@ -7,37 +7,22 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class LoginE2eTests {
+class RegistrarVisitaE2eTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
     private val robot = MainActivityRobot(composeTestRule)
 
     @Test
-    fun testScreenCrearClienteSeMuestra() {
-        robot.clickOnCrearCliente()
-        robot.verificarScreenConTituloSeMuestra("Create Client")
-        robot.clickEnBoton("Cancelar")
-    }
-
-    @Test
-    fun loginClienteCorrectoTest() {
-        robot.escribirEnCampo("Correo", "cliente@gmail.com")
-        robot.escribirEnCampo("Contraseña", "12345678")
-        robot.clickEnBoton("Ingresar")
-        robot.esperarProcesamiento(3000)
-        robot.verificarScreenConTituloSeMuestra("¡Hello, Client!")
-        robot.clickEnBoton("logout")
-        robot.esperarProcesamiento(500)
-    }
-
-    @Test
-    fun loginVendedorCorrectoTest() {
+    fun registrarVisitaSeMuestraTest() {
         robot.escribirEnCampo("Correo", "vendedor@gmail.com")
         robot.escribirEnCampo("Contraseña", "12345678")
         robot.clickEnBoton("Ingresar")
         robot.esperarProcesamiento(3000)
         robot.verificarScreenConTituloSeMuestra("¡Hello, Seller!")
+        robot.clickEnBoton("REGISTER VISIT")
+        robot.verificarScreenConTituloSeMuestra("Visit Register")
         robot.clickEnBoton("logout")
         robot.esperarProcesamiento(500)
     }
 }
+

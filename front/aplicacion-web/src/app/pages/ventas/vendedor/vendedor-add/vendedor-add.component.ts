@@ -11,6 +11,7 @@ import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Auth, sendPasswordResetEmail } from '@angular/fire/auth';
+import { MapGeocoder } from '@angular/google-maps';
 
 @Component({
   selector: 'app-vendedor-add',
@@ -30,15 +31,18 @@ import { Auth, sendPasswordResetEmail } from '@angular/fire/auth';
   styleUrl: './vendedor-add.component.css'
 })
 export class VendedorAddComponent {
+  JSON: any;
+  geocoder: MapGeocoder
 
-  constructor(private location: Location) {
-
+  constructor(private location: Location, geocoder: MapGeocoder) {
+    JSON = JSON
+    this.geocoder = geocoder
   }
 
   crearVendedorForm = new FormGroup({
     nombre: new FormControl('', [Validators.required, Validators.minLength(4)]),
     correo: new FormControl('', [Validators.required, Validators.email]),
-    telefono: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
+    telefono: new FormControl('', [Validators.required, Validators.minLength(7), Validators.maxLength(10)]),
     direccion: new FormControl('', [Validators.required, Validators.minLength(4)]),
   });
 
@@ -63,31 +67,40 @@ export class VendedorAddComponent {
 
   private auth = inject(Auth)
 
-  onSubmit() {
+  async onSubmit() {
 
     const formVal = this.crearVendedorForm.value
     const nombre = formVal.nombre
     const correo = formVal.correo
     const telefono = formVal.telefono
     const direccion = formVal.direccion
-    if (!correo || !telefono || !direccion || !nombre) {
+    if (!correo || !telefono || !direccion || !nombre || !this.crearVendedorForm.valid) {
       return
     }
-    this.crearVendedor({
-      correo,
-      telefono,
-      direccion,
-      nombre,
-      imagen: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Default_Profile_Picture.png",
-      latitud: "45",
-      longitud: "45"
+
+    const mapsResponse = this.geocoder.geocode({ address: direccion })
+    mapsResponse.subscribe(r => {
+      const { lat, lng } = r.results?.[0].geometry.location
+      this.crearVendedor({
+        correo,
+        telefono,
+        direccion,
+        nombre,
+        imagen: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Default_Profile_Picture.png",
+        latitud: "" + lat(),
+        longitud: "" + lng()
+      })
     })
+
   }
+
   crearVendedor(params: RegistrarVendedorProps) {
+    console.log("creando vendedor", params)
     this.registroResponse = this.vendedorAddService.registrarVendedor(params)
     this.registroResponse.subscribe(async (result) => {
       if (result.id) {
         await sendPasswordResetEmail(this.auth, params.correo);
+        console.log("vendedor creado:", result)
         this.router.navigate(["/ventas"])
       }
     })
