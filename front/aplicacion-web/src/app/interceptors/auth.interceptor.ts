@@ -21,9 +21,7 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
       if (token) {
         req = req.clone({
           setHeaders: {
-            Authorization: `Bearer ${token}`,
-            // Añadir cabecera para peticiones CORS
-            'Access-Control-Allow-Origin': '*'
+            Authorization: `Bearer ${token}`
           }
         });
       }
