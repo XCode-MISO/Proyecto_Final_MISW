@@ -18,8 +18,6 @@ securityDefinitions:
     x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
     x-google-audiences: "misw-4301-native-cloud-433702"    
 
-security:
-  - firebase: []
 
 paths:
   /api/productos:
@@ -65,6 +63,8 @@ paths:
             - estante
             - pasillo
               
+      security:
+        - firebase: []
       responses:
         201:
           description: "Producto creado"
@@ -109,6 +109,9 @@ paths:
                   type: "string"
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/compras/api/productos/upload"
+    
+      security:
+        - firebase: []
     options:
       operationId: "corsUploadProductos"
       x-google-backend:
@@ -129,6 +132,8 @@ paths:
           description: "Lista de fabricantes"
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/compras/api/fabricantes"
+      security:
+        - firebase: []
     post:
       operationId: "createFabricante"
       summary: "Crear fabricante"
@@ -165,6 +170,8 @@ paths:
       responses:
         '200':
           description: A successful response
+      security:
+        - firebase: []
 
   /api/fabricantes/upload:
     post:
@@ -182,6 +189,8 @@ paths:
           required: true
           type: "string"
           format: "binary"
+      security:
+        - firebase: []
       responses:
         200:
           description: "Carga masiva procesada"
@@ -231,6 +240,8 @@ paths:
                   type: "integer"
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios/pedidos"
+      security:
+        - firebase: []
     options:
       operationId: "corsListInventarioProductos"
       x-google-backend:
@@ -264,6 +275,8 @@ paths:
                   type: "integer"
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios/ubicacion"
+      security:
+        - firebase: []
     options:
       operationId: "corsListInventarioUbicacion"
       x-google-backend:
@@ -314,6 +327,8 @@ paths:
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios{producto_id}"
         path_translation: APPEND_PATH_TO_ADDRESS
+      security:
+        - firebase: []
     options:
       operationId: corsoptionsGetInventario
       parameters:
@@ -341,6 +356,8 @@ paths:
           description: "Lista de rutas generadas"
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/logistica/api/route"
+      security:
+        - firebase: []
     options:
       operationId: corsOptionsListRutas
       x-google-backend:
@@ -370,6 +387,8 @@ paths:
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/logistica"
         path_translation: APPEND_PATH_TO_ADDRESS
+      security:
+        - firebase: []
     options:
       operationId: corsOptionsListRuta
       x-google-backend:
@@ -450,6 +469,9 @@ paths:
           description: Server error
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/logistica/api/add-stop-route"
+    
+      security:
+        - firebase: []
     options:
       operationId: corsAddStop
       x-google-backend:
@@ -518,6 +540,8 @@ paths:
           description: "No se encontró esa ruta"
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/logistica/api/generate-route"
+      security:
+        - firebase: []
     options:
       operationId: corsGenerateRoute
       x-google-backend:
@@ -536,6 +560,8 @@ paths:
           description: Lista de pedidos
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/pedidos/pedidos"
+      security:
+        - firebase: []
     options:
       operationId: corsOptionsGetPedidos
       x-google-backend:
@@ -549,6 +575,8 @@ paths:
       operationId: "getPedido"
       summary: Obtener pedido por ID
       description: "Devuelve el pedido con el ID especificado"      
+      security:
+        - firebase: []
       parameters:
         - in: path
           name: pedido_id
@@ -578,6 +606,8 @@ paths:
 
   /api/pedidos/create_pedido:
     post:
+      security:
+        - firebase: []
       operationId: "crearPedido"
       summary: Crear un nuevo pedido
       responses:
@@ -595,6 +625,8 @@ paths:
 
   /api/clients:
     post:
+      security:
+        - firebase: []
       operationId: "crearCliente"
       summary: Crear Visita nueva
       responses:
@@ -610,6 +642,8 @@ paths:
         '200':
           description: A successful response
     get:
+      security:
+        - firebase: []
       operationId: "listclientes"
       summary: "Listas clientes que han sido generadas"
       description: "Devuleve la lista de clientes que se han generado"
@@ -623,6 +657,8 @@ paths:
 
   /api/clients/{client_id}:
     get:
+      security:
+        - firebase: []
       operationId: "getCliente"
       summary: "Obtener una Clientes que ha sido generada"
       description: "Devuleve la Cliente que se han generado"
@@ -658,6 +694,8 @@ paths:
 
   /api/visits:
     post:
+      security:
+        - firebase: []
       operationId: "crearVisita"
       summary: Crear Visita nueva
       responses:
@@ -673,6 +711,8 @@ paths:
         '200':
           description: A successful response
     get:
+      security:
+        - firebase: []
       operationId: "listvisitas"
       summary: "Listas visitas que han sido generadas"
       description: "Devuleve la lista de visitas que se han generado"
@@ -686,6 +726,8 @@ paths:
   
   /api/upload:
     post:
+      security:
+        - firebase: []
       operationId: "uploadVideoCommand"
       summary: "Subir video para procesamiento"
       description: >
@@ -726,6 +768,8 @@ paths:
     
   /api/recommend:
     get:
+      security:
+        - firebase: []
       operationId: "getRecommendation"
       summary: "Obtener recomendación por job_id"
       description: >
@@ -770,6 +814,8 @@ paths:
     
   /api/vendedores:
     post:
+      security:
+        - firebase: []
       operationId: "crearVendedor"
       summary: Crear Vendedor nueva
       responses:
@@ -785,6 +831,8 @@ paths:
         '200':
           description: A successful response
     get:
+      security:
+        - firebase: []
       operationId: "listvendedores"
       summary: "Listas vendedores que han sido generadas"
       description: "Devuleve la lista de vendedores que se han generado"
@@ -798,6 +846,8 @@ paths:
         
   /api/vendedores/{vendedor_id}:
     get:
+      security:
+        - firebase: []
       operationId: "getvendedore"
       summary: "Obtener una vendedores que ha sido generada"
       description: "Devuleve la vendedore que se han generado"
@@ -838,6 +888,8 @@ paths:
   
   /api/plan:
     post:
+      security:
+        - firebase: []
       operationId: "crearPlan"
       summary: Crear Plan nueva
       responses:
@@ -853,6 +905,8 @@ paths:
         '200':
           description: A successful response
     get:
+      security:
+        - firebase: []
       operationId: "listplan"
       summary: "Listas plan que han sido generadas"
       description: "Devuleve la lista de plan que se han generado"
@@ -866,6 +920,8 @@ paths:
         
   /api/plan/{plan_id}:
     get:
+      security:
+        - firebase: []
       operationId: "getplan"
       summary: "Obtener una plan que ha sido generada"
       description: "Devuleve la vendedore que se han generado"
