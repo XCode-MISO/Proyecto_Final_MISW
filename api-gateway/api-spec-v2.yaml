@@ -5,7 +5,17 @@ info:
 host: "microservicios-gateway-1qkjvfz9.uc.gateway.dev"
 schemes:
   - "https"
-security: []
+securityDefinitions:
+  firebase:
+    type: "oauth2"
+    flow: "implicit"
+    authorizationUrl: ""                    
+    x-google-issuer: "https://securetoken.google.com/misw-4301-native-cloud-433702"
+    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+    x-google-audiences: "misw-4301-native-cloud-433702"    
+
+security:
+  - firebase: []
 
 x-google-endpoints:
   - name: "microservicios-gateway-1qkjvfz9.uc.gateway.dev"
@@ -301,7 +311,7 @@ paths:
         404:
           description: "Producto no encontrado"
       x-google-backend:
-        address: "http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios"
+        address: "http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios{producto_id}"
         path_translation: APPEND_PATH_TO_ADDRESS  
   
   /api/route:

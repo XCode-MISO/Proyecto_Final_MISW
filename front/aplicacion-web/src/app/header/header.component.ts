@@ -9,10 +9,11 @@ import { AuthService } from '../services/auth.service';
 import { Subject } from 'rxjs';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, takeUntil } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-header',
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule, NavbarComponent, MatMenuModule],
+  imports: [MatToolbarModule, MatButtonModule, MatIconModule, NavbarComponent, MatMenuModule, CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
   standalone: true
@@ -25,7 +26,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(LOCALE_ID) public locale: string,
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router
   ) { 
     this.selectedLocale = locale;
