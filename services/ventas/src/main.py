@@ -13,6 +13,7 @@ if env_path.is_file():
 from .errors.errors import ApiError
 from .blueprints.clients import client_blueprint
 from .blueprints.visits import visit_blueprint
+from .blueprints.plan import plan_blueprint
 from .blueprints.sellers import seller_blueprint
 from .models.model import Base
 from .session import engine
@@ -22,6 +23,7 @@ app = Flask(__name__)
 app.register_blueprint(client_blueprint)
 app.register_blueprint(seller_blueprint)
 app.register_blueprint(visit_blueprint)
+app.register_blueprint(plan_blueprint)
 CORS(app)
 init_firebase()
 
