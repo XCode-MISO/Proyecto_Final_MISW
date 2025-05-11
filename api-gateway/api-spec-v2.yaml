@@ -864,7 +864,7 @@ paths:
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/ventas/api/plan"
         
-  /api/plan/{vendedor_id}:
+  /api/plan/{plan_id}:
     get:
       operationId: "getplan"
       summary: "Obtener una plan que ha sido generada"
@@ -873,7 +873,7 @@ paths:
         - "application/json"
       parameters:        
       - in: path
-        name: vendedor_id
+        name: plan_id
         type: string
         required: true
         description: String ID de la vendedore
@@ -887,6 +887,12 @@ paths:
         path_translation: APPEND_PATH_TO_ADDRESS
     options:
       operationId: corsOptionsGetPlan
+      parameters:        
+      - in: path
+        name: plan_id
+        type: string
+        required: true
+        description: String ID de la vendedore
       x-google-backend:
         address: http://kubernetes-gateway.cppxcode.shop/ventas
       responses:
