@@ -3,6 +3,10 @@ info:
   title: "API de Microservicios"
   version: "1.1.0"
 host: "microservicios-gateway-1qkjvfz9.uc.gateway.dev"
+x-google-endpoints:
+  - name: "microservicios-gateway-1qkjvfz9.uc.gateway.dev"
+    allowCors: True
+    
 schemes:
   - "https"
 securityDefinitions:
@@ -17,9 +21,6 @@ securityDefinitions:
 security:
   - firebase: []
 
-x-google-endpoints:
-  - name: "microservicios-gateway-1qkjvfz9.uc.gateway.dev"
-    allowCors: True
 paths:
   /api/productos:
     post:
