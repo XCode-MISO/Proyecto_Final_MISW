@@ -143,20 +143,3 @@ fdescribe('VendedorListComponent', () => {
     expect(compiled.textContent).toContain('Juan Carlos Rodríguez');
   });
 });
-
-curl --location 'https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api/create_pedido' \
---header 'Content-Type: application/json' \
---data '{
-  "name": "Pedido especial",
-  "clientId": "696ea246-c7d8-472b-9088-4b595fbc3a4e",
-  "clientName": "armando casas",
-  "vendedorId": "696ea246-c7d8-472b-9088-4b595fbc3a4e",
-  "vendedorName": "armando casas",
-  "products": [
-    { "id": "3", "amount": 1 },
-    { "id": "1", "amount": 5 }
-],
-  "price": 150.75,
-  "state": "Pendiente",
-  "deliveryDate": "2025-05-07"
-}'
