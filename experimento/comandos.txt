@@ -174,7 +174,7 @@ gcloud api-gateway apis create microservicios-api \
   --project=misw-4301-native-cloud-433702
 
 
-  gcloud api-gateway api-configs create microservicios-config-vvv4 \
+  gcloud api-gateway api-configs create microservicios-config-vvv5 \
   --api=microservicios-api \
   --openapi-spec=api-spec-v2.yaml \
   --project=misw-4301-native-cloud-433702 \
@@ -190,7 +190,7 @@ gcloud api-gateway apis create microservicios-api \
 
  gcloud api-gateway gateways update microservicios-gateway \
   --api=microservicios-api \
-  --api-config=microservicios-config-vvv4  \
+  --api-config=microservicios-config-vvv5  \
   --location=us-central1 \
 
 
