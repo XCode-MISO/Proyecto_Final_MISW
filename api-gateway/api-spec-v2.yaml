@@ -316,6 +316,12 @@ paths:
         path_translation: APPEND_PATH_TO_ADDRESS
     options:
       operationId: corsoptionsGetInventario
+      parameters:
+        - in: "path"
+          name: "producto_id"
+          type: "integer"
+          required: true
+          description: "ID del producto"
       x-google-backend:
         address: http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios
       responses:
@@ -368,6 +374,12 @@ paths:
       operationId: corsOptionsListRuta
       x-google-backend:
         address: http://kubernetes-gateway.cppxcode.shop/logistica/api/route
+      parameters:        
+      - in: path
+        name: route_id
+        type: string
+        required: true
+        description: String ID de la ruta
       responses:
         '200':
           description: A successful response
@@ -552,6 +564,12 @@ paths:
         address: "http://kubernetes-gateway.cppxcode.shop/pedidos/pedidos"
     options:
       operationId: corsOptionsGetPedido
+      parameters:
+        - in: path
+          name: pedido_id
+          type: string
+          required: true
+          description: ID 
       x-google-backend:
         address: http://kubernetes-gateway.cppxcode.shop/pedidos/pedidos
       responses:
@@ -626,6 +644,12 @@ paths:
         path_translation: APPEND_PATH_TO_ADDRESS
     options:
       operationId: corsOptionsGetCliente
+      parameters:        
+      - in: path
+        name: client_id
+        type: string
+        required: true
+        description: String ID de la Cliente
       x-google-backend:
         address: http://kubernetes-gateway.cppxcode.shop/ventas
       responses:
@@ -795,6 +819,17 @@ paths:
         path_translation: APPEND_PATH_TO_ADDRESS
     options:
       operationId: corsOptionsGetVendedor
+      parameters:        
+      - in: path
+        name: vendedor_id
+        type: string
+        required: true
+        description: String ID de la vendedore
+      responses:
+        200:
+          description: "Lista de vendedores generadas"
+        404:
+          description: "No se encontró esa vendedore"
       x-google-backend:
         address: http://kubernetes-gateway.cppxcode.shop/ventas
       responses:
