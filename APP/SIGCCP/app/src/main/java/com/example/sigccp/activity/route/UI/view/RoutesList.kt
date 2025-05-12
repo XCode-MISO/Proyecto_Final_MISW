@@ -161,8 +161,9 @@ fun RoutesList(viewModel: RouteViewModel = viewModel()) {
                             routes
                         }
                         ListaDeRutas(filteredRoutes) { selectedRouteId ->
-                            navController.navigate("detalleRuta/$selectedRouteId")
+                            navController.navigate(AppScreen.DetalleRuta.idRoute(selectedRouteId))
                         }
+
 
                     }
                 }

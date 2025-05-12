@@ -1,5 +1,6 @@
 package com.example.sigccp.ui.View.Components
 
+import android.R
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.widget.DatePicker
@@ -63,6 +64,9 @@ import com.example.sigccp.activity.pedido.Data.Modelo.ClienteClass
 import com.example.sigccp.activity.pedido.Data.Modelo.PedidoClass
 import com.example.sigccp.activity.producto.Data.Modelo.ProductoClass
 import com.example.sigccp.activity.producto.Data.Modelo.ProductosPedidoClass
+import com.example.sigccp.activity.route.Data.Modelo.MapsResponse
+import com.example.sigccp.activity.route.Data.Modelo.Parada
+import com.example.sigccp.activity.route.Data.Modelo.Route
 import com.example.sigccp.activity.route.Data.Modelo.RouteSimple
 import com.example.sigccp.ui.theme.AmarilloApp
 import com.example.sigccp.ui.theme.AppTypography
@@ -73,6 +77,12 @@ import com.example.sigccp.utils.getSavedLanguage
 import com.example.sigccp.utils.restartActivity
 import com.example.sigccp.utils.saveLanguage
 import com.example.sigccp.utils.setAppLocale
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Polyline
+import com.google.maps.android.PolyUtil
 import java.util.Calendar
 
 @Composable
@@ -604,6 +614,125 @@ fun RutaBox(ruta: RouteSimple, onClick: () -> Unit) {
         }
     }
 }
+
+@Composable
+fun ListaDeParadas(paradas: List<Parada>) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(paradas) { parada ->
+            ParadaBox(parada = parada)
+        }
+    }
+}
+
+@Composable
+fun ParadaBox(parada: Parada) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(AmarilloApp, shape = RoundedCornerShape(8.dp))
+            .border(2.dp, MoradoApp, shape = RoundedCornerShape(8.dp))
+            .padding(8.dp)
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = parada.nombre,
+                    style = AppTypography.labelMedium,
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Start
+                )
+                Text(
+                    text = parada.duration?.text ?: "10 min",
+                    style = AppTypography.labelMedium,
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = parada.cliente.nombre,
+                    style = AppTypography.labelMedium,
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.End
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun MapaRuta(routes: List<Route>) {
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(LatLng(4.6097, -74.0817), 14f)
+    }
+
+    GoogleMap(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(250.dp),
+        cameraPositionState = cameraPositionState
+    ) {
+        // Recolectar y decodificar todos los puntos de todas las rutas
+        val allPoints = routes.flatMap { route ->
+            route.legs.flatMap { leg ->
+                leg.steps.flatMap { step ->
+                    PolyUtil.decode(step.polyline.points)
+                }
+            }
+        }
+
+        Polyline(points = allPoints)
+    }
+}
+
+
+@Composable
+fun CampoFecha(
+    fecha: String
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = "Fecha",
+            style = AppTypography.labelMedium,
+            color = MoradoApp,
+            modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(2.dp, MoradoApp, RoundedCornerShape(12.dp))
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = if (fecha.isEmpty()) "Sin fecha" else fecha,
+                    style = AppTypography.labelLarge,
+                    color = MoradoApp
+                )
+
+                Icon(
+                    painter = painterResource(id = com.example.sigccp.R.drawable.date),
+                    contentDescription = "Ícono de calendario",
+                    tint = MoradoApp,
+                    modifier = Modifier.size(30.dp)
+                )
+            }
+        }
+    }
+}
+
 
 @Composable
 fun newAgregarButton(

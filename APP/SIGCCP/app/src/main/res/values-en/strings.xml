@@ -20,4 +20,5 @@
     <string name="listClients">CLIENTS</string>
     <string name="delivery">DELIVERY</string>
     <string name="listRoutes">ROUTES</string>
+    <string name="Route">ROUTE</string>
 </resources>

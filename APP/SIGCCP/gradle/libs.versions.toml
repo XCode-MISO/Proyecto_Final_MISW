@@ -20,6 +20,7 @@ gson = "2.9.0"
 room = "2.5.2"
 compose-material-icons = "1.5.0"
 mapsCompose = "2.11.4"
+mapsUtils = "3.8.0"
 playServicesMaps = "19.1.0"
 
 [libraries]
@@ -53,6 +54,8 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-compose-material-icons = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose-material-icons" }
 maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
+maps-utils = { module = "com.google.maps.android:android-maps-utils", version.ref = "mapsUtils" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
