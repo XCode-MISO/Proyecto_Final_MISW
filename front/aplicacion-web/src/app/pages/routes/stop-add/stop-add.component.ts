@@ -11,6 +11,7 @@ import { Parada, RouteListService } from '../route-list/route-list.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VendedorService } from '../../ventas/vendedor/vendedor.service';
 import { AsyncPipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 export type UpdateRoute = Route
 
@@ -30,7 +31,8 @@ export type AddStopToRoute = {
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    AsyncPipe
+    AsyncPipe,
+    TranslateModule
   ],
   templateUrl: './stop-add.component.html',
   styleUrl: './stop-add.component.css',

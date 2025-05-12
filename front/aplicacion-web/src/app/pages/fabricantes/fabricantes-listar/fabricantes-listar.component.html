@@ -1,5 +1,5 @@
 <div class="contenedor">
-  <h2 class="titulo">Listado de Fabricantes</h2>
+  <h2 class="titulo">{{ 'FABRICANTES.FABRICANTES_LIST' | translate }}</h2>
 
   @if (fabricantes.length > 0) {
     @for (fabricante of fabricantes; track fabricante.id) {
@@ -15,6 +15,6 @@
       </div>
     }
   } @else {
-    <p class="mensaje-vacio">No hay fabricantes registrados.</p>
+    <p class="mensaje-vacio">{{ 'FABRICANTES.NOT_FOUND' | translate }}</p>
   }
 </div>

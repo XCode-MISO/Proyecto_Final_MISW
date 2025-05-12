@@ -9,6 +9,7 @@ import { ProductosService, FabricanteDto, ProductoDto } from './productos.servic
 import { HttpClientModule } from '@angular/common/http';
 import { tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-productos-cargar',
@@ -22,7 +23,8 @@ import { Router } from '@angular/router';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
+    TranslateModule
   ]
 })
 export class ProductosCargarComponent implements OnInit {

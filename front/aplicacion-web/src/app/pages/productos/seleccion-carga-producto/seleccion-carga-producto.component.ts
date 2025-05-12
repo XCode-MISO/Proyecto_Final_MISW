@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-seleccion-carga',
   templateUrl: './seleccion-carga-producto.component.html',
-  styleUrls: ['./seleccion-carga-producto.component.css']
+  styleUrls: ['./seleccion-carga-producto.component.css'],
+  imports: [TranslateModule]
 })
 export class SeleccionCargaProductoComponent {
 
