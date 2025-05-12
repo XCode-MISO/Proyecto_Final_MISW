@@ -1,10 +1,12 @@
 name: ZAP API Scan
 
+
 on:
   push:
     branches: [main]
   pull_request:
-
+    paths:
+      - 'api-gateway/**'
 
 jobs:
   zap-scan:
@@ -12,20 +14,29 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4     
+        uses: actions/checkout@v3
 
-     
+      - name: Prepare output dir
+        run: mkdir -p zap-output
+
+      - name: Pull OWASP ZAP image
+        run: docker pull ghcr.io/zaproxy/zaproxy:2.16.1
+
       - name: Run ZAP API scan
         env:
           FIREBASE_TOKEN: ${{ secrets.GATEWAY_BEARER_TOKEN }}
         run: |
+          # UID/GID del runner para ejecutarlo dentro del contenedor
+          UID_GID="$(id -u):$(id -g)"
+
           docker run --rm \
-            -v "${{ github.workspace }}/api-gateway":/zap/wrk:rw \
-            ghcr.io/zaproxy/zaproxy:stable \
-            zap-api-scan.py \
+            --user "${UID_GID}" \
+            -v "${{ github.workspace }}/api-gateway":/zap/wrk:ro \
+            -v "${{ github.workspace }}/zap-output":/zap/results:rw \
+            ghcr.io/zaproxy/zaproxy:2.16.1 zap-api-scan.py \
               -t /zap/wrk/api-spec-v2.yaml \
               -f openapi \
-              -r /zap/wrk/zap-report.html \
+              -r /zap/results/zap-report.html \
               -d \
               -z "-config api.disablekey=true \
                   -config replacer.full_list(0).description='Add Auth Header' \
@@ -34,10 +45,9 @@ jobs:
                   -config replacer.full_list(0).match='.*' \
                   -config replacer.full_list(0).replacement='Authorization: Bearer $FIREBASE_TOKEN'"
 
-     
       - name: Upload ZAP report
-        uses: actions/upload-artifact@v4   
+        uses: actions/upload-artifact@v3
         with:
           name: zap-report
-          path: api-gateway/zap-report.html
-        
+          path: zap-output/zap-report.html
+ 
