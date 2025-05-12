@@ -1,0 +1,92 @@
+{
+    "HEADER": {
+      "TITLE": "Sistema Integral de Gestión para CCP",
+      "LOGOUT": "Salir",
+      "LANGUAGE": "Idioma"
+    },
+    "COMMON": {
+      "ACTIONS": "Acciones",
+      "SAVE": "Guardar",
+      "CANCEL": "Cancelar",
+      "DELETE": "Eliminar",
+      "EDIT": "Editar",
+      "ADD": "Agregar",
+      "NAME": "Nombre",
+      "PHONE": "Teléfono",
+      "COMPANY": "Empresa",
+      "FILE": "Archivo",
+      "SINGLE_LOAD": "Carga Individual",
+      "BULK_LOAD": "Carga Masiva",
+      "DATE": "Fecha",
+      "APPLY": "Aplicar",
+      "START": "Inicio",
+      "END": "Fin",
+      "ADDRESS": "Dirección"
+    },
+    "LOGIN": {
+      "TITLE": "Iniciar sesión",
+      "USERNAME": "Correo",
+      "PASSWORD": "Contraseña",
+      "SUBMIT": "Ingresar",
+      "INVALID_MAIL": "Correo electrónico inválido",
+      "INVALID_PASSWORD": "Contraseña requerida"
+    },
+    "NAVIGATION": {
+      "HOME": "Inicio",
+      "VENDORS": "Gestión de Fabricantes",
+      "SALES": "Gestión de Ventas",
+      "INVENTORY": "Gestión de Inventario"
+    }
+    ,
+    "FABRICANTES": {
+      "FABRICANTES_LIST": "Listar Fabricantes",
+      "FABRICANTES_ADD": "Registrar Fabricante",
+      "FABRICANTES_LOAD": "Cargar Fabricantes",
+      "PRODUCTS": "Carga de Productos",
+      "NOT_FOUND": "No hay fabricantes registrados.",
+      "BULK_UPLOAD": "Carga Masiva de Fabricantes"
+    },
+     "ERROR_ACCESS_DENIED": {
+      "ACCESS_DENIED": "Acceso Denegado",
+      "ACCESS": "No tienes permisos para acceder a esta sección",
+      "BACK": "Volver al inicio"
+    },
+    "PLANS": {
+      "PLANS_ADD": "Registrar Plan",
+      "SELLERS": "Vendedores",
+      "SALES_PLAN": "Plan de Ventas",
+      "ERROR": "Error en el formato de plan de venta"
+    },
+    "PRODUCTS": {
+      "PRODUCT": "Producto",
+      "FABRICANTE": "Fabricante",
+      "AMOUNT": "Cantidad",
+      "PRICE": "Precio",
+      "CURRENCY": "Moneda",
+      "WAREHOUSE": "Bodega",
+      "SHELF": "Estante",
+      "AISLE": "Pasillo",
+      "LOAD": "Carga de Producto",
+      "BULK_LOAD_PRODUCTS": "Carga Masiva de Productos"
+    },
+    "ROUTES": {
+      "ROUTE_LIST": "Rutas",
+      "ROUTE_ADD": "Agregar ruta",
+      "CREATE_ROUTE": "Crear ruta",
+      "STOP_ROUTE_ADD": "Agregar Parada a Ruta",
+      "STOP_ADD": "Agregar Parada",
+      "CUSTOMER": "Cliente",
+      "SELLER": "Vendedor",
+      "STOPS": "Paradas"
+    },
+     "SALES": {
+      "SALES_PLAN": "Plan de Ventas",
+      "CREATE_SALES_PLAN": "Crear Plan de Ventas",
+      "LIST_SELLERS": "Lista de Vendedores",
+      "REGISTER_SELLER": "Registrar Vendedor",
+      "NOT_FOUND": "No hay vendedores registrados.",
+      "INFORMATION": "Informes",
+      "REPORTS": "Reportes"
+    }
+
+  }

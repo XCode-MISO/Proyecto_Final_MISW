@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { VendedorService } from '../vendedor.service'; // Importa el servicio desde la ruta correcta
+import { TranslateModule } from '@ngx-translate/core';
 
 // Interface para los vendedores, si no existe ya en el servicio
 interface Vendedor {
@@ -19,7 +20,7 @@ interface Vendedor {
 @Component({
   selector: 'app-vendedor-list',
   standalone: true,
-  imports: [CommonModule, MatButtonModule],
+  imports: [CommonModule, MatButtonModule, TranslateModule],
   templateUrl: './vendedor-list.component.html',
   styleUrls: ['./vendedor-list.component.css']
 })

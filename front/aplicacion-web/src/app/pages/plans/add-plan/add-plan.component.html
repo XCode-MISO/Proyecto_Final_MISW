@@ -1,5 +1,5 @@
 <div class="plan-add-page">
-  <span class="plan-add-title" i18n> Registrar Plan </span>
+  <span class="plan-add-title" i18n> {{ 'PLANS.PLANS_ADD' | translate }}</span>
   <div class="plan-add-column">
     <form
       class="form-column-root"
@@ -9,13 +9,13 @@
       <div class="plan-imagen-wrap">
         <div class="form-column">
           <div class="form-row">
-            <span class="form-row-text" i18n> Vendedores: </span>
+            <span class="form-row-text" i18n> {{ 'PLANS.SELLERS' | translate }}: </span>
             <mat-form-field
               appearance="outline"
               class="form-field"
               [subscriptSizing]="'dynamic'"
             >
-              <mat-label i18n>Nombre </mat-label>
+              <mat-label i18n>{{ 'COMMON.NAME' | translate }} </mat-label>
               <mat-select formControlName="vendedores" multiple="true">
                 @for (vendedor of vendedores | async; track vendedor) {
                 <mat-option value="{{ vendedor.id }}">{{
@@ -26,7 +26,7 @@
             </mat-form-field>
           </div>
           <div class="form-row">
-            <span class="form-row-text"> Fecha: </span>
+            <span class="form-row-text"> {{ 'COMMON.DATE' | translate }} : </span>
             <mat-form-field class="form-field" [subscriptSizing]="'dynamic'">
               <mat-label>Choose a date</mat-label>
               <input
@@ -41,14 +41,14 @@
               ></mat-datepicker-toggle>
               <mat-datepicker #datepicker>
                 <mat-datepicker-actions>
-                  <button mat-button matDatepickerCancel>Cancel</button>
-                  <button mat-raised-button matDatepickerApply>Apply</button>
+                  <button mat-button matDatepickerCancel>{{ 'COMMON.CANCEL' | translate }} </button>
+                  <button mat-raised-button matDatepickerApply>{{ 'COMMON.APPLY' | translate }} </button>
                 </mat-datepicker-actions>
               </mat-datepicker>
             </mat-form-field>
           </div>
           <div class="form-row">
-            <span class="form-row-text" i18n> Plan de Venta: </span>
+            <span class="form-row-text" i18n> {{ 'PLANS.SALES_PLAN' | translate }} : </span>
             <mat-form-field
               appearance="outline"
               class="form-field"
@@ -58,7 +58,7 @@
               <mat-label i18n>{{ "lorem ipsum" }} </mat-label>
               <input matInput formControlName="descripcion" />
               @if(descripcion?.invalid){<mat-error>
-                Error en el formato de plan de venta</mat-error
+                {{ 'PLANS.ERROR' | translate }}</mat-error
               >}
             </mat-form-field>
           </div>
@@ -76,7 +76,7 @@
               i18n
               (click)="cancelar()"
             >
-              Cancelar
+              {{ 'PLANS.CANCEL' | translate }}
             </button>
           </div>
         </div>
