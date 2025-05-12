@@ -4,38 +4,33 @@ on:
   push:
     branches: [main]
   pull_request:
-    
+  
 
 jobs:
   zap-scan:
     runs-on: ubuntu-latest
 
     steps:
-      
       - name: Checkout repo
-        uses: actions/checkout@v4 
+        uses: actions/checkout@v4
 
-    
-      - name: Prepare output dir
-        run: mkdir -p zap-output
-
-      - name: Pull OWASP ZAP image
-        run: docker pull ghcr.io/zaproxy/zaproxy:2.16.1
+      - name: Pull OWASP ZAP Docker image
+        run: docker pull owasp/zap2docker-stable:2.16.1
 
       - name: Run ZAP API scan
         env:
           FIREBASE_TOKEN: ${{ secrets.GATEWAY_BEARER_TOKEN }}
         run: |
-          UID_GID="$(id -u):$(id -g)"
-
+          # Carpeta para el resultado
+          mkdir -p zap-output
+          
           docker run --rm \
-            --user "${UID_GID}" \
             -v "${{ github.workspace }}/api-gateway":/zap/wrk:ro \
-            -v "${{ github.workspace }}/zap-output":/zap/results:rw \
-            ghcr.io/zaproxy/zaproxy:2.16.1 zap-api-scan.py \
+            -v "${{ github.workspace }}/zap-output":/zap/output:rw \
+            owasp/zap2docker-stable:2.16.1 zap-api-scan.py \
               -t /zap/wrk/api-spec-v2.yaml \
               -f openapi \
-              -r /zap/results/zap-report.html \
+              -r /zap/output/zap-report.html \
               -d \
               -z "-config api.disablekey=true \
                   -config replacer.full_list(0).description='Add Auth Header' \
@@ -45,8 +40,8 @@ jobs:
                   -config replacer.full_list(0).replacement='Authorization: Bearer $FIREBASE_TOKEN'"
 
       - name: Upload ZAP report
-        uses: actions/upload-artifact@v4   
+        uses: actions/upload-artifact@v4
         with:
           name: zap-report
           path: zap-output/zap-report.html
-        
+          retention-days: 14
