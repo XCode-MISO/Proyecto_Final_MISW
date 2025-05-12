@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sigccp.activity.pedido.Data.Modelo.ProductoCantidad
+import com.example.sigccp.activity.route.Data.Modelo.Duracion
 import com.example.sigccp.activity.route.Data.Modelo.Leg
 import com.example.sigccp.activity.route.Data.Modelo.Parada
 import com.example.sigccp.activity.route.Data.Modelo.RouteSimple
@@ -48,31 +49,46 @@ class RouteViewModel  : ViewModel() {
             }
         }
     }
+
+
     fun asignarDuraciones(paradas: List<Parada>, legs: List<Leg>): List<Parada> {
+        Log.d("DEBUG_ROUTE", "Total paradas: ${paradas.size}, Total legs: ${legs.size}")
+
         var legIndex = 0
+
         return paradas.mapIndexed { index, parada ->
-            val leg: Leg? = when {
-                index == 0 -> {
-                    // Siempre asignar el primer leg (punto de partida)
-                    legs.getOrNull(0)
+            val leg: Leg? = when (index) {
+                0 -> {
+                    // Primera parada usa el primer leg (aunque tenga duración 0)
+                    legs.getOrNull(0).also {
+                        Log.d("DEBUG_ROUTE", "Parada $index '${parada.nombre}' asignada al leg 0 con duración=${it?.duration?.text}")
+                    }
                 }
                 else -> {
-                    // Buscar el siguiente leg con duración > 0
+                    // Avanzamos buscando el siguiente leg con duración > 0
                     var nextValidLeg: Leg? = null
                     while (legIndex + 1 < legs.size) {
                         legIndex++
                         val candidate = legs[legIndex]
                         if (candidate.duration.value > 0) {
                             nextValidLeg = candidate
+                            Log.d("DEBUG_ROUTE", "Parada $index '${parada.nombre}' asignada al leg $legIndex con duración=${candidate.duration.text}")
                             break
+                        } else {
+                            Log.d("DEBUG_ROUTE", "Leg $legIndex descartado (duración=0)")
                         }
                     }
                     nextValidLeg
                 }
             }
-            parada.copy(duration = leg?.duration)
+
+            parada.copy(duration = leg?.duration ?: Duracion("0 min", 0))
         }
     }
+
+
+
+
 
     fun fetchRoutes() {
         viewModelScope.launch {

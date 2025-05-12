@@ -126,9 +126,11 @@ fun RouteDetail(routeId: String, viewModel: RouteViewModel = viewModel()) {
 
                             CampoFecha(fechaFormateada)
                             MapaRuta(detalleRuta.mapsResponse)
+
                             ListaDeParadas(detalleRuta.paradas.map {
-                                val minutosExtraidos = it.duration?.text?.substringBefore(" ")?.toIntOrNull() ?: 0
-                                Parada(nombre = it.nombre, minutos = minutosExtraidos, cliente = it.cliente)
+
+                                Parada(nombre = it.nombre, duration = it.duration, cliente = it.cliente)
+
                             })
 
                         } else {

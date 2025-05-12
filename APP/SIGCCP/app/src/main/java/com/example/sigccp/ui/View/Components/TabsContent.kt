@@ -651,7 +651,7 @@ fun ParadaBox(parada: Parada) {
                     textAlign = TextAlign.Start
                 )
                 Text(
-                    text = parada.duration?.text ?: "10 min",
+                    text = parada.duration?.text?: "N/A",
                     style = AppTypography.labelMedium,
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center

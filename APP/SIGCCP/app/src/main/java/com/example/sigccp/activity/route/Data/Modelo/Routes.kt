@@ -57,9 +57,8 @@ data class Polyline(
 
 data class Parada(
     val nombre: String,
-    val minutos: Int,
-    val cliente: Cliente,
-    val duration: Duracion? = null
+    val duration: Duracion? = null,
+    val cliente: Cliente
 )
 
 data class Cliente(
