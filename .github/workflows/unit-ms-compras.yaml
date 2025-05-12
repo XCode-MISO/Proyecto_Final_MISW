@@ -2,6 +2,8 @@ name: unit-ms_compras
 
 on:
   pull_request:
+      paths:
+      - 'services/ms_compras/**'
   push:
     branches: [master]
 

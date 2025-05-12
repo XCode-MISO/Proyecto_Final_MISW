@@ -1,19 +1,21 @@
 name: ZAP API Scan
 
-
 on:
   push:
     branches: [main]
   pull_request:
     
+
 jobs:
   zap-scan:
     runs-on: ubuntu-latest
 
     steps:
+      
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 
 
+    
       - name: Prepare output dir
         run: mkdir -p zap-output
 
@@ -24,7 +26,6 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.GATEWAY_BEARER_TOKEN }}
         run: |
-          # UID/GID del runner para ejecutarlo dentro del contenedor
           UID_GID="$(id -u):$(id -g)"
 
           docker run --rm \
@@ -44,8 +45,8 @@ jobs:
                   -config replacer.full_list(0).replacement='Authorization: Bearer $FIREBASE_TOKEN'"
 
       - name: Upload ZAP report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4   
         with:
           name: zap-report
           path: zap-output/zap-report.html
- 
+        
