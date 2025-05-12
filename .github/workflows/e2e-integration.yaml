@@ -2,8 +2,7 @@ name: E2E Integration Tests
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
 
 jobs:
@@ -12,20 +11,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v4
+    - name: Check out code
+      uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
 
-      - name: Install dependencies from requirements.txt
-        working-directory: services/tests/integration
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Install integration dependencies
+      working-directory: services/tests/integration
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-      - name: Run E2E integration test
-        working-directory: services/tests/integration
-        run: pytest test_e2e.py
+    - name: Run E2E integration tests
+      working-directory: services/tests/integration
+      run: |
+        pytest -q test_e2e.py | tee integration-results.txt
+
+    - name: Upload test report
+      uses: actions/upload-artifact@v4
+      with:
+        name: e2e-report
+        path: services/tests/integration/integration-results.txt
