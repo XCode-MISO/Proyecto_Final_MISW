@@ -14,20 +14,20 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Pull OWASP ZAP Docker image
-        run: docker pull owasp/zap2docker-stable:2.16.1
+      - name: Pull ZAP image from GHCR
+        run: docker pull ghcr.io/zaproxy/zaproxy:stable
 
       - name: Run ZAP API scan
         env:
           FIREBASE_TOKEN: ${{ secrets.GATEWAY_BEARER_TOKEN }}
         run: |
-          # Carpeta para el resultado
           mkdir -p zap-output
-          
+
           docker run --rm \
             -v "${{ github.workspace }}/api-gateway":/zap/wrk:ro \
             -v "${{ github.workspace }}/zap-output":/zap/output:rw \
-            owasp/zap2docker-stable:2.16.1 zap-api-scan.py \
+            ghcr.io/zaproxy/zaproxy:stable \
+            zap-api-scan.py \
               -t /zap/wrk/api-spec-v2.yaml \
               -f openapi \
               -r /zap/output/zap-report.html \
@@ -44,4 +44,4 @@ jobs:
         with:
           name: zap-report
           path: zap-output/zap-report.html
-          retention-days: 14
+         
