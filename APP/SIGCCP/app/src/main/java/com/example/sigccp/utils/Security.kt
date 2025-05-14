@@ -60,7 +60,7 @@ class AuthInterceptor() : Interceptor {
 
             appContext.let {
                 Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(it, "Your session has expired. Please log in again.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(it, "Ingrese a la aplicación de nuevo.", Toast.LENGTH_LONG).show()
                 }
             }
 
