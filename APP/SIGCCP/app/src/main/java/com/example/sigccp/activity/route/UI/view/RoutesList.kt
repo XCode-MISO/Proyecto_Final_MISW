@@ -54,6 +54,7 @@ fun RoutesList(viewModel: RouteViewModel = viewModel()) {
         }
     }
 
+    val isLoading = viewModel.isLoading.collectAsState().value
     val routes=viewModel.routes.collectAsState().value
 
     val context = LocalContext.current
@@ -158,11 +159,14 @@ fun RoutesList(viewModel: RouteViewModel = viewModel()) {
                         } else {
                             routes
                         }
-                        ListaDeRutas(filteredRoutes) { selectedRouteId ->
-                            navController.navigate(AppScreen.DetalleRuta.idRoute(selectedRouteId))
+
+                        if (isLoading) {
+                            CircularProgressIndicator()
+                        } else {
+                            ListaDeRutas(filteredRoutes) { selectedRouteId ->
+                                navController.navigate(AppScreen.DetalleRuta.idRoute(selectedRouteId))
+                            }
                         }
-
-
                     }
                 }
             }

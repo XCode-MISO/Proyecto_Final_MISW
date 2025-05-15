@@ -44,6 +44,7 @@ fun RouteDetail(routeId: String, viewModel: RouteViewModel = viewModel()) {
         }
     }
     val routeDate = "11/05/2025"
+    val isLoading = viewModel.isLoading.collectAsState().value
     val detalleRuta = viewModel.detalleRuta.collectAsState().value
     val fechaFormateada = if (detalleRuta != null) {
         try {
@@ -58,15 +59,6 @@ fun RouteDetail(routeId: String, viewModel: RouteViewModel = viewModel()) {
     LaunchedEffect(routeId) {
         viewModel.fetchRouteDetail(routeId)
     }
-    /*val paradasEjemplo = listOf(
-        Parada(nombre = "Parque Central", minutos = 5, cliente = "Juan Pérez"),
-        Parada(nombre = "Estación Norte", minutos = 10, cliente = "Distribuciones Gómez"),
-        Parada(nombre = "Zona Industrial", minutos = 8, cliente = "Ferretería Central"),
-        Parada(nombre = "Centro Comercial", minutos = 12, cliente = "Súper Tienda LA 14"),
-        Parada(nombre = "Barrio El Prado", minutos = 6, cliente = "Doña Marta"),
-    )*/
-    val routes = viewModel.routes.collectAsState().value
-    val context = LocalContext.current
 
     ScreenContainer(
         title = stringResource(id = R.string.Route),
@@ -136,9 +128,6 @@ fun RouteDetail(routeId: String, viewModel: RouteViewModel = viewModel()) {
                             CircularProgressIndicator()
                         }
 
-
-                        //CampoFecha(routeDate)
-                        //ListaDeParadas(paradasEjemplo)
                     }
                 }
             }

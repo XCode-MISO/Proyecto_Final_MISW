@@ -12,6 +12,7 @@ import com.example.sigccp.activity.route.Data.Modelo.RouteDetailResponse
 import com.example.sigccp.activity.route.Data.Network.RetrofitInstanceRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class RouteViewModel  : ViewModel() {
@@ -20,6 +21,8 @@ class RouteViewModel  : ViewModel() {
     val routes: StateFlow<List<RouteSimple>> = _routes
     private val _detalleRuta = MutableStateFlow<RouteDetailResponse?>(null)
     val detalleRuta: StateFlow<RouteDetailResponse?> = _detalleRuta
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading = _isLoading.asStateFlow()
 
     init {
         fetchRoutes()
