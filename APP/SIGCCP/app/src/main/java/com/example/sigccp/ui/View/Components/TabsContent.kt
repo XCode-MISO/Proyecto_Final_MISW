@@ -676,24 +676,35 @@ fun MapaRuta(routes: List<Route>) {
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(LatLng(4.6097, -74.0817), 14f)
     }
-    LaunchedEffect(routes) {
-        Log.d("DEBUG_MAP", "Recibidas rutas: ${routes.size}")
-    }
-    GoogleMap(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(250.dp),
-        cameraPositionState = cameraPositionState
-    ) {
-        // Recolectar y decodificar todos los puntos de todas las rutas
-        val allPoints = routes.flatMap { route ->
+
+    val allPoints = remember(routes) {
+        routes.flatMap { route ->
             route.legs.flatMap { leg ->
                 leg.steps.flatMap { step ->
                     PolyUtil.decode(step.polyline.points)
                 }
             }
         }
+    }
+
+    LaunchedEffect(routes) {
+        Log.d("DEBUG_MAP", "Recibidas rutas: ${routes.size}")
+    }
+
+    GoogleMap(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(250.dp),
+        cameraPositionState = cameraPositionState
+    ) {
         if (allPoints.isNotEmpty()) {
+            // Dibujar la polilínea
+            Polyline(
+                points = allPoints,
+                color = Color.Blue,
+                width = 10f
+            )
+
             val boundsBuilder = LatLngBounds.builder()
             allPoints.forEach { boundsBuilder.include(it) }
             val bounds = boundsBuilder.build()
@@ -708,6 +719,7 @@ fun MapaRuta(routes: List<Route>) {
         }
     }
 }
+
 
 
 @Composable

@@ -121,8 +121,6 @@ fun RouteDetail(routeId: String, viewModel: RouteViewModel = viewModel()) {
                         horizontalAlignment = Alignment.CenterHorizontally
                     )
                     {
-                        Text(routeId)
-
                         if (detalleRuta != null) {
 
                             CampoFecha(fechaFormateada)
