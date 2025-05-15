@@ -3,6 +3,7 @@ package com.example.sigccp.ui.View.Components
 import android.R
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.util.Log
 import android.widget.DatePicker
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,6 +41,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -77,8 +79,10 @@ import com.example.sigccp.utils.getSavedLanguage
 import com.example.sigccp.utils.restartActivity
 import com.example.sigccp.utils.saveLanguage
 import com.example.sigccp.utils.setAppLocale
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Polyline
@@ -672,7 +676,9 @@ fun MapaRuta(routes: List<Route>) {
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(LatLng(4.6097, -74.0817), 14f)
     }
-
+    LaunchedEffect(routes) {
+        Log.d("DEBUG_MAP", "Recibidas rutas: ${routes.size}")
+    }
     GoogleMap(
         modifier = Modifier
             .fillMaxWidth()
@@ -687,8 +693,19 @@ fun MapaRuta(routes: List<Route>) {
                 }
             }
         }
+        if (allPoints.isNotEmpty()) {
+            val boundsBuilder = LatLngBounds.builder()
+            allPoints.forEach { boundsBuilder.include(it) }
+            val bounds = boundsBuilder.build()
 
-        Polyline(points = allPoints)
+            LaunchedEffect(allPoints) {
+                cameraPositionState.move(
+                    CameraUpdateFactory.newLatLngBounds(bounds, 100)
+                )
+            }
+        } else {
+            Log.d("DEBUG_MAP", "No hay puntos para dibujar en el mapa")
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package com.example.sigccp.activity.route.UI.view
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -126,7 +127,7 @@ fun RouteDetail(routeId: String, viewModel: RouteViewModel = viewModel()) {
 
                             CampoFecha(fechaFormateada)
                             MapaRuta(detalleRuta.mapsResponse)
-
+                            Log.d("DEBUG_ROUTE", "MapsResponse size: ${detalleRuta.mapsResponse.size}")
                             ListaDeParadas(detalleRuta.paradas.map {
 
                                 Parada(nombre = it.nombre, duration = it.duration, cliente = it.cliente)
