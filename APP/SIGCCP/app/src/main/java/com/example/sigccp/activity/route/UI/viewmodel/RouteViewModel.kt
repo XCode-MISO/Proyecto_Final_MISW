@@ -43,6 +43,7 @@ class RouteViewModel  : ViewModel() {
 
                 _detalleRuta.value = nuevaRespuesta
                 Log.d("DEBUG_ROUTE", "Ruta recibida: $response")
+
             } catch (e: Exception) {
                 Log.e("DEBUG_ROUTE", "Error: ${e.localizedMessage}", e)
                 e.printStackTrace()
