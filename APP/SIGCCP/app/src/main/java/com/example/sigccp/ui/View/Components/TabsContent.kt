@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -93,7 +94,7 @@ import java.util.Calendar
 fun newButton(
     onClick: () -> Unit,
     nombre: String,
-    buttonWidth: Dp = 200.dp // 🔹 Ancho definido por defecto en 200.dp
+    buttonWidth: Dp = 200.dp
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered by interactionSource.collectIsHoveredAsState()
@@ -106,10 +107,9 @@ fun newButton(
             .width(buttonWidth)
             .border(2.dp, MoradoApp, RoundedCornerShape(12.dp))
     ) {
-        // Sombra debajo del botón
         Box(
             modifier = Modifier
-                .width(buttonWidth) // 🔹 Ancho fijo
+                .width(buttonWidth)
                 .height(4.dp)
                 .background(Color.Black.copy(alpha = 0.3f))
                 .align(Alignment.BottomCenter)
@@ -117,10 +117,9 @@ fun newButton(
                 .offset(y = 2.dp)
         )
 
-        // Fondo del botón
         Box(
             modifier = Modifier
-                .width(buttonWidth) // 🔹 Ancho fijo
+                .width(buttonWidth)
                 .padding(bottom = 4.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(currentColor)
@@ -132,7 +131,7 @@ fun newButton(
                 ),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
-                    .width(buttonWidth) // 🔹 Ancho fijo
+                    .width(buttonWidth)
                     .semantics { contentDescription = nombre }
                     .testTag(nombre),
                 interactionSource = interactionSource
@@ -581,15 +580,15 @@ fun ListaDeRutas(rutas: List<RouteSimple>, onRutaClick: (String) -> Unit) {
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(rutas) { ruta ->
-            RutaBox(ruta = ruta, onClick = { onRutaClick(ruta.routeId) })
+        itemsIndexed(rutas) { index, ruta ->
+            RutaBox(ruta = ruta, modifier = Modifier.testTag("ruta_$index"), onClick = { onRutaClick(ruta.routeId) })
         }
     }
 }
 @Composable
-fun RutaBox(ruta: RouteSimple, onClick: () -> Unit) {
+fun RutaBox(ruta: RouteSimple,modifier: Modifier = Modifier, onClick: () -> Unit) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(AmarilloApp, shape = RoundedCornerShape(8.dp))
             .border(2.dp, MoradoApp, shape = RoundedCornerShape(8.dp))
@@ -807,7 +806,8 @@ fun newAgregarButton(
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .width(buttonWidth) // 🔹 Ancho fijo
-                    .semantics { contentDescription = nombre },
+                    .semantics { contentDescription = nombre }
+                    .testTag(nombre),
                 interactionSource = interactionSource
             ) {
                 Row(
