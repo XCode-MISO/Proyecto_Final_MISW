@@ -111,7 +111,7 @@ fun Producto(viewModel: PedidoViewModel)
                                 val productosValidados = productos.value.mapNotNull { producto ->
                                     val cantidad = cantidades[producto.producto_id]
 
-                                    if (cantidad == null || cantidad <= 0) return@mapNotNull null
+                                    if (cantidad == null || cantidad <= 0 || producto.stock == 0) return@mapNotNull null
 
                                     val esValida = cantidad <= producto.stock
                                     val total = (producto.precio * cantidad).toFloat()
@@ -150,7 +150,7 @@ fun Producto(viewModel: PedidoViewModel)
 
                                 val total = cantidades.entries.sumOf { (productoId, cantidad) ->
                                     val producto = productos.value.find { it.producto_id == productoId }
-                                    if (producto != null) {
+                                    if (producto != null && producto.stock > 0) {
                                         (producto.precio * cantidad).toDouble()
                                     } else {
                                         0.0

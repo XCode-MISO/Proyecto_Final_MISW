@@ -42,8 +42,8 @@ fun getOkHttpClientWithToken(): OkHttpClient {
 }
 
 fun logout() {
-    PreferencesManager.clearAll()
     NavigationController.navigate(AppScreen.Login.route)
+    PreferencesManager.clearAll()
 }
 
 class AuthInterceptor() : Interceptor {
@@ -57,22 +57,32 @@ class AuthInterceptor() : Interceptor {
             // Access the context via the holder
             val appContext = SIGCCPApp.getContext()
 
+            PreferencesManager.clearAll()
 
-            appContext.let {
-                Handler(Looper.getMainLooper()).post {
-                    Toast.makeText(it, "Ingrese a la aplicación de nuevo.", Toast.LENGTH_LONG).show()
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(
+                    appContext,
+                    "Sesión expirada. Inicie sesión nuevamente.",
+                    Toast.LENGTH_LONG
+                ).show()
+                /*
+                appContext.let {
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(it, "Ingrese a la aplicación de nuevo.", Toast.LENGTH_LONG)
+                            .show()
+                    }
                 }
+                */
+                logout()
+
+                // You might want to perform other actions here, such as:
+                // - Clearing the expired token from SharedPreferences or other storage
+                // - Redirecting the user to the login screen
+
+                // Return the response so the original Retrofit call can handle it.
             }
 
-            logout()
-
-            // You might want to perform other actions here, such as:
-            // - Clearing the expired token from SharedPreferences or other storage
-            // - Redirecting the user to the login screen
-
-            // Return the response so the original Retrofit call can handle it.
         }
-
         return response
     }
 }

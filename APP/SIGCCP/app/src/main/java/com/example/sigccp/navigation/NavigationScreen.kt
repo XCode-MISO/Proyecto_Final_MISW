@@ -1,11 +1,14 @@
 package com.example.sigccp.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.sigccp.PreferenceKeys
 import com.example.sigccp.PreferencesManager
 import com.example.sigccp.activity.clients.ui.view.CrearCliente
@@ -22,6 +25,8 @@ import com.example.sigccp.activity.pedido.UI.ViewModel.PedidoViewModel
 import com.example.sigccp.activity.recomendacion.ui.view.Recomendacion
 import com.example.sigccp.activity.recomendacion.ui.viewmodel.RecomendacionServiceViewModel
 import com.example.sigccp.activity.recomendacion.ui.viewmodel.RecomendacionViewModel
+import com.example.sigccp.activity.route.UI.view.ListarRutas
+import com.example.sigccp.activity.route.UI.view.RouteDetail
 
 
 class NavigationController {
@@ -64,6 +69,19 @@ fun NavigationScreen(recomendacionServiceViewModel: RecomendacionServiceViewMode
         composable(route = AppScreen.ListarClientes.route)
         {
             ListarClientes()
+        }
+        composable(route = AppScreen.ListarRutas.route)
+        {
+            ListarRutas()
+        }
+        composable(
+            route = AppScreen.DetalleRuta.route,
+            arguments = listOf(navArgument("routeId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val routeId = backStackEntry.arguments?.getString("routeId")
+            if (routeId != null) {
+                RouteDetail(routeId = routeId)
+            }
         }
         composable(route = AppScreen.RegistrarVisita.route)
         {
