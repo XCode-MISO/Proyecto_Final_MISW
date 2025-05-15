@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -46,11 +49,12 @@ fun Pedidos (viewModel: PedidoViewModel = viewModel())
             popUpTo(0)
         }
     }
+    val isLoading = viewModel.isLoading.collectAsState().value
     val pedidos = viewModel.pedidos.collectAsState().value
     val role = PreferencesManager.getString(PreferenceKeys.ROLE)
     val rolEsCliente = (role == "cliente")
     val clientId = PreferencesManager.getString(PreferenceKeys.USER_ID)
-
+    val monedaSeleccionada = remember { mutableStateOf(1) }
 
     ScreenContainer(title = stringResource(id = R.string.ListPedidos), true,false,true,null,AppScreen.Menu.route) {
         Box(
@@ -101,10 +105,16 @@ fun Pedidos (viewModel: PedidoViewModel = viewModel())
                         newButton(onClick = {NavigationController.navigate(AppScreen.CrearPedido.route)}, nombre= "Crear Pedido")
                         locationDropdown(
                             locations = moneda,
-                            onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
+                            onLocationtSelected = { nombreMoneda ->
+                                monedaSeleccionada.value = nombreMoneda
+                            }
                         )
-                        ListaDePedidos(pedidos)
 
+                        if (isLoading) {
+                            CircularProgressIndicator()
+                        } else {
+                            ListaDePedidos(pedidos = pedidos, moneda = monedaSeleccionada.value)
+                        }
                     }
                 }
             }

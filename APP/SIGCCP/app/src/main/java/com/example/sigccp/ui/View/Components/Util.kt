@@ -44,8 +44,8 @@ import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import com.example.sigccp.utils.logout
 
 val moneda = listOf(
-    1 to "Peso Colombiano",
-    2 to "Dolar Americano",
+    1 to "COP",
+    2 to "USD"
 )
 
 @Composable

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -58,6 +59,7 @@ fun Pedido(viewModel: PedidoViewModel) {
     var showDialog by remember { mutableStateOf(false) }
     var dialogMessage by remember { mutableStateOf("") }
     val role = PreferencesManager.getString(PreferenceKeys.ROLE)
+    val isLoading = viewModel.isLoading.collectAsState().value
     val productos = viewModel.productosSeleccionados.value
 
     ScreenContainer(title = stringResource(id = R.string.CrearPedido), true,false, true, null, AppScreen.ListarPedidos.route) {
@@ -159,7 +161,11 @@ fun Pedido(viewModel: PedidoViewModel) {
                             buttonWidth = 320.dp,
                         )
 
-                        ListaDeProductosPedido(productos)
+                        if (isLoading) {
+                            CircularProgressIndicator()
+                        } else {
+                            ListaDeProductosPedido(productos)
+                        }
                     }
                 }
             }

@@ -491,13 +491,13 @@ fun ClienteBox(
 
 
 @Composable
-fun ListaDePedidos(pedidos: List<PedidoClass>) {
+fun ListaDePedidos(pedidos: List<PedidoClass>, moneda: Int) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp) // Espaciado entre elementos
     ) {
         items(pedidos) { pedido:PedidoClass  ->
-            PedidoBox(pedido = pedido)
+            PedidoBox(pedido = pedido, moneda = moneda)
         }
     }
 }
@@ -506,8 +506,12 @@ fun ListaDePedidos(pedidos: List<PedidoClass>) {
 //Componente Listar Pedido
 @Composable
 fun PedidoBox(
-    pedido: PedidoClass
+    pedido: PedidoClass,
+    moneda: Int
 ) {
+    val tasaConversion = 4000f
+    val precioConvertido = if (moneda == 2) pedido.price / tasaConversion else pedido.price
+    val simbolo = if (moneda == 2) "USD" else "COP"
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -560,7 +564,7 @@ fun PedidoBox(
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "Total: $${pedido.price}",
+                    text = "Total: $${"%.2f".format(precioConvertido)} $simbolo",
                     style = AppTypography.labelMedium,
                     modifier = Modifier
                         .weight(1f)
