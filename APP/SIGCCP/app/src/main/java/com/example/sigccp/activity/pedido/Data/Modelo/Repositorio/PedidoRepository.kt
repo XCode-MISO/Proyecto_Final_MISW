@@ -1,22 +1,24 @@
-package com.example.sigccp.activity.pedido.Data.Modelo.Repositorio
+package com.example.sigccp.activity.pedido.Data.Repository
 
 import com.example.sigccp.activity.pedido.Data.Modelo.PedidoClass
+import com.example.sigccp.activity.pedido.Data.Modelo.PedidoRequest
+import com.example.sigccp.activity.producto.Data.Modelo.ProductoClass
+import com.example.sigccp.activity.pedido.Data.Modelo.ClienteClass
 import com.example.sigccp.activity.pedido.Data.Network.PedidoService
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
+import com.example.sigccp.activity.pedido.Data.Network.RetrofitInstancePedido
 
-class PedidoRepository @Inject constructor(private val api: PedidoService) {
+class PedidoRepository {
+    var api: PedidoService = RetrofitInstancePedido.api
 
-    fun getPedidosFlow(): Flow<List<PedidoClass>> = flow {
-        val pedidos = api.obtenerPedidos()
-        emit(pedidos)
-    }
+    suspend fun obtenerPedidos(clientId: String? = null): List<PedidoClass> =
+        api.obtenerPedidos(clientId)
 
-    fun getPedidoFlow(pedidoId: String): Flow<PedidoClass> = flow {
-        val pedido = api.obtenerPedidos().find { it.id == pedidoId }
-        if (pedido != null) {
-            emit(pedido)
-        }
-    }
+    suspend fun obtenerProductos(): List<ProductoClass> =
+        api.obtenerProductos()
+
+    suspend fun crearPedido(request: PedidoRequest) =
+        api.createPedido(request)
+
+    suspend fun obtenerClientes(): List<ClienteClass> =
+        api.obtenerClientes()
 }

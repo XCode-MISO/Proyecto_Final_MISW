@@ -93,7 +93,7 @@ import java.util.Calendar
 fun newButton(
     onClick: () -> Unit,
     nombre: String,
-    buttonWidth: Dp = 200.dp // 🔹 Ancho definido por defecto en 200.dp
+    buttonWidth: Dp = 200.dp
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered by interactionSource.collectIsHoveredAsState()
@@ -106,10 +106,9 @@ fun newButton(
             .width(buttonWidth)
             .border(2.dp, MoradoApp, RoundedCornerShape(12.dp))
     ) {
-        // Sombra debajo del botón
         Box(
             modifier = Modifier
-                .width(buttonWidth) // 🔹 Ancho fijo
+                .width(buttonWidth)
                 .height(4.dp)
                 .background(Color.Black.copy(alpha = 0.3f))
                 .align(Alignment.BottomCenter)
@@ -117,10 +116,9 @@ fun newButton(
                 .offset(y = 2.dp)
         )
 
-        // Fondo del botón
         Box(
             modifier = Modifier
-                .width(buttonWidth) // 🔹 Ancho fijo
+                .width(buttonWidth)
                 .padding(bottom = 4.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(currentColor)
@@ -132,7 +130,7 @@ fun newButton(
                 ),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
-                    .width(buttonWidth) // 🔹 Ancho fijo
+                    .width(buttonWidth)
                     .semantics { contentDescription = nombre }
                     .testTag(nombre),
                 interactionSource = interactionSource
@@ -807,7 +805,8 @@ fun newAgregarButton(
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .width(buttonWidth) // 🔹 Ancho fijo
-                    .semantics { contentDescription = nombre },
+                    .semantics { contentDescription = nombre }
+                    .testTag(nombre),
                 interactionSource = interactionSource
             ) {
                 Row(
