@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -579,15 +580,15 @@ fun ListaDeRutas(rutas: List<RouteSimple>, onRutaClick: (String) -> Unit) {
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(rutas) { ruta ->
-            RutaBox(ruta = ruta, onClick = { onRutaClick(ruta.routeId) })
+        itemsIndexed(rutas) { index, ruta ->
+            RutaBox(ruta = ruta, modifier = Modifier.testTag("ruta_$index"), onClick = { onRutaClick(ruta.routeId) })
         }
     }
 }
 @Composable
-fun RutaBox(ruta: RouteSimple, onClick: () -> Unit) {
+fun RutaBox(ruta: RouteSimple,modifier: Modifier = Modifier, onClick: () -> Unit) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(AmarilloApp, shape = RoundedCornerShape(8.dp))
             .border(2.dp, MoradoApp, shape = RoundedCornerShape(8.dp))

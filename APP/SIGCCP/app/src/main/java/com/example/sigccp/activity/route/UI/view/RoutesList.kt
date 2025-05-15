@@ -31,6 +31,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import com.example.sigccp.activity.route.Data.Modelo.RouteSimple
 import com.example.sigccp.ui.View.Components.ListaDeRutas
@@ -73,10 +74,6 @@ fun RoutesList(viewModel: RouteViewModel = viewModel()) {
         ).show()
     }
 
-    val rutasSimples = listOf(
-        RouteSimple(routeId = "R001", nombreRuta = "Ruta Norte", fecha = "2025-05-10"),
-        RouteSimple(routeId = "R002", nombreRuta = "Ruta Sur", fecha = "2025-05-11")
-    )
     ScreenContainer(title = stringResource(id = R.string.listRoutes), true,false,true,null,AppScreen.Menu.route) {
         Box(
             modifier = Modifier
@@ -126,6 +123,7 @@ fun RoutesList(viewModel: RouteViewModel = viewModel()) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .testTag("SelectorFecha")
                                 .border(2.dp, MoradoApp, RoundedCornerShape(12.dp))
                                 .clickable { showDatePicker() }
                                 .padding(horizontal = 16.dp, vertical = 12.dp)
