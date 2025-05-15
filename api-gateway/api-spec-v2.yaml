@@ -3,14 +3,22 @@ info:
   title: "API de Microservicios"
   version: "1.1.0"
 host: "microservicios-gateway-1qkjvfz9.uc.gateway.dev"
-schemes:
-  - "https"
-security: []
-
-
 x-google-endpoints:
   - name: "microservicios-gateway-1qkjvfz9.uc.gateway.dev"
     allowCors: True
+    
+schemes:
+  - "https"
+securityDefinitions:
+  firebase:
+    type: "oauth2"
+    flow: "implicit"
+    authorizationUrl: ""                    
+    x-google-issuer: "https://securetoken.google.com/misw-4301-native-cloud-433702"
+    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+    x-google-audiences: "misw-4301-native-cloud-433702"    
+
+
 paths:
   /api/productos:
     post:
@@ -55,6 +63,8 @@ paths:
             - estante
             - pasillo
               
+      security:
+        - firebase: []
       responses:
         201:
           description: "Producto creado"
@@ -99,6 +109,9 @@ paths:
                   type: "string"
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/compras/api/productos/upload"
+    
+      security:
+        - firebase: []
     options:
       operationId: "corsUploadProductos"
       x-google-backend:
@@ -119,6 +132,8 @@ paths:
           description: "Lista de fabricantes"
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/compras/api/fabricantes"
+      security:
+        - firebase: []
     post:
       operationId: "createFabricante"
       summary: "Crear fabricante"
@@ -155,6 +170,8 @@ paths:
       responses:
         '200':
           description: A successful response
+      security:
+        - firebase: []
 
   /api/fabricantes/upload:
     post:
@@ -172,6 +189,8 @@ paths:
           required: true
           type: "string"
           format: "binary"
+      security:
+        - firebase: []
       responses:
         200:
           description: "Carga masiva procesada"
@@ -221,6 +240,8 @@ paths:
                   type: "integer"
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios/pedidos"
+      security:
+        - firebase: []
     options:
       operationId: "corsListInventarioProductos"
       x-google-backend:
@@ -254,6 +275,8 @@ paths:
                   type: "integer"
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios/ubicacion"
+      security:
+        - firebase: []
     options:
       operationId: "corsListInventarioUbicacion"
       x-google-backend:
@@ -302,8 +325,24 @@ paths:
         404:
           description: "Producto no encontrado"
       x-google-backend:
-        address: "http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios"
-        path_translation: APPEND_PATH_TO_ADDRESS  
+        address: "http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios{producto_id}"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      security:
+        - firebase: []
+    options:
+      operationId: corsoptionsGetInventario
+      parameters:
+        - in: "path"
+          name: "producto_id"
+          type: "integer"
+          required: true
+          description: "ID del producto"
+      x-google-backend:
+        address: http://kubernetes-gateway.cppxcode.shop/inventario/api/inventarios
+      responses:
+        '200':
+          description: A successful response
+ 
   
   /api/route:
     get:
@@ -317,6 +356,15 @@ paths:
           description: "Lista de rutas generadas"
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/logistica/api/route"
+      security:
+        - firebase: []
+    options:
+      operationId: corsOptionsListRutas
+      x-google-backend:
+        address: http://kubernetes-gateway.cppxcode.shop/logistica/api/route
+      responses:
+        '200':
+          description: A successful response
 
   /api/route/{route_id}:
     get:
@@ -339,7 +387,22 @@ paths:
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/logistica"
         path_translation: APPEND_PATH_TO_ADDRESS
-        
+      security:
+        - firebase: []
+    options:
+      operationId: corsOptionsListRuta
+      x-google-backend:
+        address: http://kubernetes-gateway.cppxcode.shop/logistica/api/route
+      parameters:        
+      - in: path
+        name: route_id
+        type: string
+        required: true
+        description: String ID de la ruta
+      responses:
+        '200':
+          description: A successful response
+
   /api/add-stop-route:
     post:
       operationId: "addStop"
@@ -406,6 +469,9 @@ paths:
           description: Server error
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/logistica/api/add-stop-route"
+    
+      security:
+        - firebase: []
     options:
       operationId: corsAddStop
       x-google-backend:
@@ -474,6 +540,8 @@ paths:
           description: "No se encontró esa ruta"
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/logistica/api/generate-route"
+      security:
+        - firebase: []
     options:
       operationId: corsGenerateRoute
       x-google-backend:
@@ -492,12 +560,23 @@ paths:
           description: Lista de pedidos
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/pedidos/pedidos"
+      security:
+        - firebase: []
+    options:
+      operationId: corsOptionsGetPedidos
+      x-google-backend:
+        address: http://kubernetes-gateway.cppxcode.shop/pedidos/pedidos
+      responses:
+        '200':
+          description: A successful response
 
   /api/pedidos/{pedido_id}:
     get:
       operationId: "getPedido"
       summary: Obtener pedido por ID
       description: "Devuelve el pedido con el ID especificado"      
+      security:
+        - firebase: []
       parameters:
         - in: path
           name: pedido_id
@@ -511,9 +590,24 @@ paths:
           description: "No se encontró ese pedido"
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/pedidos/pedidos"
+    options:
+      operationId: corsOptionsGetPedido
+      parameters:
+        - in: path
+          name: pedido_id
+          type: string
+          required: true
+          description: ID 
+      x-google-backend:
+        address: http://kubernetes-gateway.cppxcode.shop/pedidos/pedidos
+      responses:
+        '200':
+          description: A successful response
 
   /api/pedidos/create_pedido:
     post:
+      security:
+        - firebase: []
       operationId: "crearPedido"
       summary: Crear un nuevo pedido
       responses:
@@ -546,6 +640,8 @@ paths:
         '200':
           description: A successful response
     get:
+      security:
+        - firebase: []
       operationId: "listclientes"
       summary: "Listas clientes que han sido generadas"
       description: "Devuleve la lista de clientes que se han generado"
@@ -559,6 +655,8 @@ paths:
 
   /api/clients/{client_id}:
     get:
+      security:
+        - firebase: []
       operationId: "getCliente"
       summary: "Obtener una Clientes que ha sido generada"
       description: "Devuleve la Cliente que se han generado"
@@ -578,9 +676,24 @@ paths:
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/ventas"
         path_translation: APPEND_PATH_TO_ADDRESS
+    options:
+      operationId: corsOptionsGetCliente
+      parameters:        
+      - in: path
+        name: client_id
+        type: string
+        required: true
+        description: String ID de la Cliente
+      x-google-backend:
+        address: http://kubernetes-gateway.cppxcode.shop/ventas
+      responses:
+        '200':
+          description: A successful response
 
   /api/visits:
     post:
+      security:
+        - firebase: []
       operationId: "crearVisita"
       summary: Crear Visita nueva
       responses:
@@ -596,6 +709,8 @@ paths:
         '200':
           description: A successful response
     get:
+      security:
+        - firebase: []
       operationId: "listvisitas"
       summary: "Listas visitas que han sido generadas"
       description: "Devuleve la lista de visitas que se han generado"
@@ -609,6 +724,8 @@ paths:
   
   /api/upload:
     post:
+      security:
+        - firebase: []
       operationId: "uploadVideoCommand"
       summary: "Subir video para procesamiento"
       description: >
@@ -649,6 +766,8 @@ paths:
     
   /api/recommend:
     get:
+      security:
+        - firebase: []
       operationId: "getRecommendation"
       summary: "Obtener recomendación por job_id"
       description: >
@@ -708,6 +827,8 @@ paths:
         '200':
           description: A successful response
     get:
+      security:
+        - firebase: []
       operationId: "listvendedores"
       summary: "Listas vendedores que han sido generadas"
       description: "Devuleve la lista de vendedores que se han generado"
@@ -721,6 +842,8 @@ paths:
         
   /api/vendedores/{vendedor_id}:
     get:
+      security:
+        - firebase: []
       operationId: "getvendedore"
       summary: "Obtener una vendedores que ha sido generada"
       description: "Devuleve la vendedore que se han generado"
@@ -740,4 +863,90 @@ paths:
       x-google-backend:
         address: "http://kubernetes-gateway.cppxcode.shop/ventas"
         path_translation: APPEND_PATH_TO_ADDRESS
-
+    options:
+      operationId: corsOptionsGetVendedor
+      parameters:        
+      - in: path
+        name: vendedor_id
+        type: string
+        required: true
+        description: String ID de la vendedore
+      responses:
+        200:
+          description: "Lista de vendedores generadas"
+        404:
+          description: "No se encontró esa vendedore"
+      x-google-backend:
+        address: http://kubernetes-gateway.cppxcode.shop/ventas
+      responses:
+        '200':
+          description: A successful response
+  
+  /api/plan:
+    post:
+      security:
+        - firebase: []
+      operationId: "crearPlan"
+      summary: Crear Plan nueva
+      responses:
+        200:
+          description: Visita nueva creada correctamente
+      x-google-backend:
+        address: "http://kubernetes-gateway.cppxcode.shop/ventas/api/plan"
+    options:
+      operationId: corsCrearPlan
+      x-google-backend:
+        address: http://kubernetes-gateway.cppxcode.shop/ventas
+      responses:
+        '200':
+          description: A successful response
+    get:
+      security:
+        - firebase: []
+      operationId: "listplan"
+      summary: "Listas plan que han sido generadas"
+      description: "Devuleve la lista de plan que se han generado"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Lista de plan generadas"
+      x-google-backend:
+        address: "http://kubernetes-gateway.cppxcode.shop/ventas/api/plan"
+        
+  /api/plan/{plan_id}:
+    get:
+      security:
+        - firebase: []
+      operationId: "getplan"
+      summary: "Obtener una plan que ha sido generada"
+      description: "Devuleve la vendedore que se han generado"
+      produces: 
+        - "application/json"
+      parameters:        
+      - in: path
+        name: plan_id
+        type: string
+        required: true
+        description: String ID de la vendedore
+      responses:
+        200:
+          description: "Lista de plan generadas"
+        404:
+          description: "No se encontró esa vendedore"
+      x-google-backend:
+        address: "http://kubernetes-gateway.cppxcode.shop/ventas"
+        path_translation: APPEND_PATH_TO_ADDRESS
+    options:
+      operationId: corsOptionsGetPlan
+      parameters:        
+      - in: path
+        name: plan_id
+        type: string
+        required: true
+        description: String ID de la vendedore
+      x-google-backend:
+        address: http://kubernetes-gateway.cppxcode.shop/ventas
+      responses:
+        '200':
+          description: A successful response

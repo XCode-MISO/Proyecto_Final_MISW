@@ -1,0 +1,33 @@
+<div class="vendedores-container">
+    <h1 class="page-title">{{ 'SALES.LIST_SELLERS' | translate }}</h1>
+  
+    <div class="vendedor-list">
+      @for (vendedor of vendedores; track vendedor.id) {
+        <div class="vendedor-card">
+          <div class="vendedor-info">
+            <!-- Si la imagen está vacía o no es válida, usa una imagen por defecto -->
+            <img [src]="vendedor.imagen || 'assets/default-avatar.png'" 
+                 alt="Foto de {{ vendedor.nombre }}" 
+                 class="vendedor-avatar"
+                 onerror="this.src='assets/default-avatar.png'">
+            <h2 class="vendedor-name">{{ vendedor.nombre }}</h2>
+          </div>
+          <div class="vendedor-actions">
+            <button mat-raised-button class="action-button informes-button" (click)="verInformes(vendedor.id)">
+              {{ 'SALES.INFORMATION' | translate }}
+            </button>
+            <button mat-raised-button class="action-button reportes-button" (click)="verReportes(vendedor.id)">
+              {{ 'SALES.REPORTS' | translate }}
+            </button>
+          </div>
+        </div>
+      }
+  
+      <!-- Mensaje cuando no hay vendedores -->
+      @if (vendedores.length === 0) {
+        <div class="no-vendedores">
+          <p>{{ 'SALES.NOT_FOUND' | translate }}</p>
+        </div>
+      }
+    </div>
+  </div>

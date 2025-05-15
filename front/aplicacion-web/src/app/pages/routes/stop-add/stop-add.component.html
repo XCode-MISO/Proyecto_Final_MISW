@@ -1,25 +1,25 @@
 <div class="route-stop-add-page">
   <span class="route-stop-add-title" i18n>
-    Agregar Parada a Ruta
+    {{ 'ROUTES.STOP_ROUTE_ADD' | translate }}
   </span>
   <div class="route-stop-add-column">
     <form class="form-column-root" [formGroup]="crearParadaForm" (ngSubmit)="onSubmit()">
       <div class="form-column">
         <div class="form-row">
           <span class="form-row-text" i18n>
-            Nombre:
+            {{ 'COMMON.NAME' | translate }}:
           </span>
           <mat-form-field appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
-            <mat-label i18n>Nombre </mat-label>
+            <mat-label i18n>{{ 'COMMON.NAME' | translate }}: </mat-label>
             <input matInput formControlName="nombre">
           </mat-form-field>
         </div>
         <div class="form-row">
           <span class="form-row-text" i18n>
-            Vendedor:
+            {{ 'ROUTES.SELLER' | translate }}::
           </span>
           <mat-form-field  appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
-            <mat-label i18n>Nombre </mat-label>
+            <mat-label i18n>{{ 'COMMON.NAME' | translate }}:: </mat-label>
             <mat-select formControlName="vendedor">
               @for (vendedor of vendedores | async; track vendedor) {
                 <mat-option value="{{vendedor.id}}">{{vendedor.nombre}}</mat-option>
@@ -29,10 +29,10 @@
         </div>
         <div class="form-row">
           <span class="form-row-text" i18n>
-            Cliente:
+            {{ 'ROUTES.CUSTOMER' | translate }}:::
           </span>
           <mat-form-field appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
-            <mat-label i18n>Nombre </mat-label>
+            <mat-label i18n> {{ 'COMMON.NAME' | translate }}: </mat-label>
             <mat-select formControlName="cliente">
               @for (cliente of clientes | async; track cliente) {
                 <mat-option value={{cliente.id}}>{{cliente.nombre}}</mat-option>
@@ -44,7 +44,7 @@
       <div class="form-column">
         <div class="form-row">
           <span class="form-row-text">
-            Fecha:
+             {{ 'COMMON.DATE' | translate }}::
           </span>
           <mat-form-field class="form-field" [subscriptSizing]="'dynamic'">
             <mat-label>Choose a date</mat-label>
@@ -53,18 +53,18 @@
             <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
             <mat-datepicker #datepicker>
               <mat-datepicker-actions>
-                <button mat-button matDatepickerCancel>Cancel</button>
-                <button mat-raised-button matDatepickerApply>Apply</button>
+                <button mat-button matDatepickerCancel> {{ 'COMMON.CANCEL' | translate }}:</button>
+                <button mat-raised-button matDatepickerApply> {{ 'COMMON.APPLY' | translate }}:</button>
               </mat-datepicker-actions>
             </mat-datepicker>
           </mat-form-field>
         </div>
         <div class="agregar-buttons-row">
           <button mat-flat-button class="crear-ruta-button" i18n>
-            Agregar Parada
+             {{ 'COMMON.NAME' | translate }}:
           </button>
           <button mat-flat-button class="cancelar-crear-ruta-button" i18n>
-            Cancelar
+             {{ 'ROUTES.STOP_ADD' | translate }}:
           </button>
         </div>
       </div>

@@ -4,19 +4,19 @@
 
   <div class="botones">
     <button mat-raised-button class="menu-btn" routerLink="/">
-      Planes de Venta
+      {{ 'SALES.SALES_PLAN' | translate }}
     </button>
   
-    <button mat-raised-button class="menu-btn" routerLink="/">
-      Crear Plan de Venta
+    <button mat-raised-button class="menu-btn" routerLink="/plan/add">
+      {{ 'SALES.CREATE_SALES_PLAN' | translate }}
     </button>
   
-    <button mat-raised-button class="menu-btn" routerLink="/">
-      Listado de Vendedores
+    <button mat-raised-button class="menu-btn" routerLink="/ventas/vendedor/list">
+      {{ 'SALES.LIST_SELLERS' | translate }}
     </button>
   
     <button mat-raised-button class="menu-btn" routerLink="/ventas/vendedor/add">
-      Registrar Vendedor
+      {{ 'SALES.REGISTER_SELLER' | translate }}
     </button>
   </div>
   </div>

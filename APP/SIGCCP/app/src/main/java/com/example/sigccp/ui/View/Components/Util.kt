@@ -41,6 +41,7 @@ import com.example.sigccp.ui.theme.MoradoApp
 import com.example.sigccp.ui.theme.VerdeApp
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import com.example.sigccp.utils.logout
 
 val moneda = listOf(
     1 to "Peso Colombiano",
@@ -104,8 +105,7 @@ fun ScreenContainer(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            PreferencesManager.clearAll()
-                            NavigationController.navigate(AppScreen.Login.route)
+                            logout()
                         },
                         modifier = Modifier
                             .padding(start = 20.dp, end = 25.dp)

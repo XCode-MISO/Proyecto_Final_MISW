@@ -9,6 +9,13 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const router = inject(Router);
   
+  console.log(`📤 Interceptando solicitud a: ${req.url}`, { method: req.method });
+  
+  // Si la URL es externa, considera usar un proxy o manejarla diferente
+  if (req.url.includes('microservicios-gateway')) {
+    console.warn('⚠️ Detectada petición directa a API Gateway. Considera usar un proxy local.');
+  }
+  
   return from(authService.getToken()).pipe(
     switchMap(token => {
       if (token) {
@@ -21,10 +28,17 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
       
       return next(req).pipe(
         catchError(error => {
-          // Si es error de autenticación (401), cerrar sesión
+          if (error.status === 0) {
+            console.error('🔄 Error de conexión: No se pudo conectar con el servidor. Posible problema CORS o de red.');
+            // No cerrar sesión en este caso, es un problema de conexión
+            return throwError(() => new Error('No se pudo conectar al servidor. Verifica tu conexión o contacta con el administrador.'));
+          }
+          
           if (error.status === 401) {
             authService.logout();
+            router.navigate(['/login']);
           }
+          
           return throwError(() => error);
         })
       );

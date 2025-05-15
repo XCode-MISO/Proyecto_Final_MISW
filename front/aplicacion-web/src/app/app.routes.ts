@@ -17,6 +17,11 @@ import { VendedorAddComponent } from './pages/ventas/vendedor/vendedor-add/vende
 import { LoginComponent } from './pages/auth/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AccessDeniedComponent } from './pages/errors/access-denied/access-denied.component';
+import { VendedorListComponent } from './pages/ventas/vendedor/vendedor-list/vendedor-list.component';
+
+import { PlansComponent } from './pages/plans/plans.component';
+import { AddPlanComponent } from './pages/plans/add-plan/add-plan.component';
+
 
 export const routes: Routes = [
   // Rutas públicas
@@ -65,7 +70,14 @@ export const routes: Routes = [
     children: [
       { path: '', component: MenuComponent },
       { path: 'vendedor/add', component: VendedorAddComponent },
+      { path: 'vendedor/list', component: VendedorListComponent },
     ]
+  },
+  {
+    path: 'plan/add',
+    component: AddPlanComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['admin', 'directorventas'] }
   },
   
   // Rutas de Inventario/Logística - Solo para admin y directorlogistica

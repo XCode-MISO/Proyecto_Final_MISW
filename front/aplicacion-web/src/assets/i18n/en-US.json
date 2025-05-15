@@ -1,0 +1,89 @@
+{
+    "HEADER": {
+      "TITLE": "Comprehensive Management System for CCP",
+      "LOGOUT": "Logout",
+      "LANGUAGE": "Language"
+    },
+    "COMMON": {
+      "ACTIONS": "Actions",
+      "SAVE": "Save",
+      "CANCEL": "Cancel",
+      "DELETE": "Delete",
+      "EDIT": "Edit",
+      "ADD": "Add",
+      "NAME": "Name",
+      "PHONE": "Phone",
+      "COMPANY": "Company",
+      "FILE": "File",
+      "SINGLE_LOAD": "Single Load",
+      "BULK_LOAD": "Bulk Load",
+      "DATE": "Date",
+      "APPLY": "Apply",
+      "START": "Start",
+      "END": "End",
+      "ADDRESS": "Address"
+    },
+    "LOGIN": {
+      "TITLE": "Login",
+      "USERNAME": "Email",
+      "PASSWORD": "Password",
+      "SUBMIT": "Submit",
+      "INVALID_MAIL": "Invalid email",
+      "INVALID_PASSWORD": "Password required"
+    },
+    "NAVIGATION": {
+      "HOME": "Home",
+      "VENDORS": "Vendor Management",
+      "SALES": "Sales Management",
+      "INVENTORY": "Inventory Management"
+    },
+    "FABRICANTES": {
+      "FABRICANTES_LIST": "Manufacturer List",
+      "FABRICANTES_ADD": "Register Manufacturer",
+      "FABRICANTES_LOAD": "Manufacturer Load",
+      "PRODUCTS": "Product Load",
+      "NOT_FOUND": "There are no registered manufacturers."
+    },
+     "ERROR_ACCESS_DENIED": {
+      "ACCESS_DENIED": "Access Denied",
+      "ACCESS": "You do not have permission to access this section",
+      "BACK": "Back to top"
+    },
+      "PLANS": {
+      "PLANS_ADD": "Register Plan",
+      "SELLERS": "Sellers",
+      "SALES_PLAN": "Sales Plan",
+      "ERROR": "Error in the sales plan format"
+    },
+      "PRODUCTS": {
+      "PRODUCT": "Product",
+      "FABRICANTE": "Manufacturer",
+      "AMOUNT": "Amount",
+      "PRICE": "Price",
+      "CURRENCY": "Moneda",
+      "WAREHOUSE": "Bodega",
+      "SHELF": "Shelf",
+      "AISLE": "Aisle",
+      "LOAD": "Product Load",
+      "BULK_LOAD_PRODUCTS": "Mass Loading of Products"
+    },
+      "ROUTES": {
+      "ROUTE_LIST": "Routes",
+      "ROUTE_ADD": "Add route",
+      "CREATE_ROUTE": "Create Route",
+      "STOP_ROUTE_ADD": "Add Stop to Route",
+      "STOP_ADD": "Add Stop",
+      "CUSTOMER": "Customer",
+      "SELLER": "Seller",
+      "STOPS": "Stops"
+    },
+     "SALES": {
+      "SALES_PLAN": "Sales Plan",
+      "CREATE_SALES_PLAN": "Create Sales Plan",
+      "LIST_SELLERS": "List Sellers",
+      "REGISTER_SELLER": "Register Seller",
+      "NOT_FOUND": "There are no registered sellers.",
+      "INFORMATION": "Information",
+      "REPORTS": "Reports"
+    }
+  }

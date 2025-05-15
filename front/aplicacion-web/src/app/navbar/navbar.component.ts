@@ -6,15 +6,17 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 type Tab = {
   name: string
   route: string
+  translationKey: string
 }
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatButtonModule, MatTabsModule, RouterModule, CommonModule],
+  imports: [MatButtonModule, MatTabsModule, RouterModule, CommonModule, TranslateModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
   standalone: true
@@ -24,46 +26,57 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   showNavbar: boolean = false;
   userRole: string | null = null;
-  // Definición completa de tabs
   allTabs = [
-    { name: "Inicio", route: '/home', roles: ['admin', 'directorcompras', 'directorventas', 'directorlogistica'] }, 
-    { name: "Gestion de Fabricantes", route: '/fabricantes/menu', roles: ['admin', 'directorcompras']}, 
-    { name: "Gestion de Ventas", route: '/ventas', roles: ['admin', 'directorventas']}, 
-    { name: "Gestion de Inventario", route: '/route', roles: ['admin', 'directorlogistica']}
+    { 
+      name: "Inicio", 
+      route: '/home', 
+      roles: ['admin', 'directorcompras', 'directorventas', 'directorlogistica'],
+      translationKey: 'NAVIGATION.HOME'
+    }, 
+    { 
+      name: "Gestion de Fabricantes", 
+      route: '/fabricantes/menu', 
+      roles: ['admin', 'directorcompras'],
+      translationKey: 'NAVIGATION.VENDORS'
+    }, 
+    { 
+      name: "Gestion de Ventas", 
+      route: '/ventas', 
+      roles: ['admin', 'directorventas'],
+      translationKey: 'NAVIGATION.SALES'
+    }, 
+    { 
+      name: "Gestion de Inventario", 
+      route: '/route', 
+      roles: ['admin', 'directorlogistica'],
+      translationKey: 'NAVIGATION.INVENTORY'
+    }
   ];
   
-  // Los tabs que se mostrarán según el rol
-  tabs: { name: string, route: string }[] = [];
+  tabs: { name: string, route: string, translationKey: string }[] = [];
   currentTab: Tab = this.allTabs[0];
   
-  // Propiedad para controlar la visibilidad del navbar
-
 
   constructor(
     private router: Router,
     private authService: AuthService
   ) {}
   ngOnDestroy(): void {
-    // Complete the observable cleanup to prevent memory leaks
     this.destroy$.next();
     this.destroy$.complete();
   }
   
   ngOnInit() {
-    // Verificar la ruta inicial
     this.checkRoute(this.router.url);
     
-    // Suscribirse a cambios de ruta
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
       this.checkRoute(event.url);
     });
     
-    // Actualizar los tabs según el rol del usuario
     this.updateTabsByRole();
     
-    // Suscribirse a cambios en la autenticación
     this.authService.userRole$.subscribe(() => {
       this.updateTabsByRole();
     });
@@ -122,7 +135,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (this.userRole) {
       this.tabs = this.allTabs
         .filter(tab => tab.roles.includes(this.userRole || ''))
-        .map(({ name, route }) => ({ name, route }));
+        .map(({ name, route, translationKey }) => ({ name, route, translationKey }));
     } else {
       this.tabs = [];
     }

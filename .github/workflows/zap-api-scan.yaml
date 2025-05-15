@@ -1,0 +1,40 @@
+name: ZAP API Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    
+    paths:
+      - 'api-gateway/**'
+
+jobs:
+  zap-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Pull OWASP ZAP Docker image
+        run: docker pull owasp/zap2docker-stable:2.16.1
+
+      - name: Run ZAP API scan
+        env:
+          FIREBASE_TOKEN: ${{ secrets.GATEWAY_BEARER_TOKEN }}
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/api-gateway":/zap/wrk:rw \
+            owasp/zap2docker-stable:2.16.1 \
+            zap-api-scan.py \
+            -t /zap/wrk/api-spec-v2.yaml \
+            -f openapi \
+            -r /zap/wrk/zap-report.html \
+            -d \
+            -z "-config api.disablekey=true -config replacer.full_list(0).description='Add Auth Header' -config replacer.full_list(0).enabled=true -config replacer.full_list(0).matchtype=REQ_HEADER -config replacer.full_list(0).match='.*' -config replacer.full_list(0).replacement='Authorization: Bearer $FIREBASE_TOKEN'"
+
+      - name: Upload ZAP report
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-report
+          path: api-gateway/zap-report.html
