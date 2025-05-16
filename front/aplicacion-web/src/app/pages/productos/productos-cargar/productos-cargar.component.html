@@ -1,15 +1,15 @@
 <div class="form-wrapper">
-  <h2 class="titulo">Cargar Productos</h2>
+  <h2 class="titulo">{{ 'FABRICANTES.PRODUCTS' | translate }} </h2>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="campos">
     <mat-form-field appearance="outline">
-      <mat-label>Producto</mat-label>
+      <mat-label>{{ 'PRODUCTS.PRODUCT' | translate }}</mat-label>
       <input matInput formControlName="nombre" />
       <mat-error *ngIf="enviado && f['nombre'].errors">Requerido</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Fabricante</mat-label>
+      <mat-label>{{ 'PRODUCTS.FABRICANTE' | translate }}</mat-label>
       <mat-select formControlName="fabricanteId">
         <mat-option *ngFor="let fab of fabricantes" [value]="fab.id">{{ fab.nombre }}</mat-option>
       </mat-select>
@@ -17,19 +17,19 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Cantidad</mat-label>
+      <mat-label>{{ 'PRODUCTS.AMOUNT' | translate }}</mat-label>
       <input matInput type="number" min="1" step="1" formControlName="cantidad" />
       <mat-error *ngIf="enviado && f['cantidad'].errors">Ingrese un entero positivo</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Precio</mat-label>
+      <mat-label>{{ 'PRODUCTS.PRICE' | translate }}</mat-label>
       <input matInput type="number" min="0.01" step="0.01" formControlName="precio" />
       <mat-error *ngIf="enviado && f['precio'].errors">Ingrese un número positivo</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Moneda</mat-label>
+      <mat-label>{{ 'PRODUCTS.CURRENCY' | translate }}</mat-label>
       <mat-select formControlName="moneda">
         <mat-option value="COP">COP</mat-option>
         <mat-option value="USD">USD</mat-option>
@@ -40,26 +40,26 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Bodega</mat-label>
+      <mat-label>{{ 'PRODUCTS.WAREHOUSE' | translate }}</mat-label>
       <input matInput formControlName="bodega" />
       <mat-error *ngIf="enviado && f['bodega'].errors">Requerido</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Estante</mat-label>
+      <mat-label>{{ 'PRODUCTS.SHELF' | translate }}</mat-label>
       <input matInput formControlName="estante" />
       <mat-error *ngIf="enviado && f['estante'].errors">Requerido</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Pasillo</mat-label>
+      <mat-label>{{ 'PRODUCTS.AISLE' | translate }}</mat-label>
       <input matInput formControlName="pasillo" />
       <mat-error *ngIf="enviado && f['pasillo'].errors">Requerido</mat-error>
     </mat-form-field>
 
     <div class="acciones">
-      <button mat-flat-button class="save-btn" type="submit" >Cargar Producto</button>
-      <button mat-flat-button class="cancel-btn" type="button" (click)="onCancel()">Cancelar</button>
+      <button mat-flat-button class="save-btn" type="submit" >{{ 'PRODUCTS.LOAD' | translate }}</button>
+      <button mat-flat-button class="cancel-btn" type="button" (click)="onCancel()">{{ 'COMMON.CANCEL' | translate }}</button>
     </div>
 
     <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>

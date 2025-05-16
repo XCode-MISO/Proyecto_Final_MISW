@@ -1,22 +1,22 @@
 <div class="route-stop-add-page">
   <span class="route-stop-add-title" i18n>
-    Agregar Ruta
+    {{ 'ROUTES.ROUTE_ADD' | translate }}
   </span>
   <div class="route-stop-add-column">
     <form class="form-column-root" [formGroup]="crearRutaForm" (ngSubmit)="onSubmit()">
       <div class="form-column">
         <div class="form-row">
           <span class="form-row-text" i18n>
-            Nombre:
+            {{ 'COMMON.NAME' | translate }}:
           </span>
           <mat-form-field  appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
-            <mat-label i18n>Nombre </mat-label>
+            <mat-label i18n>{{ 'COMMON.NAME' | translate }} </mat-label>
             <input matInput formControlName="nombre" name="nombre">
           </mat-form-field>
         </div>
         <div class="form-row">
           <span class="form-row-text" i18n>
-            Inicio:
+            {{ 'COMMON.START' | translate }}::
           </span>
           <mat-form-field appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
             <mat-label i18n>Ex: Calle 1#20-84, Bogota, Colombia </mat-label>
@@ -25,7 +25,7 @@
         </div>
         <div class="form-row">
           <span class="form-row-text" i18n>
-            Fin:
+            {{ 'COMMON.END' | translate }}::
           </span>
           <mat-form-field appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
             <mat-label i18n>Ex: Calle 1#20-84, Bogota, Colombia </mat-label>
@@ -36,7 +36,7 @@
       <div class="form-column">
         <div class="form-row">
           <span class="form-row-text">
-            Fecha:
+            {{ 'COMMON.DATE' | translate }}::
           </span>
           <mat-form-field class="form-field" [subscriptSizing]="'dynamic'">
             <mat-label>Choose a date</mat-label>
@@ -53,10 +53,10 @@
         </div>
         <div class="agregar-buttons-row">
           <button mat-flat-button class="crear-ruta-button" i18n>
-            Crear Ruta
+            {{ 'ROUTES.CREATE_ROUTE' | translate }}:
           </button>
           <button mat-flat-button class="cancelar-crear-ruta-button" i18n (click)="cancelar()">
-            Cancelar
+            {{ 'COMMON.CANCEL' | translate }}:
           </button>
         </div>
       </div>

@@ -2,9 +2,10 @@ name: ZAP API Scan
 
 on:
   push:
+
     branches: [main]
   pull_request:
-   # paths: ['api-gateway/**']
+
 
 jobs:
   zap-scan:

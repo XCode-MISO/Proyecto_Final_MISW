@@ -14,6 +14,12 @@ class LoginE2eTests {
 
     @Test
     fun testScreenCrearClienteSeMuestra() {
+        robot.esperarProcesamiento(2000)
+        composeTestRule.waitForIdle()
+
+        // Ejecutar la función
+        robot.seleccionarIdiomaIngles(composeTestRule)
+        robot.esperarProcesamiento(2000)
         robot.clickOnCrearCliente()
         robot.verificarScreenConTituloSeMuestra("Create Client")
         robot.clickEnBoton("Cancelar")
@@ -21,6 +27,12 @@ class LoginE2eTests {
 
     @Test
     fun loginClienteCorrectoTest() {
+        robot.esperarProcesamiento(2000)
+        composeTestRule.waitForIdle()
+
+        // Ejecutar la función
+        robot.seleccionarIdiomaIngles(composeTestRule)
+        robot.esperarProcesamiento(2000)
         robot.escribirEnCampo("Correo", "cliente@gmail.com")
         robot.escribirEnCampo("Contraseña", "12345678")
         robot.clickEnBoton("Ingresar")
@@ -32,6 +44,12 @@ class LoginE2eTests {
 
     @Test
     fun loginVendedorCorrectoTest() {
+        robot.esperarProcesamiento(2000)
+        composeTestRule.waitForIdle()
+
+        // Ejecutar la función
+        robot.seleccionarIdiomaIngles(composeTestRule)
+        robot.esperarProcesamiento(2000)
         robot.escribirEnCampo("Correo", "vendedor@gmail.com")
         robot.escribirEnCampo("Contraseña", "12345678")
         robot.clickEnBoton("Ingresar")

@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 export type Cliente = { id: string, nombre: string, direccion: string }
 export type Vendedor = Cliente
@@ -24,7 +25,7 @@ export type Route = {
 
 @Component({
   selector: 'app-routes',
-  imports: [MatButtonModule, GoogleMapsModule, MatTabsModule, AsyncPipe],
+  imports: [MatButtonModule, GoogleMapsModule, MatTabsModule, AsyncPipe, TranslateModule],
   templateUrl: './routes.component.html',
   styleUrl: './routes.component.css'
 })

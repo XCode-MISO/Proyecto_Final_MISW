@@ -73,6 +73,7 @@ dependencies {
     // Maps
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
+    implementation(libs.maps.utils)
 
     //Firebase
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")

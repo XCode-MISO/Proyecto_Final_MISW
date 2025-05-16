@@ -216,3 +216,5 @@ node_modules/
 #Archivos de credenciales
 keys.json
 google-services.json
+
+.DS_Store

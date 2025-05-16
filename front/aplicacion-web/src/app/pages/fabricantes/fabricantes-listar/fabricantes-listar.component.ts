@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { FabricantesListarService, Fabricante } from './fabricantes-listar.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-fabricantes-listar',
-  imports: [],
+  imports: [TranslateModule],
   templateUrl: './fabricantes-listar.component.html',
   styleUrl: './fabricantes-listar.component.css'
 })

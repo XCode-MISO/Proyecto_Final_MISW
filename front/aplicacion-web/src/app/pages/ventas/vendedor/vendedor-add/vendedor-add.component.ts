@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Auth, sendPasswordResetEmail } from '@angular/fire/auth';
 import { MapGeocoder } from '@angular/google-maps';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-vendedor-add',
@@ -25,7 +26,8 @@ import { MapGeocoder } from '@angular/google-maps';
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    AsyncPipe
+    AsyncPipe,
+    TranslateModule
   ],
   templateUrl: './vendedor-add.component.html',
   styleUrl: './vendedor-add.component.css'

@@ -100,7 +100,7 @@ def consume_pedido_creado(context):
     cola = queue.Queue()
 
     def callback(message):
-        if cola.qsize() <= 5:
+        if cola.qsize() <= 3:
             cola.put(message)
             print("Se encoló el pedido\n")
             print(message)
