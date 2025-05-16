@@ -1,38 +1,48 @@
 name: ZAP API Scan
 
 on:
+  push:
+    branches: [main]
   pull_request:
-    branches:
-      - main
-    paths:
-      - 'api-gateway/**'
+   # paths: ['api-gateway/**']
 
 jobs:
   zap-scan:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+    
+      - name: Prepare results dir
+        run: mkdir -p ${{ github.workspace }}/zap-results
+
       - name: Pull OWASP ZAP Docker image
-        run: docker pull owasp/zap2docker-stable:2.16.1
+        run: docker pull ghcr.io/zaproxy/zap2docker-stable:latest
 
       - name: Run ZAP API scan
         env:
           FIREBASE_TOKEN: ${{ secrets.GATEWAY_BEARER_TOKEN }}
         run: |
           docker run --rm \
-            -v "${{ github.workspace }}/api-gateway":/zap/wrk:rw \
-            owasp/zap2docker-stable:2.16.1 \
+            -v "${{ github.workspace }}/api-gateway":/zap/work:ro \
+            -v "${{ github.workspace }}/zap-results":/zap/wrk:rw \
+            ghcr.io/zaproxy/zap2docker-stable:latest \
             zap-api-scan.py \
-            -t /zap/wrk/api-spec-v2.yaml \
-            -f openapi \
-            -r /zap/wrk/zap-report.html \
-            -d \
-            -z "-config api.disablekey=true -config replacer.full_list(0).description='Add Auth Header' -config replacer.full_list(0).enabled=true -config replacer.full_list(0).matchtype=REQ_HEADER -config replacer.full_list(0).match='.*' -config replacer.full_list(0).replacement='Authorization: Bearer $FIREBASE_TOKEN'"
+              -t /zap/work/api-spec-v2.yaml \
+              -f openapi \
+              -r zap-report.html \
+              -d \
+              -z "-config api.disablekey=true \
+                   -config replacer.full_list(0).description='Add Auth Header' \
+                   -config replacer.full_list(0).enabled=true \
+                   -config replacer.full_list(0).matchtype=REQ_HEADER \
+                   -config replacer.full_list(0).match='.*' \
+                   -config replacer.full_list(0).replacement='Authorization: Bearer $FIREBASE_TOKEN'"
 
       - name: Upload ZAP report
         uses: actions/upload-artifact@v3
         with:
           name: zap-report
-          path: api-gateway/zap-report.html
+          path: zap-results/zap-report.html
