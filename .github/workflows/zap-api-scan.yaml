@@ -6,8 +6,8 @@ on:
     branches: [ main ]
 
 permissions:
-  issues: write
   contents: read
+  issues: write        # si luego vas a crear incidencias con el reporte
 
 jobs:
   zap-api-scan:
@@ -16,18 +16,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # ----- Lanzar el escáner (wrapper) -----
       - name: Run ZAP API scan
+        id: zap
         uses: zaproxy/action-api-scan@v0.7.0
         with:
-          target: '/zap/wrk/api-gateway/api-spec-v2.yaml'
-          format: openapi
-
-          # Opciones propias del *wrapper* (p. ej. debug)
-          cmd_options: |
-            -d
-
-          # Opciones que se pasarán al binario de ZAP
-          zap_options: |
+          format:              openapi
+          target:              '/zap/wrk/api-gateway/api-spec-v2.yaml'
+          cmd_options:         -d                  # debug del wrapper
+          artifact_name:       zap-scan-report     # <- nombre limpio
+          zap_options: |                          # opciones para ZAP
             -config api.disablekey=true
             -config replacer.full_list(0).description='Auth header'
             -config replacer.full_list(0).enabled=true
@@ -35,10 +33,13 @@ jobs:
             -config replacer.full_list(0).match='.*'
             -config replacer.full_list(0).replacement='Authorization: Bearer ${{ secrets.GATEWAY_BEARER_TOKEN }}'
 
-      - name: Upload ZAP report
+      # El wrapper ya sube HTML / MD / JSON con el nombre que le pases, pero si
+      # prefieres subirlos de forma explícita descomenta este paso:
+      #
+      - name: Upload ZAP report manually
         uses: actions/upload-artifact@v4
         with:
-          name: zap-report
+          name: zap-scan-report
           path: |
             report_html.html
             report_md.md
