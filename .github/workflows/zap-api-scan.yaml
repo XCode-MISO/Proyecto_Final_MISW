@@ -1,24 +1,25 @@
 name: ZAP API Scan
-
 on:
-  pull_request:
-    
   push:
     branches: [ main ]
+  pull_request:
+    #paths: [ 'api-gateway/**' ]
 
 jobs:
   zap-scan:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      # 1) Checkout
+      - uses: actions/checkout@v4 
 
-      # UID/GID para evitar problemas de permisos de escritura
-      - name: Get runner ids
+      # 2) UID y GID del runner para evitar problemas de permisos
+      - name: Detect UID/GID
         id: ids
         run: echo "uidgid=$(id -u):$(id -g)" >> "$GITHUB_OUTPUT"
 
-      - name: ZAP API scan
+      # 3) Ejecutar ZAP
+      - name: Run ZAP API scan
         env:
           FIREBASE_TOKEN: ${{ secrets.GATEWAY_BEARER_TOKEN }}
         run: |
@@ -33,16 +34,16 @@ jobs:
               -r /zap/output/zap-report.html \
               -d \
               -z "
-                 -config api.disablekey=true
-                 -config replacer.full_list(0).description='Auth header'
-                 -config replacer.full_list(0).enabled=true
-                 -config replacer.full_list(0).matchtype=REQ_HEADER
-                 -config replacer.full_list(0).match='.*'
-                 -config replacer.full_list(0).replacement='Authorization: Bearer $FIREBASE_TOKEN'
+                -config api.disablekey=true
+                -config replacer.full_list(0).description='Auth header'
+                -config replacer.full_list(0).enabled=true
+                -config replacer.full_list(0).matchtype=REQ_HEADER
+                -config replacer.full_list(0).match='.*'
+                -config replacer.full_list(0).replacement='Authorization: Bearer $FIREBASE_TOKEN'
               "
 
-      - name: Upload ZAP report
-        uses: actions/upload-artifact@v3
+      # 4) Publicar el reporte
+      - uses: actions/upload-artifact@v4   # ← v4
         with:
           name: zap-report
           path: zap-results/zap-report.html
