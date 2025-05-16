@@ -1,61 +1,48 @@
 name: ZAP API Scan
 
 on:
-  push:
-    branches: [main]
   pull_request:
-    #paths: ['api-gateway/**']
+    paths: [ 'api-gateway/**' ]
+  push:
+    branches: [ main ]
 
 jobs:
   zap-scan:
     runs-on: ubuntu-latest
 
     steps:
-      # ─────────────────────────────────────────────
-      # 1. Checkout del repositorio
-      # ─────────────────────────────────────────────
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      # ─────────────────────────────────────────────
-      # 2. Crear carpeta para los resultados
-      # ─────────────────────────────────────────────
-      - name: Prepare output dir
-        run: |
-          mkdir -p zap-results
+      # UID/GID para evitar problemas de permisos de escritura
+      - name: Get runner ids
+        id: ids
+        run: echo "uidgid=$(id -u):$(id -g)" >> "$GITHUB_OUTPUT"
 
-      # ─────────────────────────────────────────────
-      # 3. Ejecutar ZAP (modo CLI) contra el spec
-      # ─────────────────────────────────────────────
-      - name: Run ZAP API scan
+      - name: ZAP API scan
         env:
           FIREBASE_TOKEN: ${{ secrets.GATEWAY_BEARER_TOKEN }}
         run: |
-          UID_GID="$(id -u):$(id -g)"
           docker run --rm \
-            --user "$UID_GID" \
+            --user "${{ steps.ids.outputs.uidgid }}" \
             -v "${{ github.workspace }}/api-gateway":/zap/wrk:ro \
             -v "${{ github.workspace }}/zap-results":/zap/output:rw \
-            zaproxy/zap2docker-stable:2.15.0 \
+            ghcr.io/zaproxy/zap2docker-stable:2.16.0 \
             zap-api-scan.py \
               -t /zap/wrk/api-spec-v2.yaml \
               -f openapi \
               -r /zap/output/zap-report.html \
               -d \
               -z "
-                -config api.disablekey=true
-                -config replacer.full_list(0).description='Auth header'
-                -config replacer.full_list(0).enabled=true
-                -config replacer.full_list(0).matchtype=REQ_HEADER
-                -config replacer.full_list(0).match='.*'
-                -config replacer.full_list(0).replacement='Authorization: Bearer $FIREBASE_TOKEN'
+                 -config api.disablekey=true
+                 -config replacer.full_list(0).description='Auth header'
+                 -config replacer.full_list(0).enabled=true
+                 -config replacer.full_list(0).matchtype=REQ_HEADER
+                 -config replacer.full_list(0).match='.*'
+                 -config replacer.full_list(0).replacement='Authorization: Bearer $FIREBASE_TOKEN'
               "
 
-      # ─────────────────────────────────────────────
-      # 4. Publicar el reporte como artefacto
-      # ─────────────────────────────────────────────
       - name: Upload ZAP report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: zap-report
           path: zap-results/zap-report.html
