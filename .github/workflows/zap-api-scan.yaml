@@ -31,13 +31,12 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.GATEWAY_BEARER_TOKEN }}
         run: |
-          # UID y GID actuales, así el contenedor puede escribir sin problemas
           UID_GID="$(id -u):$(id -g)"
           docker run --rm \
             --user "$UID_GID" \
             -v "${{ github.workspace }}/api-gateway":/zap/wrk:ro \
             -v "${{ github.workspace }}/zap-results":/zap/output:rw \
-            owasp/zap2docker-stable \
+            zaproxy/zap2docker-stable:2.15.0 \
             zap-api-scan.py \
               -t /zap/wrk/api-spec-v2.yaml \
               -f openapi \
