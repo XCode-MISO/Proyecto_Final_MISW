@@ -2,24 +2,28 @@ name: ZAP API Scan
 
 on:
   pull_request:
-
+    #paths: [ 'api-gateway/**' ]
   push:
     branches: [ main ]
 
 jobs:
   zap-api-scan:
     runs-on: ubuntu-22.04
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run ZAP API Scan
+      # ── Lanza zaproxy/action-api-scan ──────────────────────────────────────
+      - name: Run ZAP API scan
         uses: zaproxy/action-api-scan@v0.7.0
         with:
-          target: 'https://microservicios-gateway-1qkjvfz9.uc.gateway.dev'
+          # NOTA: el parámetro 'target' se pasa como -t al script;
+          # aquí le damos directamente la ruta del spec dentro del contenedor.
+          target: '/zap/wrk/api-gateway/api-spec-v2.yaml'
+
+          # Opciones adicionales exactamente igual que en CLI
           cmd_options: >
-            -t /zap/wrk/api-gateway/api-spec-v2.yaml
-            -f openapi
+            -f openapi                         # formato
+            -d                                 # debug -> verás todo en el log
             -config api.disablekey=true
             -config replacer.full_list(0).description='Auth header'
             -config replacer.full_list(0).enabled=true
@@ -27,6 +31,7 @@ jobs:
             -config replacer.full_list(0).match='.*'
             -config replacer.full_list(0).replacement='Authorization: Bearer ${{ secrets.GATEWAY_BEARER_TOKEN }}'
 
+      # ── Publicamos el informe como artefacto ───────────────────────────────
       - name: Upload ZAP report
         uses: actions/upload-artifact@v4
         with:
