@@ -3,6 +3,11 @@ import json
 import time
 from google.cloud import pubsub_v1
 from src.models import db, Recommendation
+import requests
+from typing import List, Dict
+
+INVENTORY_BASE = os.getenv("INVENTORY_BASE", "http://kubernetes-gateway.cppxcode.shop/inventario")
+
 
 def update_or_create_recommendation(data):
     """
@@ -232,4 +237,24 @@ def generate_store_recommendation(analysis_metadata: dict) -> (str, list):
 
     return final_recommendation, identified_objects
 
+def fetch_inventory_for_orders() -> List[Dict]:
+    url = f"{INVENTORY_BASE}/api/inventarios/pedidos"
+    resp = requests.get(url, timeout=10)
+    resp.raise_for_status()
+    return resp.json() 
+
+def recommend_products(identified: List[str], max_items: int = 5) -> List[Dict]:
+    try:
+        all_products = fetch_inventory_for_orders()
+    except Exception as exc:
+        print(f"[recommend_products] error al consultar inventario: {exc}", flush=True)
+        return []
+
+    id_set = {n.lower() for n in identified}
+
+    filtered = [
+        p for p in all_products
+        if p.get("stock", 0) > 0 and p.get("nombre", "").lower() not in id_set
+    ]
+    return filtered[:max_items]
 

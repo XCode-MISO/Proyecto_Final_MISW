@@ -1,0 +1,75 @@
+steps:
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: 'bash'
+    args:
+    - '-c'
+    - 'echo "{\"version\": \"$TAG_NAME\"}" > ./services/ms_inventarios/version.json'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+    - '-c'
+    - echo $_FIREBASE_ADMIN_KEYS | base64 -d > ./services/ms_inventarios/keys.json
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+    - 'build'
+    - '-t'
+    - 'gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/ms_inventarios:latest'
+    - '-f'
+    - 'services/ms_inventarios/Dockerfile'
+    - 'services/ms_inventarios'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/ms_inventarios:latest']
+  # REPLACE GOOGLE PROJECT
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+    - '-c'
+    - sed -i 's/%GOOGLE_CLOUD_PROJECT%/'${_GOOGLE_CLOUD_PROJECT}'/g' services/ms_inventarios/ms-inventarios-deployment.yaml
+  # REPLACE DATABASE_URL
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+    - '-c'
+    - sed -i 's/%DATABASE_URL%/'${_DATABASE_URL}'/g' services/ms_inventarios/ms-inventarios-deployment.yaml
+  # REPLACE DATABASE_NAME
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+    - '-c'
+    - sed -i 's/%DATABASE_NAME%/'${_DATABASE_NAME}'/g' services/ms_inventarios/ms-inventarios-deployment.yaml
+  # REPLACE DATABASE_USER
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+    - '-c'
+    - sed -i 's/%DATABASE_USER%/'${_DATABASE_USER}'/g' services/ms_inventarios/ms-inventarios-deployment.yaml
+  # REPLACE DATABASE_PASSWORD
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+    - '-c'
+    - sed -i 's/%DATABASE_PASSWORD%/'${_DATABASE_PASSWORD}'/g' services/ms_inventarios/ms-inventarios-deployment.yaml
+  # REPLACE DATABASE_PORT
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+    - '-c'
+    - sed -i 's/%DATABASE_PORT%/'${_DATABASE_PORT}'/g' services/ms_inventarios/ms-inventarios-deployment.yaml
+  # Kubernetes Deploy
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+    - run
+    - --filename=services/ms_inventarios/ms-inventarios-deployment.yaml
+    - --location=us-central1-c
+    - --cluster=manual-cluster-clone-1-clone-1
+    - --image=gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/ms_inventarios:latest
+  # Kubernetes Service Updated
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+    - run
+    - --filename=services/ms_inventarios/ms-inventarios-service.yaml
+    - --location=us-central1-c
+    - --cluster=manual-cluster-clone-1-clone-1
+    - --output=output/service
+options:
+  logging: CLOUD_LOGGING_ONLY
