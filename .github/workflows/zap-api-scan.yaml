@@ -1,18 +1,17 @@
 name: ZAP API Scan
 
 on:
-  workflow_dispatch:               # lo puedes lanzar a mano
-  pull_request:                    # o en cada PR
-    paths:
-      - 'api-gateway/**'           # solo si cambia el OpenAPI
+  
+  pull_request:              
+
   push:
-    branches: [ main ]             # también en pushes a main
+    branches: [ main ]          
 
 jobs:
   zap-scan:
     runs-on: ubuntu-latest
 
-    permissions:                   # necesarios para crear issues
+    permissions:                  
       contents: read
       issues: write
 
@@ -20,17 +19,13 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      # ── ZAP scan ―――――――――――――――――――――――――――――――――――――――――
       - name: ZAP scan (OpenAPI)
         uses: zaproxy/action-api-scan@v0.7.0
         with:
-          # URL pública del API Gateway (‐t en zap-api-scan.py)
           target: 'https://microservicios-gateway-1qkjvfz9.uc.gateway.dev'
 
-          # Fichero OpenAPI dentro del repo
           openapi: 'api-gateway/api-spec-v2.yaml'
 
-          # Cabecera de autorización (token guardado como secret)
           zap_options: >
             -config api.disablekey=true
             -config replacer.full_list(0).description='Auth header'
@@ -39,18 +34,15 @@ jobs:
             -config replacer.full_list(0).match='.*'
             -config replacer.full_list(0).replacement='Authorization: Bearer ${{ secrets.GATEWAY_BEARER_TOKEN }}'
 
-          # Nombre **válido** para el artefacto (sin “_”)
           artifact_name: zap-scan-report
 
-          # Si quieres que el job falle al haber WARN/FAIL:
-          fail_action: true           # o false si solo quieres reporte
+          fail_action: true          
 
-          # Título base para los issues que abre el action
           issue_title: 'ZAP API Scan Report'
 
-      # ── (Opcional) publicar el HTML como summary ―――
+
       - name: Publicar summary
-        if: success() || failure()           # se ejecuta pase lo que pase
+        if: success() || failure()          
         run: |
           echo "### ZAP scan" >> $GITHUB_STEP_SUMMARY
           echo "El informe completo está adjunto como artefacto **zap-scan-report**" >> $GITHUB_STEP_SUMMARY
