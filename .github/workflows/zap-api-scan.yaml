@@ -4,36 +4,41 @@ on:
   push:
     branches: [main]
   pull_request:
-   
+    #paths: [ 'api-gateway/**' ]
 
 jobs:
   zap-scan:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Código
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      # 2. Ejecutar el scan con la action oficial
-      - name: ZAP Baseline Scan
-        uses: zaproxy/action-baseline@v0.7.0   # Última versión estable
-        with:
-          target: 'https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api'
-          rules_file_name: '.zap/rules.tsv'          # opcional, para filtrar alerts
-          allow_issue_writing: false                 # evita crear Issues automáticos
-          cmd_options: >
-            -t api-gateway/api-spec-v2.yaml
-            -f openapi
-            -z "-config api.disablekey=true
-                 -config replacer.full_list(0).description='Auth header'
-                 -config replacer.full_list(0).enabled=true
-                 -config replacer.full_list(0).matchtype=REQ_HEADER
-                 -config replacer.full_list(0).match='.*'
-                 -config replacer.full_list(0).replacement='Authorization: Bearer ${{ secrets.GATEWAY_BEARER_TOKEN }}'"
+    # 1) Autenticarse en GHCR para poder descargar la imagen
+    - name: Docker login to GHCR
+      run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      # 3. Publicar el reporte HTML que genera la action
-      - name: Upload ZAP report
-        uses: actions/upload-artifact@v4
-        with:
-          name: zap-report
-          path: zap-report.html
+    # 2) Lanzar la acción oficial, indicando la imagen correcta
+    - name: ZAP Baseline Scan
+      uses: zaproxy/action-baseline@v0.7.0
+      with:
+        target: 'https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api'
+        docker_name: 'ghcr.io/zaproxy/zap2docker-stable'   # <─ imagen correcta
+        # ---- quita la línea siguiente si no tienes reglas personalizadas ----
+        # rules_file_name: '.zap/rules.tsv'
+        allow_issue_writing: false
+        cmd_options: >
+          -t api-gateway/api-spec-v2.yaml
+          -f openapi
+          -z "-config api.disablekey=true
+               -config replacer.full_list(0).description='Auth header'
+               -config replacer.full_list(0).enabled=true
+               -config replacer.full_list(0).matchtype=REQ_HEADER
+               -config replacer.full_list(0).match='.*'
+               -config replacer.full_list(0).replacement='Authorization: Bearer ${{ secrets.GATEWAY_BEARER_TOKEN }}'"
+
+    # 3) Publicar el reporte
+    - name: Upload ZAP report
+      uses: actions/upload-artifact@v4
+      with:
+        name: zap-report
+        path: report_html.html   # nombre que genera la action
