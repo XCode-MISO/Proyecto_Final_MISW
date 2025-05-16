@@ -8,40 +8,42 @@ on:
 
 permissions:
   contents: read
-  issues: write
+  issues:   write    
 
 jobs:
   zap-api:
     runs-on: ubuntu-latest
-    continue-on-error: true
+    continue-on-error: true      
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: ZAP scan against OpenAPI
+      - name: ZAP scan (OpenAPI)
         id: zap
         uses: zaproxy/action-api-scan@v0.7.0
         with:
-          target: 'https://microservicios-gateway-1qkjvfz9.uc.gateway.dev'
+          target: 'https://microservicios-gateway-1qkjvfz9.uc.gateway.dev' 
           format: openapi
           cmd_options: >
-            -t /zap/wrk/api-gateway/api-spec-v2.yaml
-            -d
-            -config api.disablekey=true
-            -config replacer.full_list(0).description='Auth header'
-            -config replacer.full_list(0).enabled=true
-            -config replacer.full_list(0).matchtype=REQ_HEADER
-            -config replacer.full_list(0).match='.*'
-            -config replacer.full_list(0).replacement='Authorization: Bearer ${{ secrets.GATEWAY_BEARER_TOKEN }}'
-          fail_action: false             
-          allow_issue_writing: true
+            -t /zap/wrk/api-gateway/api-spec-v2.yaml               
+            -d                                                     
+            -z "
+              -config api.disablekey=true
+              -config replacer.full_list(0).description='Auth header'
+              -config replacer.full_list(0).enabled=true
+              -config replacer.full_list(0).matchtype=REQ_HEADER
+              -config replacer.full_list(0).match='.*'
+              -config replacer.full_list(0).replacement='Authorization: Bearer ${{ secrets.GATEWAY_BEARER_TOKEN }}'
+            "
+          fail_action: false
+          allow_issue_writing: true   
 
-      - name: Upload ZAP reports
+      - name: Subir reportes de ZAP
         if: always() && steps.zap.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
-          name: zap-report-${{ github.run_number }}
+          name: zap-report-${{ github.run_id }}
           path: |
             report_html.html
             report_md.md
