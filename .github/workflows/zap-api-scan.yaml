@@ -37,7 +37,7 @@ jobs:
             --user "$UID_GID" \
             -v "${{ github.workspace }}/api-gateway":/zap/wrk:ro \
             -v "${{ github.workspace }}/zap-results":/zap/output:rw \
-            ghcr.io/zaproxy/zap2docker-stable \
+            owasp/zap2docker-stable \
             zap-api-scan.py \
               -t /zap/wrk/api-spec-v2.yaml \
               -f openapi \
