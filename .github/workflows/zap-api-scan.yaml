@@ -1,13 +1,12 @@
 name: ZAP API Scan
-
 on:
   pull_request:
     #paths: [ 'api-gateway/**' ]
   push:
     branches: [ main ]
 
-permissions:            # ⬅️  ¡importante!
-  issues: write          #  permite crear Issues
+permissions:
+  issues: write
   contents: read
 
 jobs:
@@ -21,9 +20,14 @@ jobs:
         uses: zaproxy/action-api-scan@v0.7.0
         with:
           target: '/zap/wrk/api-gateway/api-spec-v2.yaml'
-          format: 'openapi'
-          cmd_options: >
+          format: openapi
+
+          # Opciones propias del *wrapper* (p. ej. debug)
+          cmd_options: |
             -d
+
+          # Opciones que se pasarán al binario de ZAP
+          zap_options: |
             -config api.disablekey=true
             -config replacer.full_list(0).description='Auth header'
             -config replacer.full_list(0).enabled=true
