@@ -1,49 +1,39 @@
 name: ZAP API Scan
+
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    #paths: [ 'api-gateway/**' ]
+   
 
 jobs:
   zap-scan:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) Checkout
+      # 1. Código
       - uses: actions/checkout@v4
 
-      # 2) UID/GID para que el contenedor pueda escribir sin root
-      - name: Detect UID/GID
-        id: ids
-        run: echo "uidgid=$(id -u):$(id -g)" >> "$GITHUB_OUTPUT"
+      # 2. Ejecutar el scan con la action oficial
+      - name: ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.7.0   # Última versión estable
+        with:
+          target: 'https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api'
+          rules_file_name: '.zap/rules.tsv'          # opcional, para filtrar alerts
+          allow_issue_writing: false                 # evita crear Issues automáticos
+          cmd_options: >
+            -t api-gateway/api-spec-v2.yaml
+            -f openapi
+            -z "-config api.disablekey=true
+                 -config replacer.full_list(0).description='Auth header'
+                 -config replacer.full_list(0).enabled=true
+                 -config replacer.full_list(0).matchtype=REQ_HEADER
+                 -config replacer.full_list(0).match='.*'
+                 -config replacer.full_list(0).replacement='Authorization: Bearer ${{ secrets.GATEWAY_BEARER_TOKEN }}'"
 
-      # 3) Ejecutar ZAP (imagen desde Docker Hub)
-      - name: Run ZAP API scan
-        env:
-          FIREBASE_TOKEN: ${{ secrets.GATEWAY_BEARER_TOKEN }}
-        run: |
-          docker run --rm \
-            --user "${{ steps.ids.outputs.uidgid }}" \
-            -v "${{ github.workspace }}/api-gateway":/zap/wrk:ro \
-            -v "${{ github.workspace }}/zap-results":/zap/output:rw \
-            owasp/zap2docker-stable:2.16.0 \          # ← Docker Hub
-            zap-api-scan.py \
-              -t /zap/wrk/api-spec-v2.yaml \
-              -f openapi \
-              -r /zap/output/zap-report.html \
-              -d \
-              -z "
-                -config api.disablekey=true
-                -config replacer.full_list(0).description='Auth header'
-                -config replacer.full_list(0).enabled=true
-                -config replacer.full_list(0).matchtype=REQ_HEADER
-                -config replacer.full_list(0).match='.*'
-                -config replacer.full_list(0).replacement='Authorization: Bearer $FIREBASE_TOKEN'
-              "
-
-      # 4) Publicar el reporte
-      - uses: actions/upload-artifact@v4
+      # 3. Publicar el reporte HTML que genera la action
+      - name: Upload ZAP report
+        uses: actions/upload-artifact@v4
         with:
           name: zap-report
-          path: zap-results/zap-report.html
+          path: zap-report.html
