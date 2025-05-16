@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request, current_app
-from models.producto import Producto
+from services.ms_ventas_report.models.reporte import Producto
 from models.producto_inventario import ProductoInventario
 
 inventario_bp = Blueprint('inventario_bp', __name__)
