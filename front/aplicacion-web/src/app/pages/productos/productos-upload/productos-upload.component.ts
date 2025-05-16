@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
@@ -11,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-Productos-upload',
  
   imports: [CommonModule
-    , MatButtonModule],
+    , MatButtonModule, TranslateModule],
   
   templateUrl: './productos-upload.component.html',
   styleUrls: ['./productos-upload.component.css']

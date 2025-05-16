@@ -2,11 +2,11 @@
   <div class="route-column">
 
     <span class="route-title" i18n>
-      Rutas
+      {{ 'ROUTES.ROUTE_LIST' | translate }}
     </span>
     <div class="form-row">
       <span class="form-row-text">
-        Fecha:
+        {{ 'COMMON.DATE' | translate }}:
       </span>
       <form >
         <mat-form-field class="form-field" appearance="outline" [subscriptSizing]="'dynamic'">
@@ -14,8 +14,8 @@
           <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
           <mat-datepicker #datepicker>
             <mat-datepicker-actions>
-              <button mat-button matDatepickerCancel>Cancel</button>
-              <button mat-raised-button matDatepickerApply>Apply</button>
+              <button mat-button matDatepickerCancel>{{ 'COMMON.CANCEL' | translate }}</button>
+              <button mat-raised-button matDatepickerApply>{{ 'COMMON.APPLY' | translate }}</button>
             </mat-datepicker-actions>
           </mat-datepicker>
         </mat-form-field>
@@ -23,7 +23,7 @@
     </div>
     <div class="agregar-ruta-row">
       <button mat-flat-button class="agregar-ruta-button" i18n (click)="navigateToRouteAdd()">
-        Agregar Ruta
+        {{ 'ROUTES.ROUTE_ADD' | translate }}
       </button>
     </div>
     <div class="route-list">

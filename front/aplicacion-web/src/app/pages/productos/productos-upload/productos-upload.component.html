@@ -1,10 +1,10 @@
 
   <div class="form-wrapper">
-    <h2>Carga Masiva de Productos</h2>
+    <h2>{{ 'PRODUCTS.LOAD' | translate }} </h2>
    
 
     <div class="file-upload-container">
-      <label class="file-label" for="archivo">Archivo:</label>
+      <label class="file-label" for="archivo">{{ 'COMMON.FILE' | translate }} :</label>
       
       <div class="custom-file-upload">
      
@@ -28,8 +28,8 @@
     </div>
 
     <div class="acciones">
-      <button mat-flat-button class="subir-btn" (click)="uploadFile()">Cargar Productos</button>
-      <button mat-flat-button class="cancel-btn" (click)="cancelar()">Cancelar</button>
+      <button mat-flat-button class="subir-btn" (click)="uploadFile()">{{ 'PRODUCTS.LOAD' | translate }} </button>
+      <button mat-flat-button class="cancel-btn" (click)="cancelar()">{{ 'COMMON.CANCEL' | translate }} </button>
     </div>
 
 

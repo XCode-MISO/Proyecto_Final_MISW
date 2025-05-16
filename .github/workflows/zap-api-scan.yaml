@@ -2,10 +2,10 @@ name: ZAP API Scan
 
 on:
   push:
+
     branches: [main]
   pull_request:
     
-
 jobs:
   zap-scan:
     runs-on: ubuntu-latest

@@ -15,6 +15,12 @@ class ConfidencialidadE2eTests {
 
     @Test
     fun confidencialidadMenuVendedor() {
+        robot.esperarProcesamiento(2000)
+        composeTestRule.waitForIdle()
+
+        // Ejecutar la función
+        robot.seleccionarIdiomaIngles(composeTestRule)
+        robot.esperarProcesamiento(2000)
         robot.escribirEnCampo("Correo", "vendedor@gmail.com")
         robot.escribirEnCampo("Contraseña", "12345678")
         robot.clickEnBoton("Ingresar")
@@ -33,6 +39,12 @@ class ConfidencialidadE2eTests {
 
     @Test
     fun confidencialidadMenuCliente() {
+        robot.esperarProcesamiento(2000)
+        composeTestRule.waitForIdle()
+
+        // Ejecutar la función
+        robot.seleccionarIdiomaIngles(composeTestRule)
+        robot.esperarProcesamiento(2000)
         robot.escribirEnCampo("Correo", "cliente@gmail.com")
         robot.escribirEnCampo("Contraseña", "12345678")
         robot.clickEnBoton("Ingresar")

@@ -10,6 +10,7 @@ import { Parada, RouteListService } from '../route-list/route-list.service';
 import { Router } from '@angular/router';
 import { catchError, Observable } from 'rxjs';
 import { VendedorService } from '../../ventas/vendedor/vendedor.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 export type CreateRoute = {
   nombre: string
@@ -30,7 +31,8 @@ export type CreateRoute = {
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
   templateUrl: './route-add.component.html',
   styleUrl: './route-add.component.css'

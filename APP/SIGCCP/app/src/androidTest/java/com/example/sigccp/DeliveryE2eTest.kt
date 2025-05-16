@@ -11,6 +11,12 @@ class DeliveryE2eTest {
 
     @Test
     fun deliverySeMuestraTest() {
+        robot.esperarProcesamiento(2000)
+        composeTestRule.waitForIdle()
+
+        // Ejecutar la función
+        robot.seleccionarIdiomaIngles(composeTestRule)
+        robot.esperarProcesamiento(2000)
         robot.escribirEnCampo("Correo", "cliente@gmail.com")
         robot.escribirEnCampo("Contraseña", "12345678")
         robot.clickEnBoton("Ingresar")

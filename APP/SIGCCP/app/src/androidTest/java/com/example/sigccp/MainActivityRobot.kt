@@ -6,6 +6,7 @@ import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -19,6 +20,31 @@ class MainActivityRobot(private val composeTestRule: ComposeTestRule) {
             .onNodeWithText("Crear Cliente")
             .performClick()
     }
+
+    fun seleccionarIdiomaIngles(composeTestRule: ComposeTestRule) {
+        // Hacer clic en el icono del idioma para abrir el dropdown
+        composeTestRule.onNodeWithContentDescription("Idioma").performClick()
+
+        // Esperar hasta que aparezca al menos un nodo "EN"
+        composeTestRule.waitUntil(timeoutMillis = 3_000) {
+            composeTestRule.onAllNodesWithText("EN", useUnmergedTree = true)
+                .fetchSemanticsNodes().isNotEmpty()
+        }
+
+        // Obtener todos los nodos con texto "EN"
+        val enNodes = composeTestRule.onAllNodesWithText("EN", useUnmergedTree = true)
+
+        if (enNodes.fetchSemanticsNodes().size >= 2) {
+            // Si hay 2 o más "EN", hacer clic en el segundo (índice 1)
+            enNodes[1].performClick()
+        } else {
+            // Si solo hay uno, hacer clic en ese
+            enNodes[0].performClick()
+        }
+
+        esperarProcesamiento(2000)
+    }
+
 
     // Function to verify if an investment card is displayed based on its tag
     fun verificarScreenConTituloSeMuestra(text: String) {

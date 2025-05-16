@@ -14,6 +14,12 @@ class CrearClienteE2eTest {
 
     @Test
     fun testScreenCrearClienteSeMuestra() {
+        robot.esperarProcesamiento(2000)
+        composeTestRule.waitForIdle()
+
+        // Ejecutar la función
+        robot.seleccionarIdiomaIngles(composeTestRule)
+        robot.esperarProcesamiento(2000)
         robot.clickOnCrearCliente()
         robot.verificarScreenConTituloSeMuestra("Create Client")
         robot.clickEnBoton("Cancelar")

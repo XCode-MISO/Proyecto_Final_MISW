@@ -9,8 +9,10 @@ sealed class AppScreen(val route:String)
     object CrearPedido:AppScreen("CrearPedidos")
     object AgregarProductos:AppScreen("AgregarProductos")
     object ListarClientes:AppScreen("ListarClientes")
-    object Inventario:AppScreen("Inventario")
-    object Rutas:AppScreen("Rutas")
+    object ListarRutas:AppScreen("ListarRutas")
+    object DetalleRuta : AppScreen("DetalleRuta/{routeId}") {
+        fun idRoute(routeId: String) = "DetalleRuta/$routeId"
+    }
     object Recomendacion:AppScreen("Recomendacion")
     object RegistrarVisita:AppScreen("RegistrarVisita")
     object Entregas:AppScreen("Entregas")

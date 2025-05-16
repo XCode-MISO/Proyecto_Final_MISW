@@ -1,6 +1,6 @@
 <div class="vendedor-add-page">
   <span class="vendedor-add-title" i18n>
-    Registrar Vendedor
+    {{ 'SALES.REGISTER_SELLER' | translate }}
   </span>
   <div class="vendedor-add-column">
 
@@ -10,17 +10,17 @@
         <div class="form-column">
           <div class="form-row">
             <span class="form-row-text" i18n>
-              Nombre:
+              {{ 'COMMON.NAME' | translate }}:
             </span>
             <mat-form-field appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
-              <mat-label i18n>Nombre </mat-label>
+              <mat-label i18n>{{ 'COMMON.NAME' | translate }}: </mat-label>
               <input matInput formControlName="nombre" name="nombre">
               @if(nombre?.invalid){<mat-error> Error en el nombre</mat-error>}
             </mat-form-field>
           </div>
           <div class="form-row">
             <span class="form-row-text" i18n>
-              Correo:
+              {{ 'COMMON.USERNAME' | translate }}:
             </span>
             <mat-form-field appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
               <mat-label i18n>{{"Ex: 123@facebook.com"}} </mat-label>
@@ -30,7 +30,7 @@
           </div>
           <div class="form-row">
             <span class="form-row-text" i18n>
-              Telefono:
+              {{ 'COMMON.PHONE' | translate }}:
             </span>
             <mat-form-field appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
               <mat-label i18n>3154155813 </mat-label>
@@ -40,7 +40,7 @@
           </div>
           <div class="form-row">
             <span class="form-row-text" i18n>
-              Direccion:
+              {{ 'COMMON.ADDRESS' | translate }}:
             </span>
             <mat-form-field appearance="outline" class="form-field" [subscriptSizing]="'dynamic'">
               <mat-label i18n>Ex: Cr. 13#26-50 </mat-label>
@@ -54,10 +54,10 @@
         <div class="form-row">
           <div class="agregar-buttons-row">
             <button mat-flat-button class="crear-ruta-button" i18n>
-              Registrar Vendedor
+              {{ 'SALES.REGISTER_SELLER' | translate }}
             </button>
             <button mat-flat-button class="cancelar-crear-ruta-button" i18n (click)="cancelar()">
-              Cancelar
+              {{ 'COMMON.CANCEL' | translate }}
             </button>
           </div>
         </div>
