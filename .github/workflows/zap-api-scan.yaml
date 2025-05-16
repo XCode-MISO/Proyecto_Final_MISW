@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    #paths: [ 'api-gateway/**' ]
+    #paths: ['api-gateway/**']
 
 jobs:
   zap-scan:
@@ -13,18 +13,17 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    # 1) Autenticarse en GHCR para poder descargar la imagen
+    # Autenticarnos en GHCR (evita rate-limit y “denied”)
     - name: Docker login to GHCR
-      run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      run: echo "${{ github.token }}" | \
+           docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-    # 2) Lanzar la acción oficial, indicando la imagen correcta
+    # Lanzar la action con la imagen correcta
     - name: ZAP Baseline Scan
       uses: zaproxy/action-baseline@v0.7.0
       with:
         target: 'https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api'
-        docker_name: 'ghcr.io/zaproxy/zap2docker-stable'   # <─ imagen correcta
-        # ---- quita la línea siguiente si no tienes reglas personalizadas ----
-        # rules_file_name: '.zap/rules.tsv'
+        docker_name: 'ghcr.io/zaproxy/zaproxy:stable'   # 👈 imagen válida
         allow_issue_writing: false
         cmd_options: >
           -t api-gateway/api-spec-v2.yaml
@@ -36,9 +35,9 @@ jobs:
                -config replacer.full_list(0).match='.*'
                -config replacer.full_list(0).replacement='Authorization: Bearer ${{ secrets.GATEWAY_BEARER_TOKEN }}'"
 
-    # 3) Publicar el reporte
+    # Subir el reporte como artefacto
     - name: Upload ZAP report
       uses: actions/upload-artifact@v4
       with:
         name: zap-report
-        path: report_html.html   # nombre que genera la action
+        path: report_html.html
