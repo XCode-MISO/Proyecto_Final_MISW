@@ -1,40 +1,48 @@
 name: ZAP API Scan
 
 on:
+  
+  pull_request:              
+
   push:
-    branches:
-      - main
-  pull_request:
-    
-    paths:
-      - 'api-gateway/**'
+    branches: [ main ]          
 
 jobs:
   zap-scan:
     runs-on: ubuntu-latest
+
+    permissions:                  
+      contents: read
+      issues: write
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Pull OWASP ZAP Docker image
-        run: docker pull owasp/zap2docker-stable:2.16.1
-
-      - name: Run ZAP API scan
-        env:
-          FIREBASE_TOKEN: ${{ secrets.GATEWAY_BEARER_TOKEN }}
-        run: |
-          docker run --rm \
-            -v "${{ github.workspace }}/api-gateway":/zap/wrk:rw \
-            owasp/zap2docker-stable:2.16.1 \
-            zap-api-scan.py \
-            -t /zap/wrk/api-spec-v2.yaml \
-            -f openapi \
-            -r /zap/wrk/zap-report.html \
-            -d \
-            -z "-config api.disablekey=true -config replacer.full_list(0).description='Add Auth Header' -config replacer.full_list(0).enabled=true -config replacer.full_list(0).matchtype=REQ_HEADER -config replacer.full_list(0).match='.*' -config replacer.full_list(0).replacement='Authorization: Bearer $FIREBASE_TOKEN'"
-
-      - name: Upload ZAP report
-        uses: actions/upload-artifact@v3
+      - name: ZAP scan (OpenAPI)
+        uses: zaproxy/action-api-scan@v0.7.0
         with:
-          name: zap-report
-          path: api-gateway/zap-report.html
+          target: 'https://microservicios-gateway-1qkjvfz9.uc.gateway.dev'
+
+          openapi: 'api-gateway/api-spec-v2.yaml'
+
+          zap_options: >
+            -config api.disablekey=true
+            -config replacer.full_list(0).description='Auth header'
+            -config replacer.full_list(0).enabled=true
+            -config replacer.full_list(0).matchtype=REQ_HEADER
+            -config replacer.full_list(0).match='.*'
+            -config replacer.full_list(0).replacement='Authorization: Bearer ${{ secrets.GATEWAY_BEARER_TOKEN }}'
+
+          artifact_name: zap-scan-report
+
+          fail_action: true          
+
+          issue_title: 'ZAP API Scan Report'
+
+
+      - name: Publicar summary
+        if: success() || failure()          
+        run: |
+          echo "### ZAP scan" >> $GITHUB_STEP_SUMMARY
+          echo "El informe completo está adjunto como artefacto **zap-scan-report**" >> $GITHUB_STEP_SUMMARY
