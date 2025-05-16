@@ -159,7 +159,7 @@ fun Recomendacion(
                             CircularProgressIndicator()
                             Text("Procesando recomendacion...")
                         } else if (recommendation.isNotBlank()) {
-                            Text("Recomendación: $recommendation")
+                            Text(recommendation)
                         }
                     }
                 }

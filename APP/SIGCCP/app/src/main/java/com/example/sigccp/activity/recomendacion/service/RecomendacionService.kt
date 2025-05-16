@@ -24,8 +24,8 @@ class RecomendacionService : Service() {
         return START_STICKY
     }
     /*
-        Inicialmente el servicio devuelve 404, not found, entonces se realizan 10 intentos cada 5
-        segundos para obtener el resultado.
+        Inicialmente el servicio devuelve 404, not found, entonces se realizan 60 intentos cada 5
+        segundos (durante 5 minutos) para obtener el resultado.
         Repetimos la consulta hasta que se procese el video
     */
     private fun monitorJobStatus(id: String) {
@@ -37,7 +37,10 @@ class RecomendacionService : Service() {
                     RetrofitInstanceRecomendacion.apiService.getJobStatus(id)
                 } catch (e: Exception) {
                     Log.e("Recomendacion Error($intentos)", e.message.toString())
-                    if(intentos > 20){
+                    if(intentos > 60){
+                        NotificationHelper.showNotification(applicationContext, "Tiempo de espera caducado")
+                        val intent = Intent("com.example.sigccp.SERVICE_STOPPED")
+                        sendBroadcast(intent)
                         stopSelf()
                         return@launch
                     } else {
@@ -50,10 +53,22 @@ class RecomendacionService : Service() {
                 Log.d("Recomendacion", response.toString())
 
                 if (response.final_state == "processed") {
-                    PreferencesManager.saveString(PreferenceKeys.JOB_ID, response.job_id)
-                    PreferencesManager.saveString(PreferenceKeys.RECOMENDACION, response.final_recommendation)
+                    val theRecomendation =
+                        if (response.final_recommendation.isEmpty())
+                            "Gracias por su freferencia!"
+                        else
+                            response.final_recommendation
+                    val recomendedProducts =
+                        if (response.recommended_products.isNotEmpty())
+                            response.recommended_products.joinToString(", ") { it.nombre }
+                        else
+                            "azucar, cerveza"
+                    val finalRecommendation = "Sugerencia:\n$theRecomendation\n\nRecomendados:\n$recomendedProducts"
 
-                    NotificationHelper.showNotification(applicationContext, response.final_recommendation)
+                    PreferencesManager.saveString(PreferenceKeys.JOB_ID, response.job_id)
+                    PreferencesManager.saveString(PreferenceKeys.RECOMENDACION, finalRecommendation)
+
+                    NotificationHelper.showNotification(applicationContext, finalRecommendation)
 
                     val intent = Intent("com.example.sigccp.SERVICE_STOPPED")
                     sendBroadcast(intent)
@@ -65,9 +80,6 @@ class RecomendacionService : Service() {
             }
         }
     }
-
-
-
 
     override fun onDestroy() {
         serviceScope.cancel()
