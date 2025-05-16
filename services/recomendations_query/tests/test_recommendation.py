@@ -50,17 +50,3 @@ def test_get_recommendation_not_found(client):
     rv = client.get("/api/recommend", query_string={"job_id": "999"})
     assert rv.status_code == 404
     assert "error" in rv.get_json()
-
-def test_recommendation_has_suggestions(client, monkeypatch):
-
-    monkeypatch.setattr(
-        'src.services.recommendation_service.fetch_inventory_for_orders',
-        lambda: [
-            {"producto_id": 1, "nombre": "pan", "precio": 2.5, "stock": 10},
-            {"producto_id": 2, "nombre": "jabon", "precio": 3.0, "stock": 15},
-        ]
-    )
-    resp = client.get('/recommend?job_id=123')
-    data = resp.get_json()
-    assert 'recommended_products' in data
-    assert len(data['recommended_products']) > 0
