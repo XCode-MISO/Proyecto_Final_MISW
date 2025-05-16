@@ -2,24 +2,20 @@ name: ZAP API Scan
 
 on:
   push:
-
     branches: [main]
   pull_request:
-    
+
 jobs:
   zap-scan:
     runs-on: ubuntu-latest
 
     steps:
-     
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      
       - name: Prepare results dir
         run: mkdir -p ${{ github.workspace }}/zap-results
 
-      
       - name: Pull OWASP ZAP Docker image
         run: docker pull ghcr.io/zaproxy/zap2docker-stable:latest
 
