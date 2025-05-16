@@ -1,50 +1,56 @@
 name: ZAP API Scan
 
 on:
-  pull_request:
-    #paths: ['api-gateway/**']
+  workflow_dispatch:               # lo puedes lanzar a mano
+  pull_request:                    # o en cada PR
+    paths:
+      - 'api-gateway/**'           # solo si cambia el OpenAPI
   push:
-    branches: [main]
-
-permissions:
-  contents: read
-  issues:   write    
+    branches: [ main ]             # también en pushes a main
 
 jobs:
-  zap-api:
+  zap-scan:
     runs-on: ubuntu-latest
-    continue-on-error: true      
+
+    permissions:                   # necesarios para crear issues
+      contents: read
+      issues: write
 
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v3
 
+      # ── ZAP scan ―――――――――――――――――――――――――――――――――――――――――
       - name: ZAP scan (OpenAPI)
-        id: zap
         uses: zaproxy/action-api-scan@v0.7.0
         with:
-          target: 'https://microservicios-gateway-1qkjvfz9.uc.gateway.dev' 
-          format: openapi
-          cmd_options: >
-            -t /zap/wrk/api-gateway/api-spec-v2.yaml               
-            -d                                                     
-            -z "
-              -config api.disablekey=true
-              -config replacer.full_list(0).description='Auth header'
-              -config replacer.full_list(0).enabled=true
-              -config replacer.full_list(0).matchtype=REQ_HEADER
-              -config replacer.full_list(0).match='.*'
-              -config replacer.full_list(0).replacement='Authorization: Bearer ${{ secrets.GATEWAY_BEARER_TOKEN }}'
-            "
-          fail_action: false
-          allow_issue_writing: true   
+          # URL pública del API Gateway (‐t en zap-api-scan.py)
+          target: 'https://microservicios-gateway-1qkjvfz9.uc.gateway.dev'
 
-      - name: Subir reportes de ZAP
-        if: always() && steps.zap.outcome == 'success'
-        uses: actions/upload-artifact@v4
-        with:
-          name: zap-report-${{ github.run_id }}
-          path: |
-            report_html.html
-            report_md.md
-            report_json.json
+          # Fichero OpenAPI dentro del repo
+          openapi: 'api-gateway/api-spec-v2.yaml'
+
+          # Cabecera de autorización (token guardado como secret)
+          zap_options: >
+            -config api.disablekey=true
+            -config replacer.full_list(0).description='Auth header'
+            -config replacer.full_list(0).enabled=true
+            -config replacer.full_list(0).matchtype=REQ_HEADER
+            -config replacer.full_list(0).match='.*'
+            -config replacer.full_list(0).replacement='Authorization: Bearer ${{ secrets.GATEWAY_BEARER_TOKEN }}'
+
+          # Nombre **válido** para el artefacto (sin “_”)
+          artifact_name: zap-scan-report
+
+          # Si quieres que el job falle al haber WARN/FAIL:
+          fail_action: true           # o false si solo quieres reporte
+
+          # Título base para los issues que abre el action
+          issue_title: 'ZAP API Scan Report'
+
+      # ── (Opcional) publicar el HTML como summary ―――
+      - name: Publicar summary
+        if: success() || failure()           # se ejecuta pase lo que pase
+        run: |
+          echo "### ZAP scan" >> $GITHUB_STEP_SUMMARY
+          echo "El informe completo está adjunto como artefacto **zap-scan-report**" >> $GITHUB_STEP_SUMMARY
