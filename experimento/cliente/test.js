@@ -59,7 +59,7 @@ export let options = {
             duration: '30m',
 
             // How many iterations per timeUnit
-            rate: 100,
+            rate: 20,
 
             // Start `rate` iterations per second
             timeUnit: '1m',
@@ -118,7 +118,12 @@ export default function (data) {
 
         // Paso 1: Subida del video al microservicio Command
         let uploadStart = new Date().getTime();
-        let uploadRes = http.post('http://34.60.201.251/command/api/upload', formData);
+        let uploadRes = http.post('https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api/upload', formData, 
+        {
+          headers: {
+            Authorization: "Bearer <token>"
+          }
+        });
         let uploadEnd = new Date().getTime();
         let uploadTime = (uploadEnd - uploadStart) / 1000;
 
@@ -183,9 +188,14 @@ export default function (data) {
             }
 
             attempts++;
-            let statusUrl = `http://34.60.201.251/query/api/recommend?job_id=${jobId}`;
+            let statusUrl = `https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api/recommend?job_id=${jobId}`;
 
-            let statusRes = http.get(statusUrl);
+            let statusRes = http.get(statusUrl, 
+                {
+                  headers: {
+                    Authorization: "Bearer <token>"
+                  }
+                });
 
             if (statusRes.status === 200) {
                 try {
