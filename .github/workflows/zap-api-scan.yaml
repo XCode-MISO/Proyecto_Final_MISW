@@ -2,6 +2,9 @@ name: ZAP API Scan
 on:
   pull_request:
   
+permissions:            
+  contents: read           
+  issues: write     
 
 jobs:
   zap-scan:
