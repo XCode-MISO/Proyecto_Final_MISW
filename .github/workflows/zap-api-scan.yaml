@@ -6,24 +6,24 @@ on:
   push:
     branches: [ main ]
 
+permissions:            # ⬅️  ¡importante!
+  issues: write          #  permite crear Issues
+  contents: read
+
 jobs:
   zap-api-scan:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
-      # ── Lanza zaproxy/action-api-scan ──────────────────────────────────────
       - name: Run ZAP API scan
         uses: zaproxy/action-api-scan@v0.7.0
         with:
-          # NOTA: el parámetro 'target' se pasa como -t al script;
-          # aquí le damos directamente la ruta del spec dentro del contenedor.
           target: '/zap/wrk/api-gateway/api-spec-v2.yaml'
-
-          # Opciones adicionales exactamente igual que en CLI
+          format: 'openapi'
           cmd_options: >
-            -f openapi                         # formato
-            -d                                 # debug -> verás todo en el log
+            -d
             -config api.disablekey=true
             -config replacer.full_list(0).description='Auth header'
             -config replacer.full_list(0).enabled=true
@@ -31,7 +31,6 @@ jobs:
             -config replacer.full_list(0).match='.*'
             -config replacer.full_list(0).replacement='Authorization: Bearer ${{ secrets.GATEWAY_BEARER_TOKEN }}'
 
-      # ── Publicamos el informe como artefacto ───────────────────────────────
       - name: Upload ZAP report
         uses: actions/upload-artifact@v4
         with:
