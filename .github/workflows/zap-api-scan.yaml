@@ -11,14 +11,14 @@ jobs:
 
     steps:
       # 1) Checkout
-      - uses: actions/checkout@v4 
+      - uses: actions/checkout@v4
 
-      # 2) UID y GID del runner para evitar problemas de permisos
+      # 2) UID/GID para que el contenedor pueda escribir sin root
       - name: Detect UID/GID
         id: ids
         run: echo "uidgid=$(id -u):$(id -g)" >> "$GITHUB_OUTPUT"
 
-      # 3) Ejecutar ZAP
+      # 3) Ejecutar ZAP (imagen desde Docker Hub)
       - name: Run ZAP API scan
         env:
           FIREBASE_TOKEN: ${{ secrets.GATEWAY_BEARER_TOKEN }}
@@ -27,7 +27,7 @@ jobs:
             --user "${{ steps.ids.outputs.uidgid }}" \
             -v "${{ github.workspace }}/api-gateway":/zap/wrk:ro \
             -v "${{ github.workspace }}/zap-results":/zap/output:rw \
-            ghcr.io/zaproxy/zap2docker-stable:2.16.0 \
+            owasp/zap2docker-stable:2.16.0 \          # ← Docker Hub
             zap-api-scan.py \
               -t /zap/wrk/api-spec-v2.yaml \
               -f openapi \
@@ -43,7 +43,7 @@ jobs:
               "
 
       # 4) Publicar el reporte
-      - uses: actions/upload-artifact@v4   # ← v4
+      - uses: actions/upload-artifact@v4
         with:
           name: zap-report
           path: zap-results/zap-report.html
