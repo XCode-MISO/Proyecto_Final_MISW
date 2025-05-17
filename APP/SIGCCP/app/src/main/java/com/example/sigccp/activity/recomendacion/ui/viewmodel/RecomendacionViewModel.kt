@@ -36,6 +36,7 @@ class RecomendacionViewModel:ViewModel() {
                     val jsonResponse = response.body()?.string()
                     val jsonObject = JSONObject(jsonResponse.toString())
                     val jobId = jsonObject.getString("job_id")
+                    Log.d("uploaded-video-jobId", jobId)
                     onSuccess(jobId)
                 } else {
                     onError("Error en envío: ${response.errorBody()?.string()}")

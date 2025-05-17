@@ -38,6 +38,11 @@ class RecomendacionService : Service() {
                 } catch (e: Exception) {
                     Log.e("Recomendacion Error($intentos)", e.message.toString())
                     if(intentos > 60){
+                        val finalRecommendation = "Sugerencia:\n- No se identificó una categoría clara.\n\nRecomendados:\nazucar, cerveza"
+
+                        PreferencesManager.saveString(PreferenceKeys.JOB_ID, "0")
+                        PreferencesManager.saveString(PreferenceKeys.RECOMENDACION, finalRecommendation)
+
                         NotificationHelper.showNotification(applicationContext, "Tiempo de espera caducado")
                         val intent = Intent("com.example.sigccp.SERVICE_STOPPED")
                         sendBroadcast(intent)

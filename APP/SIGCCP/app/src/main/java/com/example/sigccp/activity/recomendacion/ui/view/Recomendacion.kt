@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -61,11 +60,11 @@ fun Recomendacion(
     val recommendation by serviceViewModel.recommendationText.collectAsState()
 
     //-------------------------------------------
-    val jobId = PreferencesManager.getString("job_id")
+    val storedJobId = PreferencesManager.getString("job_id")
     val textoRecomendacion = PreferencesManager.getString("final_recommendation")
 
-    if (jobId.isNotBlank() && textoRecomendacion.isNotBlank()) {
-        serviceViewModel.setJobId(jobId)
+    if (storedJobId.isNotBlank() && textoRecomendacion.isNotBlank()) {
+        serviceViewModel.setJobId(storedJobId)
         serviceViewModel.setRecommendationText(recommendation)
     }
 
@@ -79,16 +78,15 @@ fun Recomendacion(
         uri?.let {
             val file = FileUtils.getFileFromUri(context, it)
             viewModel.uploadVideoFile(file,
-                onSuccess = {jobId ->
-                    Log.d("Response", jobId)
+                onSuccess = { generadedJobId ->
                     Toast.makeText(
                         context,
                         "Video Cargado", Toast.LENGTH_LONG
                     ).show()
-                    serviceViewModel.setJobId(jobId)
+                    serviceViewModel.setJobId(generadedJobId)
                     serviceViewModel.setServiceRunning(true)
                     serviceViewModel.setRecommendationText("")
-                    startJobService(context, jobId)
+                    startJobService(context, generadedJobId)
                 }, onError = {msg ->
                     Toast.makeText(
                         context,
@@ -107,15 +105,15 @@ fun Recomendacion(
             videoUri = it
             val file = FileUtils.getFileFromUri(context, it)
             viewModel.uploadVideoFile(file,
-                onSuccess = {
+                onSuccess = {generadedJobId ->
                     Toast.makeText(
                         context,
                         "Video Cargado", Toast.LENGTH_LONG
                     ).show()
-                    serviceViewModel.setJobId(jobId)
+                    serviceViewModel.setJobId(generadedJobId)
                     serviceViewModel.setServiceRunning(true)
                     serviceViewModel.setRecommendationText("")
-                    startJobService(context, jobId)
+                    startJobService(context, generadedJobId)
 
                 }, onError = {msg ->
                     Toast.makeText(
