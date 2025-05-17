@@ -1,0 +1,46 @@
+<div class="producto-page">
+  <div class="producto-column">
+    <span class="producto-title" i18n>
+      {{ 'INVENTORY.INVENTORY_LIST' | translate }}
+    </span>
+
+    <div class="filtro-container">
+      <input
+        type="text"
+        [(ngModel)]="filtroNombre"
+        (ngModelChange)="actualizarFiltro()"
+        placeholder="Filtrar por nombre"
+        class="filtro-input-material"
+        aria-label="Filtrar por nombre"
+      />
+      <mat-icon class="filtro-icon">search</mat-icon>
+    </div>
+
+
+    <div class="producto-header">
+      <span class="header-nombre" i18n>{{ 'COMMON.NAME' | translate }}</span>
+      <span class="header-ubicacion" i18n>{{ 'COMMON.WAREHOUSE' | translate }}</span>
+      <span class="header-stock" i18n>{{ 'COMMON.STOCK' | translate }}</span>
+    </div>
+
+    <div class="producto-list">
+      <ng-container *ngIf="productosFiltrados.length > 0; else sinProductos">
+        <div
+          class="producto-row card"
+          *ngFor="let producto of productosFiltrados; trackBy: trackByProductoId"
+          (click)="navigateToDetalle(producto.producto_id)"
+        >
+          <span class="producto-nombre">{{ producto.nombre }}</span>
+          <span class="producto-ubicacion">{{ producto.bodega }}</span>
+          <span class="producto-stock">{{ producto.cantidad }}</span>
+        </div>
+      </ng-container>
+
+      <ng-template #sinProductos>
+        <div class="no-productos" i18n>
+          {{ 'INVENTORY.NOT_FOUND' | translate }}
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,126 @@
+.producto-page {
+  padding: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #351330;
+}
+
+.producto-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 13px;
+  width: 50%;
+  gap: 10px;
+}
+
+.producto-title {
+  font: var(--mat-sys-headline-large);
+  color: #351330;
+}
+
+.producto-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.producto-row,
+.producto-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 0;
+  border-radius: 8px;
+}
+
+.producto-row {
+  background-color: var(--mdc-filled-button-container-color);
+}
+
+.producto-header {
+  font-weight: bold;
+  background-color: transparent;
+  color: #351330;
+}
+.producto-nombre,
+.producto-ubicacion,
+.producto-stock,
+.header-nombre,
+.header-ubicacion,
+.header-stock {
+  color: #351330;
+}
+.producto-row-text {
+  white-space: initial;
+  max-width: 200px;
+  height: 40px;
+  text-align: center;
+  align-content: center;
+  font: var(--mat-sys-label-large);
+  color: #351330;
+}
+
+.producto-nombre {
+  flex: 2;
+  padding-left: 30px; /* Espacio desde el borde izquierdo */
+  padding-right: 50px; 
+}
+
+.header-nombre{
+  flex: 2;
+  padding-left: 60px; /* Espacio desde el borde izquierdo */
+}
+
+.header-ubicacion,
+.producto-ubicacion {
+  flex: 2;
+  display: flex;
+  justify-content: center; /* Centrado horizontal */
+}
+
+.header-stock{
+  flex: 2;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 20px; /* Para equilibrar margen interno */
+}
+
+.producto-stock {
+  flex: 2;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 40px; /* Para equilibrar margen interno */
+}
+
+.filtro-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60%; /* Ajusta la longitud aquí */
+  margin-bottom: 12px;
+  border: 1px solid #351330;
+  border-radius: 6px;
+  padding: 4px 10px;
+  background-color: transparent; /* Sin fondo blanco */
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.filtro-input-material {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #351330;
+  text-align: center;
+}
+
+.filtro-icon {
+  font-size: 20px;
+  color: #351330;
+  margin-left: 8px;
+}
