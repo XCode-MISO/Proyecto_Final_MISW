@@ -44,5 +44,7 @@ class ProductosE2eTest {
         robot.clickEnBoton("Agregar")
         robot.esperarProcesamiento(3000)
         robot.verificarScreenConTituloSeMuestra("!Product¡") // Ajusta el título según corresponda
+        robot.clickEnBoton("logout")
+        robot.esperarProcesamiento(500)
     }
 }

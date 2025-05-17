@@ -23,7 +23,8 @@
       "END": "End",
       "ADDRESS": "Address",
       "STOCK": "Stock",
-      "WAREHOUSE": "Warehouse"
+      "WAREHOUSE": "Warehouse",
+      "FILTER_NAME": "Filter by name"
     },
     "LOGIN": {
       "TITLE": "Login",

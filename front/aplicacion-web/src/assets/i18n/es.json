@@ -23,7 +23,8 @@
       "END": "Fin",
       "ADDRESS": "Dirección",
       "STOCK": "Cantidad",
-      "WAREHOUSE": "Bodega"
+      "WAREHOUSE": "Bodega",
+      "FILTER_NAME": "Filtrar por nombre"
     },
     "LOGIN": {
       "TITLE": "Iniciar sesión",

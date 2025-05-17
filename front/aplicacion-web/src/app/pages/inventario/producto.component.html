@@ -9,9 +9,9 @@
         type="text"
         [(ngModel)]="filtroNombre"
         (ngModelChange)="actualizarFiltro()"
-        placeholder="Filtrar por nombre"
+        [placeholder]="'COMMON.FILTER_NAME' | translate"
         class="filtro-input-material"
-        aria-label="Filtrar por nombre"
+        [attr.aria-label]="'COMMON.FILTER_NAME' | translate"
       />
       <mat-icon class="filtro-icon">search</mat-icon>
     </div>
