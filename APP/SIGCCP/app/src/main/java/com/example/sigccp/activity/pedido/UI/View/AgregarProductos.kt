@@ -30,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sigccp.R
 import com.example.sigccp.navigation.NavigationController
 import com.example.sigccp.ui.View.Components.moneda
@@ -38,8 +39,9 @@ import com.example.sigccp.ui.theme.AppTypography
 
 //@Preview
 @Composable
-fun AgregarProductos( viewModel: PedidoViewModel)
+fun AgregarProductos()
 {
+    val viewModel: PedidoViewModel = viewModel()
     Producto(viewModel)
 }
 

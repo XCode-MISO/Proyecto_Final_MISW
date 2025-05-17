@@ -41,8 +41,9 @@ import com.example.sigccp.ui.theme.AmarilloApp
 
 //@Preview
 @Composable
-fun CrearPedido(viewModel: PedidoViewModel)
+fun CrearPedido()
 {
+    val viewModel: PedidoViewModel = viewModel()
     Pedido(viewModel)
 }
 @Composable

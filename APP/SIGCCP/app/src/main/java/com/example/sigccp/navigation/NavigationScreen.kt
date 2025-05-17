@@ -44,7 +44,6 @@ fun NavigationScreen(recomendacionServiceViewModel: RecomendacionServiceViewMode
     val token = PreferencesManager.getString(PreferenceKeys.TOKEN)
     val startDestination = if (token.isNotEmpty()) AppScreen.Menu.route else AppScreen.Login.route
 
-    val viewModel: PedidoViewModel = viewModel()
     val clientViewModel: ClienteViewModel = viewModel()
     val recomendacionViewModel: RecomendacionViewModel = viewModel()
     val entregasViewModel: ListarEntregasViewModel = viewModel()
@@ -93,11 +92,11 @@ fun NavigationScreen(recomendacionServiceViewModel: RecomendacionServiceViewMode
         }
         composable(route = AppScreen.CrearPedido.route)
         {
-            CrearPedido(viewModel)
+            CrearPedido()
         }
         composable(route = AppScreen.AgregarProductos.route)
         {
-            AgregarProductos(viewModel)
+            AgregarProductos()
         }
         composable(route = AppScreen.Recomendacion.route)
         {
