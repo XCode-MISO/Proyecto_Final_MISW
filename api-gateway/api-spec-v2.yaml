@@ -325,7 +325,7 @@ paths:
         404:
           description: "Producto no encontrado"
       x-google-backend:
-        address: "http://kubernetes-gateway.cppxcode.shop/inventario/"
+        address: "http://kubernetes-gateway.cppxcode.shop/inventario"
         path_translation: APPEND_PATH_TO_ADDRESS
       security:
         - firebase: []
@@ -338,7 +338,7 @@ paths:
           required: true
           description: "ID del producto"
       x-google-backend:
-        address: http://kubernetes-gateway.cppxcode.shop/inventario/
+        address: http://kubernetes-gateway.cppxcode.shop/inventario
       responses:
         '200':
           description: A successful response
