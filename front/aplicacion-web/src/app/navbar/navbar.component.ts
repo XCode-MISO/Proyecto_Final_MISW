@@ -45,9 +45,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
       roles: ['admin', 'directorventas'],
       translationKey: 'NAVIGATION.SALES'
     }, 
-    { 
+    { //Ruta a menu de gestion de inventario
       name: "Gestion de Inventario", 
-      route: '/route', 
+      route: '/inventario/menu', 
       roles: ['admin', 'directorlogistica'],
       translationKey: 'NAVIGATION.INVENTORY'
     }
@@ -106,7 +106,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       case 'directorlogistica':
         // DirectorLogistica solo puede ver Inicio y Gestión de Inventario
         this.tabs = this.allTabs.filter(tab => 
-          tab.route === '/home' || tab.route === '/route'
+          tab.route === '/home' || tab.route === '/inventario/menu' || tab.route === '/inventario/route' || tab.route === '/route'||  tab.route === '/inventario/listar' ||  tab.route === '/inventario/detalle'
         );
         break;
       default:

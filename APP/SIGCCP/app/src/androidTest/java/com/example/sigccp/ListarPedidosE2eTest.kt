@@ -45,5 +45,7 @@ class ListarPedidosE2eTest {
 
         // Verificar que se muestra la pantalla de creación de pedido
         robot.verificarScreenConTituloSeMuestra("¡Your Order!") // Ajusta el título según corresponda
+        robot.clickEnBoton("logout")
+        robot.esperarProcesamiento(500)
     }
 }

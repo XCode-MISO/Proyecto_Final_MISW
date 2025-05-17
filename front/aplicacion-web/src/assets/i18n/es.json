@@ -21,7 +21,10 @@
       "APPLY": "Aplicar",
       "START": "Inicio",
       "END": "Fin",
-      "ADDRESS": "Dirección"
+      "ADDRESS": "Dirección",
+      "STOCK": "Cantidad",
+      "WAREHOUSE": "Bodega",
+      "FILTER_NAME": "Filtrar por nombre"
     },
     "LOGIN": {
       "TITLE": "Iniciar sesión",
@@ -68,6 +71,12 @@
       "AISLE": "Pasillo",
       "LOAD": "Carga de Producto",
       "BULK_LOAD_PRODUCTS": "Carga Masiva de Productos"
+    },
+    "INVENTORY": {
+      "ROUTE_LIST": "Rutas",
+      "INVENTORY_LIST": "Inventario de Productos",
+      "INVENTORY_DETAIL": "Detalle de Producto",
+      "NOT_FOUND": "No hay productos registrados."
     },
     "ROUTES": {
       "ROUTE_LIST": "Rutas",

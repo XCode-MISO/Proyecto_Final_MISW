@@ -1,0 +1,39 @@
+<div class="inventory-page">
+  <div class="inventory-column">
+
+    <span class="inventory-title" i18n>
+      {{ 'INVENTORY.INVENTORY_LIST' | translate }}
+    </span>
+    <div class="form-row">
+      <span class="form-row-text">
+        {{ 'COMMON.NAME' | translate }}:
+      </span>
+
+      <form>
+        <mat-form-field class="form-field" appearance="outline" [subscriptSizing]="'dynamic'">
+          <mat-icon matPrefix>search</mat-icon>
+          <input
+            matInput
+            type="text"
+            placeholder="{{ 'COMMON.SEARCH' | translate }}"
+            [formControl]="nameFilter"
+            (input)="filterRoutes()"
+          />
+        </mat-form-field>
+      </form>
+
+    </div>
+    <div class="inventory-list">
+      @for (route of filteredRoutes; track $index; let idx = $index) {
+          <div class="inventory-row" (click)="navigateToRoute(route.id)" >
+            <span class="inventory-row-text">
+              {{route.nombreRuta}}
+            </span>
+            <span class="inventory-row-text">
+              {{route.fecha}}
+            </span>
+          </div>
+      }
+    </div>
+  </div>
+</div>

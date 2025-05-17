@@ -36,13 +36,15 @@ class ListarRutasTest {
 
         // Verificar que está visible el selector de fecha
         robot.botonEstaVisible("SelectorFecha") // testTag en el Box clickable que abre el DatePicker
-        robot.esperarProcesamiento(6000)
+        robot.esperarProcesamiento(7000)
         composeTestRule
-            .onNodeWithTag("ruta_1")
+            .onNodeWithTag("ruta_0")
             .performClick()
 
         robot.esperarProcesamiento(3000)
         robot.verificarScreenConTituloSeMuestra("ROUTE") // Ajusta el título según corresponda
+        robot.clickEnBoton("logout")
+        robot.esperarProcesamiento(500)
 
     }
 }

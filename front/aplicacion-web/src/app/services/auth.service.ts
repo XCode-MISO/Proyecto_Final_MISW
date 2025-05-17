@@ -212,7 +212,7 @@ export class AuthService {
       
       // Obtener token fresco de Firebase
       const token = await user.getIdToken(true);
-      console.log('getToken: Token obtenido con éxito');
+      console.log('getToken: Token obtenido con éxito',token);
       return token;
     } catch (error) {
       console.error('Error al obtener token:', error);

@@ -21,6 +21,8 @@ import { VendedorListComponent } from './pages/ventas/vendedor/vendedor-list/ven
 
 import { PlansComponent } from './pages/plans/plans.component';
 import { AddPlanComponent } from './pages/plans/add-plan/add-plan.component';
+import { GestionInventarioComponent } from './pages/inventario/gestion-inventario/gestion-inventario.component';
+import { ProductoComponent } from './pages/inventario/producto.component';
 
 
 export const routes: Routes = [
@@ -61,7 +63,7 @@ export const routes: Routes = [
       { path: 'upload-productos', component: ProductosUploadComponent },
     ]
   },
-  
+ 
   // Rutas de Ventas - Solo para admin y directorventas
   { 
     path: 'ventas', 
@@ -86,7 +88,6 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     data: { roles: ['admin', 'directorlogistica'] },
     children: [
-      { path: '', component: RouteListComponent },
       { path: 'add', component: RouteAddComponent },
       { path: ':id', component: RoutesComponent },
       { path: ':id/stop/add', component: StopAddComponent },
@@ -99,6 +100,20 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     data: { roles: ['admin', 'directorlogistica'] }
   },
+
+   // Rutas de Fabricantes - Solo para admin y directorcompras
+  { 
+    path: 'inventario', 
+    canActivate: [AuthGuard],
+    data: { roles: ['admin', 'directorcompras'] },
+    children: [
+      { path: 'productos', component: ProductoComponent },
+      //{ path: 'detalle', component: InventarioListarComponent },
+      { path: 'menu', component: GestionInventarioComponent },
+      { path: 'route', component: RouteListComponent },
+    ]
+  },
+  
   
   // Ruta de redirección para rutas no encontradas
   { path: '**', redirectTo: '/login' }
