@@ -1,0 +1,48 @@
+name: unit-ms_ventas_report
+
+on:
+  pull_request:
+    paths:
+      - "services/ms_ventas_report/**"
+      - ".github/workflows/unit-ms-ventas-report.yaml"
+  push:
+    branches: [master]
+   
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install -r services/ms_ventas_report/requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Run tests + coverage
+        run: |
+          cd services/ms_ventas_report
+          python -m pytest -q tests \
+            --cov=. \
+            --cov-report=xml:coverage.xml \
+            --cov-report=html:cov_html \
+            --cov-config=.coveragerc
+
+      - name: Upload HTML coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-ms_ventas_report
+          path: services/ms_ventas_report/cov_html
+          
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: services/ms_ventas_report/coverage.xml
+          flags: ms_ventas_report
+          name: ms_ventas_report-coverage
+          fail_ci_if_error: false

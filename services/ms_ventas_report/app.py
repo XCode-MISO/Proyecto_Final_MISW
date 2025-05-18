@@ -1,70 +1,65 @@
-import json
-import os, sys
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
-from flask import Flask, jsonify
-from models.db import init_db
-from services.ms_ventas_report.apis.reportes_api import inventario_bp
-from werkzeug.exceptions import HTTPException
-from flask_cors import CORS
+import os
+import threading
+from flask import Flask
+from models.db import db
+from api.reporte_controller import reporte_bp
+import logging
+
+# Configurar logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def create_app():
     app = Flask(__name__)
-
-    @app.route("/")
-    def hello_world():
-        return "<p>Hello, World!</p>"
-
-    @app.route("/health")
-    def health_check():
-        return "Ok"
-
-    @app.route("/info")
-    def info_path():
-        try:
-            return json.load(open(os.path.join("version.json"), "r"))
-        except Exception as e:
-            print(str(e))
-            return "No version.json, this means this deployment was manual or there is an error."
-
-  
-    if app.config.get('TESTING'):
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    else:
-        db_host = os.getenv('DB_HOST', '34.171.48.199')
-        db_port = os.getenv('DB_PORT', '5432')
-        db_user = os.getenv('DB_USER', 'admin_write')
-        db_pass = os.getenv('DB_PASS', 'PASSWORD_123')
-        db_name = os.getenv('DB_NAME', 'inventarios_db')
-        app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-        app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-        "pool_recycle": 300, 
-        "pool_pre_ping": True  
-        }
-
-    init_db(app)
     
-
-    @app.errorhandler(Exception)
-    def handle_exception(e):
-        if isinstance(e, HTTPException):
-            return jsonify({"error": e.description}), e.code
-        return jsonify({"error": str(e)}), 500
-
-    app.register_blueprint(inventario_bp, url_prefix='/api/inventarios')
-
-    CORS(app)
+  
+    postgres_uri = "postgresql+pg8000://admin_read:PASSWORD_123@35.202.68.237:5432/reportes_db"
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', postgres_uri)
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    #  la DB
+    db.init_app(app)
+    
+    app.register_blueprint(reporte_bp)
+    
+    with app.app_context():
+        db.create_all()
+    
+    @app.route('/')
+    def health_check():
+        return {"status": "ok", "service": "ms_ventas_report"}
+    
     return app
 
-if __name__ == '__main__':
-    flask_app = create_app()
-    # Iniciar el subscriber en un hilo aparte
-    from events.subscriber_compras import start_subscriber
-    from events.subscriber_pedidos import start_pedidos_subscriber
-    import threading
-    sub_thread_compras = threading.Thread(target=start_subscriber, daemon=True)
-    sub_thread_compras.start()
-    sub_thread_pedidos = threading.Thread(target=start_pedidos_subscriber, daemon=True)
-    sub_thread_pedidos.start()
+def start_subscribers():
+    in_docker = os.path.exists("/.dockerenv")
+    
+    if in_docker:
+        logger.info("🐳 Ejecutando en Docker, intentando iniciar Pub/Sub real")
+        try:
+            from events.subscriber_pedidos import start_pedidos_subscriber
+            subscriber_thread = threading.Thread(target=start_pedidos_subscriber)
+            subscriber_thread.daemon = True
+            subscriber_thread.start()
+            logger.info("✅ Suscriptor Pub/Sub iniciado correctamente")
+        except Exception as e:
+            logger.error(f"❌ Error iniciando Pub/Sub: {e}")
+    else:
+        logger.info("💻 Ejecutando en local, usando simulador de eventos")
+        try:
+            from events.subscriber_pedidos import simular_eventos_pedidos
+            simular_eventos_pedidos()
+            logger.info("✅ Eventos simulados procesados correctamente")
+        except Exception as e:
+            logger.error(f"❌ Error en simulación de eventos: {e}")
 
-    flask_app.run(host='0.0.0.0', port=5002, debug=True)
+if __name__ == "__main__":
+    app = create_app()
+    
+    if os.getenv('ENABLE_PUBSUB', 'false').lower() == 'true':
+        start_subscribers()
+    else:
+        logger.info("ℹ️ Pub/Sub desactivado. Establece ENABLE_PUBSUB=true para activarlo.")
+    
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))

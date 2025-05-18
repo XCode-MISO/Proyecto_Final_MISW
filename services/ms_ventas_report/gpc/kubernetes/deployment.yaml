@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-ventas-report-deployment
+  labels:
+    app: ms-ventas-report
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-ventas-report
+  template:
+    metadata:
+      labels:
+        app: ms-ventas-report
+    spec:
+      containers:
+      - name: ms-ventas-report
+        image: gcr.io/misw-4301-native-cloud-433702/github.com/xcode-miso/ms-ventas-report:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DATABASE_URL
+          value: "postgresql+pg8000://admin_read:PASSWORD_123@35.202.68.237:5432/reportes_db"
+        - name: ENABLE_PUBSUB
+          value: "true"
+        - name: GOOGLE_CLOUD_PROJECT
+          value: "misw-4301-native-cloud-433702"
+        - name: PEDIDOS_TOPIC
+          value: "PedidoCreado"
+        - name: PEDIDOS_SUBSCRIPTION
+          value: "PedidoCreado-ventas-report-sub"
