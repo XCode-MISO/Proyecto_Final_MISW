@@ -21,7 +21,8 @@ data class PedidoClass(
     val name: String,
     val price: Float,
     val state: String,
-    val client: ClienteSingleClass
+    val client: ClienteSingleClass,
+    val createdAt: String
 )
 
 data class Pedidos(
@@ -50,7 +51,7 @@ data class PedidoRequest(
     val products: List<ProductoCantidad>,
     val price: Float,
     val state: String,
-    val deliveryDate: String
+    val deliveryDate: String,
 )
 
 data class ProductoCantidad(

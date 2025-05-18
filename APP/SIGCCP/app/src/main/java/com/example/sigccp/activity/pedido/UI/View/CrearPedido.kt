@@ -54,7 +54,13 @@ fun Pedido(viewModel: PedidoViewModel) {
         }
     }
     LaunchedEffect(Unit) {
-        viewModel.fetchClientes() // Asumimos que esta es la función para cargar clientes
+        val token = PreferencesManager.getString(PreferenceKeys.TOKEN)
+        if (token.isNotEmpty()) {
+            viewModel.fetchClientes()
+        } else {
+            // Navegar a login o mostrar mensaje de sesión expirada
+            NavigationController.navigate(AppScreen.Login.route)
+        }
     }
     var showDialog by remember { mutableStateOf(false) }
     var dialogMessage by remember { mutableStateOf("") }
