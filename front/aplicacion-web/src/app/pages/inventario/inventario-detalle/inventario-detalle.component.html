@@ -1,0 +1,35 @@
+<div class="detalle-producto-page">
+  <h2 class="detalle-title" i18n>{{ 'INVENTORY.INVENTORY_DETAIL' | translate }}</h2>
+
+  <div class="detalle-form" *ngIf="producto">
+    <label class="detalle-label" i18n>{{ 'COMMON.NAME' | translate }}</label>
+    <input class="detalle-input" [value]="producto.nombre" readonly />
+
+    <label class="detalle-label" i18n>{{ 'COMMON.WAREHOUSE' | translate }}</label>
+    <input class="detalle-input" [value]="producto.bodega" readonly />
+
+    <label class="detalle-label" i18n>{{ 'INVENTORY.AISLE' | translate }}</label>
+    <input class="detalle-input" [value]="producto.pasillo" readonly />
+
+    <label class="detalle-label" i18n>{{ 'INVENTORY.SHELF' | translate }}</label>
+    <input class="detalle-input" [value]="producto.estante" readonly />
+
+    <label class="detalle-label" i18n>{{ 'COMMON.STOCK' | translate }}</label>
+    <input class="detalle-input" [value]="producto.stock" readonly />
+
+    <label class="detalle-label" i18n>{{ 'COMMON.CURRENCY' | translate }}</label>
+<div class="detalle-select-wrapper">
+  <select class="detalle-input" [(ngModel)]="monedaSeleccionada" (change)="actualizarPrecio()">
+    <option value="COP">COP</option>
+    <option value="USD">USD</option>
+  </select>
+  <span class="select-arrow">&#9662;</span>
+</div>
+
+    <label class="detalle-label" i18n>{{ 'COMMON.PRICE' | translate }}</label>
+    <input class="detalle-input" [value]="precioConvertido | number:'1.2-2'" readonly />
+
+    <label class="detalle-label" i18n>{{ 'COMMON.CURRENCY' | translate }}</label>
+    <input class="detalle-input" [value]="monedaSeleccionada" readonly />
+  </div>
+</div>

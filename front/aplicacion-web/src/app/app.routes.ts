@@ -23,6 +23,7 @@ import { PlansComponent } from './pages/plans/plans.component';
 import { AddPlanComponent } from './pages/plans/add-plan/add-plan.component';
 import { GestionInventarioComponent } from './pages/inventario/gestion-inventario/gestion-inventario.component';
 import { ProductoComponent } from './pages/inventario/producto.component';
+import { DetalleProductoComponent } from './pages/inventario/inventario-detalle/inventario-detalle.component';
 
 
 export const routes: Routes = [
@@ -108,7 +109,7 @@ export const routes: Routes = [
     data: { roles: ['admin', 'directorcompras'] },
     children: [
       { path: 'productos', component: ProductoComponent },
-      //{ path: 'detalle', component: InventarioListarComponent },
+      { path: 'detalle/:id', component: DetalleProductoComponent },
       { path: 'menu', component: GestionInventarioComponent },
       { path: 'route', component: RouteListComponent },
     ]
