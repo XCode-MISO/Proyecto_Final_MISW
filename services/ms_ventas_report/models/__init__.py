@@ -1,3 +1,2 @@
 from .db import db
-from .producto_inventario import ProductoInventario
-from .reporte import Producto
+from .reporte import ReporteVentas

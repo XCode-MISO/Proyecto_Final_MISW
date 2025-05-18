@@ -1,15 +1,16 @@
 FROM python:3.10-slim
 
-RUN apt-get update && apt-get install -y \
-    gcc \
-    libpq-dev \
-    postgresql-client \
- && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /app
+
+# Instalar dependencias
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY . /app
-ENV FLASK_APP=app.py
-EXPOSE 5002
-CMD ["python", "app.py"]
+
+# Copiar código fuente
+COPY . .
+
+# Puerto para la API
+EXPOSE 8080
+
+# Comando para ejecutar
+CMD ["python", "app_simple.py"]
