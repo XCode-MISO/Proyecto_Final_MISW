@@ -41,9 +41,8 @@ import com.example.sigccp.ui.theme.AmarilloApp
 
 //@Preview
 @Composable
-fun CrearPedido()
+fun CrearPedido(viewModel: PedidoViewModel)
 {
-    val viewModel: PedidoViewModel = viewModel()
     Pedido(viewModel)
 }
 @Composable
@@ -112,12 +111,12 @@ fun Pedido(viewModel: PedidoViewModel) {
                                 }
                             )
                         }
-
+                        /*
                         locationDropdown(
                             locations = moneda,
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
                         )
-
+                        */
                         Text(
                             text = "Total: $${"%.2f".format(viewModel.precioTotal.value)}",
                             style = AppTypography.labelLarge,
@@ -142,7 +141,7 @@ fun Pedido(viewModel: PedidoViewModel) {
                                 // Crear pedido si todo está correcto
                                 viewModel.crearPedido(
                                     onSuccess = {
-                                        dialogMessage = "Pedido creado exitosamente."
+                                        dialogMessage = "Pedido '${viewModel.nombrePedido.value}' creado exitosamente."
                                         showDialog = true
                                         viewModel.precioTotal.value = 0f
                                         viewModel.limpiarPedido()

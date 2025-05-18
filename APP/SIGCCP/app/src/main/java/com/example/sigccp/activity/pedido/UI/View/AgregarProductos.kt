@@ -39,9 +39,8 @@ import com.example.sigccp.ui.theme.AppTypography
 
 //@Preview
 @Composable
-fun AgregarProductos()
+fun AgregarProductos(viewModel: PedidoViewModel)
 {
-    val viewModel: PedidoViewModel = viewModel()
     Producto(viewModel)
 }
 
@@ -100,10 +99,12 @@ fun Producto(viewModel: PedidoViewModel)
                         horizontalAlignment = Alignment.CenterHorizontally
                     )
                     {
+                        /*
                         locationDropdown(
                             locations = moneda,
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
                         )
+                        */
                         Text(
                             text = "Total: $${"%.2f".format(viewModel.precioTotal.value)}",
                             style = AppTypography.labelLarge,

@@ -27,9 +27,9 @@ class PedidoViewModel : ViewModel() {
     private val _clientes = mutableStateOf<List<ClienteClass>>(emptyList())
     val clientes: State<List<ClienteClass>> = _clientes
 
-    val formatter = DateTimeFormatter.ofPattern("yyMMddHHmm")
+    val formatter = DateTimeFormatter.ofPattern("yyMMddHHmmss")
     val timestamp = LocalDateTime.now().format(formatter)
-    val nombrePedido = mutableStateOf("Pedido #$timestamp")
+    val nombrePedido = mutableStateOf("Pedido $timestamp")
     val clienteId = mutableStateOf("")
     val clienteNombre = mutableStateOf("")
     val precioTotal = mutableStateOf(0f)
@@ -176,9 +176,10 @@ class PedidoViewModel : ViewModel() {
         }
     }
     fun limpiarPedido() {
+        val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"))
         clienteId.value = ""
         _productosSeleccionados.value = emptyList()
-        nombrePedido.value = "Pedido #${(1..9999).random()}"
+        nombrePedido.value = "Pedido ${timestamp}"
         precioTotal.value = 0.0f
     }
 

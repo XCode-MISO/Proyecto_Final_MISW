@@ -100,8 +100,8 @@ fun EntregaBox(
     moneda: Int
 ) {
     val tasaConversion = 4000f
-    val precioConvertido = if (moneda == 2) entrega.price / tasaConversion else entrega.price
-    val simbolo = if (moneda == 2) "USD" else "COP"
+    val precioConvertido = if (moneda == 2) entrega.price * tasaConversion else entrega.price
+    val simbolo = if (moneda == 2) "COP" else "USD"
     Box(
         modifier = Modifier
             .fillMaxWidth()

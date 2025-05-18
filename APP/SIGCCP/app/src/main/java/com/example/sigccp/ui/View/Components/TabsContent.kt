@@ -510,8 +510,8 @@ fun PedidoBox(
     moneda: Int
 ) {
     val tasaConversion = 4000f
-    val precioConvertido = if (moneda == 2) pedido.price / tasaConversion else pedido.price
-    val simbolo = if (moneda == 2) "USD" else "COP"
+    val precioConvertido = if (moneda == 2) pedido.price * tasaConversion else pedido.price
+    val simbolo = if (moneda == 2) "COP" else "USD"
     Box(
         modifier = Modifier
             .fillMaxWidth()
