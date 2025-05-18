@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, catchError, finalize, of } from 'rxjs';
-import { environment } from '../../../../environments/environment';
 
 export interface Inventario {
   producto_id: number;
@@ -13,9 +12,8 @@ export interface Inventario {
 export interface DetalleInventarioProducto {
   producto_id: number;
   nombre: string;
-  descripcion: string;
   precio: number;
-  fabricante_id: number;
+  moneda: string;
   stock: number;
   bodega: string;
   estante: string;

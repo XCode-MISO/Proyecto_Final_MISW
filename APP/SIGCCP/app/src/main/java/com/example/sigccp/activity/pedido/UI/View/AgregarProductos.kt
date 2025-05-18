@@ -31,6 +31,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.sigccp.PreferenceKeys
+import com.example.sigccp.PreferencesManager
 import com.example.sigccp.R
 import com.example.sigccp.navigation.NavigationController
 import com.example.sigccp.ui.View.Components.moneda
@@ -39,9 +41,8 @@ import com.example.sigccp.ui.theme.AppTypography
 
 //@Preview
 @Composable
-fun AgregarProductos()
+fun AgregarProductos(viewModel: PedidoViewModel)
 {
-    val viewModel: PedidoViewModel = viewModel()
     Producto(viewModel)
 }
 
@@ -49,7 +50,13 @@ fun AgregarProductos()
 fun Producto(viewModel: PedidoViewModel)
 {
     LaunchedEffect(Unit) {
-        viewModel.fetchProductos()
+        val token = PreferencesManager.getString(PreferenceKeys.TOKEN)
+        if (token.isNotEmpty()) {
+            viewModel.fetchProductos()
+        } else {
+            // Navegar a login o mostrar mensaje de sesión expirada
+            NavigationController.navigate(AppScreen.Login.route)
+        }
     }
     val isLoading = viewModel.isLoading.collectAsState().value
     val productos = viewModel.productosDisponibles
@@ -100,10 +107,12 @@ fun Producto(viewModel: PedidoViewModel)
                         horizontalAlignment = Alignment.CenterHorizontally
                     )
                     {
+                        /*
                         locationDropdown(
                             locations = moneda,
                             onLocationtSelected = { id -> println("Cliente seleccionado: $id") }
                         )
+                        */
                         Text(
                             text = "Total: $${"%.2f".format(viewModel.precioTotal.value)}",
                             style = AppTypography.labelLarge,

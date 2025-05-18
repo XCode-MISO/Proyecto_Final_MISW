@@ -47,6 +47,7 @@ fun NavigationScreen(recomendacionServiceViewModel: RecomendacionServiceViewMode
     val clientViewModel: ClienteViewModel = viewModel()
     val recomendacionViewModel: RecomendacionViewModel = viewModel()
     val entregasViewModel: ListarEntregasViewModel = viewModel()
+    val pedidoViewModel: PedidoViewModel = viewModel()
 
     NavigationController.navController = rememberNavController()
 
@@ -92,11 +93,11 @@ fun NavigationScreen(recomendacionServiceViewModel: RecomendacionServiceViewMode
         }
         composable(route = AppScreen.CrearPedido.route)
         {
-            CrearPedido()
+            CrearPedido(pedidoViewModel)
         }
         composable(route = AppScreen.AgregarProductos.route)
         {
-            AgregarProductos()
+            AgregarProductos(pedidoViewModel)
         }
         composable(route = AppScreen.Recomendacion.route)
         {

@@ -1,0 +1,98 @@
+.detalle-producto-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.detalle-title {
+  font: var(--mat-sys-headline-large);
+  color: #351330;
+  margin-bottom: 20px;
+}
+
+.detalle-form {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 10px; /* Espaciado reducido */
+  width: 60%;
+  max-width: 700px;
+}
+
+.detalle-input[readonly] {
+  cursor: default; /* Cambia el cursor */
+  background-color: transparent;
+  color: #351330;
+  user-select: none; /* Deshabilita selección de texto */
+  pointer-events: none; /* Evita clics y focus */
+}
+
+.detalle-label {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: #351330;
+}
+
+.detalle-input {
+  width: 100%;
+  background-color: transparent; /* Quitar fondo blanco */
+  border: 1px solid #351330; /* Color del borde */
+  border-radius: 6px;
+  padding: 10px;
+  font: var(--mat-sys-label-large);
+  color: #351330; /* Color del texto */
+}
+
+.detalle-input[readonly] {
+  cursor: not-allowed;
+  background-color: transparent; /* Fondo transparente */
+  color: #351330; /* Color del texto */
+}
+
+.detalle-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+select.detalle-input {
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid #351330;
+  border-radius: 6px;
+  padding: 10px;
+  font: var(--mat-sys-label-large);
+  color: #351330;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 30px; /* Deja espacio para la flecha */
+}
+
+.select-arrow {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #351330;
+  font-size: 14px;
+}
+.detalle-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 30px;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23351330' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+.detalle-input,
+select.detalle-input {
+  box-sizing: border-box; /* Asegura que el padding no cambie el tamaño */
+  height: 42px; /* Igualamos explícitamente la altura */
+  line-height: 1.2;
+  padding: 10px 12px;
+}

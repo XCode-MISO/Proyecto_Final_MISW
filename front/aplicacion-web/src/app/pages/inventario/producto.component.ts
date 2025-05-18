@@ -37,7 +37,7 @@ export class ProductoComponent implements OnInit {
   }
 
   navigateToDetalle(producto_id: number): void {
-    this.router.navigate(['/detalle-producto', producto_id]);
+    this.router.navigate(['/inventario/detalle/', producto_id]);
   }
 
   trackByProductoId(index: number, producto: any): any {

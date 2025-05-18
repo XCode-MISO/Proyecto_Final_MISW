@@ -26,10 +26,9 @@ import java.time.format.DateTimeFormatter
 class PedidoViewModel : ViewModel() {
     private val _clientes = mutableStateOf<List<ClienteClass>>(emptyList())
     val clientes: State<List<ClienteClass>> = _clientes
-
-    val formatter = DateTimeFormatter.ofPattern("yyMMddHHmm")
+    val formatter = DateTimeFormatter.ofPattern("yyMMddHHmmss")
     val timestamp = LocalDateTime.now().format(formatter)
-    val nombrePedido = mutableStateOf("Pedido #$timestamp")
+    val nombrePedido = mutableStateOf("Pedido $timestamp")
     val clienteId = mutableStateOf("")
     val clienteNombre = mutableStateOf("")
     val precioTotal = mutableStateOf(0f)
@@ -72,6 +71,10 @@ class PedidoViewModel : ViewModel() {
     }
 
     private fun fetchPedidos() {
+        val token = PreferencesManager.getString(PreferenceKeys.TOKEN)
+        if (token.isNullOrEmpty()) {
+            return
+        }
         viewModelScope.launch {
             try {
                 val role = PreferencesManager.getString(PreferenceKeys.ROLE)
@@ -82,18 +85,15 @@ class PedidoViewModel : ViewModel() {
                 } else {
                     RetrofitInstancePedido.api.obtenerPedidos()
                 }
-                _pedidos.value = response
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    fun fetchProductos() {
-        viewModelScope.launch {
-            try {
-                val response = RetrofitInstancePedido.api.obtenerProductos()
-                _productosDisponibles.value = response
+                val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+                val pedidosOrdenados = response.sortedByDescending { pedido ->
+                    try {
+                        LocalDateTime.parse(pedido.createdAt, formatter)
+                    } catch (e: Exception) {
+                        LocalDateTime.MIN
+                    }
+                }
+                _pedidos.value = pedidosOrdenados
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -165,7 +165,26 @@ class PedidoViewModel : ViewModel() {
     }
 
 
+    fun fetchProductos() {
+        viewModelScope.launch {
+            val token = PreferencesManager.getString(PreferenceKeys.TOKEN)
+            if (token.isNullOrEmpty()) {
+                return@launch
+            }
+            try {
+                val response = RetrofitInstancePedido.api.obtenerProductos()
+                _productosDisponibles.value = response
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     fun fetchClientes() {
+        val token = PreferencesManager.getString(PreferenceKeys.TOKEN)
+        if (token.isNullOrEmpty()) {
+            return
+        }
         viewModelScope.launch {
             try {
                 val response = RetrofitInstancePedido.api.obtenerClientes()
@@ -176,9 +195,10 @@ class PedidoViewModel : ViewModel() {
         }
     }
     fun limpiarPedido() {
+        val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"))
         clienteId.value = ""
         _productosSeleccionados.value = emptyList()
-        nombrePedido.value = "Pedido #${(1..9999).random()}"
+        nombrePedido.value = "Pedido ${timestamp}"
         precioTotal.value = 0.0f
     }
 

@@ -24,7 +24,9 @@
       "ADDRESS": "Address",
       "STOCK": "Stock",
       "WAREHOUSE": "Warehouse",
-      "FILTER_NAME": "Filter by name"
+      "FILTER_NAME": "Filter by name",
+      "PRICE": "Price",
+      "CURRENCY": "Currency"
     },
     "LOGIN": {
       "TITLE": "Login",
@@ -74,7 +76,9 @@
       "ROUTE_LIST": "Routes",
       "INVENTORY_LIST": "Inventory Of Products",
       "INVENTORY_DETAIL": "Detail Product",
-      "NOT_FOUND": "There are no registered products."
+      "NOT_FOUND": "There are no registered products.",
+      "AISLE": "Aisle",
+      "SHELF": "Shelf"
     },
       "ROUTES": {
       "ROUTE_LIST": "Routes",
