@@ -34,7 +34,7 @@ jobs:
             -z "-config api.disablekey=true -config replacer.full_list(0).description='Add Auth Header' -config replacer.full_list(0).enabled=true -config replacer.full_list(0).matchtype=REQ_HEADER -config replacer.full_list(0).match='.*' -config replacer.full_list(0).replacement='Authorization: Bearer $FIREBASE_TOKEN'"
 
       - name: Upload ZAP report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.3
         with:
           name: zap-report
           path: api-gateway/zap-report.html
