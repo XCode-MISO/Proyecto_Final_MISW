@@ -52,14 +52,11 @@ export class VendedorService {
     return this.http.get<Vendedor>(`${this.apiUrl}/vendedores/${id}`)
   }
   
- getReportesPorVendedor(vendedorId: string) {
+  getReportesPorVendedor(vendedorId: string) {
       return this.http.get<any[]>(`${this.reportesUrl}/reportes/vendedor/${vendedorId}`);
+  }
 
   getVisitas() {
     return this.http.get<VendedorVisita[]>(`${this.apiUrl}/visits`);
   }
-
-}
-
-
 }
