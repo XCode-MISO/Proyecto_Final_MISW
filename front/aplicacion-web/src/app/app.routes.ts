@@ -78,9 +78,9 @@ export const routes: Routes = [
       { path: '', component: MenuComponent },
       { path: 'vendedor/add', component: VendedorAddComponent },
       { path: 'vendedor/list', component: VendedorListComponent },
-   { path: 'vendedor/:id/reportes', component: VendedorReportesComponent },
 
-      { path: 'vendedor/informes', component: VendedorVisitListComponent },
+      { path: 'vendedor/:id/reportes', component: VendedorReportesComponent },
+      { path: 'vendedor/informes', component: VendedorVisitListComponent }
 
     ]
   },

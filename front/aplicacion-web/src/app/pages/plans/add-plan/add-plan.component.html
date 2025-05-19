@@ -55,7 +55,7 @@
               [subscriptSizing]="'dynamic'"
               class="form-row-big"
             >
-              <mat-label i18n>{{ "lorem ipsum" }} </mat-label>
+              <mat-label i18n>{{ 'PLANS.DESCRIPTION' | translate }} </mat-label>
               <input matInput formControlName="descripcion" />
               @if(descripcion?.invalid){<mat-error>
                 {{ 'PLANS.ERROR' | translate }}</mat-error

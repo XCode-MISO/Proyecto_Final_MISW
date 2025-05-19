@@ -58,7 +58,8 @@
       "PLANS_ADD": "Register Plan",
       "SELLERS": "Sellers",
       "SALES_PLAN": "Sales Plan",
-      "ERROR": "Error in the sales plan format"
+      "ERROR": "Error in the sales plan format",
+      "DESCRIPTION": "Description"
     },
       "PRODUCTS": {
       "PRODUCT": "Product",
