@@ -1,0 +1,63 @@
+.visisitas-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2.2rem;
+  color: #333;
+  margin-bottom: 30px;
+  font-weight: 700;
+}
+
+.visisitas-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px 10px 20px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #3c0d4e;
+}
+
+.fecha-header, .informe-header {
+  flex: 1;
+}
+
+.visisitas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.visisitas-card {
+  display: flex;
+  background-color: rgba(235, 213, 179, 0.8);
+  border-radius: 5px;
+  padding: 20px;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.visisitas-card .fecha {
+  flex: 1;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #3c0d4e;
+}
+
+.visisitas-card .informe {
+  flex: 3;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #3c0d4e;
+}
+
+.no-visisitas {
+  text-align: center;
+  padding: 30px;
+  color: #666;
+}

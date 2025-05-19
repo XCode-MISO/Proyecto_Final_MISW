@@ -1,0 +1,23 @@
+<div class="visisitas-container">
+  <h1 class="page-title">{{ 'SALES.INFORMATION' | translate }}</h1>
+
+  <div class="visisitas-header">
+    <span class="fecha-header">{{ 'SALES.DATE' | translate }}</span>
+    <span class="informe-header">{{ 'SALES.REPORT' | translate }}</span>
+  </div>
+
+  <div class="visisitas-list">
+    @for (visita of visitas; track visita.id) {
+      <div class="visisitas-card">
+        <div class="fecha">{{ visita.fechaVisita }}</div>
+        <div class="informe"><strong>{{ visita.informe }}</strong></div>
+      </div>
+    }
+
+    @if (visitas.length === 0) {
+      <div class="no-visisitas">
+        <p>{{ 'SALES.NOT_FOUND' | translate }}</p>
+      </div>
+    }
+  </div>
+</div>
