@@ -12,9 +12,10 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   console.log(`📤 Interceptando solicitud a: ${req.url}`, { method: req.method });
   
   // Si la URL es externa, considera usar un proxy o manejarla diferente
-  if (req.url.includes('microservicios-gateway')) {
+if (req.url.includes('microservicios-gateway') && !req.url.includes('ventas_report.cppxcode.shop')) {
     console.warn('⚠️ Detectada petición directa a API Gateway. Considera usar un proxy local.');
   }
+  
   
   return from(authService.getToken()).pipe(
     switchMap(token => {

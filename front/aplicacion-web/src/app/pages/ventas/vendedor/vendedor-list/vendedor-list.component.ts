@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { VendedorService } from '../vendedor.service'; // Importa el servicio desde la ruta correcta
 import { TranslateModule } from '@ngx-translate/core';
-
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 // Interface para los vendedores, si no existe ya en el servicio
 interface Vendedor {
   id: string;
@@ -20,16 +21,18 @@ interface Vendedor {
 @Component({
   selector: 'app-vendedor-list',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, TranslateModule],
+  imports: [CommonModule, MatButtonModule, TranslateModule, MatSnackBarModule],
   templateUrl: './vendedor-list.component.html',
   styleUrls: ['./vendedor-list.component.css']
 })
 export class VendedorListComponent implements OnInit {
-  vendedores: Vendedor[] = [];
+  vendedores: any[] = [];
 
   constructor(
-    private vendedorService: VendedorService, // Inyecta el servicio
-    private router: Router
+    private vendedorService: VendedorService,    
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -40,19 +43,25 @@ export class VendedorListComponent implements OnInit {
     this.vendedorService.getVendedores().subscribe({
       next: (data) => {
         this.vendedores = data;
-        console.log('Vendedores cargados:', this.vendedores);
       },
-      error: (err) => {
-        console.error('Error al cargar los vendedores:', err);
+      error: (error) => {
+        this.mostrarError('ERRORS.LOADING_SELLERS');
+        console.error('Error al cargar vendedores:', error);
       }
     });
   }
 
   verInformes(vendedorId: string): void {
-    this.router.navigate(['/ventas/vendedor/informes', vendedorId]);
+    this.router.navigate(['/ventas/vendedor', vendedorId, 'informes']);
   }
 
   verReportes(vendedorId: string): void {
-    this.router.navigate(['/ventas/vendedor/reportes', vendedorId]);
+    this.router.navigate(['/ventas/vendedor', vendedorId, 'reportes']);
+  }
+
+  private mostrarError(mensaje: string): void {
+    this.translate.get(mensaje).subscribe((msg: string) => {
+      this.snackBar.open(msg, 'OK', { duration: 5000 });
+    });
   }
 }

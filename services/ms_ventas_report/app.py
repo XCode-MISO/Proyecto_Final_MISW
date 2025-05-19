@@ -4,7 +4,7 @@ from flask import Flask
 from models.db import db
 from api.reporte_controller import reporte_bp
 import logging
-
+from flask_cors import CORS
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -30,6 +30,8 @@ def create_app():
     def health_check():
         return {"status": "ok", "service": "ms_ventas_report"}
     
+    
+    CORS(app)
     return app
 
 def start_subscribers():

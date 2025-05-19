@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Cliente, Vendedor } from '../../routes/routes.component';
 
@@ -15,7 +15,7 @@ export type RegistrarVendedorProps = {
   imagen: string
   latitud: string
   longitud: string
- }
+}
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +23,8 @@ export type RegistrarVendedorProps = {
 export class VendedorService {
 
   apiUrl = `https://microservicios-gateway-1qkjvfz9.uc.gateway.dev/api`
+
+  reportesUrl = 'http://ventas_report.cppxcode.shop/api'
 
   private http = inject(HttpClient)
 
@@ -41,5 +43,16 @@ export class VendedorService {
   getClientes() {
     return this.http.get<Cliente[]>(`${this.apiUrl}/clients`)
   }
+
+
+  getVendedorPorId(id: string) {
+    return this.http.get<Vendedor>(`${this.apiUrl}/vendedores/${id}`)
+  }
+  
+ getReportesPorVendedor(vendedorId: string) {
+      return this.http.get<any[]>(`${this.reportesUrl}/reportes/vendedor/${vendedorId}`);
+
+}
+
 
 }
