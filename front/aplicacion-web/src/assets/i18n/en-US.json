@@ -99,6 +99,8 @@
       "INFORMATION": "Information",
       "REPORTS": "Reports",
       "REPORTS_LIST": "List of Reports",
-      "REPORT_NOT_FOUND": "Report not found"
+      "REPORT_NOT_FOUND": "Report not found",
+      "DATE":"Date",
+      "REPORT":"Report"
     }
   }

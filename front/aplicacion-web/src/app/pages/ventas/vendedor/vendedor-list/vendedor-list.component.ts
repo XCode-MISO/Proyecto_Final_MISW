@@ -52,7 +52,10 @@ export class VendedorListComponent implements OnInit {
   }
 
   verInformes(vendedorId: string): void {
-    this.router.navigate(['/ventas/vendedor', vendedorId, 'informes']);
+
+    //this.router.navigate(['/ventas/vendedor/informes', vendedorId]);
+    this.router.navigate(['/ventas/vendedor/informes']);
+
   }
 
   verReportes(vendedorId: string): void {
