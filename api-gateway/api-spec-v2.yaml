@@ -385,14 +385,14 @@ paths:
         404:
           description: "No se encontró esa ruta"
       x-google-backend:
-        address: "http://kubernetes-gateway.cppxcode.shop/logistica"
+        address: "http://kubernetes-gateway.cppxcode.shop/logistica/"
         path_translation: APPEND_PATH_TO_ADDRESS
       security:
         - firebase: []
     options:
       operationId: corsOptionsListRuta
       x-google-backend:
-        address: http://kubernetes-gateway.cppxcode.shop/logistica/api/route
+        address: http://kubernetes-gateway.cppxcode.shop/logistica/
       parameters:        
       - in: path
         name: route_id
