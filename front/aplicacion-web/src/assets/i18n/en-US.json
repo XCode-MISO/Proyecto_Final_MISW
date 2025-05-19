@@ -97,6 +97,8 @@
       "REGISTER_SELLER": "Register Seller",
       "NOT_FOUND": "There are no registered sellers.",
       "INFORMATION": "Information",
-      "REPORTS": "Reports"
+      "REPORTS": "Reports",
+      "DATE":"Date",
+      "REPORT":"Report"
     }
   }
