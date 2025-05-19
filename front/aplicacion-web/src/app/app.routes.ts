@@ -24,6 +24,9 @@ import { AddPlanComponent } from './pages/plans/add-plan/add-plan.component';
 import { GestionInventarioComponent } from './pages/inventario/gestion-inventario/gestion-inventario.component';
 import { ProductoComponent } from './pages/inventario/producto.component';
 import { DetalleProductoComponent } from './pages/inventario/inventario-detalle/inventario-detalle.component';
+
+import { VendedorReportesComponent } from './pages/ventas/vendedor/vendedor-reportes/vendedor-reportes.component';
+
 import { VendedorVisitListComponent } from './pages/ventas/vendedor/vendedor-visit-list/vendedor-visit-list.component';
 
 
@@ -75,7 +78,10 @@ export const routes: Routes = [
       { path: '', component: MenuComponent },
       { path: 'vendedor/add', component: VendedorAddComponent },
       { path: 'vendedor/list', component: VendedorListComponent },
+   { path: 'vendedor/:id/reportes', component: VendedorReportesComponent }
+
       { path: 'vendedor/informes', component: VendedorVisitListComponent },
+
     ]
   },
   {

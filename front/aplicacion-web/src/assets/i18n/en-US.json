@@ -98,6 +98,8 @@
       "NOT_FOUND": "There are no registered sellers.",
       "INFORMATION": "Information",
       "REPORTS": "Reports",
+      "REPORTS_LIST": "List of Reports"
+
       "DATE":"Date",
       "REPORT":"Report"
     }

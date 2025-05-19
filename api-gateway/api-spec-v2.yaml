@@ -966,23 +966,13 @@ paths:
         type: string
         required: true
         description: "ID del vendedor"
-      - in: query
-        name: fecha_inicio
-        type: string
-        required: false
-        description: "Fecha de inicio para filtrar (formato YYYY-MM-DD)"
-      - in: query
-        name: fecha_fin
-        type: string
-        required: false
-        description: "Fecha de fin para filtrar (formato YYYY-MM-DD)"
       responses:
         200:
           description: "Lista de reportes de ventas del vendedor"
         404:
           description: "No se encontraron reportes para el vendedor especificado"
       x-google-backend:
-        address: "http://ventas_report.cppxcode.shop/reportes"
+        address: "http://ventas_report.cppxcode.shop/api/reportes/vendedor/{vendedor_id}"
         path_translation: APPEND_PATH_TO_ADDRESS
     options:
       operationId: corsOptionsGetReportesVendedor
@@ -993,7 +983,7 @@ paths:
         required: true
         description: "ID del vendedor"
       x-google-backend:
-        address: "http://ventas_report.cppxcode.shop/reportes"
+        address: "http://ventas_report.cppxcode.shop/api/reportes/vendedor/{vendedor_id}"
       responses:
         '200':
           description: "Respuesta CORS exitosa"

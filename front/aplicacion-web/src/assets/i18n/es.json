@@ -100,6 +100,7 @@
       "NOT_FOUND": "No hay vendedores registrados.",
       "INFORMATION": "Informes",
       "REPORTS": "Reportes",
+      "REPORTS_LIST": "Listado de Reportes"
       "DATE":"Fecha",
       "REPORT":"Informe"
     }
