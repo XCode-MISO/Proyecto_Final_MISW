@@ -1,166 +1,83 @@
-/* Estilos generales */
-.container {
-  max-width: 1200px;
+.reportes-container {
+  width: 100%;
+  max-width: 1000px;
   margin: 0 auto;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* Contenedor del encabezado */
-.header-container {
+.page-title {
+  text-align: center;
+  font-size: 2.2rem;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 1.6rem;
+  color: #555;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.reportes-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px 10px 20px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #3c0d4e;
+}
+
+.fecha-header, .producto-header, .cantidad-header {
+  flex: 1;
+}
+
+.producto-header {
+  flex: 2;
+}
+
+.reportes-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 2.5rem;
-  text-align: center;
+  gap: 20px;
 }
 
-/* Nombre del vendedor */
-.vendor-name {
-  font-size: 2.2rem;
-  font-weight: 600;
-  color: #3f2a56;
-  margin-bottom: 1rem;
-  text-align: center;
-  width: 100%;
-}
-
-/* Contenedor de la línea divisoria */
-.divider-wrapper {
+.reporte-card {
   display: flex;
-  justify-content: center;
-  width: 100%;
+  background-color: rgba(235, 213, 179, 0.8);
+  border-radius: 5px;
+  padding: 20px;
+  flex-direction: row;
+  gap: 20px;
 }
 
-/* Línea divisoria */
-.custom-divider {
-  width: 150px;
-  height: 3px;
-  background-color: #3f2a56;
-  opacity: 0.5;
-  margin: 0 auto 10px auto;
+.reporte-card .fecha {
+  flex: 1;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #3c0d4e;
 }
 
-/* Estilos de la tarjeta */
-.card {
-  border: none;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.reporte-card .producto {
+  flex: 2;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #3c0d4e;
 }
 
-.card-header {
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.card-title {
-  margin: 0;
-  color: #3f2a56;
-  font-size: 1.25rem;
-  font-weight: 500;
-}
-
-.card-body {
-  padding: 1.5rem;
-}
-
-/* Estilos para la tabla */
-.table-header {
-  color: #3f2a56;
-  font-weight: 500;
-  background-color: #f4f1e8;
-}
-
-.table-responsive {
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-}
-
-th.mat-header-cell {
-  padding: 12px 16px;
-  font-size: 0.95rem;
-}
-
-td.mat-cell {
-  padding: 12px 16px;
-  font-size: 0.95rem;
-  color: #333;
-}
-
-.mat-mdc-table {
-  box-shadow: none !important;
-  background-color: #f8f9fa !important;
-}
-
-/* Filas de la tabla */
-tr.mat-mdc-row, 
-tr.mat-row {
-  background-color: #f8f9fa;
-}
-
-/* Filas alternas */
-tr.mat-mdc-row:nth-child(even), 
-tr.mat-row:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-/* Hover de las filas */
-.hover-row:hover,
-tr.mat-mdc-row:hover,
-tr.mat-row:hover {
-  background-color: rgba(63, 42, 86, 0.04) !important;
-  transition: background-color 0.2s;
-}
-
-/* Mensaje sin datos */
-.text-center {
+.reporte-card .cantidad {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #3c0d4e;
   text-align: center;
 }
 
-.my-5 {
-  margin-top: 3rem;
-  margin-bottom: 3rem;
-}
-
-.text-muted {
+.no-reportes {
+  text-align: center;
+  padding: 30px;
   color: #666;
-  font-style: italic;
-}
-
-/* Asegurar compatibilidad con Bootstrap */
-.bg-white {
-  background-color: #ffffff !important;
-}
-
-.bg-light {
-  background-color: #f4f1e8 !important;
-}
-
-.shadow-sm {
-  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
-}
-
-.mt-4 {
-  margin-top: 1.5rem !important;
-}
-
-.mb-4 {
-  margin-bottom: 1.5rem !important;
-}
-
-.w-100 {
-  width: 100% !important;
-}
-
-.text-center {
-  text-align: center !important;
-}
-
-.mx-auto {
-  margin-left: auto !important;
-  margin-right: auto !important;
 }

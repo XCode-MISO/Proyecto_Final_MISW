@@ -1,53 +1,26 @@
-<div class="container mt-4">
-  <!-- Encabezado del vendedor -->
-  <div class="header-container">
-    <h1 class="vendor-name">{{ vendedor?.nombre }}</h1>
-    <div class="divider-wrapper">
-      <div class="custom-divider"></div>
-    </div>
+<div class="reportes-container">
+  <h1 class="page-title">{{ vendedor?.nombre }}</h1>
+  <h2 class="subtitle">{{ 'SALES.REPORTS_LIST' | translate }}</h2>
+
+  <div class="reportes-header">
+    <span class="fecha-header">{{ 'COMMON.DATE' | translate }}</span>
+    <span class="producto-header">{{ 'PRODUCTS.PRODUCT' | translate }}</span>
+    <span class="cantidad-header">{{ 'PRODUCTS.AMOUNT' | translate }}</span>
   </div>
 
-  <!-- Tarjeta de reportes -->
-  <div class="row">
-    <div class="col-12">
-      <div class="card shadow-sm">
-          <div class="card-header bg-primary-light">
-          <h2 class="card-title">{{ 'SALES.REPORTS_LIST' | translate }}</h2>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table mat-table [dataSource]="reportes" class="w-100 table-hover" style="background-color: #f8f9fa !important;">
-              <!-- Fecha Column -->
-              <ng-container matColumnDef="fecha">
-                <th mat-header-cell *matHeaderCellDef class="table-header">{{ 'COMMON.DATE' | translate }}</th>
-                <td mat-cell *matCellDef="let reporte">{{ reporte.fecha | date:'dd/MM/yyyy' }}</td>
-              </ng-container>
-
-              <!-- Producto Column -->
-              <ng-container matColumnDef="producto">
-                <th mat-header-cell *matHeaderCellDef class="table-header">{{ 'PRODUCTS.PRODUCT' | translate }}</th>
-                <td mat-cell *matCellDef="let reporte">{{ reporte.producto }}</td>
-              </ng-container>
-
-              <!-- Cantidad Column -->
-              <ng-container matColumnDef="cantidad">
-                <th mat-header-cell *matHeaderCellDef class="table-header">{{ 'PRODUCTS.AMOUNT' | translate }}</th>
-                <td mat-cell *matCellDef="let reporte">{{ reporte.cantidad }}</td>
-              </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="columnas" class="bg-light"></tr>
-              <tr mat-row *matRowDef="let row; columns: columnas;" class="hover-row"></tr>
-            </table>
-
-            <!-- Mensaje cuando no hay datos -->
-            @if (reportes.data.length === 0) {
-            <div class="text-center my-5">
-              <p class="text-muted">{{ 'SALES.NO_REPORTS_FOUND' | translate }}</p>
-            </div>
-            }
-          </div>
-        </div>
+  <div class="reportes-list">
+    @for (reporte of reportes.data; track reporte.id) {
+      <div class="reporte-card">
+        <div class="fecha">{{ reporte.fecha | date:'dd/MM/yyyy' }}</div>
+        <div class="producto">{{ reporte.producto }}</div>
+        <div class="cantidad">{{ reporte.cantidad }}</div>
       </div>
-    </div>
+    }
+
+    @if (reportes.data.length === 0) {
+      <div class="no-reportes">
+        <p>{{ 'SALES.REPORT_NOT_FOUND' | translate }}</p>
+      </div>
+    }
   </div>
 </div>
