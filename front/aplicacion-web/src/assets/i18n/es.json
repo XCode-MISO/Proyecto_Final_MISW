@@ -99,7 +99,9 @@
       "REGISTER_SELLER": "Registrar Vendedor",
       "NOT_FOUND": "No hay vendedores registrados.",
       "INFORMATION": "Informes",
-      "REPORTS": "Reportes"
+      "REPORTS": "Reportes",
+      "DATE":"Fecha",
+      "REPORT":"Informe"
     }
 
   }

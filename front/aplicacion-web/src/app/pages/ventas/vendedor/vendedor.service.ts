@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Cliente, Vendedor } from '../../routes/routes.component';
+import { VendedorVisita } from './vendedor-visit-list/vendedor-visit-list.component';
 
 export type RegistrarVendedorResponse = {
   id: string
@@ -16,6 +17,8 @@ export type RegistrarVendedorProps = {
   latitud: string
   longitud: string
  }
+
+ 
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +43,10 @@ export class VendedorService {
 
   getClientes() {
     return this.http.get<Cliente[]>(`${this.apiUrl}/clients`)
+  }
+
+  getVisitas() {
+    return this.http.get<VendedorVisita[]>(`${this.apiUrl}/visits`);
   }
 
 }
